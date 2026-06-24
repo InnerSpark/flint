@@ -1,4 +1,4 @@
-# Flint Design System — Tokens
+# Flint Design System: Tokens
 
 The single source of truth for color, type, spacing, and radius across AccessSpark and its sister brands. Tokens only (no components); framework-agnostic.
 
@@ -7,7 +7,7 @@ The single source of truth for color, type, spacing, and radius across AccessSpa
 ## Install (private, git tag)
 
 ```bash
-npm install github:innersparkmedia/flint#v1.0.0
+npm install github:InnerSpark/flint#v1.0.0
 ```
 
 Point it at wherever you host the repo. You can graduate to GitHub Packages later without changing any imports.
@@ -46,7 +46,7 @@ Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--r
 ## Build
 
 ```bash
-npm run build   # node scripts/build.mjs — regenerates dist/ from tokens.json
+npm run build   # runs scripts/build.mjs, regenerates dist/ from tokens.json
 ```
 
 `dist/` is committed so git-tag installs work without a build step; `prepare` also rebuilds on install.
