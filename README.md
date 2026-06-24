@@ -54,3 +54,8 @@ npm run build   # runs scripts/build.mjs, regenerates dist/ from tokens.json
 ## Versioning
 
 Flint semver, independent of the consuming apps. See CHANGELOG.md for releases. Bump on token changes (major = breaking removal/rename, minor = additive, patch = value fix) and tag the release.
+
+## Color usage
+
+- Colored text, icons, and numbers use the readable tokens: `feedback.{success,warning,error,info}.text`, `text.link` for primary-colored text, `accent.aaaText` for purple. These pass AA on the surfaces they sit on, in both light and dark.
+- The saturated `*.solid` tokens, plus `action.primary` and `accent.aaaSolid`, are fills only. Put white `*.onSolid` text on top. Never use a `*.solid` as a foreground color on a page or card: its value does not change between modes, so as text it fails on dark surfaces.

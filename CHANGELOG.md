@@ -2,6 +2,16 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.0.2
+
+Text-contrast fixes for text on tinted and elevated surfaces. No breaking changes.
+
+- `text.placeholder` now meets 4.5:1 on input surfaces (light to gray/500 `#64748b`, dark stays gray/450 `#8492a6`). Placeholders are text under WCAG 1.4.3, so they are held to AA; they stay distinct from entered values, which use the darker `text.default`.
+- `text.muted` darkened so captions pass on tinted/elevated surfaces: light to gray/550 `#5f6f84` (4.68:1 on `surface.subtle`), dark to gray/350 `#9fadc1` (4.55:1 on `surface.subtle`). Previously borderline (4.34 / 4.04).
+- Added `gray/350` (`#9fadc1`) and `gray/550` (`#5f6f84`) primitives so muted and placeholder stay ramp aliases. The text grays now form a clean hierarchy: `text.default` > `text.muted` > `text.placeholder`.
+- Documented the foreground-versus-fill color rule (see README): colored text and icons use `*.text` / `text.link` / `accent.aaaText`; the saturated `*.solid` tokens are fills only, with white `*.onSolid` on top.
+- Contrast guard updated: placeholder is checked at 4.5 on the default and page surfaces, and muted is now verified on the subtle surface in both modes.
+
 ## v1.0.1
 
 Accessibility and tooling fixes. No breaking changes; safe to bump from v1.0.0.

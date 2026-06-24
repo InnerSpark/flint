@@ -5,13 +5,12 @@
  *
  * Policy notes:
  *  - text and on-solid pairs: 4.5:1 (WCAG 1.4.3 normal text).
- *  - placeholder: 3:1, treated as a non-essential hint (the field's accessible name
- *    comes from its <label>, not the placeholder).
+ *  - placeholder: 4.5:1 on input surfaces (default, page). Inputs render there, not on
+ *    the tinted subtle surface, so it is checked on those two only.
+ *  - text.muted is checked on every surface including subtle (captions sit on cards).
  *  - focus indicators (border.focus, action.focusRing) and primary-as-accent: 3:1 (1.4.11).
  *  - border.default / border.strong are decorative boundaries (WCAG-exempt); reported
  *    as advisory ("ADV"), never fail the build.
- *  - text.muted on surface.subtle is intentionally omitted: the AS-121 rule disallows it
- *    (use text.default on the subtle surface).
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -34,10 +33,11 @@ const PAIRS = [
   ["default on subtle", "text.default", "surface.subtle", 4.5, "text"],
   ["muted on page", "text.muted", "surface.page", 4.5, "text"],
   ["muted on default", "text.muted", "surface.default", 4.5, "text"],
+  ["muted on subtle", "text.muted", "surface.subtle", 4.5, "text"],
   ["link on page", "text.link", "surface.page", 4.5, "text"],
   ["link on default", "text.link", "surface.default", 4.5, "text"],
-  ["placeholder on default", "text.placeholder", "surface.default", 3.0, "hint"],
-  ["placeholder on page", "text.placeholder", "surface.page", 3.0, "hint"],
+  ["placeholder on default", "text.placeholder", "surface.default", 4.5, "text"],
+  ["placeholder on page", "text.placeholder", "surface.page", 4.5, "text"],
   ["success.text on surface", "feedback.success.text", "feedback.success.surface", 4.5, "text"],
   ["warning.text on surface", "feedback.warning.text", "feedback.warning.surface", 4.5, "text"],
   ["error.text on surface", "feedback.error.text", "feedback.error.surface", 4.5, "text"],

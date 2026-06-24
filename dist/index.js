@@ -30,9 +30,11 @@ const tokens = {
       "100": "#f1f5f9",
       "200": "#e2e8f0",
       "300": "#cbd5e1",
+      "350": "#9fadc1",
       "400": "#94a3b8",
       "450": "#8492a6",
       "500": "#64748b",
+      "550": "#5f6f84",
       "600": "#475569",
       "700": "#334155",
       "800": "#1e293b",
@@ -159,8 +161,8 @@ const tokens = {
       "text": {
         "heading": "#0d2b45",
         "default": "#475569",
-        "muted": "#64748b",
-        "placeholder": "#8492a6",
+        "muted": "#5f6f84",
+        "placeholder": "#64748b",
         "link": "#2767cc",
         "inverse": "#ffffff"
       },
@@ -233,7 +235,7 @@ const tokens = {
       "text": {
         "heading": "#f8fafc",
         "default": "#e2e8f0",
-        "muted": "#94a3b8",
+        "muted": "#9fadc1",
         "placeholder": "#8492a6",
         "link": "#93c5fd",
         "inverse": "#0f172a"
