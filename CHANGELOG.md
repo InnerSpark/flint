@@ -2,6 +2,17 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.2.0
+
+Additive package tokens and delivery options. No breaking changes.
+
+- Added `motion` tokens (durations and easings) and a `zIndex` scale (dropdown, sticky, overlay, modal, popover, toast), emitted to CSS (`--duration-*`, `--ease-*`, `--z-*`) and the JS exports.
+- Added `dist/tokens.media.css`, a `prefers-color-scheme` variant for consumers who want automatic dark without toggling `data-theme`. Importable as `@innerspark/flint/tokens.media.css`.
+- Added a proprietary `LICENSE` and set the `license` field to `SEE LICENSE IN LICENSE`.
+- Added `dist/tokens.dtcg.json`, a W3C Design Tokens (DTCG) export (`$type` / `$value`, semantic split into `light` and `dark`) for Tokens Studio, Style Dictionary, and Figma Make. Importable as `@innerspark/flint/tokens.dtcg.json`.
+- Added an adaptive `accent.cyan` token (light sky/800 `#075985`, dark sky/300 `#7dd3fc`), AA as text in both modes (7.56:1 / 8.77:1 on the default surface).
+- Added an optional MUI entry, `@innerspark/flint/mui`, exporting `createFlintTheme(mode, overrides?)` (and the pure `flintThemeOptions(mode)`) that wires the Flint palette, type scale, and focus / target-size baseline into a MUI theme for light or dark. `@mui/material` is an optional peer dependency.
+
 ## v1.1.0
 
 Adds shadow and typography tokens. Additive, no breaking changes.

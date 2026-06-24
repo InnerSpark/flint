@@ -45,6 +45,11 @@ function staticVars() {
   for (const [k, v] of Object.entries(tokens.fontWeight)) out.push([`--font-weight-${k}`, `${v}`]);
   for (const [k, v] of Object.entries(tokens.lineHeight)) out.push([`--line-height-${k}`, `${v}`]);
   for (const [k, v] of Object.entries(tokens.shadow || {})) out.push([`--shadow-${k}`, v]);
+  if (tokens.motion) {
+    for (const [k, v] of Object.entries(tokens.motion.duration || {})) out.push([`--duration-${k}`, v]);
+    for (const [k, v] of Object.entries(tokens.motion.easing || {})) out.push([`--ease-${k}`, v]);
+  }
+  for (const [k, v] of Object.entries(tokens.zIndex || {})) out.push([`--z-${k}`, `${v}`]);
   out.push(['--font-sans', tokens.fontFamily.sans]);
   out.push(['--font-prose', tokens.fontFamily.prose]);
   out.push(['--font-mono', tokens.fontFamily.mono]);
@@ -64,6 +69,22 @@ ${fmt(semanticVars('light'))}
 [data-theme="dark"] {
   /* semantic (dark) */
 ${fmt(semanticVars('dark'))}
+}
+`);
+
+writeFileSync(join(dist, 'tokens.media.css'), `/* GENERATED from tokens.json. Auto dark via prefers-color-scheme. Do not edit by hand. */
+:root {
+${fmt(staticVars())}
+
+  /* semantic (light) */
+${fmt(semanticVars('light'))}
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* semantic (dark) */
+${fmt(semanticVars('dark'))}
+  }
 }
 `);
 
@@ -108,6 +129,8 @@ export interface Tokens {
   lineHeight: Record<string, number>;
   shadow: Record<string, string>;
   typography: Record<string, { fontFamily: string; fontSize: number; fontWeight: number; lineHeight: number; letterSpacing: string }>;
+  motion: { duration: Record<string, string>; easing: Record<string, string> };
+  zIndex: Record<string, number>;
   control: Record<string, number>;
   iconSize: Record<string, number>;
   targetMin: number;
@@ -123,6 +146,8 @@ export const fontSize: Tokens['fontSize'];
 export const lineHeight: Tokens['lineHeight'];
 export const shadow: Tokens['shadow'];
 export const typography: Tokens['typography'];
+export const motion: Tokens['motion'];
+export const zIndex: Tokens['zIndex'];
 export const control: Tokens['control'];
 export const iconSize: Tokens['iconSize'];
 export const targetMin: Tokens['targetMin'];
@@ -130,4 +155,37 @@ export const semantic: Tokens['semantic'];
 export default tokens;
 `);
 
-console.log('Built dist/: tokens.css, fonts.css, index.js, index.d.ts');
+// W3C DTCG export (tool-agnostic: Tokens Studio, Style Dictionary, Figma Make).
+const px = (v) => (/^-?\d+(\.\d+)?$/.test(String(v)) ? `${v}px` : String(v));
+const colorGroup = (obj) => {
+  const g = {};
+  for (const [k, v] of Object.entries(obj)) g[k] = typeof v === 'string' ? { $type: 'color', $value: v } : colorGroup(v);
+  return g;
+};
+const dimGroup = (obj) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, { $type: 'dimension', $value: px(v) }]));
+const numGroup = (obj, $type = 'number') => Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, { $type, $value: v }]));
+const parseShadow = (s) => {
+  const cm = s.match(/(rgba?\([^)]*\)|#[0-9a-fA-F]+)\s*$/);
+  const color = cm ? cm[1] : '#000000';
+  const nums = s.slice(0, cm ? cm.index : s.length).trim().split(/\s+/);
+  return { color, offsetX: px(nums[0] || 0), offsetY: px(nums[1] || 0), blur: px(nums[2] || 0), spread: px(nums[3] || 0) };
+};
+const bezier = (s) => { const m = s.match(/cubic-bezier\(([^)]+)\)/); return m ? m[1].split(',').map((n) => parseFloat(n)) : [0, 0, 1, 1]; };
+const dtcg = {
+  color: colorGroup(tokens.color),
+  space: dimGroup(tokens.space),
+  radius: dimGroup(tokens.radius),
+  fontFamily: Object.fromEntries(Object.entries(tokens.fontFamily).map(([k, v]) => [k, { $type: 'fontFamily', $value: v }])),
+  fontWeight: numGroup(tokens.fontWeight, 'fontWeight'),
+  fontSize: dimGroup(tokens.fontSize),
+  lineHeight: numGroup(tokens.lineHeight),
+  zIndex: numGroup(tokens.zIndex),
+  duration: Object.fromEntries(Object.entries(tokens.motion.duration).map(([k, v]) => [k, { $type: 'duration', $value: v }])),
+  easing: Object.fromEntries(Object.entries(tokens.motion.easing).map(([k, v]) => [k, { $type: 'cubicBezier', $value: bezier(v) }])),
+  shadow: Object.fromEntries(Object.entries(tokens.shadow).map(([k, v]) => [k, { $type: 'shadow', $value: parseShadow(v) }])),
+  typography: Object.fromEntries(Object.entries(tokens.typography).map(([k, t]) => [k, { $type: 'typography', $value: { fontFamily: t.fontFamily, fontSize: px(t.fontSize), fontWeight: t.fontWeight, lineHeight: t.lineHeight, letterSpacing: px(t.letterSpacing) } }])),
+  semantic: { light: colorGroup(tokens.semantic.light), dark: colorGroup(tokens.semantic.dark) },
+};
+writeFileSync(join(dist, 'tokens.dtcg.json'), JSON.stringify(dtcg, null, 2));
+
+console.log('Built dist/: tokens.css, tokens.media.css, fonts.css, index.js, index.d.ts, tokens.dtcg.json');

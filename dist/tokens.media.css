@@ -1,4 +1,4 @@
-/* GENERATED from tokens.json. Flint Design System. Do not edit by hand. */
+/* GENERATED from tokens.json. Auto dark via prefers-color-scheme. Do not edit by hand. */
 :root {
   --color-blue-50: #eff6ff;
   --color-blue-100: #dbeafe;
@@ -184,8 +184,9 @@
   --color-overlay-scrim: rgba(15, 23, 42, 0.5);
 }
 
-[data-theme="dark"] {
-  /* semantic (dark) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* semantic (dark) */
   --color-surface-page: #0f172a;
   --color-surface-default: #1e293b;
   --color-surface-subtle: #334155;
@@ -237,4 +238,5 @@
   --color-selected-surface: #0d3b6e;
   --color-selected-text: #93c5fd;
   --color-overlay-scrim: rgba(0, 0, 0, 0.6);
+  }
 }

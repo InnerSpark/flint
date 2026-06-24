@@ -1,8 +1,8 @@
 {
   "name": "@innerspark/flint",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Flint Design System tokens (color, type, spacing, radius) shared across AccessSpark and its sister brands. Tokens only, framework-agnostic.",
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -10,7 +10,8 @@
   "files": [
     "tokens.json",
     "dist",
-    "scripts"
+    "scripts",
+    "mui"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,11 +22,25 @@
     },
     "./tokens.json": "./tokens.json",
     "./tokens.css": "./dist/tokens.css",
-    "./fonts.css": "./dist/fonts.css"
+    "./tokens.media.css": "./dist/tokens.media.css",
+    "./fonts.css": "./dist/fonts.css",
+    "./tokens.dtcg.json": "./dist/tokens.dtcg.json",
+    "./mui": {
+      "types": "./mui/index.d.ts",
+      "import": "./mui/index.mjs"
+    }
   },
   "scripts": {
     "build": "node scripts/build.mjs && node scripts/check-contrast.mjs",
     "check": "node scripts/check-contrast.mjs",
     "prepare": "node scripts/build.mjs && node scripts/check-contrast.mjs"
+  },
+  "peerDependencies": {
+    "@mui/material": ">=5"
+  },
+  "peerDependenciesMeta": {
+    "@mui/material": {
+      "optional": true
+    }
   }
 }

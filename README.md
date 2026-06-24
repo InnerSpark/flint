@@ -24,7 +24,9 @@ import '@innerspark/flint/tokens.css';
 .card { background: var(--color-surface-default); color: var(--color-text-heading); padding: var(--space-16); border-radius: var(--radius-md); }
 ```
 
-Dark mode: set `data-theme="dark"` on a parent; every `--color-*` flips. Optional metric-matched fallback (no layout shift): `import '@innerspark/flint/fonts.css';` and add `'Open Sans Fallback'` to your stack.
+Dark mode: set `data-theme="dark"` on a parent; every `--color-*` flips. For automatic dark with no toggle, import `@innerspark/flint/tokens.media.css` instead, which flips via `prefers-color-scheme`. Optional metric-matched fallback (no layout shift): `import '@innerspark/flint/fonts.css';` and add `'Open Sans Fallback'` to your stack.
+
+Motion and layering ship as tokens too: `var(--duration-base)` / `var(--ease-standard)` for transitions, `var(--z-modal)` etc. for stacking (also on the `motion` and `zIndex` JS exports). Respect `prefers-reduced-motion`: gate non-essential transitions on it.
 
 ### JS / TS
 
@@ -41,9 +43,18 @@ const h1 = typography.headingH1;              // { fontFamily, fontSize, fontWei
 import tokens from '@innerspark/flint/tokens.json';
 ```
 
+### MUI
+
+```ts
+import { createFlintTheme } from '@innerspark/flint/mui';
+const theme = createFlintTheme('light'); // or 'dark'
+```
+
+`createFlintTheme(mode, overrides?)` maps the Flint palette, type scale, and a focus / target-size baseline onto a MUI theme; `flintThemeOptions(mode)` returns the raw options if you build the theme yourself. `@mui/material` is an optional peer dependency, only pulled in if you import this entry.
+
 ## Figma Make
 
-Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--radius` / `--font` set in light and dark) or at **`tokens.json`** for the structured values. Either gives Make the whole Flint scale to design against.
+Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--radius` / `--font` set in light and dark) or at **`tokens.json`** for the structured values. Either gives Make the whole Flint scale to design against. For a standards-based ingest (Tokens Studio, Style Dictionary), use `@innerspark/flint/tokens.dtcg.json` (W3C DTCG `$type` / `$value`, semantic split into `light` and `dark`).
 
 ## Build
 

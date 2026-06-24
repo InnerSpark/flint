@@ -50,6 +50,8 @@ const PAIRS = [
   ["onDanger on danger", "action.onDanger", "action.danger", 4.5, "text"],
   ["aaaText on aaaSurface", "accent.aaaText", "accent.aaaSurface", 4.5, "text"],
   ["onAaa on aaaSolid", "accent.onAaa", "accent.aaaSolid", 4.5, "text"],
+  ["cyan accent on default", "accent.cyan", "surface.default", 4.5, "text"],
+  ["cyan accent on page", "accent.cyan", "surface.page", 4.5, "text"],
   ["selected.text on surface", "selected.text", "selected.surface", 4.5, "text"],
   ["focus border on default", "border.focus", "surface.default", 3.0, "focus"],
   ["focusRing on page", "action.focusRing", "surface.page", 3.0, "focus"],
