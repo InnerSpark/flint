@@ -1,6 +1,6 @@
 {
   "name": "@innerspark/flint",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Flint Design System tokens (color, type, spacing, radius) shared across AccessSpark and its sister brands. Tokens only, framework-agnostic.",
   "license": "UNLICENSED",
   "type": "module",

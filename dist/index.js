@@ -149,6 +149,112 @@ const tokens = {
     "lg": 24
   },
   "targetMin": 24,
+  "shadow": {
+    "card": "0 2px 8px rgba(0, 0, 0, 0.08)",
+    "popover": "0 4px 16px rgba(0, 0, 0, 0.12)",
+    "dialog": "0 8px 32px rgba(0, 0, 0, 0.16)",
+    "raised": "0 10px 30px rgba(13, 43, 69, 0.12)"
+  },
+  "typography": {
+    "display": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 48,
+      "fontWeight": 700,
+      "lineHeight": 1.2,
+      "letterSpacing": "-1.2px"
+    },
+    "displayXl": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 56,
+      "fontWeight": 800,
+      "lineHeight": 1.08,
+      "letterSpacing": "-2px"
+    },
+    "headingH1": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 36,
+      "fontWeight": 700,
+      "lineHeight": 1.2,
+      "letterSpacing": "-0.8px"
+    },
+    "headingH2": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 24,
+      "fontWeight": 700,
+      "lineHeight": 1.3,
+      "letterSpacing": "-0.4px"
+    },
+    "headingH3": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 18,
+      "fontWeight": 700,
+      "lineHeight": 1.4,
+      "letterSpacing": "0"
+    },
+    "bodyLg": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 18,
+      "fontWeight": 400,
+      "lineHeight": 1.6,
+      "letterSpacing": "0"
+    },
+    "bodyMd": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 1.5,
+      "letterSpacing": "0"
+    },
+    "bodySm": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 1.5,
+      "letterSpacing": "0"
+    },
+    "labelButton": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 14,
+      "fontWeight": 700,
+      "lineHeight": 1,
+      "letterSpacing": "0"
+    },
+    "labelDefault": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 14,
+      "fontWeight": 600,
+      "lineHeight": 1.4,
+      "letterSpacing": "0"
+    },
+    "labelCaption": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 12,
+      "fontWeight": 600,
+      "lineHeight": 1.3,
+      "letterSpacing": "0.5px"
+    },
+    "labelKicker": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 12,
+      "fontWeight": 700,
+      "lineHeight": 1.2,
+      "letterSpacing": "1.68px"
+    },
+    "labelFinePrint": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 12,
+      "fontWeight": 700,
+      "lineHeight": 1.2,
+      "letterSpacing": "0.55px"
+    },
+    "labelHelper": {
+      "fontFamily": "'Open Sans', sans-serif",
+      "fontSize": 12,
+      "fontWeight": 400,
+      "lineHeight": 1.4,
+      "letterSpacing": "0"
+    }
+  },
   "semantic": {
     "light": {
       "surface": {
@@ -310,5 +416,7 @@ export const lineHeight = tokens["lineHeight"];
 export const control = tokens["control"];
 export const iconSize = tokens["iconSize"];
 export const targetMin = tokens["targetMin"];
+export const shadow = tokens["shadow"];
+export const typography = tokens["typography"];
 export const semantic = tokens["semantic"];
 export default tokens;

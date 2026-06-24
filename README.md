@@ -29,8 +29,10 @@ Dark mode: set `data-theme="dark"` on a parent; every `--color-*` flips. Optiona
 ### JS / TS
 
 ```ts
-import tokens, { color, semantic, space, radius, fontSize } from '@innerspark/flint';
+import tokens, { color, semantic, space, radius, fontSize, shadow, typography } from '@innerspark/flint';
 const heading = semantic.light.text.heading; // "#0d2b45"
+const card = shadow.card;                     // "0 2px 8px rgba(0, 0, 0, 0.08)"
+const h1 = typography.headingH1;              // { fontFamily, fontSize, fontWeight, lineHeight, letterSpacing }
 ```
 
 ### Raw JSON (Figma Make, Style Dictionary, Tailwind, etc.)

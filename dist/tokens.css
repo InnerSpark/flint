@@ -108,6 +108,10 @@
   --line-height-snug: 1.35;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-popover: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-dialog: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-raised: 0 10px 30px rgba(13, 43, 69, 0.12);
   --font-sans: 'Open Sans', sans-serif;
   --font-prose: 'Open Sans', sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;

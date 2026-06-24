@@ -19,6 +19,8 @@ export interface Tokens {
   fontWeight: Record<string, number>;
   fontSize: Record<string, number>;
   lineHeight: Record<string, number>;
+  shadow: Record<string, string>;
+  typography: Record<string, { fontFamily: string; fontSize: number; fontWeight: number; lineHeight: number; letterSpacing: string }>;
   control: Record<string, number>;
   iconSize: Record<string, number>;
   targetMin: number;
@@ -32,6 +34,8 @@ export const fontFamily: Tokens['fontFamily'];
 export const fontWeight: Tokens['fontWeight'];
 export const fontSize: Tokens['fontSize'];
 export const lineHeight: Tokens['lineHeight'];
+export const shadow: Tokens['shadow'];
+export const typography: Tokens['typography'];
 export const control: Tokens['control'];
 export const iconSize: Tokens['iconSize'];
 export const targetMin: Tokens['targetMin'];

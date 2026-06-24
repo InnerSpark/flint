@@ -44,6 +44,7 @@ function staticVars() {
   for (const [k, v] of Object.entries(tokens.fontSize)) out.push([`--font-size-${k}`, `${v}px`]);
   for (const [k, v] of Object.entries(tokens.fontWeight)) out.push([`--font-weight-${k}`, `${v}`]);
   for (const [k, v] of Object.entries(tokens.lineHeight)) out.push([`--line-height-${k}`, `${v}`]);
+  for (const [k, v] of Object.entries(tokens.shadow || {})) out.push([`--shadow-${k}`, v]);
   out.push(['--font-sans', tokens.fontFamily.sans]);
   out.push(['--font-prose', tokens.fontFamily.prose]);
   out.push(['--font-mono', tokens.fontFamily.mono]);
@@ -105,6 +106,8 @@ export interface Tokens {
   fontWeight: Record<string, number>;
   fontSize: Record<string, number>;
   lineHeight: Record<string, number>;
+  shadow: Record<string, string>;
+  typography: Record<string, { fontFamily: string; fontSize: number; fontWeight: number; lineHeight: number; letterSpacing: string }>;
   control: Record<string, number>;
   iconSize: Record<string, number>;
   targetMin: number;
@@ -118,6 +121,8 @@ export const fontFamily: Tokens['fontFamily'];
 export const fontWeight: Tokens['fontWeight'];
 export const fontSize: Tokens['fontSize'];
 export const lineHeight: Tokens['lineHeight'];
+export const shadow: Tokens['shadow'];
+export const typography: Tokens['typography'];
 export const control: Tokens['control'];
 export const iconSize: Tokens['iconSize'];
 export const targetMin: Tokens['targetMin'];

@@ -2,9 +2,16 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.1.0
+
+Adds shadow and typography tokens. Additive, no breaking changes.
+
+- Added a `shadow` token group (card, popover, dialog, raised) as ready-to-use CSS box-shadow strings, emitted to `--shadow-*` and the JS exports. Mirrors the Figma effect styles.
+- Added a `typography` token group: the composed text styles (display, displayXl, heading h1-h3, body lg/md/sm, label variants) with family, size, weight, line-height, and letter-spacing, so code builds text identically to the Figma text styles.
+
 ## v1.0.2
 
-Text-contrast fixes for text on tinted and elevated surfaces. No breaking changes.
+Text-contrast fixes for text on tinted and elevated surfaces.
 
 - `text.placeholder` now meets 4.5:1 on input surfaces (light to gray/500 `#64748b`, dark stays gray/450 `#8492a6`). Placeholders are text under WCAG 1.4.3, so they are held to AA; they stay distinct from entered values, which use the darker `text.default`.
 - `text.muted` darkened so captions pass on tinted/elevated surfaces: light to gray/550 `#5f6f84` (4.68:1 on `surface.subtle`), dark to gray/350 `#9fadc1` (4.55:1 on `surface.subtle`). Previously borderline (4.34 / 4.04).
