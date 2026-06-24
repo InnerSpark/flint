@@ -31,6 +31,7 @@ const tokens = {
       "200": "#e2e8f0",
       "300": "#cbd5e1",
       "400": "#94a3b8",
+      "450": "#8492a6",
       "500": "#64748b",
       "600": "#475569",
       "700": "#334155",
@@ -159,7 +160,7 @@ const tokens = {
         "heading": "#0d2b45",
         "default": "#475569",
         "muted": "#64748b",
-        "placeholder": "#94a3b8",
+        "placeholder": "#8492a6",
         "link": "#2767cc",
         "inverse": "#ffffff"
       },
@@ -233,13 +234,13 @@ const tokens = {
         "heading": "#f8fafc",
         "default": "#e2e8f0",
         "muted": "#94a3b8",
-        "placeholder": "#64748b",
+        "placeholder": "#8492a6",
         "link": "#93c5fd",
         "inverse": "#0f172a"
       },
       "action": {
-        "primary": "#1a5fa8",
-        "primaryHover": "#1550a0",
+        "primary": "#2767cc",
+        "primaryHover": "#1a5fa8",
         "onPrimary": "#ffffff",
         "secondary": "#38bdf8",
         "focusRing": "#60a5fa",
@@ -248,8 +249,8 @@ const tokens = {
         "onDanger": "#ffffff"
       },
       "border": {
-        "default": "#334155",
-        "strong": "#475569",
+        "default": "#64748b",
+        "strong": "#94a3b8",
         "focus": "#60a5fa",
         "error": "#f87171"
       },

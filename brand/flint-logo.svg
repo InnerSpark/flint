@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212 64" role="img" aria-label="Flint">
+  <title>Flint</title>
+  <!-- Mark: faceted flint shard + struck spark -->
+  <polygon points="33,7 55,25 32,28" fill="#60a5fa"/>
+  <polygon points="55,25 41,57 32,28" fill="#2767cc"/>
+  <polygon points="41,57 21,55 32,28" fill="#1550a0"/>
+  <polygon points="21,55 11,23 32,28" fill="#0d3b6e"/>
+  <polygon points="11,23 33,7 32,28" fill="#1a5fa8"/>
+  <g fill="#93c5fd">
+    <path d="M54 6 Q55 11 54 16 Q53 11 54 6 Z"/>
+    <path d="M49 11 Q54 10 59 11 Q54 12 49 11 Z"/>
+    <circle cx="59" cy="18" r="1.4" opacity="0.85"/>
+  </g>
+  <!-- Wordmark (outline the text for print/portable use) -->
+  <text x="78" y="43" font-family="'Open Sans','Segoe UI',sans-serif" font-weight="800" font-size="36" letter-spacing="-1" fill="#0d2b45">Flint</text>
+</svg>

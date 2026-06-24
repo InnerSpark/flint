@@ -1,6 +1,6 @@
 {
   "name": "@innerspark/flint",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Flint Design System tokens (color, type, spacing, radius) shared across AccessSpark and its sister brands. Tokens only, framework-agnostic.",
   "license": "UNLICENSED",
   "type": "module",
@@ -24,7 +24,8 @@
     "./fonts.css": "./dist/fonts.css"
   },
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "prepare": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs && node scripts/check-contrast.mjs",
+    "check": "node scripts/check-contrast.mjs",
+    "prepare": "node scripts/build.mjs && node scripts/check-contrast.mjs"
   }
 }

@@ -53,4 +53,4 @@ npm run build   # runs scripts/build.mjs, regenerates dist/ from tokens.json
 
 ## Versioning
 
-Flint semver, independent of the consuming apps. This is **v1.0.0**. Bump on token changes (major = breaking removal/rename, minor = additive, patch = value fix) and tag the release.
+Flint semver, independent of the consuming apps. See CHANGELOG.md for releases. Bump on token changes (major = breaking removal/rename, minor = additive, patch = value fix) and tag the release.

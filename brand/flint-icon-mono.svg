@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Flint" fill="currentColor">
+  <title>Flint</title>
+  <!-- Single-ink tonal mark. Set `color` to ink it (defaults to currentColor). -->
+  <polygon points="33,7 55,25 32,28" opacity="1"/>
+  <polygon points="55,25 41,57 32,28" opacity="0.66"/>
+  <polygon points="41,57 21,55 32,28" opacity="0.5"/>
+  <polygon points="21,55 11,23 32,28" opacity="0.4"/>
+  <polygon points="11,23 33,7 32,28" opacity="0.82"/>
+  <g opacity="0.9">
+    <path d="M54 6 Q55 11 54 16 Q53 11 54 6 Z"/>
+    <path d="M49 11 Q54 10 59 11 Q54 12 49 11 Z"/>
+    <circle cx="59" cy="18" r="1.4"/>
+  </g>
+</svg>
