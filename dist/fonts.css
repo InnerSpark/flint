@@ -1,0 +1,9 @@
+/* Flint: metric-matched Open Sans fallback (no layout shift). Add 'Open Sans Fallback' to the font stack. */
+@font-face {
+  font-family: 'Open Sans Fallback';
+  src: local('Arial');
+  size-adjust: 105.15%;
+  ascent-override: 101.65%;
+  descent-override: 27.86%;
+  line-gap-override: 0%;
+}

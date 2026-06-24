@@ -1,0 +1,30 @@
+{
+  "name": "@innerspark/flint",
+  "version": "1.0.0",
+  "description": "Flint Design System tokens — color, type, spacing, radius — shared across AccessSpark and its sister brands. Tokens only, framework-agnostic.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "tokens.json",
+    "dist",
+    "scripts"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./tokens.json": "./tokens.json",
+    "./tokens.css": "./dist/tokens.css",
+    "./fonts.css": "./dist/fonts.css"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "prepare": "node scripts/build.mjs"
+  }
+}
