@@ -40,6 +40,19 @@ const tokens = {
       "800": "#1e293b",
       "900": "#0f172a"
     },
+    "ink": {
+      "50": "#f0f6fc",
+      "100": "#c9d1d9",
+      "200": "#aeb8c2",
+      "300": "#9aa4af",
+      "400": "#828b95",
+      "500": "#6e7681",
+      "600": "#545d68",
+      "700": "#21262d",
+      "800": "#161b22",
+      "900": "#0d1117",
+      "950": "#010409"
+    },
     "green": {
       "50": "#f0fdf4",
       "100": "#dcfce7",
@@ -355,19 +368,19 @@ const tokens = {
     },
     "dark": {
       "surface": {
-        "page": "#0f172a",
-        "default": "#1e293b",
-        "subtle": "#334155",
+        "page": "#0d1117",
+        "default": "#161b22",
+        "subtle": "#21262d",
         "inverse": "#f8fafc",
-        "code": "#0f172a"
+        "code": "#010409"
       },
       "text": {
-        "heading": "#f8fafc",
-        "default": "#e2e8f0",
-        "muted": "#9fadc1",
-        "placeholder": "#8492a6",
+        "heading": "#f0f6fc",
+        "default": "#c9d1d9",
+        "muted": "#9aa4af",
+        "placeholder": "#828b95",
         "link": "#93c5fd",
-        "inverse": "#0f172a"
+        "inverse": "#0d1117"
       },
       "action": {
         "primary": "#2767cc",
@@ -380,8 +393,8 @@ const tokens = {
         "onDanger": "#ffffff"
       },
       "border": {
-        "default": "#64748b",
-        "strong": "#94a3b8",
+        "default": "#6e7681",
+        "strong": "#aeb8c2",
         "focus": "#60a5fa",
         "error": "#f87171"
       },

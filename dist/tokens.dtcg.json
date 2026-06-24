@@ -138,6 +138,52 @@
         "$value": "#0f172a"
       }
     },
+    "ink": {
+      "50": {
+        "$type": "color",
+        "$value": "#f0f6fc"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#c9d1d9"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#aeb8c2"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#9aa4af"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#828b95"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#6e7681"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#545d68"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#21262d"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#161b22"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#0d1117"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#010409"
+      }
+    },
     "green": {
       "50": {
         "$type": "color",
@@ -965,15 +1011,15 @@
       "surface": {
         "page": {
           "$type": "color",
-          "$value": "#0f172a"
+          "$value": "#0d1117"
         },
         "default": {
           "$type": "color",
-          "$value": "#1e293b"
+          "$value": "#161b22"
         },
         "subtle": {
           "$type": "color",
-          "$value": "#334155"
+          "$value": "#21262d"
         },
         "inverse": {
           "$type": "color",
@@ -981,25 +1027,25 @@
         },
         "code": {
           "$type": "color",
-          "$value": "#0f172a"
+          "$value": "#010409"
         }
       },
       "text": {
         "heading": {
           "$type": "color",
-          "$value": "#f8fafc"
+          "$value": "#f0f6fc"
         },
         "default": {
           "$type": "color",
-          "$value": "#e2e8f0"
+          "$value": "#c9d1d9"
         },
         "muted": {
           "$type": "color",
-          "$value": "#9fadc1"
+          "$value": "#9aa4af"
         },
         "placeholder": {
           "$type": "color",
-          "$value": "#8492a6"
+          "$value": "#828b95"
         },
         "link": {
           "$type": "color",
@@ -1007,7 +1053,7 @@
         },
         "inverse": {
           "$type": "color",
-          "$value": "#0f172a"
+          "$value": "#0d1117"
         }
       },
       "action": {
@@ -1047,11 +1093,11 @@
       "border": {
         "default": {
           "$type": "color",
-          "$value": "#64748b"
+          "$value": "#6e7681"
         },
         "strong": {
           "$type": "color",
-          "$value": "#94a3b8"
+          "$value": "#aeb8c2"
         },
         "focus": {
           "$type": "color",

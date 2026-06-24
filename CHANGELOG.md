@@ -2,6 +2,15 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.3.0
+
+Dark-mode neutrals re-toned to a near-neutral ink (GitHub / VS Code style). Additive: no token removed or renamed.
+
+- Added an `ink` primitive ramp (`#f0f6fc` to `#010409`), a near-neutral dark scale that replaces the blue-heavy slate in dark mode.
+- Repointed dark `surface` (page `#0d1117`, default `#161b22`, subtle `#21262d`, code `#010409`), the neutral `text` greys (heading/default/muted/placeholder/inverse), and `border` (default/strong) to `ink`. Brand blues (links, primary, focus ring, info) are unchanged.
+- Every dark pairing still passes the contrast guard: `border.default` holds 3.77:1 for visible control edges, `text.placeholder` 5.01:1, and `accent.cyan` rises to 10.38:1 on the darker surface.
+- `gray/350` and `gray/450` (previously dark muted/placeholder) are no longer referenced but remain as primitives. (ASDS-15)
+
 ## v1.2.0
 
 Additive package tokens and delivery options. No breaking changes.
