@@ -2,6 +2,12 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.4.0
+
+Adds a canonical MUI `Card` to the theme factory. Additive, no breaking changes.
+
+- `createFlintTheme` now styles `MuiCard` from the card tokens: `surface.default` background, a 1px `border.default` outline, `radius/md` (12px) corners, and the `shadow.card` elevation, with MUI's own elevation shadow and dark-mode background overlay turned off (`elevation: 0`, `backgroundImage: none`). `MuiCardContent` padding is normalized to `space/16`, dropping MUI's 24px last-child quirk so padding is even on every side. Renders in light and dark. (ASDS-16)
+
 ## v1.3.0
 
 Dark-mode neutrals re-toned to a near-neutral ink (GitHub / VS Code style). Additive: no token removed or renamed.

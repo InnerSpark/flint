@@ -3,7 +3,7 @@
  * it can be tested standalone. `createFlintTheme` (index.mjs) wraps this with MUI's
  * `createTheme`. Parameterized by mode, so the same source drives light and dark.
  */
-import { semantic, fontFamily, fontWeight, fontSize, lineHeight, radius, targetMin } from '../dist/index.js';
+import { semantic, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, space, targetMin } from '../dist/index.js';
 
 const t = (size, weight, lh, ls = '0') => ({
   fontFamily: fontFamily.sans,
@@ -69,6 +69,23 @@ export function flintThemeOptions(mode = 'light') {
         `,
       },
       MuiButton: { styleOverrides: { root: { textTransform: 'none', borderRadius: radius.sm } } },
+      MuiCard: {
+        defaultProps: { elevation: 0 },
+        styleOverrides: {
+          root: {
+            backgroundColor: c.surface.default,
+            backgroundImage: 'none',
+            border: `1px solid ${c.border.default}`,
+            borderRadius: radius.md,
+            boxShadow: shadow.card,
+          },
+        },
+      },
+      MuiCardContent: {
+        styleOverrides: {
+          root: { padding: space[16], '&:last-child': { paddingBottom: space[16] } },
+        },
+      },
       MuiOutlinedInput: { styleOverrides: { root: { borderRadius: radius.sm } } },
       MuiTab: { styleOverrides: { root: { textTransform: 'none', fontWeight: fontWeight.medium, fontFamily: fontFamily.sans } } },
     },
