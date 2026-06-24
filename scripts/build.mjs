@@ -33,6 +33,8 @@ function semanticVars(mode) {
   return out;
 }
 
+const shadowDarkVars = () => Object.entries(tokens.shadowDark || {}).map(([k, v]) => [`--shadow-${k}`, v]);
+
 function staticVars() {
   const out = [];
   for (const [ramp, steps] of Object.entries(tokens.color)) {
@@ -69,6 +71,9 @@ ${fmt(semanticVars('light'))}
 [data-theme="dark"] {
   /* semantic (dark) */
 ${fmt(semanticVars('dark'))}
+
+  /* elevation (dark) */
+${fmt(shadowDarkVars())}
 }
 `);
 
@@ -84,6 +89,9 @@ ${fmt(semanticVars('light'))}
   :root {
     /* semantic (dark) */
 ${fmt(semanticVars('dark'))}
+
+    /* elevation (dark) */
+${fmt(shadowDarkVars())}
   }
 }
 `);
@@ -128,6 +136,7 @@ export interface Tokens {
   fontSize: Record<string, number>;
   lineHeight: Record<string, number>;
   shadow: Record<string, string>;
+  shadowDark: Record<string, string>;
   typography: Record<string, { fontFamily: string; fontSize: number; fontWeight: number; lineHeight: number; letterSpacing: string }>;
   motion: { duration: Record<string, string>; easing: Record<string, string> };
   zIndex: Record<string, number>;
@@ -145,6 +154,7 @@ export const fontWeight: Tokens['fontWeight'];
 export const fontSize: Tokens['fontSize'];
 export const lineHeight: Tokens['lineHeight'];
 export const shadow: Tokens['shadow'];
+export const shadowDark: Tokens['shadowDark'];
 export const typography: Tokens['typography'];
 export const motion: Tokens['motion'];
 export const zIndex: Tokens['zIndex'];
@@ -170,6 +180,8 @@ const parseShadow = (s) => {
   const nums = s.slice(0, cm ? cm.index : s.length).trim().split(/\s+/);
   return { color, offsetX: px(nums[0] || 0), offsetY: px(nums[1] || 0), blur: px(nums[2] || 0), spread: px(nums[3] || 0) };
 };
+const splitLayers = (s) => { const out = []; let depth = 0, cur = ''; for (const ch of s) { if (ch === '(') depth++; if (ch === ')') depth--; if (ch === ',' && depth === 0) { out.push(cur.trim()); cur = ''; } else cur += ch; } if (cur.trim()) out.push(cur.trim()); return out; };
+const shadowVal = (s) => { const layers = splitLayers(s).map(parseShadow); return layers.length === 1 ? layers[0] : layers; };
 const bezier = (s) => { const m = s.match(/cubic-bezier\(([^)]+)\)/); return m ? m[1].split(',').map((n) => parseFloat(n)) : [0, 0, 1, 1]; };
 const dtcg = {
   color: colorGroup(tokens.color),
@@ -182,7 +194,8 @@ const dtcg = {
   zIndex: numGroup(tokens.zIndex),
   duration: Object.fromEntries(Object.entries(tokens.motion.duration).map(([k, v]) => [k, { $type: 'duration', $value: v }])),
   easing: Object.fromEntries(Object.entries(tokens.motion.easing).map(([k, v]) => [k, { $type: 'cubicBezier', $value: bezier(v) }])),
-  shadow: Object.fromEntries(Object.entries(tokens.shadow).map(([k, v]) => [k, { $type: 'shadow', $value: parseShadow(v) }])),
+  shadow: Object.fromEntries(Object.entries(tokens.shadow).map(([k, v]) => [k, { $type: 'shadow', $value: shadowVal(v) }])),
+  shadowDark: Object.fromEntries(Object.entries(tokens.shadowDark).map(([k, v]) => [k, { $type: 'shadow', $value: shadowVal(v) }])),
   typography: Object.fromEntries(Object.entries(tokens.typography).map(([k, t]) => [k, { $type: 'typography', $value: { fontFamily: t.fontFamily, fontSize: px(t.fontSize), fontWeight: t.fontWeight, lineHeight: t.lineHeight, letterSpacing: px(t.letterSpacing) } }])),
   semantic: { light: colorGroup(tokens.semantic.light), dark: colorGroup(tokens.semantic.dark) },
 };

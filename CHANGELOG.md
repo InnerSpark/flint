@@ -2,6 +2,15 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.5.0
+
+Dark-aware elevation and a broad canonical MUI component set. Additive, no breaking changes.
+
+- Dark-aware shadows: added a `shadowDark` token group (a deeper drop shadow plus a faint 1px light ring) so elevation reads on dark surfaces instead of vanishing. The `--shadow-*` CSS vars now flip under `[data-theme="dark"]` and `prefers-color-scheme`, and the DTCG export carries both (multi-layer shadows as layer arrays). The JS `shadow` export stays light; `shadowDark` is the dark counterpart.
+- `createFlintTheme` now sets `theme.shape.borderRadius` from `radius/xs` (4px), so unitless MUI radii map onto the Flint scale (`1`=4, `2`=8, `3`=12, `4`=16) by design instead of by MUI's incidental default.
+- Canonical `MuiPaper`: drops MUI's dark elevation overlay and maps the `elevation` prop onto the shadow tokens (mode-aware), which covers `Menu`, `Popover`, `Dialog`, and `Drawer` since they are all Paper-based. Floating surfaces no longer hand-roll shadows. `Menu`/`Popover`/`Dialog` papers also get token radii.
+- Canonical `MuiChip` (pill, token-driven success/warning/error/info intents), `MuiAccordion` (off-scale 10px radius replaced with `radius/md`, token border, expanded-only shadow), `MuiInputBase`/`MuiOutlinedInput` sizing wired to `control.md` (40px), `MuiAlert` (mapped to the feedback intents), `MuiToggleButton` (selected uses the `selected.*` tokens), `MuiTooltip` (inverse surface/text), and `MuiLinearProgress` (track `border.default`, bar `action.primary`). (ASDS-17, ASDS-18)
+
 ## v1.4.0
 
 Adds a canonical MUI `Card` to the theme factory. Additive, no breaking changes.

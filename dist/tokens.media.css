@@ -249,5 +249,11 @@
   --color-selected-surface: #0d3b6e;
   --color-selected-text: #93c5fd;
   --color-overlay-scrim: rgba(0, 0, 0, 0.6);
+
+    /* elevation (dark) */
+  --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-popover: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 6px 20px rgba(0, 0, 0, 0.5);
+  --shadow-dialog: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 40px rgba(0, 0, 0, 0.6);
+  --shadow-raised: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.5);
   }
 }

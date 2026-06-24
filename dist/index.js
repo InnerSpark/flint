@@ -168,6 +168,12 @@ const tokens = {
     "dialog": "0 8px 32px rgba(0, 0, 0, 0.16)",
     "raised": "0 10px 30px rgba(13, 43, 69, 0.12)"
   },
+  "shadowDark": {
+    "card": "0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.4)",
+    "popover": "0 0 0 1px rgba(255, 255, 255, 0.05), 0 6px 20px rgba(0, 0, 0, 0.5)",
+    "dialog": "0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 40px rgba(0, 0, 0, 0.6)",
+    "raised": "0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.5)"
+  },
   "typography": {
     "display": {
       "fontFamily": "'Open Sans', sans-serif",
@@ -454,6 +460,7 @@ export const control = tokens["control"];
 export const iconSize = tokens["iconSize"];
 export const targetMin = tokens["targetMin"];
 export const shadow = tokens["shadow"];
+export const shadowDark = tokens["shadowDark"];
 export const typography = tokens["typography"];
 export const motion = tokens["motion"];
 export const zIndex = tokens["zIndex"];

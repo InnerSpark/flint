@@ -636,6 +636,84 @@
       }
     }
   },
+  "shadowDark": {
+    "card": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(255, 255, 255, 0.04)",
+          "offsetX": "0px",
+          "offsetY": "0px",
+          "blur": "0px",
+          "spread": "1px"
+        },
+        {
+          "color": "rgba(0, 0, 0, 0.4)",
+          "offsetX": "0px",
+          "offsetY": "2px",
+          "blur": "8px",
+          "spread": "0px"
+        }
+      ]
+    },
+    "popover": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(255, 255, 255, 0.05)",
+          "offsetX": "0px",
+          "offsetY": "0px",
+          "blur": "0px",
+          "spread": "1px"
+        },
+        {
+          "color": "rgba(0, 0, 0, 0.5)",
+          "offsetX": "0px",
+          "offsetY": "6px",
+          "blur": "20px",
+          "spread": "0px"
+        }
+      ]
+    },
+    "dialog": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(255, 255, 255, 0.06)",
+          "offsetX": "0px",
+          "offsetY": "0px",
+          "blur": "0px",
+          "spread": "1px"
+        },
+        {
+          "color": "rgba(0, 0, 0, 0.6)",
+          "offsetX": "0px",
+          "offsetY": "12px",
+          "blur": "40px",
+          "spread": "0px"
+        }
+      ]
+    },
+    "raised": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "rgba(255, 255, 255, 0.05)",
+          "offsetX": "0px",
+          "offsetY": "0px",
+          "blur": "0px",
+          "spread": "1px"
+        },
+        {
+          "color": "rgba(0, 0, 0, 0.5)",
+          "offsetX": "0px",
+          "offsetY": "10px",
+          "blur": "30px",
+          "spread": "0px"
+        }
+      ]
+    }
+  },
   "typography": {
     "display": {
       "$type": "typography",

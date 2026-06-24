@@ -50,7 +50,7 @@ import { createFlintTheme } from '@innerspark/flint/mui';
 const theme = createFlintTheme('light'); // or 'dark'
 ```
 
-`createFlintTheme(mode, overrides?)` maps the Flint palette, type scale, a canonical `Card` (surface, border, radius, shadow), and a focus / target-size baseline onto a MUI theme; `flintThemeOptions(mode)` returns the raw options if you build the theme yourself. `@mui/material` is an optional peer dependency, only pulled in if you import this entry.
+`createFlintTheme(mode, overrides?)` maps the Flint palette, type scale, `shape.borderRadius`, dark-aware elevation, and a canonical component set (Paper, Card, Menu/Popover/Dialog, Chip, Accordion, inputs, Alert, ToggleButton, Tooltip, LinearProgress) onto a MUI theme; `flintThemeOptions(mode)` returns the raw options if you build the theme yourself. `@mui/material` is an optional peer dependency, only pulled in if you import this entry.
 
 ## Figma Make
 

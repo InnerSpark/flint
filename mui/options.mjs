@@ -3,7 +3,7 @@
  * it can be tested standalone. `createFlintTheme` (index.mjs) wraps this with MUI's
  * `createTheme`. Parameterized by mode, so the same source drives light and dark.
  */
-import { semantic, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, space, targetMin } from '../dist/index.js';
+import { semantic, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, shadowDark, space, control, targetMin } from '../dist/index.js';
 
 const t = (size, weight, lh, ls = '0') => ({
   fontFamily: fontFamily.sans,
@@ -15,6 +15,8 @@ const t = (size, weight, lh, ls = '0') => ({
 
 export function flintThemeOptions(mode = 'light') {
   const c = semantic[mode];
+  const S = mode === 'dark' ? shadowDark : shadow;
+  const intent = (name) => ({ success: c.feedback.success, warning: c.feedback.warning, error: c.feedback.error, info: c.feedback.info }[name]);
   return {
     palette: {
       mode,
@@ -44,6 +46,7 @@ export function flintThemeOptions(mode = 'light') {
       caption: { ...t(fontSize.xs, fontWeight.semibold, lineHeight.snug), color: c.text.default },
       overline: { ...t(fontSize.xs, fontWeight.bold, 1.2, '1.5px'), textTransform: 'uppercase' },
     },
+    shape: { borderRadius: radius.xs },
     components: {
       MuiCssBaseline: {
         styleOverrides: `
@@ -69,6 +72,18 @@ export function flintThemeOptions(mode = 'light') {
         `,
       },
       MuiButton: { styleOverrides: { root: { textTransform: 'none', borderRadius: radius.sm } } },
+      // Canonical Paper: kills MUI's dark elevation overlay and maps the elevation
+      // prop onto the shadow tokens (mode-aware). Covers Menu/Popover/Dialog/Drawer,
+      // which are all Paper-based, so floating surfaces stop hand-rolling shadows.
+      MuiPaper: {
+        styleOverrides: {
+          root: ({ ownerState }) => {
+            const e = ownerState.elevation ?? 0;
+            const sh = e === 0 ? null : e <= 1 ? S.card : e <= 4 ? S.popover : e <= 8 ? S.raised : S.dialog;
+            return { backgroundImage: 'none', ...(sh ? { boxShadow: sh } : {}) };
+          },
+        },
+      },
       MuiCard: {
         defaultProps: { elevation: 0 },
         styleOverrides: {
@@ -77,7 +92,7 @@ export function flintThemeOptions(mode = 'light') {
             backgroundImage: 'none',
             border: `1px solid ${c.border.default}`,
             borderRadius: radius.md,
-            boxShadow: shadow.card,
+            boxShadow: S.card,
           },
         },
       },
@@ -86,7 +101,97 @@ export function flintThemeOptions(mode = 'light') {
           root: { padding: space[16], '&:last-child': { paddingBottom: space[16] } },
         },
       },
-      MuiOutlinedInput: { styleOverrides: { root: { borderRadius: radius.sm } } },
+      MuiMenu: { styleOverrides: { paper: { borderRadius: radius.sm, boxShadow: S.popover } } },
+      MuiPopover: { styleOverrides: { paper: { borderRadius: radius.sm, boxShadow: S.popover } } },
+      MuiDialog: { styleOverrides: { paper: { borderRadius: radius.lg, boxShadow: S.dialog } } },
+      // Token-driven Chip: pill radius; intent (success/warning/error/info) maps to the
+      // feedback surface/border/text; default uses the subtle surface.
+      MuiChip: {
+        styleOverrides: {
+          root: ({ ownerState }) => {
+            const f = intent(ownerState.color);
+            const base = { borderRadius: radius.pill, fontFamily: fontFamily.sans, fontWeight: fontWeight.semibold };
+            if (f) {
+              return ownerState.variant === 'outlined'
+                ? { ...base, color: f.text, borderColor: f.border, backgroundColor: 'transparent' }
+                : { ...base, color: f.text, backgroundColor: f.surface };
+            }
+            return ownerState.variant === 'outlined'
+              ? { ...base, color: c.text.default, borderColor: c.border.default }
+              : { ...base, color: c.text.default, backgroundColor: c.surface.subtle };
+          },
+        },
+      },
+      // Accordion: replaces the app's off-scale 10px radius with radius/md and a
+      // token border; shadow only when expanded.
+      MuiAccordion: {
+        defaultProps: { disableGutters: true, elevation: 0, square: false },
+        styleOverrides: {
+          root: {
+            backgroundColor: c.surface.default,
+            backgroundImage: 'none',
+            border: `1px solid ${c.border.default}`,
+            borderRadius: radius.md,
+            boxShadow: 'none',
+            '&:before': { display: 'none' },
+            '&.Mui-expanded': { boxShadow: S.card },
+          },
+        },
+      },
+      // Inputs wired to control.md (40px) so the app stops hand-setting 42px heights.
+      MuiInputBase: { styleOverrides: { root: { fontFamily: fontFamily.sans, fontSize: fontSize.md } } },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: { borderRadius: radius.sm },
+          input: { height: `${control.md}px`, paddingTop: 0, paddingBottom: 0, boxSizing: 'border-box' },
+        },
+      },
+      // Alert mapped to the feedback intents (standard / filled / outlined).
+      MuiAlert: {
+        styleOverrides: {
+          root: ({ ownerState }) => {
+            const f = intent(ownerState.severity) || c.feedback.info;
+            const base = { borderRadius: radius.md, fontFamily: fontFamily.sans };
+            if (ownerState.variant === 'filled') return { ...base, backgroundColor: f.solid, color: f.onSolid };
+            if (ownerState.variant === 'outlined') return { ...base, color: f.text, border: `1px solid ${f.border}`, backgroundColor: 'transparent' };
+            return { ...base, backgroundColor: f.surface, color: f.text, border: `1px solid ${f.border}` };
+          },
+        },
+      },
+      MuiToggleButton: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+            fontFamily: fontFamily.sans,
+            color: c.text.default,
+            borderColor: c.border.default,
+            '&.Mui-selected': {
+              backgroundColor: c.selected.surface,
+              color: c.selected.text,
+              '&:hover': { backgroundColor: c.selected.surface },
+            },
+          },
+        },
+      },
+      MuiTooltip: {
+        styleOverrides: {
+          tooltip: {
+            backgroundColor: c.surface.inverse,
+            color: c.text.inverse,
+            fontFamily: fontFamily.sans,
+            fontSize: `${fontSize.xs}px`,
+            borderRadius: radius.sm,
+            padding: `${space[4]}px ${space[8]}px`,
+          },
+          arrow: { color: c.surface.inverse },
+        },
+      },
+      MuiLinearProgress: {
+        styleOverrides: {
+          root: { backgroundColor: c.border.default, borderRadius: radius.pill, height: space[8] },
+          bar: { backgroundColor: c.action.primary, borderRadius: radius.pill },
+        },
+      },
       MuiTab: { styleOverrides: { root: { textTransform: 'none', fontWeight: fontWeight.medium, fontFamily: fontFamily.sans } } },
     },
   };

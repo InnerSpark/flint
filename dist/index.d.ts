@@ -20,6 +20,7 @@ export interface Tokens {
   fontSize: Record<string, number>;
   lineHeight: Record<string, number>;
   shadow: Record<string, string>;
+  shadowDark: Record<string, string>;
   typography: Record<string, { fontFamily: string; fontSize: number; fontWeight: number; lineHeight: number; letterSpacing: string }>;
   motion: { duration: Record<string, string>; easing: Record<string, string> };
   zIndex: Record<string, number>;
@@ -37,6 +38,7 @@ export const fontWeight: Tokens['fontWeight'];
 export const fontSize: Tokens['fontSize'];
 export const lineHeight: Tokens['lineHeight'];
 export const shadow: Tokens['shadow'];
+export const shadowDark: Tokens['shadowDark'];
 export const typography: Tokens['typography'];
 export const motion: Tokens['motion'];
 export const zIndex: Tokens['zIndex'];
