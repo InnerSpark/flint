@@ -3,7 +3,7 @@
  * it can be tested standalone. `createFlintTheme` (index.mjs) wraps this with MUI's
  * `createTheme`. Parameterized by mode, so the same source drives light and dark.
  */
-import { semantic, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, shadowDark, space, control, targetMin } from '../dist/index.js';
+import { semantic, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, shadowDark, space, control, breakpoint, targetMin } from '../dist/index.js';
 
 const t = (size, weight, lh, ls = '0') => ({
   fontFamily: fontFamily.sans,
@@ -27,8 +27,9 @@ export function flintThemeOptions(mode = 'light') {
       error: { main: c.feedback.error.solid },
       info: { main: c.feedback.info.solid },
       background: { default: c.surface.page, paper: c.surface.default },
-      text: { primary: c.text.heading, secondary: c.text.default, disabled: c.text.placeholder },
+      text: { primary: c.text.heading, secondary: c.text.default, disabled: c.action.disabled },
       divider: c.border.default,
+      action: { disabled: c.action.disabled, disabledBackground: c.action.disabledBg },
     },
     typography: {
       fontFamily: fontFamily.sans,
@@ -46,6 +47,8 @@ export function flintThemeOptions(mode = 'light') {
       caption: { ...t(fontSize.xs, fontWeight.semibold, lineHeight.snug), color: c.text.default },
       overline: { ...t(fontSize.xs, fontWeight.bold, 1.2, '1.5px'), textTransform: 'uppercase' },
     },
+    spacing: space[8],
+    breakpoints: { values: breakpoint },
     shape: { borderRadius: radius.xs },
     components: {
       MuiCssBaseline: {
@@ -192,6 +195,40 @@ export function flintThemeOptions(mode = 'light') {
           bar: { backgroundColor: c.action.primary, borderRadius: radius.pill },
         },
       },
+      // Tables: DS owns header surface, cell border + padding, and body row hover.
+      MuiTableHead: { styleOverrides: { root: { backgroundColor: c.surface.subtle } } },
+      MuiTableCell: {
+        styleOverrides: {
+          root: { borderBottom: `1px solid ${c.border.default}`, padding: `${space[8]}px ${space[12]}px`, fontFamily: fontFamily.sans, fontSize: `${fontSize.sm}px`, color: c.text.default },
+          head: { color: c.text.heading, fontWeight: fontWeight.semibold, backgroundColor: c.surface.subtle },
+        },
+      },
+      MuiTableBody: {
+        styleOverrides: {
+          root: {
+            '& .MuiTableRow-root:hover': { backgroundColor: c.surface.subtle },
+            '& .MuiTableRow-root:last-child .MuiTableCell-root': { borderBottom: 'none' },
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          switchBase: {
+            color: '#ffffff',
+            '&.Mui-checked': { color: '#ffffff', '& + .MuiSwitch-track': { backgroundColor: c.action.primary, opacity: 1 } },
+            '&.Mui-disabled + .MuiSwitch-track': { backgroundColor: c.action.disabledBg, opacity: 1 },
+          },
+          track: { backgroundColor: c.border.strong, opacity: 1 },
+        },
+      },
+      MuiSelect: { styleOverrides: { icon: { color: c.text.muted } } },
+      MuiAvatar: { styleOverrides: { root: { backgroundColor: c.surface.subtle, color: c.text.default, fontFamily: fontFamily.sans, fontWeight: fontWeight.semibold } } },
+      MuiSnackbarContent: { styleOverrides: { root: { backgroundColor: c.surface.inverse, color: c.text.inverse, borderRadius: radius.sm, fontFamily: fontFamily.sans } } },
+      MuiCheckbox: { styleOverrides: { root: { color: c.border.strong, '&.Mui-checked': { color: c.action.primary }, '&.Mui-disabled': { color: c.action.disabled } } } },
+      MuiRadio: { styleOverrides: { root: { color: c.border.strong, '&.Mui-checked': { color: c.action.primary }, '&.Mui-disabled': { color: c.action.disabled } } } },
+      // Link underlined by default (WCAG 1.4.1); app keeps only its selector exceptions local.
+      MuiLink: { defaultProps: { underline: 'always' }, styleOverrides: { root: { color: c.text.link, textDecorationColor: 'currentColor', textUnderlineOffset: '0.15em' } } },
+      MuiBackdrop: { styleOverrides: { root: { backgroundColor: c.overlayScrim } } },
       MuiTab: { styleOverrides: { root: { textTransform: 'none', fontWeight: fontWeight.medium, fontFamily: fontFamily.sans } } },
     },
   };

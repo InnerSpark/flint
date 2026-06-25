@@ -547,6 +547,28 @@
       "$value": 1500
     }
   },
+  "breakpoint": {
+    "xs": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "640px"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "768px"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "900px"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "1200px"
+    }
+  },
   "duration": {
     "instant": {
       "$type": "duration",
@@ -938,6 +960,14 @@
         "onDanger": {
           "$type": "color",
           "$value": "#ffffff"
+        },
+        "disabled": {
+          "$type": "color",
+          "$value": "#94a3b8"
+        },
+        "disabledBg": {
+          "$type": "color",
+          "$value": "#f1f5f9"
         }
       },
       "border": {
@@ -956,6 +986,10 @@
         "error": {
           "$type": "color",
           "$value": "#dc2626"
+        },
+        "disabled": {
+          "$type": "color",
+          "$value": "#e2e8f0"
         }
       },
       "feedback": {
@@ -1166,6 +1200,14 @@
         "onDanger": {
           "$type": "color",
           "$value": "#ffffff"
+        },
+        "disabled": {
+          "$type": "color",
+          "$value": "#6e7681"
+        },
+        "disabledBg": {
+          "$type": "color",
+          "$value": "#21262d"
         }
       },
       "border": {
@@ -1184,6 +1226,10 @@
         "error": {
           "$type": "color",
           "$value": "#f87171"
+        },
+        "disabled": {
+          "$type": "color",
+          "$value": "#545d68"
         }
       },
       "feedback": {

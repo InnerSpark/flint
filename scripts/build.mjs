@@ -52,6 +52,8 @@ function staticVars() {
     for (const [k, v] of Object.entries(tokens.motion.easing || {})) out.push([`--ease-${k}`, v]);
   }
   for (const [k, v] of Object.entries(tokens.zIndex || {})) out.push([`--z-${k}`, `${v}`]);
+  for (const [k, v] of Object.entries(tokens.breakpoint || {})) out.push([`--breakpoint-${k}`, `${v}px`]);
+  out.push(['--target-min', `${tokens.targetMin}px`]);
   out.push(['--font-sans', tokens.fontFamily.sans]);
   out.push(['--font-prose', tokens.fontFamily.prose]);
   out.push(['--font-mono', tokens.fontFamily.mono]);
@@ -140,6 +142,7 @@ export interface Tokens {
   typography: Record<string, { fontFamily: string; fontSize: number; fontWeight: number; lineHeight: number; letterSpacing: string }>;
   motion: { duration: Record<string, string>; easing: Record<string, string> };
   zIndex: Record<string, number>;
+  breakpoint: Record<string, number>;
   control: Record<string, number>;
   iconSize: Record<string, number>;
   targetMin: number;
@@ -158,6 +161,7 @@ export const shadowDark: Tokens['shadowDark'];
 export const typography: Tokens['typography'];
 export const motion: Tokens['motion'];
 export const zIndex: Tokens['zIndex'];
+export const breakpoint: Tokens['breakpoint'];
 export const control: Tokens['control'];
 export const iconSize: Tokens['iconSize'];
 export const targetMin: Tokens['targetMin'];
@@ -192,6 +196,7 @@ const dtcg = {
   fontSize: dimGroup(tokens.fontSize),
   lineHeight: numGroup(tokens.lineHeight),
   zIndex: numGroup(tokens.zIndex),
+  breakpoint: dimGroup(tokens.breakpoint),
   duration: Object.fromEntries(Object.entries(tokens.motion.duration).map(([k, v]) => [k, { $type: 'duration', $value: v }])),
   easing: Object.fromEntries(Object.entries(tokens.motion.easing).map(([k, v]) => [k, { $type: 'cubicBezier', $value: bezier(v) }])),
   shadow: Object.fromEntries(Object.entries(tokens.shadow).map(([k, v]) => [k, { $type: 'shadow', $value: shadowVal(v) }])),

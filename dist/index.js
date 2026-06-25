@@ -296,6 +296,13 @@ const tokens = {
     "popover": 1400,
     "toast": 1500
   },
+  "breakpoint": {
+    "xs": 0,
+    "sm": 640,
+    "md": 768,
+    "lg": 900,
+    "xl": 1200
+  },
   "semantic": {
     "light": {
       "surface": {
@@ -321,13 +328,16 @@ const tokens = {
         "focusRing": "#1a5fa8",
         "danger": "#b91c1c",
         "dangerHover": "#991b1b",
-        "onDanger": "#ffffff"
+        "onDanger": "#ffffff",
+        "disabled": "#94a3b8",
+        "disabledBg": "#f1f5f9"
       },
       "border": {
         "default": "#e2e8f0",
         "strong": "#cbd5e1",
         "focus": "#1a5fa8",
-        "error": "#dc2626"
+        "error": "#dc2626",
+        "disabled": "#e2e8f0"
       },
       "feedback": {
         "success": {
@@ -396,13 +406,16 @@ const tokens = {
         "focusRing": "#60a5fa",
         "danger": "#b91c1c",
         "dangerHover": "#991b1b",
-        "onDanger": "#ffffff"
+        "onDanger": "#ffffff",
+        "disabled": "#6e7681",
+        "disabledBg": "#21262d"
       },
       "border": {
         "default": "#6e7681",
         "strong": "#aeb8c2",
         "focus": "#60a5fa",
-        "error": "#f87171"
+        "error": "#f87171",
+        "disabled": "#545d68"
       },
       "feedback": {
         "success": {
@@ -464,5 +477,6 @@ export const shadowDark = tokens["shadowDark"];
 export const typography = tokens["typography"];
 export const motion = tokens["motion"];
 export const zIndex = tokens["zIndex"];
+export const breakpoint = tokens["breakpoint"];
 export const semantic = tokens["semantic"];
 export default tokens;

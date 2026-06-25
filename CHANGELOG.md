@@ -2,6 +2,15 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.6.0
+
+System-level tokens and a wider canonical component set. Additive, no breaking changes.
+
+- The factory now sets `theme.spacing` from the space scale (`space/8`) and `theme.breakpoints` from a new `breakpoint` token group (`xs` 0, `sm` 640, `md` 768, `lg` 900, `xl` 1200), so consumers stop re-deriving them.
+- `targetMin` now ships as a `--target-min` CSS variable, and the breakpoints as `--breakpoint-*`, so non-MUI surfaces (the marketing site) stop hardcoding `24px` / ad-hoc widths. The breakpoint scale is in the DTCG export too.
+- Added disabled-state tokens beyond placeholder: `action.disabled`, `action.disabledBg`, and `border.disabled` (light and dark), wired into `palette.action` and the control components. Modal overlays use the existing `overlayScrim` token via a canonical `MuiBackdrop`.
+- New canonical components, all token-driven and mode-aware: `MuiTableHead` / `MuiTableCell` / `MuiTableBody` (subtle header surface, token cell borders + padding, body-row hover), `MuiSwitch` (track `border.strong`, checked `action.primary`, disabled `action.disabledBg`), `MuiSelect` icon, `MuiAvatar`, `MuiSnackbarContent` (inverse surface), `MuiCheckbox` / `MuiRadio` (action/border tokens), and `MuiLink` (underlined by default for WCAG 1.4.1, leaving the app's selector exceptions local). (ASDS-19)
+
 ## v1.5.0
 
 Dark-aware elevation and a broad canonical MUI component set. Additive, no breaking changes.
