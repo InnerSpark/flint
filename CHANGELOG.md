@@ -2,6 +2,10 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.6.1
+
+- Ownership/licensing: the LICENSE copyright now names the full legal entity, "Inner Spark Media, LLC" (previously "Inner Spark Media"), and `package.json` gains `author` and `repository`. Added a NOTICE. No token, component, or API changes; consumers can re-pin at their next Flint bump.
+
 ## v1.6.0
 
 System-level tokens and a wider canonical component set. Additive, no breaking changes.
