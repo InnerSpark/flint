@@ -9,8 +9,14 @@
  *    the tinted subtle surface, so it is checked on those two only.
  *  - text.muted is checked on every surface including subtle (captions sit on cards).
  *  - focus indicators (border.focus, action.focusRing) and primary-as-accent: 3:1 (1.4.11).
- *  - border.default / border.strong are decorative boundaries (WCAG-exempt); reported
- *    as advisory ("ADV"), never fail the build.
+ *  - border.control and border.error are REQUIRED at 3:1 on both the field and page
+ *    surfaces. These are the boundaries that identify a form control, which 1.4.11
+ *    covers; they are not decorative. (A light-mode input outline at 1.23:1 is how the
+ *    field was previously unidentifiable, see ASDS-20.)
+ *  - border.default / border.strong are decorative boundaries (dividers, card edges,
+ *    WCAG-exempt); reported as advisory ("ADV"), never fail the build.
+ *  - action.disabled is exempt under 1.4.3 (inactive controls). Reported as advisory,
+ *    but we hold it well above the old value for legibility.
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -53,6 +59,11 @@ const PAIRS = [
   ["cyan accent on default", "accent.cyan", "surface.default", 4.5, "text"],
   ["cyan accent on page", "accent.cyan", "surface.page", 4.5, "text"],
   ["selected.text on surface", "selected.text", "selected.surface", 4.5, "text"],
+  ["control border on default", "border.control", "surface.default", 3.0, "control"],
+  ["control border on page", "border.control", "surface.page", 3.0, "control"],
+  ["error border on default", "border.error", "surface.default", 3.0, "control"],
+  ["error border on page", "border.error", "surface.page", 3.0, "control"],
+  ["disabled text on disabledBg", "action.disabled", "action.disabledBg", 4.5, "exempt"],
   ["focus border on default", "border.focus", "surface.default", 3.0, "focus"],
   ["focusRing on page", "action.focusRing", "surface.page", 3.0, "focus"],
   ["primary on page (accent)", "action.primary", "surface.page", 3.0, "ui"],
@@ -65,7 +76,7 @@ for (const mode of ["light", "dark"]) {
   console.log(`\n== ${mode} ==`);
   for (const [label, fg, bg, th, kind] of PAIRS) {
     const r = ratio(get(mode, fg), get(mode, bg));
-    const advisory = kind === "decorative";
+    const advisory = kind === "decorative" || kind === "exempt";
     const ok = r >= th;
     if (!ok && !advisory) failures++;
     const tag = ok ? "PASS" : (advisory ? "ADV " : "FAIL");

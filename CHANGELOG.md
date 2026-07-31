@@ -2,6 +2,14 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.7.0
+
+Fixes two contrast problems found while building the Form field component, and teaches the guard to catch them.
+
+- Added `border.control`, a semantic token for form-control boundaries (light gray/500 `#64748b`, dark ink/500 `#6e7681`). The rest border on inputs previously used `border.default`, which is 1.23:1 against a white field in light mode. WCAG 1.4.11 requires 3:1 for the visual boundary that identifies a control, so the light-mode input outline was effectively invisible. `border.control` is 4.76:1 on the field and 4.55:1 on the page; dark mode is 3.77:1 / 4.12:1. `border.default` is unchanged and stays the decorative divider token.
+- Raised `action.disabled` for legibility: light gray/400 to gray/500 (2.34:1 to 4.34:1 on the disabled background), dark ink/500 to ink/400 (3.31:1 to 4.40:1). Disabled controls are exempt under WCAG 1.4.3, so this is a readability improvement rather than a conformance fix, and the token stays visibly muted against `text.default`.
+- Contrast guard: `border.control` and `border.error` are now checked as required at 3:1 on both the field and page surfaces in both modes, instead of being lumped in with decorative borders. `action.disabled` is reported as advisory under its exemption. Note this also caught that `feedback.error.solid` is only 2.67:1 on the dark field surface, so error borders must use `border.error`, not the solid.
+
 ## v1.6.1
 
 - Ownership/licensing: the LICENSE copyright now names the full legal entity, "Inner Spark Media, LLC" (previously "Inner Spark Media"), and `package.json` gains `author` and `repository`. Added a NOTICE. No token, component, or API changes; consumers can re-pin at their next Flint bump.

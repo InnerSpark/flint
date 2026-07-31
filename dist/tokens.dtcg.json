@@ -963,7 +963,7 @@
         },
         "disabled": {
           "$type": "color",
-          "$value": "#94a3b8"
+          "$value": "#64748b"
         },
         "disabledBg": {
           "$type": "color",
@@ -974,6 +974,10 @@
         "default": {
           "$type": "color",
           "$value": "#e2e8f0"
+        },
+        "control": {
+          "$type": "color",
+          "$value": "#64748b"
         },
         "strong": {
           "$type": "color",
@@ -1203,7 +1207,7 @@
         },
         "disabled": {
           "$type": "color",
-          "$value": "#6e7681"
+          "$value": "#828b95"
         },
         "disabledBg": {
           "$type": "color",
@@ -1212,6 +1216,10 @@
       },
       "border": {
         "default": {
+          "$type": "color",
+          "$value": "#6e7681"
+        },
+        "control": {
           "$type": "color",
           "$value": "#6e7681"
         },

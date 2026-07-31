@@ -329,11 +329,12 @@ const tokens = {
         "danger": "#b91c1c",
         "dangerHover": "#991b1b",
         "onDanger": "#ffffff",
-        "disabled": "#94a3b8",
+        "disabled": "#64748b",
         "disabledBg": "#f1f5f9"
       },
       "border": {
         "default": "#e2e8f0",
+        "control": "#64748b",
         "strong": "#cbd5e1",
         "focus": "#1a5fa8",
         "error": "#dc2626",
@@ -407,11 +408,12 @@ const tokens = {
         "danger": "#b91c1c",
         "dangerHover": "#991b1b",
         "onDanger": "#ffffff",
-        "disabled": "#6e7681",
+        "disabled": "#828b95",
         "disabledBg": "#21262d"
       },
       "border": {
         "default": "#6e7681",
+        "control": "#6e7681",
         "strong": "#aeb8c2",
         "focus": "#60a5fa",
         "error": "#f87171",
