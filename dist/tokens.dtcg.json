@@ -979,6 +979,10 @@
           "$type": "color",
           "$value": "#64748b"
         },
+        "controlHover": {
+          "$type": "color",
+          "$value": "#475569"
+        },
         "strong": {
           "$type": "color",
           "$value": "#cbd5e1"
@@ -1222,6 +1226,10 @@
         "control": {
           "$type": "color",
           "$value": "#6e7681"
+        },
+        "controlHover": {
+          "$type": "color",
+          "$value": "#9aa4af"
         },
         "strong": {
           "$type": "color",

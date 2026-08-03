@@ -335,6 +335,7 @@ const tokens = {
       "border": {
         "default": "#e2e8f0",
         "control": "#64748b",
+        "controlHover": "#475569",
         "strong": "#cbd5e1",
         "focus": "#1a5fa8",
         "error": "#dc2626",
@@ -414,6 +415,7 @@ const tokens = {
       "border": {
         "default": "#6e7681",
         "control": "#6e7681",
+        "controlHover": "#9aa4af",
         "strong": "#aeb8c2",
         "focus": "#60a5fa",
         "error": "#f87171",

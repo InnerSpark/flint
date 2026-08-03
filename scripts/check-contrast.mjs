@@ -60,6 +60,8 @@ const PAIRS = [
   ["cyan accent on page", "accent.cyan", "surface.page", 4.5, "text"],
   ["selected.text on surface", "selected.text", "selected.surface", 4.5, "text"],
   ["control border on default", "border.control", "surface.default", 3.0, "control"],
+  ["control hover border on default", "border.controlHover", "surface.default", 3.0, "control"],
+  ["control hover border on page", "border.controlHover", "surface.page", 3.0, "control"],
   ["control border on page", "border.control", "surface.page", 3.0, "control"],
   ["error border on default", "border.error", "surface.default", 3.0, "control"],
   ["error border on page", "border.error", "surface.page", 3.0, "control"],
@@ -83,5 +85,33 @@ for (const mode of ["light", "dark"]) {
     console.log(`${tag} ${r.toFixed(2).padStart(6)} (>=${th}) ${kind.padEnd(11)} ${label}`);
   }
 }
-console.log(`\n${failures} required failure(s).`);
-process.exit(failures > 0 ? 1 : 0);
+// Usage check. The value checks above cannot see which token a component actually
+// binds to, and that is exactly how checkbox, radio and the switch track shipped on
+// border.strong (1.48:1 in light) while every value check still passed. border.strong
+// is decorative-only: dividers, card edges, hover accents on non-controls. Anything
+// that is the visible boundary of a control must use border.control / controlHover.
+const factory = join(root, 'mui', 'options.mjs');
+let usageFailures = 0;
+try {
+  const src = readFileSync(factory, 'utf8');
+  const offenders = src
+    .split('\n')
+    .map((line, i) => [i + 1, line])
+    .filter(([, line]) => /border\.strong/.test(line));
+  console.log('\n== usage ==');
+  if (offenders.length) {
+    usageFailures = offenders.length;
+    for (const [n, line] of offenders) {
+      console.log(`FAIL mui/options.mjs:${n} uses border.strong on a component. Use border.control (or border.controlHover for hover).`);
+      console.log(`     ${line.trim().slice(0, 110)}`);
+    }
+  } else {
+    console.log('PASS   no component in the MUI factory binds border.strong');
+  }
+} catch {
+  console.log('\n== usage ==\nSKIP   mui/options.mjs not found');
+}
+
+const total = failures + usageFailures;
+console.log(`\n${failures} required contrast failure(s), ${usageFailures} usage failure(s).`);
+process.exit(total > 0 ? 1 : 0);

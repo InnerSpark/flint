@@ -171,6 +171,7 @@
   --color-action-disabled-bg: #f1f5f9;
   --color-border-default: #e2e8f0;
   --color-border-control: #64748b;
+  --color-border-control-hover: #475569;
   --color-border-strong: #cbd5e1;
   --color-border-focus: #1a5fa8;
   --color-border-error: #dc2626;
@@ -231,6 +232,7 @@
   --color-action-disabled-bg: #21262d;
   --color-border-default: #6e7681;
   --color-border-control: #6e7681;
+  --color-border-control-hover: #9aa4af;
   --color-border-strong: #aeb8c2;
   --color-border-focus: #60a5fa;
   --color-border-error: #f87171;
