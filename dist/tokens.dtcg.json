@@ -909,21 +909,25 @@
         },
         "default": {
           "$type": "color",
-          "$value": "#475569"
+          "$value": "#1e293b"
         },
         "muted": {
           "$type": "color",
-          "$value": "#5f6f84"
+          "$value": "#334155"
         },
         "placeholder": {
           "$type": "color",
-          "$value": "#64748b"
+          "$value": "#334155"
         },
         "link": {
           "$type": "color",
-          "$value": "#2767cc"
+          "$value": "#1550a0"
         },
         "inverse": {
+          "$type": "color",
+          "$value": "#ffffff"
+        },
+        "onCode": {
           "$type": "color",
           "$value": "#ffffff"
         }
@@ -931,11 +935,11 @@
       "action": {
         "primary": {
           "$type": "color",
-          "$value": "#1a5fa8"
+          "$value": "#1550a0"
         },
         "primaryHover": {
           "$type": "color",
-          "$value": "#1550a0"
+          "$value": "#0d3b6e"
         },
         "onPrimary": {
           "$type": "color",
@@ -947,15 +951,15 @@
         },
         "focusRing": {
           "$type": "color",
-          "$value": "#1a5fa8"
+          "$value": "#1550a0"
         },
         "danger": {
           "$type": "color",
-          "$value": "#b91c1c"
+          "$value": "#991b1b"
         },
         "dangerHover": {
           "$type": "color",
-          "$value": "#991b1b"
+          "$value": "#7f1d1d"
         },
         "onDanger": {
           "$type": "color",
@@ -989,7 +993,7 @@
         },
         "focus": {
           "$type": "color",
-          "$value": "#1a5fa8"
+          "$value": "#1550a0"
         },
         "error": {
           "$type": "color",
@@ -1012,11 +1016,11 @@
           },
           "solid": {
             "$type": "color",
-            "$value": "#15803d"
+            "$value": "#166534"
           },
           "text": {
             "$type": "color",
-            "$value": "#166534"
+            "$value": "#14532d"
           },
           "onSolid": {
             "$type": "color",
@@ -1034,11 +1038,11 @@
           },
           "solid": {
             "$type": "color",
-            "$value": "#b45309"
+            "$value": "#92400e"
           },
           "text": {
             "$type": "color",
-            "$value": "#92400e"
+            "$value": "#78350f"
           },
           "onSolid": {
             "$type": "color",
@@ -1056,11 +1060,11 @@
           },
           "solid": {
             "$type": "color",
-            "$value": "#b91c1c"
+            "$value": "#991b1b"
           },
           "text": {
             "$type": "color",
-            "$value": "#991b1b"
+            "$value": "#7f1d1d"
           },
           "onSolid": {
             "$type": "color",
@@ -1078,7 +1082,7 @@
           },
           "solid": {
             "$type": "color",
-            "$value": "#1a5fa8"
+            "$value": "#1550a0"
           },
           "text": {
             "$type": "color",
@@ -1097,7 +1101,7 @@
         },
         "aaaSolid": {
           "$type": "color",
-          "$value": "#7c3aed"
+          "$value": "#6d28d9"
         },
         "aaaText": {
           "$type": "color",
@@ -1109,7 +1113,7 @@
         },
         "cyan": {
           "$type": "color",
-          "$value": "#075985"
+          "$value": "#0c4a6e"
         }
       },
       "selected": {
@@ -1119,7 +1123,7 @@
         },
         "text": {
           "$type": "color",
-          "$value": "#1a5fa8"
+          "$value": "#1550a0"
         }
       },
       "overlayScrim": {
@@ -1161,11 +1165,11 @@
         },
         "muted": {
           "$type": "color",
-          "$value": "#9aa4af"
+          "$value": "#aeb8c2"
         },
         "placeholder": {
           "$type": "color",
-          "$value": "#828b95"
+          "$value": "#aeb8c2"
         },
         "link": {
           "$type": "color",
@@ -1174,20 +1178,24 @@
         "inverse": {
           "$type": "color",
           "$value": "#0d1117"
+        },
+        "onCode": {
+          "$type": "color",
+          "$value": "#ffffff"
         }
       },
       "action": {
         "primary": {
           "$type": "color",
-          "$value": "#2767cc"
+          "$value": "#93c5fd"
         },
         "primaryHover": {
           "$type": "color",
-          "$value": "#1a5fa8"
+          "$value": "#bfdbfe"
         },
         "onPrimary": {
           "$type": "color",
-          "$value": "#ffffff"
+          "$value": "#0d1117"
         },
         "secondary": {
           "$type": "color",
@@ -1199,15 +1207,15 @@
         },
         "danger": {
           "$type": "color",
-          "$value": "#b91c1c"
+          "$value": "#fca5a5"
         },
         "dangerHover": {
           "$type": "color",
-          "$value": "#991b1b"
+          "$value": "#fecaca"
         },
         "onDanger": {
           "$type": "color",
-          "$value": "#ffffff"
+          "$value": "#0d1117"
         },
         "disabled": {
           "$type": "color",
@@ -1260,15 +1268,15 @@
           },
           "solid": {
             "$type": "color",
-            "$value": "#15803d"
+            "$value": "#4ade80"
           },
           "text": {
             "$type": "color",
-            "$value": "#86efac"
+            "$value": "#bbf7d0"
           },
           "onSolid": {
             "$type": "color",
-            "$value": "#ffffff"
+            "$value": "#0d1117"
           }
         },
         "warning": {
@@ -1282,15 +1290,15 @@
           },
           "solid": {
             "$type": "color",
-            "$value": "#b45309"
+            "$value": "#fbbf24"
           },
           "text": {
             "$type": "color",
-            "$value": "#fcd34d"
+            "$value": "#fde68a"
           },
           "onSolid": {
             "$type": "color",
-            "$value": "#ffffff"
+            "$value": "#0d1117"
           }
         },
         "error": {
@@ -1304,15 +1312,15 @@
           },
           "solid": {
             "$type": "color",
-            "$value": "#b91c1c"
+            "$value": "#fca5a5"
           },
           "text": {
             "$type": "color",
-            "$value": "#fca5a5"
+            "$value": "#fee2e2"
           },
           "onSolid": {
             "$type": "color",
-            "$value": "#ffffff"
+            "$value": "#0d1117"
           }
         },
         "info": {
@@ -1326,7 +1334,7 @@
           },
           "solid": {
             "$type": "color",
-            "$value": "#1a5fa8"
+            "$value": "#93c5fd"
           },
           "text": {
             "$type": "color",
@@ -1334,7 +1342,7 @@
           },
           "onSolid": {
             "$type": "color",
-            "$value": "#ffffff"
+            "$value": "#0d1117"
           }
         }
       },
@@ -1345,15 +1353,15 @@
         },
         "aaaSolid": {
           "$type": "color",
-          "$value": "#7c3aed"
+          "$value": "#c4b5fd"
         },
         "aaaText": {
           "$type": "color",
-          "$value": "#c4b5fd"
+          "$value": "#ddd6fe"
         },
         "onAaa": {
           "$type": "color",
-          "$value": "#ffffff"
+          "$value": "#0d1117"
         },
         "cyan": {
           "$type": "color",
@@ -1367,7 +1375,7 @@
         },
         "text": {
           "$type": "color",
-          "$value": "#93c5fd"
+          "$value": "#bfdbfe"
         }
       },
       "overlayScrim": {

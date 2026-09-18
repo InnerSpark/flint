@@ -2,6 +2,19 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.9.0
+
+Raises every semantic text pairing to WCAG AAA (7:1) in both modes, and fixes two contrast bugs (ASDS-23).
+
+- Every text pairing now meets 7:1 in light and dark. Light went from 17 of 37 pairs at AAA to all of them; dark from 18 of 37.
+- Added `text.onCode`. In dark mode, `text.inverse` on `surface.code` measured 1.09:1. Both tokens flip between modes, so the pair inverted into dark text on a near-black code surface. Code surfaces now carry their own foreground token (white in both modes) instead of borrowing the inverse text color.
+- Fixed `text.placeholder` on `surface.subtle`, which was 4.34:1 light and 4.40:1 dark, under the 4.5 AA floor. Placeholder text is not exempt from 1.4.3; only genuinely disabled controls are.
+- Darkened the light-mode brand solids one ladder step so white labels clear 7:1: `action.primary` blue/600 to blue/700, `action.danger` red/700 to red/800, and all four `feedback.*.solid` values. `text.link` moves to blue/700 and `accent.cyan` to sky/900.
+- Inverted the dark-mode filled actions. Pushing those fills dark enough to carry a white label at 7:1 dropped `action.primary` to 2.21:1 against the dark page, failing the 1.4.11 control boundary. Dark mode now uses a light fill with a near-black label (`action.primary` blue/300 with `onPrimary` ink/900, and the same pattern for danger, the feedback solids, and `accent.aaaSolid`), which satisfies both the 7:1 label and the 3:1 edge.
+- Neutral text compresses at AAA. Only gray/700 and darker clear 7:1 on `surface.subtle` (gray/600 lands at 6.92), so `text.muted` and `text.placeholder` now share a value. Restoring visual separation between them needs a re-spaced gray ladder, tracked separately.
+
+Non-text contrast (1.4.11) has no AAA tier and stays at 3:1. `border.default`, `border.strong`, and the `feedback.*.border` values remain decorative and must never be the sole boundary of a control.
+
 ## v1.8.0
 
 Extends the 1.4.11 control-boundary work to the remaining controls, and adds a guard that can see token *usage*, not just token values.
