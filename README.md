@@ -2,7 +2,7 @@
 
 The single source of truth for color, type, spacing, and radius across AccessSpark and its sister brands. Tokens only (no components); framework-agnostic.
 
-`tokens.json` is the source. The build emits CSS custom properties and typed JS exports into `dist/`.
+`tokens.json` is the source. The build emits CSS custom properties, typed JS exports, and SwiftUI tokens into `dist/`.
 
 ## Install (private, git tag)
 
@@ -52,6 +52,27 @@ const theme = createFlintTheme('light'); // or 'dark'
 
 `createFlintTheme(mode, overrides?)` maps the Flint palette, type scale, `spacing`, `breakpoints`, `shape.borderRadius`, dark-aware elevation, and a canonical component set (Paper, Card, Table, Menu/Popover/Dialog, Chip, Accordion, inputs, Select, Switch, Checkbox/Radio, Alert, ToggleButton, Tooltip, Snackbar, Avatar, Link, Backdrop, LinearProgress) onto a MUI theme; `flintThemeOptions(mode)` returns the raw options if you build the theme yourself. `@mui/material` is an optional peer dependency, only pulled in if you import this entry.
 
+### Swift / SwiftUI (iOS 16+, macOS 13+)
+
+Add the package in Xcode (File > Add Package Dependencies) with `https://github.com/InnerSpark/flint`, pinned to a version tag. The repo is private, so add your GitHub account under Xcode > Settings > Accounts first.
+
+```swift
+import Flint
+
+Text("Awning")
+  .flintText(Flint.Typography.headingH2)
+  .foregroundStyle(Flint.Colors.textHeading)
+  .padding(Flint.Space.s16)
+  .frame(minHeight: Flint.Target.touch)
+  .background(Flint.Colors.surfaceDefault, in: RoundedRectangle(cornerRadius: Flint.Radius.md))
+```
+
+- **Colors:** `Flint.Colors.*` are the semantic tokens, flat camelCase (`--color-feedback-success-text` is `feedback.success.text` is `Flint.Colors.feedbackSuccessText`). Each follows the system light/dark appearance. `Flint.Palette.*` holds the raw ramps (`blue500`) and does not change between modes.
+- **Layout:** `Flint.Space.s0` to `s64`, `Flint.Radius`, `Flint.Control`, `Flint.IconSize`. `Flint.Target.minimum` is `targetMin` (24); use `Flint.Target.touch` (44, Apple HIG) for touch UI.
+- **Type:** `.flintText(Flint.Typography.bodyMd)` sets font, line height, and tracking, all scaled with Dynamic Type. Bundle the Open Sans static TTFs (Regular, Medium, SemiBold, Bold, ExtraBold) in the app and list them under `UIAppFonts`; the styles use PostScript names like `OpenSans-Bold`.
+- **Motion:** `withAnimation(Flint.Motion.animation(.standard, duration: Flint.Motion.Duration.base, reduceMotion: reduceMotion)) { ... }`, with `reduceMotion` from `@Environment(\.accessibilityReduceMotion)`. Returns nil (no animation) when Reduce Motion is on.
+- **Not in the Swift output yet:** shadows, z-index, breakpoints.
+
 ## Figma Make
 
 Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--radius` / `--font` set in light and dark) or at **`tokens.json`** for the structured values. Either gives Make the whole Flint scale to design against. For a standards-based ingest (Tokens Studio, Style Dictionary), use `@innerspark/flint/tokens.dtcg.json` (W3C DTCG `$type` / `$value`, semantic split into `light` and `dark`).
@@ -59,7 +80,7 @@ Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--r
 ## Build
 
 ```bash
-npm run build   # runs scripts/build.mjs, regenerates dist/ from tokens.json
+npm run build   # runs scripts/build.mjs, regenerates dist/ (including dist/swift/Flint.swift) from tokens.json
 ```
 
 `dist/` is committed so git-tag installs work without a build step; `prepare` also rebuilds on install.
