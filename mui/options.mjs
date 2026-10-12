@@ -3,7 +3,7 @@
  * it can be tested standalone. `createFlintTheme` (index.mjs) wraps this with MUI's
  * `createTheme`. Parameterized by mode, so the same source drives light and dark.
  */
-import { semantic, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, shadowDark, space, control, breakpoint, targetMin } from '../dist/index.js';
+import { semantic, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, shadowDark, space, control, breakpoint, density, targetMin } from '../dist/index.js';
 
 const t = (size, weight, lh, ls = '0') => ({
   fontFamily: fontFamily.sans,
@@ -13,7 +13,11 @@ const t = (size, weight, lh, ls = '0') => ({
   letterSpacing: ls,
 });
 
-export function flintThemeOptions(mode = 'light') {
+export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
+  // Density varies inset/gap only. theme.spacing stays on the 8px base so sx multipliers
+  // keep their meaning, and control/icon/target sizes are identical in both densities, so
+  // compact never shrinks the touch target.
+  const D = density[densityName] || density.comfortable;
   const c = semantic[mode];
   const S = mode === 'dark' ? shadowDark : shadow;
   const intent = (name) => ({ success: c.feedback.success, warning: c.feedback.warning, error: c.feedback.error, info: c.feedback.info }[name]);
@@ -101,7 +105,7 @@ export function flintThemeOptions(mode = 'light') {
       },
       MuiCardContent: {
         styleOverrides: {
-          root: { padding: space[16], '&:last-child': { paddingBottom: space[16] } },
+          root: { padding: D.inset.lg, '&:last-child': { paddingBottom: D.inset.lg } },
         },
       },
       MuiMenu: { styleOverrides: { paper: { borderRadius: radius.sm, boxShadow: S.popover } } },
@@ -199,7 +203,7 @@ export function flintThemeOptions(mode = 'light') {
       MuiTableHead: { styleOverrides: { root: { backgroundColor: c.surface.subtle } } },
       MuiTableCell: {
         styleOverrides: {
-          root: { borderBottom: `1px solid ${c.border.default}`, padding: `${space[8]}px ${space[12]}px`, fontFamily: fontFamily.sans, fontSize: `${fontSize.sm}px`, color: c.text.default },
+          root: { borderBottom: `1px solid ${c.border.default}`, padding: `${D.inset.sm}px ${D.inset.md}px`, fontFamily: fontFamily.sans, fontSize: `${fontSize.sm}px`, color: c.text.default },
           head: { color: c.text.heading, fontWeight: fontWeight.semibold, backgroundColor: c.surface.subtle },
         },
       },

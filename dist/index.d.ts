@@ -25,6 +25,7 @@ export interface Tokens {
   motion: { duration: Record<string, string>; easing: Record<string, string> };
   zIndex: Record<string, number>;
   breakpoint: Record<string, number>;
+  density: Record<'comfortable' | 'compact', { inset: Record<string, number>; gap: Record<string, number> }>;
   control: Record<string, number>;
   iconSize: Record<string, number>;
   targetMin: number;
@@ -44,6 +45,7 @@ export const typography: Tokens['typography'];
 export const motion: Tokens['motion'];
 export const zIndex: Tokens['zIndex'];
 export const breakpoint: Tokens['breakpoint'];
+export const density: Tokens['density'];
 export const control: Tokens['control'];
 export const iconSize: Tokens['iconSize'];
 export const targetMin: Tokens['targetMin'];

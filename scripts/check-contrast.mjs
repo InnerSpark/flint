@@ -112,6 +112,22 @@ try {
   console.log('\n== usage ==\nSKIP   mui/options.mjs not found');
 }
 
+// Density invariant. Compact is allowed to tighten inset and gap, nothing else. Control
+// sizes, icon sizes and targetMin must stay constant, so a denser layout can never shrink
+// the touch target below WCAG 2.5.8. Pinning the allowed keys here stops a future density
+// group from quietly introducing a smaller control or target.
+const ALLOWED_DENSITY_KEYS = ['inset', 'gap'];
+console.log('\n== density ==');
+for (const [name, group] of Object.entries(tokens.density || {})) {
+  const extra = Object.keys(group).filter((k) => !ALLOWED_DENSITY_KEYS.includes(k));
+  if (extra.length) {
+    usageFailures++;
+    console.log(`FAIL density.${name} introduces ${extra.join(', ')}. Density may only vary ${ALLOWED_DENSITY_KEYS.join(' and ')}; control/icon/target sizes must stay constant.`);
+  } else {
+    console.log(`PASS   density.${name} varies only ${ALLOWED_DENSITY_KEYS.join(' + ')}`);
+  }
+}
+
 const total = failures + usageFailures;
 console.log(`\n${failures} required contrast failure(s), ${usageFailures} usage failure(s).`);
 process.exit(total > 0 ? 1 : 0);

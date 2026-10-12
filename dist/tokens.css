@@ -143,6 +143,13 @@
   --breakpoint-lg: 900px;
   --breakpoint-xl: 1200px;
   --target-min: 24px;
+  --inset-sm: 8px;
+  --inset-md: 12px;
+  --inset-lg: 16px;
+  --inset-xl: 24px;
+  --gap-sm: 8px;
+  --gap-md: 12px;
+  --gap-lg: 16px;
   --font-sans: 'Open Sans', sans-serif;
   --font-prose: 'Open Sans', sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -272,4 +279,15 @@
   --shadow-popover: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 6px 20px rgba(0, 0, 0, 0.5);
   --shadow-dialog: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 40px rgba(0, 0, 0, 0.6);
   --shadow-raised: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+[data-density="compact"] {
+  /* density (compact): inset/gap only, control + target sizes are unchanged */
+  --inset-sm: 4px;
+  --inset-md: 8px;
+  --inset-lg: 12px;
+  --inset-xl: 16px;
+  --gap-sm: 4px;
+  --gap-md: 8px;
+  --gap-lg: 12px;
 }

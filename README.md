@@ -50,6 +50,8 @@ import { createFlintTheme } from '@innerspark/flint/mui';
 const theme = createFlintTheme('light'); // or 'dark'
 ```
 
+For a compact layout, use the object form: `createFlintTheme({ mode: 'light', density: 'compact' })`. Density tightens `inset` and `gap` by one step on the space ramp and leaves control, icon and target sizes alone, so it never shrinks a touch target. Non-MUI surfaces get the same thing by setting `data-density="compact"` on a parent, which flips the `--inset-*` and `--gap-*` vars.
+
 `createFlintTheme(mode, overrides?)` maps the Flint palette, type scale, `spacing`, `breakpoints`, `shape.borderRadius`, dark-aware elevation, and a canonical component set (Paper, Card, Table, Menu/Popover/Dialog, Chip, Accordion, inputs, Select, Switch, Checkbox/Radio, Alert, ToggleButton, Tooltip, Snackbar, Avatar, Link, Backdrop, LinearProgress) onto a MUI theme; `flintThemeOptions(mode)` returns the raw options if you build the theme yourself. `@mui/material` is an optional peer dependency, only pulled in if you import this entry.
 
 ### Swift / SwiftUI (iOS 16+, macOS 13+)

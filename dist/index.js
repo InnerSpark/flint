@@ -162,6 +162,34 @@ const tokens = {
     "lg": 24
   },
   "targetMin": 24,
+  "density": {
+    "comfortable": {
+      "inset": {
+        "sm": 8,
+        "md": 12,
+        "lg": 16,
+        "xl": 24
+      },
+      "gap": {
+        "sm": 8,
+        "md": 12,
+        "lg": 16
+      }
+    },
+    "compact": {
+      "inset": {
+        "sm": 4,
+        "md": 8,
+        "lg": 12,
+        "xl": 16
+      },
+      "gap": {
+        "sm": 4,
+        "md": 8,
+        "lg": 12
+      }
+    }
+  },
   "shadow": {
     "card": "0 2px 8px rgba(0, 0, 0, 0.08)",
     "popover": "0 4px 16px rgba(0, 0, 0, 0.12)",
@@ -478,6 +506,7 @@ export const lineHeight = tokens["lineHeight"];
 export const control = tokens["control"];
 export const iconSize = tokens["iconSize"];
 export const targetMin = tokens["targetMin"];
+export const density = tokens["density"];
 export const shadow = tokens["shadow"];
 export const shadowDark = tokens["shadowDark"];
 export const typography = tokens["typography"];

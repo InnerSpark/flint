@@ -10,8 +10,18 @@
 import { createTheme } from '@mui/material/styles';
 import { flintThemeOptions } from './options.mjs';
 
-export function createFlintTheme(mode = 'light', overrides) {
-  return overrides ? createTheme(flintThemeOptions(mode), overrides) : createTheme(flintThemeOptions(mode));
+/**
+ * createFlintTheme('light')
+ * createFlintTheme('light', overrides)
+ * createFlintTheme({ mode: 'light', density: 'compact', overrides })
+ *
+ * The positional forms are kept for backward compatibility; the object form is the way
+ * to pass a density.
+ */
+export function createFlintTheme(modeOrOptions = 'light', overrides) {
+  const opts = typeof modeOrOptions === 'string' ? { mode: modeOrOptions, overrides } : (modeOrOptions || {});
+  const base = flintThemeOptions(opts.mode || 'light', opts.density || 'comfortable');
+  return opts.overrides ? createTheme(base, opts.overrides) : createTheme(base);
 }
 
 export { flintThemeOptions };

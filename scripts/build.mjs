@@ -36,6 +36,17 @@ function semanticVars(mode) {
 
 const shadowDarkVars = () => Object.entries(tokens.shadowDark || {}).map(([k, v]) => [`--shadow-${k}`, v]);
 
+// Density varies spacing only: inset and gap each drop one step down the space ramp in
+// compact. Control sizes, icon sizes, radius and targetMin are identical in both, so a
+// compact layout never shrinks the touch target (WCAG 2.5.8).
+const densityVars = (d) => {
+  const g = (tokens.density || {})[d] || {};
+  return [
+    ...Object.entries(g.inset || {}).map(([k, v]) => [`--inset-${k}`, `${v}px`]),
+    ...Object.entries(g.gap || {}).map(([k, v]) => [`--gap-${k}`, `${v}px`]),
+  ];
+};
+
 function staticVars() {
   const out = [];
   for (const [ramp, steps] of Object.entries(tokens.color)) {
@@ -55,6 +66,7 @@ function staticVars() {
   for (const [k, v] of Object.entries(tokens.zIndex || {})) out.push([`--z-${k}`, `${v}`]);
   for (const [k, v] of Object.entries(tokens.breakpoint || {})) out.push([`--breakpoint-${k}`, `${v}px`]);
   out.push(['--target-min', `${tokens.targetMin}px`]);
+  out.push(...densityVars('comfortable'));
   out.push(['--font-sans', tokens.fontFamily.sans]);
   out.push(['--font-prose', tokens.fontFamily.prose]);
   out.push(['--font-mono', tokens.fontFamily.mono]);
@@ -78,6 +90,11 @@ ${fmt(semanticVars('dark'))}
   /* elevation (dark) */
 ${fmt(shadowDarkVars())}
 }
+
+[data-density="compact"] {
+  /* density (compact): inset/gap only, control + target sizes are unchanged */
+${fmt(densityVars('compact'))}
+}
 `);
 
 writeFileSync(join(dist, 'tokens.media.css'), `/* GENERATED from tokens.json. Auto dark via prefers-color-scheme. Do not edit by hand. */
@@ -96,6 +113,11 @@ ${fmt(semanticVars('dark'))}
     /* elevation (dark) */
 ${fmt(shadowDarkVars())}
   }
+}
+
+[data-density="compact"] {
+  /* density (compact): inset/gap only, control + target sizes are unchanged */
+${fmt(densityVars('compact'))}
 }
 `);
 
@@ -144,6 +166,7 @@ export interface Tokens {
   motion: { duration: Record<string, string>; easing: Record<string, string> };
   zIndex: Record<string, number>;
   breakpoint: Record<string, number>;
+  density: Record<'comfortable' | 'compact', { inset: Record<string, number>; gap: Record<string, number> }>;
   control: Record<string, number>;
   iconSize: Record<string, number>;
   targetMin: number;
@@ -163,6 +186,7 @@ export const typography: Tokens['typography'];
 export const motion: Tokens['motion'];
 export const zIndex: Tokens['zIndex'];
 export const breakpoint: Tokens['breakpoint'];
+export const density: Tokens['density'];
 export const control: Tokens['control'];
 export const iconSize: Tokens['iconSize'];
 export const targetMin: Tokens['targetMin'];
@@ -198,6 +222,7 @@ const dtcg = {
   lineHeight: numGroup(tokens.lineHeight),
   zIndex: numGroup(tokens.zIndex),
   breakpoint: dimGroup(tokens.breakpoint),
+  density: Object.fromEntries(Object.entries(tokens.density).map(([d, g]) => [d, { inset: dimGroup(g.inset), gap: dimGroup(g.gap) }])),
   duration: Object.fromEntries(Object.entries(tokens.motion.duration).map(([k, v]) => [k, { $type: 'duration', $value: v }])),
   easing: Object.fromEntries(Object.entries(tokens.motion.easing).map(([k, v]) => [k, { $type: 'cubicBezier', $value: bezier(v) }])),
   shadow: Object.fromEntries(Object.entries(tokens.shadow).map(([k, v]) => [k, { $type: 'shadow', $value: shadowVal(v) }])),

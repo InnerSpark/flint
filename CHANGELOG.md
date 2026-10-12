@@ -2,6 +2,17 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.11.0
+
+Closes the density gap. Comfortable and Compact existed in the Figma Sizing collection but had no code equivalent, so a dimension the design system promised was unavailable to consumers (ASDS-33). Additive, and comfortable output is unchanged.
+
+- Added a `density` token group with `comfortable` and `compact`, each carrying an `inset` scale (sm/md/lg/xl) and a `gap` scale (sm/md/lg), read from the Figma Sizing collection. Compact is one step down the space ramp: inset 8/12/16/24 becomes 4/8/12/16 and gap 8/12/16 becomes 4/8/12. This also introduces the semantic spacing tier on the code side, which previously had only the raw `space` primitive ramp.
+- Emits `--inset-*` and `--gap-*` CSS vars at comfortable, with a `[data-density="compact"]` override block in both `tokens.css` and `tokens.media.css`, mirroring how dark mode is delivered. Density is in the DTCG export too.
+- `flintThemeOptions(mode, density)` and a new object form for the theme factory: `createFlintTheme({ mode, density, overrides })`. The positional forms `createFlintTheme(mode)` and `createFlintTheme(mode, overrides)` are unchanged, so existing callers need no edit.
+- `MuiCardContent` and `MuiTableCell` padding now resolve through the density scale. At comfortable they emit exactly what they did before (16, and 8/12), so adopting this release changes nothing visually until a consumer opts into compact.
+- Density deliberately varies spacing only. `theme.spacing` stays on the 8px base so `sx` multipliers keep their meaning, and control sizes, icon sizes, radius and `targetMin` are identical in both densities, so a compact layout can never shrink a touch target below WCAG 2.5.8.
+- Guard: added a density invariant that fails the build if a density group introduces anything beyond `inset` and `gap`. The contrast matrix does not grow, since density carries no color.
+
 ## v1.10.0
 
 Adds a Swift/SwiftUI token output so native Apple apps consume Flint by git tag instead of hand-copying values (ASDS-27). Additive, no token changes.
