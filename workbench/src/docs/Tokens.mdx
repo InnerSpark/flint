@@ -1,0 +1,30 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Guides/Token tiers" />
+
+# Token tiers
+
+Flint has three tiers. Each one points at the tier below it, so a change at the bottom flows everywhere above.
+
+| Tier | Example | Use it for |
+| --- | --- | --- |
+| Primitive | `color.blue.700`, `space.16`, `radius.sm` | Nothing in UI. Primitives only feed the tiers above. |
+| Semantic | `text.link` points at `{color.blue.700}` | Colors and roles in UI: surfaces, text, borders, feedback, charts. |
+| Component | `button.primary.bg` points at `{semantic.action.primary}` | The decisions a component makes, shared across MUI, shadcn and SwiftUI. |
+
+Semantic colors exist twice, once for light and once for dark. Component tokens point at semantic tokens without naming a mode, so they follow light and dark on their own.
+
+## One token, every name
+
+| Figma | CSS | JS | Swift |
+| --- | --- | --- | --- |
+| `text/link` | `--color-text-link` | `semantic.light.text.link` | `Flint.Colors.textLink` |
+| `feedback/success/text` | `--color-feedback-success-text` | `semantic.light.feedback.success.text` | `Flint.Colors.feedbackSuccessText` |
+| `button/primary/bg` | `--button-primary-bg` | `component.light.button.primary.bg` | `Flint.Component.buttonPrimaryBg` |
+
+## Adding or changing a token
+
+1. Edit `tokens.json`. Point it at an existing token with a `{reference}` wherever you can.
+2. Run `npm run build`. It rebuilds every output, then runs the contrast check and the parity test.
+3. Check the Foundations pages in light and dark.
+4. Bump the version: new token is a minor, a value fix is a patch, a rename or removal is a major.

@@ -6,12 +6,15 @@
  *   dist/index.js     ESM named + default exports of the resolved tokens
  *   dist/index.d.ts   types
  *   dist/swift/Flint.swift  SwiftUI tokens (SwiftPM via Package.swift)
+ *   dist/shadcn.css   shadcn/ui + Tailwind v4 bridge onto the Flint CSS variables (ASDS-40)
  * No runtime dependencies; Node only.
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { resolveTokens } from './resolve.mjs';
+import { resolveTokens, refOf } from './resolve.mjs';
+import { SHADCN_MAP, SHADCN_THEME_COLORS } from './shadcn-map.mjs';
+import { kebab, camel, cssVarForPath, componentVar } from './names.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 // source keeps semantic tokens as {color.*} references (DTCG output preserves them);
@@ -21,7 +24,6 @@ const tokens = resolveTokens(source);
 const dist = join(root, 'dist');
 mkdirSync(join(dist, 'swift'), { recursive: true });
 
-const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 
 function semanticVars(mode) {
   const s = tokens.semantic[mode];
@@ -59,7 +61,9 @@ function staticVars() {
     else for (const [step, hex] of Object.entries(steps)) out.push([`--color-${ramp}-${step}`, hex]);
   }
   for (const [k, v] of Object.entries(tokens.space)) out.push([`--space-${k}`, `${v}px`]);
-  for (const [k, v] of Object.entries(tokens.radius)) out.push([`--radius-${k}`, `${v}px`]);
+  for (const [k, v] of Object.entries(tokens.radius)) out.push([`--radius-${kebab(k)}`, `${v}px`]);
+  for (const [k, v] of Object.entries(tokens.control)) out.push([`--control-${k}`, `${v}px`]);
+  for (const [k, v] of Object.entries(tokens.iconSize)) out.push([`--icon-size-${k}`, `${v}px`]);
   for (const [k, v] of Object.entries(tokens.fontSize)) out.push([`--font-size-${k}`, `${v}px`]);
   for (const [k, v] of Object.entries(tokens.fontWeight)) out.push([`--font-weight-${k}`, `${v}`]);
   for (const [k, v] of Object.entries(tokens.lineHeight)) out.push([`--line-height-${k}`, `${v}`]);
@@ -75,6 +79,23 @@ function staticVars() {
   out.push(['--font-sans', tokens.fontFamily.sans]);
   out.push(['--font-prose', tokens.fontFamily.prose]);
   out.push(['--font-mono', tokens.fontFamily.mono]);
+  return out;
+}
+
+// Component tier (ASDS-39): one var per component token, written as a var() reference to
+// the token it points at. Mode-free, so dark mode needs no extra block.
+function componentVars() {
+  const out = [];
+  const walk = (node, path) => {
+    for (const [k, v] of Object.entries(node)) {
+      const p = [...path, k];
+      if (v && typeof v === 'object') { walk(v, p); continue; }
+      const name = componentVar(p);
+      const ref = refOf(v);
+      out.push([name, ref ? `var(${cssVarForPath(ref)})` : typeof v === 'number' ? `${v}px` : v]);
+    }
+  };
+  walk(source.component || {}, []);
   return out;
 }
 
@@ -100,6 +121,12 @@ ${fmt(shadowDarkVars())}
   /* density (compact): inset/gap only, control + target sizes are unchanged */
 ${fmt(densityVars('compact'))}
 }
+
+/* component tier: re-declared wherever a theme is set, so a nested data-theme="dark" section
+   resolves these against its own colors instead of inheriting the page's */
+:root, [data-theme] {
+${fmt(componentVars())}
+}
 `);
 
 writeFileSync(join(dist, 'tokens.media.css'), `/* GENERATED from tokens.json. Auto dark via prefers-color-scheme. Do not edit by hand. */
@@ -124,6 +151,12 @@ ${fmt(shadowDarkVars())}
   /* density (compact): inset/gap only, control + target sizes are unchanged */
 ${fmt(densityVars('compact'))}
 }
+
+/* component tier: re-declared wherever a theme is set, so a nested data-theme="dark" section
+   resolves these against its own colors instead of inheriting the page's */
+:root, [data-theme] {
+${fmt(componentVars())}
+}
 `);
 
 writeFileSync(join(dist, 'fonts.css'), `/* Flint: metric-matched Open Sans fallback (no layout shift). Add 'Open Sans Fallback' to the font stack. */
@@ -138,6 +171,26 @@ writeFileSync(join(dist, 'fonts.css'), `/* Flint: metric-matched Open Sans fallb
 `);
 
 writeFileSync(join(dist, 'tokens.json'), JSON.stringify(tokens, null, 2) + '\n');
+
+// shadcn/ui + Tailwind v4 bridge (ASDS-40). Import it from your Tailwind entry CSS after
+// tokens.css. Names only: every value is a var() into Flint, so dark mode and values stay Flint's.
+writeFileSync(join(dist, 'shadcn.css'), `/* GENERATED from tokens.json. Flint -> shadcn/ui bridge. Do not edit by hand.
+   Use from your Tailwind v4 entry CSS:
+     @import "tailwindcss";
+     @import "@innerspark/flint/tokens.css";
+     @import "@innerspark/flint/shadcn.css";
+   Dark mode is Flint's: set data-theme="dark" on <html>. No .dark block is needed. */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root, [data-theme] {
+${fmt(Object.entries(SHADCN_MAP).map(([name, path]) => [name, `var(${cssVarForPath(path)})`]))}
+}
+
+@theme inline {
+${SHADCN_THEME_COLORS.map((n) => `  --color-${n}: var(--${n});`).join('\n')}
+}
+`);
 
 const keys = Object.keys(tokens);
 writeFileSync(join(dist, 'index.js'), `// GENERATED from tokens.json. Flint Design System.
@@ -157,7 +210,21 @@ export interface SemanticScheme {
   feedback: Record<'success' | 'warning' | 'error' | 'info', Record<string, Hex>>;
   accent: Record<string, Hex>;
   selected: Record<string, Hex>;
+  chart: Record<'1' | '2' | '3' | '4' | '5', Hex>;
   overlayScrim: Hex;
+}
+export interface ComponentScheme {
+  button: {
+    radius: number; height: number;
+    primary: { bg: Hex; bgHover: Hex; fg: Hex };
+    secondary: { bg: Hex; bgHover: Hex; fg: Hex; border: Hex };
+    danger: { bg: Hex; bgHover: Hex; fg: Hex };
+    text: { bgHover: Hex; fg: Hex };
+    disabled: { bg: Hex; fg: Hex; border: Hex };
+  };
+  input: { radius: number; height: number; bg: Hex; fg: Hex; placeholder: Hex; border: Hex; borderHover: Hex; borderFocus: Hex; borderError: Hex };
+  checkbox: { size: number; radius: number; border: Hex; checkedBg: Hex; checkedFg: Hex };
+  focus: { ring: { color: Hex; width: number; offset: number } };
 }
 export interface Tokens {
   color: Record<string, Ramp | Hex>;
@@ -178,6 +245,7 @@ export interface Tokens {
   iconSize: Record<string, number>;
   targetMin: number;
   semantic: { light: SemanticScheme; dark: SemanticScheme };
+  component: { light: ComponentScheme; dark: ComponentScheme };
 }
 declare const tokens: Tokens;
 export const color: Tokens['color'];
@@ -198,6 +266,7 @@ export const control: Tokens['control'];
 export const iconSize: Tokens['iconSize'];
 export const targetMin: Tokens['targetMin'];
 export const semantic: Tokens['semantic'];
+export const component: Tokens['component'];
 export default tokens;
 `);
 
@@ -219,6 +288,16 @@ const parseShadow = (s) => {
 const splitLayers = (s) => { const out = []; let depth = 0, cur = ''; for (const ch of s) { if (ch === '(') depth++; if (ch === ')') depth--; if (ch === ',' && depth === 0) { out.push(cur.trim()); cur = ''; } else cur += ch; } if (cur.trim()) out.push(cur.trim()); return out; };
 const shadowVal = (s) => { const layers = splitLayers(s).map(parseShadow); return layers.length === 1 ? layers[0] : layers; };
 const bezier = (s) => { const m = s.match(/cubic-bezier\(([^)]+)\)/); return m ? m[1].split(',').map((n) => parseFloat(n)) : [0, 0, 1, 1]; };
+// Component tier in DTCG: per mode, colors stay aliases into that mode's semantic group,
+// sizes become dimensions. resolveTokens() has already proven every reference exists.
+function dtcgComponent(node, mode) {
+  return Object.fromEntries(Object.entries(node).map(([k, v]) => {
+    if (v && typeof v === 'object') return [k, dtcgComponent(v, mode)];
+    const ref = refOf(v);
+    if (ref && ref.startsWith('semantic.')) return [k, { $type: 'color', $value: `{${['semantic', mode, ...ref.split('.').slice(1)].join('.')}}` }];
+    return [k, { $type: 'dimension', $value: ref ? `{${ref}}` : px(v) }];
+  }));
+}
 const dtcg = {
   color: colorGroup(tokens.color),
   space: dimGroup(tokens.space),
@@ -237,12 +316,12 @@ const dtcg = {
   typography: Object.fromEntries(Object.entries(tokens.typography).map(([k, t]) => [k, { $type: 'typography', $value: { fontFamily: t.fontFamily, fontSize: px(t.fontSize), fontWeight: t.fontWeight, lineHeight: t.lineHeight, letterSpacing: px(t.letterSpacing) } }])),
   // Semantic values stay as {color.*} aliases so DTCG tools (Tokens Studio, Style Dictionary) keep the link to the ladder.
   semantic: { light: colorGroup(source.semantic.light), dark: colorGroup(source.semantic.dark) },
+  component: Object.fromEntries(['light', 'dark'].map((m) => [m, dtcgComponent(source.component || {}, m)])),
 };
 writeFileSync(join(dist, 'tokens.dtcg.json'), JSON.stringify(dtcg, null, 2));
 
 // Swift / SwiftUI export (ASDS-27). Writes dist/swift/Flint.swift; Package.swift at the repo root
 // points SwiftPM at dist/swift so iOS/macOS apps add Flint by git tag.
-const camel = (...parts) => parts.map((p, i) => { const s = String(p); return i === 0 ? s.charAt(0).toLowerCase() + s.slice(1) : s.charAt(0).toUpperCase() + s.slice(1); }).join('');
 const swiftColor = (v) => {
   let m = v.match(/^#([0-9a-f]{6})$/i);
   if (m) return { hex: `0x${m[1].toLowerCase()}`, a: 1 };
@@ -264,6 +343,16 @@ const semanticArgs = flatten(tokens.semantic.light).map(([path, lightVal]) => {
 const semanticLines = semanticArgs.map(([name, args]) => `    public static let ${name} = dynamic(${args})`);
 // Same semantic tokens as UIColor / NSColor (ASDS-38). UIColor(Flint.Colors.x) resolves once and
 // locks to the current appearance, so UIKit APIs like UINavigationBarAppearance need these instead.
+const componentSwiftLines = (() => {
+  const walk = (node, path) => Object.entries(node).flatMap(([k, v]) => (v && typeof v === 'object' ? walk(v, [...path, k]) : [[[...path, k], v]]));
+  return walk(source.component || {}, []).map(([path]) => {
+    const lv = at(tokens.component.light, path), dv = at(tokens.component.dark, path);
+    if (typeof lv === 'number') return `    public static let ${camel(...path)}: CGFloat = ${num(lv)}`;
+    const l = swiftColor(lv), d = swiftColor(dv);
+    const args = [`light: ${l.hex}`, l.a !== 1 ? `lightOpacity: ${l.a}` : null, `dark: ${d.hex}`, d.a !== 1 ? `darkOpacity: ${d.a}` : null].filter(Boolean).join(', ');
+    return `    public static let ${camel(...path)} = dynamic(${args})`;
+  });
+})();
 const platformLines = semanticArgs.map(([name, args]) => `    public static let ${name} = dynamicPlatform(${args})`);
 const paletteLines = Object.entries(tokens.color).flatMap(([ramp, steps]) =>
   typeof steps === 'string'
@@ -323,6 +412,12 @@ ${platformLines.join('\n')}
   /// Raw color ramps. Prefer Flint.Colors in UI; these values do not change between modes.
   public enum Palette {
 ${paletteLines.join('\n')}
+  }
+
+  /// Component tokens (ASDS-39): the decisions buttons, inputs, checkboxes and focus rings share
+  /// across MUI, shadcn and SwiftUI. Colors follow the system appearance like Flint.Colors.
+  public enum Component {
+${componentSwiftLines.join('\n')}
   }
 
   public enum Space {
@@ -482,4 +577,4 @@ private func dynamic(light: UInt32, lightOpacity: Double = 1, dark: UInt32, dark
 }
 `);
 
-console.log('Built dist/: tokens.json, tokens.css, tokens.media.css, fonts.css, index.js, index.d.ts, tokens.dtcg.json, swift/Flint.swift');
+console.log('Built dist/: tokens.json, tokens.css, tokens.media.css, fonts.css, shadcn.css, index.js, index.d.ts, tokens.dtcg.json, swift/Flint.swift');

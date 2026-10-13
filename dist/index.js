@@ -122,7 +122,10 @@ const tokens = {
     "sm": 8,
     "md": 12,
     "lg": 16,
-    "pill": 9999
+    "pill": 9999,
+    "control": 8,
+    "card": 12,
+    "cardLg": 16
   },
   "fontFamily": {
     "sans": "'Open Sans', sans-serif",
@@ -411,6 +414,13 @@ const tokens = {
         "surface": "#eff6ff",
         "text": "#1550a0"
       },
+      "chart": {
+        "1": "#1a5fa8",
+        "2": "#b45309",
+        "3": "#7c3aed",
+        "4": "#15803d",
+        "5": "#dc2626"
+      },
       "overlayScrim": "rgba(15, 23, 42, 0.5)"
     },
     "dark": {
@@ -492,7 +502,128 @@ const tokens = {
         "surface": "#0d3b6e",
         "text": "#bfdbfe"
       },
+      "chart": {
+        "1": "#60a5fa",
+        "2": "#fbbf24",
+        "3": "#a78bfa",
+        "4": "#4ade80",
+        "5": "#f87171"
+      },
       "overlayScrim": "rgba(0, 0, 0, 0.6)"
+    }
+  },
+  "component": {
+    "light": {
+      "button": {
+        "radius": 8,
+        "height": 40,
+        "primary": {
+          "bg": "#1550a0",
+          "bgHover": "#0d3b6e",
+          "fg": "#ffffff"
+        },
+        "secondary": {
+          "bg": "#ffffff",
+          "bgHover": "#f1f5f9",
+          "fg": "#1550a0",
+          "border": "#64748b"
+        },
+        "danger": {
+          "bg": "#991b1b",
+          "bgHover": "#7f1d1d",
+          "fg": "#ffffff"
+        },
+        "text": {
+          "bgHover": "#f1f5f9",
+          "fg": "#1550a0"
+        },
+        "disabled": {
+          "bg": "#f1f5f9",
+          "fg": "#64748b",
+          "border": "#e2e8f0"
+        }
+      },
+      "input": {
+        "radius": 8,
+        "height": 40,
+        "bg": "#ffffff",
+        "fg": "#1e293b",
+        "placeholder": "#334155",
+        "border": "#64748b",
+        "borderHover": "#475569",
+        "borderFocus": "#1550a0",
+        "borderError": "#dc2626"
+      },
+      "checkbox": {
+        "size": 24,
+        "radius": 4,
+        "border": "#64748b",
+        "checkedBg": "#1550a0",
+        "checkedFg": "#ffffff"
+      },
+      "focus": {
+        "ring": {
+          "color": "#1550a0",
+          "width": 2,
+          "offset": 2
+        }
+      }
+    },
+    "dark": {
+      "button": {
+        "radius": 8,
+        "height": 40,
+        "primary": {
+          "bg": "#93c5fd",
+          "bgHover": "#bfdbfe",
+          "fg": "#0d1117"
+        },
+        "secondary": {
+          "bg": "#161b22",
+          "bgHover": "#21262d",
+          "fg": "#93c5fd",
+          "border": "#6e7681"
+        },
+        "danger": {
+          "bg": "#fca5a5",
+          "bgHover": "#fecaca",
+          "fg": "#0d1117"
+        },
+        "text": {
+          "bgHover": "#21262d",
+          "fg": "#93c5fd"
+        },
+        "disabled": {
+          "bg": "#21262d",
+          "fg": "#828b95",
+          "border": "#545d68"
+        }
+      },
+      "input": {
+        "radius": 8,
+        "height": 40,
+        "bg": "#161b22",
+        "fg": "#c9d1d9",
+        "placeholder": "#aeb8c2",
+        "border": "#6e7681",
+        "borderHover": "#9aa4af",
+        "borderFocus": "#60a5fa",
+        "borderError": "#f87171"
+      },
+      "checkbox": {
+        "size": 24,
+        "radius": 4,
+        "border": "#6e7681",
+        "checkedBg": "#93c5fd",
+        "checkedFg": "#0d1117"
+      },
+      "focus": {
+        "ring": {
+          "color": "#60a5fa",
+          "width": 2,
+          "offset": 2
+        }
+      }
     }
   }
 };
@@ -514,4 +645,5 @@ export const motion = tokens["motion"];
 export const zIndex = tokens["zIndex"];
 export const breakpoint = tokens["breakpoint"];
 export const semantic = tokens["semantic"];
+export const component = tokens["component"];
 export default tokens;

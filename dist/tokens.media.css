@@ -102,6 +102,14 @@
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-pill: 9999px;
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-card-lg: 16px;
+  --control-sm: 32px;
+  --control-md: 40px;
+  --icon-size-sm: 16px;
+  --icon-size-md: 20px;
+  --icon-size-lg: 24px;
   --font-size-xs: 12px;
   --font-size-sm: 14px;
   --font-size-md: 16px;
@@ -211,6 +219,11 @@
   --color-accent-cyan: #0c4a6e;
   --color-selected-surface: #eff6ff;
   --color-selected-text: #1550a0;
+  --color-chart-1: #1a5fa8;
+  --color-chart-2: #b45309;
+  --color-chart-3: #7c3aed;
+  --color-chart-4: #15803d;
+  --color-chart-5: #dc2626;
   --color-overlay-scrim: rgba(15, 23, 42, 0.5);
 }
 
@@ -273,6 +286,11 @@
   --color-accent-cyan: #7dd3fc;
   --color-selected-surface: #0d3b6e;
   --color-selected-text: #bfdbfe;
+  --color-chart-1: #60a5fa;
+  --color-chart-2: #fbbf24;
+  --color-chart-3: #a78bfa;
+  --color-chart-4: #4ade80;
+  --color-chart-5: #f87171;
   --color-overlay-scrim: rgba(0, 0, 0, 0.6);
 
     /* elevation (dark) */
@@ -292,4 +310,43 @@
   --gap-sm: 4px;
   --gap-md: 8px;
   --gap-lg: 12px;
+}
+
+/* component tier: re-declared wherever a theme is set, so a nested data-theme="dark" section
+   resolves these against its own colors instead of inheriting the page's */
+:root, [data-theme] {
+  --button-radius: var(--radius-control);
+  --button-height: var(--control-md);
+  --button-primary-bg: var(--color-action-primary);
+  --button-primary-bg-hover: var(--color-action-primary-hover);
+  --button-primary-fg: var(--color-action-on-primary);
+  --button-secondary-bg: var(--color-surface-default);
+  --button-secondary-bg-hover: var(--color-surface-subtle);
+  --button-secondary-fg: var(--color-action-primary);
+  --button-secondary-border: var(--color-border-control);
+  --button-danger-bg: var(--color-action-danger);
+  --button-danger-bg-hover: var(--color-action-danger-hover);
+  --button-danger-fg: var(--color-action-on-danger);
+  --button-text-bg-hover: var(--color-surface-subtle);
+  --button-text-fg: var(--color-text-link);
+  --button-disabled-bg: var(--color-action-disabled-bg);
+  --button-disabled-fg: var(--color-action-disabled);
+  --button-disabled-border: var(--color-border-disabled);
+  --input-radius: var(--radius-control);
+  --input-height: var(--control-md);
+  --input-bg: var(--color-surface-default);
+  --input-fg: var(--color-text-default);
+  --input-placeholder: var(--color-text-placeholder);
+  --input-border: var(--color-border-control);
+  --input-border-hover: var(--color-border-control-hover);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-border-error);
+  --checkbox-size: var(--target-min);
+  --checkbox-radius: var(--radius-xs);
+  --checkbox-border: var(--color-border-control);
+  --checkbox-checked-bg: var(--color-action-primary);
+  --checkbox-checked-fg: var(--color-action-on-primary);
+  --focus-ring-color: var(--color-action-focus-ring);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
 }

@@ -427,6 +427,18 @@
     "pill": {
       "$type": "dimension",
       "$value": "9999px"
+    },
+    "control": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "card": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "cardLg": {
+      "$type": "dimension",
+      "$value": "16px"
     }
   },
   "fontFamily": {
@@ -1196,6 +1208,28 @@
           "$value": "{color.blue.700}"
         }
       },
+      "chart": {
+        "1": {
+          "$type": "color",
+          "$value": "{color.blue.600}"
+        },
+        "2": {
+          "$type": "color",
+          "$value": "{color.amber.700}"
+        },
+        "3": {
+          "$type": "color",
+          "$value": "{color.violet.600}"
+        },
+        "4": {
+          "$type": "color",
+          "$value": "{color.green.700}"
+        },
+        "5": {
+          "$type": "color",
+          "$value": "{color.red.600}"
+        }
+      },
       "overlayScrim": {
         "$type": "color",
         "$value": "rgba(15, 23, 42, 0.5)"
@@ -1448,9 +1482,349 @@
           "$value": "{color.blue.200}"
         }
       },
+      "chart": {
+        "1": {
+          "$type": "color",
+          "$value": "{color.blue.400}"
+        },
+        "2": {
+          "$type": "color",
+          "$value": "{color.amber.400}"
+        },
+        "3": {
+          "$type": "color",
+          "$value": "{color.violet.400}"
+        },
+        "4": {
+          "$type": "color",
+          "$value": "{color.green.400}"
+        },
+        "5": {
+          "$type": "color",
+          "$value": "{color.red.400}"
+        }
+      },
       "overlayScrim": {
         "$type": "color",
         "$value": "rgba(0, 0, 0, 0.6)"
+      }
+    }
+  },
+  "component": {
+    "light": {
+      "button": {
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.control}"
+        },
+        "height": {
+          "$type": "dimension",
+          "$value": "{control.md}"
+        },
+        "primary": {
+          "bg": {
+            "$type": "color",
+            "$value": "{semantic.light.action.primary}"
+          },
+          "bgHover": {
+            "$type": "color",
+            "$value": "{semantic.light.action.primaryHover}"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{semantic.light.action.onPrimary}"
+          }
+        },
+        "secondary": {
+          "bg": {
+            "$type": "color",
+            "$value": "{semantic.light.surface.default}"
+          },
+          "bgHover": {
+            "$type": "color",
+            "$value": "{semantic.light.surface.subtle}"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{semantic.light.action.primary}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{semantic.light.border.control}"
+          }
+        },
+        "danger": {
+          "bg": {
+            "$type": "color",
+            "$value": "{semantic.light.action.danger}"
+          },
+          "bgHover": {
+            "$type": "color",
+            "$value": "{semantic.light.action.dangerHover}"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{semantic.light.action.onDanger}"
+          }
+        },
+        "text": {
+          "bgHover": {
+            "$type": "color",
+            "$value": "{semantic.light.surface.subtle}"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{semantic.light.text.link}"
+          }
+        },
+        "disabled": {
+          "bg": {
+            "$type": "color",
+            "$value": "{semantic.light.action.disabledBg}"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{semantic.light.action.disabled}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{semantic.light.border.disabled}"
+          }
+        }
+      },
+      "input": {
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.control}"
+        },
+        "height": {
+          "$type": "dimension",
+          "$value": "{control.md}"
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{semantic.light.surface.default}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.light.text.default}"
+        },
+        "placeholder": {
+          "$type": "color",
+          "$value": "{semantic.light.text.placeholder}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.light.border.control}"
+        },
+        "borderHover": {
+          "$type": "color",
+          "$value": "{semantic.light.border.controlHover}"
+        },
+        "borderFocus": {
+          "$type": "color",
+          "$value": "{semantic.light.border.focus}"
+        },
+        "borderError": {
+          "$type": "color",
+          "$value": "{semantic.light.border.error}"
+        }
+      },
+      "checkbox": {
+        "size": {
+          "$type": "dimension",
+          "$value": "{targetMin}"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.xs}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.light.border.control}"
+        },
+        "checkedBg": {
+          "$type": "color",
+          "$value": "{semantic.light.action.primary}"
+        },
+        "checkedFg": {
+          "$type": "color",
+          "$value": "{semantic.light.action.onPrimary}"
+        }
+      },
+      "focus": {
+        "ring": {
+          "color": {
+            "$type": "color",
+            "$value": "{semantic.light.action.focusRing}"
+          },
+          "width": {
+            "$type": "dimension",
+            "$value": "2px"
+          },
+          "offset": {
+            "$type": "dimension",
+            "$value": "2px"
+          }
+        }
+      }
+    },
+    "dark": {
+      "button": {
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.control}"
+        },
+        "height": {
+          "$type": "dimension",
+          "$value": "{control.md}"
+        },
+        "primary": {
+          "bg": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.primary}"
+          },
+          "bgHover": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.primaryHover}"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.onPrimary}"
+          }
+        },
+        "secondary": {
+          "bg": {
+            "$type": "color",
+            "$value": "{semantic.dark.surface.default}"
+          },
+          "bgHover": {
+            "$type": "color",
+            "$value": "{semantic.dark.surface.subtle}"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.primary}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{semantic.dark.border.control}"
+          }
+        },
+        "danger": {
+          "bg": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.danger}"
+          },
+          "bgHover": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.dangerHover}"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.onDanger}"
+          }
+        },
+        "text": {
+          "bgHover": {
+            "$type": "color",
+            "$value": "{semantic.dark.surface.subtle}"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{semantic.dark.text.link}"
+          }
+        },
+        "disabled": {
+          "bg": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.disabledBg}"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.disabled}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{semantic.dark.border.disabled}"
+          }
+        }
+      },
+      "input": {
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.control}"
+        },
+        "height": {
+          "$type": "dimension",
+          "$value": "{control.md}"
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{semantic.dark.surface.default}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.default}"
+        },
+        "placeholder": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.placeholder}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.dark.border.control}"
+        },
+        "borderHover": {
+          "$type": "color",
+          "$value": "{semantic.dark.border.controlHover}"
+        },
+        "borderFocus": {
+          "$type": "color",
+          "$value": "{semantic.dark.border.focus}"
+        },
+        "borderError": {
+          "$type": "color",
+          "$value": "{semantic.dark.border.error}"
+        }
+      },
+      "checkbox": {
+        "size": {
+          "$type": "dimension",
+          "$value": "{targetMin}"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.xs}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.dark.border.control}"
+        },
+        "checkedBg": {
+          "$type": "color",
+          "$value": "{semantic.dark.action.primary}"
+        },
+        "checkedFg": {
+          "$type": "color",
+          "$value": "{semantic.dark.action.onPrimary}"
+        }
+      },
+      "focus": {
+        "ring": {
+          "color": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.focusRing}"
+          },
+          "width": {
+            "$type": "dimension",
+            "$value": "2px"
+          },
+          "offset": {
+            "$type": "dimension",
+            "$value": "2px"
+          }
+        }
       }
     }
   }

@@ -3,7 +3,7 @@
  * it can be tested standalone. `createFlintTheme` (index.mjs) wraps this with MUI's
  * `createTheme`. Parameterized by mode, so the same source drives light and dark.
  */
-import { semantic, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, shadowDark, space, control, breakpoint, density, targetMin } from '../dist/index.js';
+import { color, semantic, component, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, shadowDark, space, breakpoint, density, targetMin } from '../dist/index.js';
 
 const t = (size, weight, lh, ls = '0') => ({
   fontFamily: fontFamily.sans,
@@ -19,6 +19,9 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
   // compact never shrinks the touch target.
   const D = density[densityName] || density.comfortable;
   const c = semantic[mode];
+  // Component tier (ASDS-39): button, input and focus decisions come from tokens, not this file.
+  const k = component[mode];
+  const ring = `${k.focus.ring.width}px solid ${k.focus.ring.color}`;
   const S = mode === 'dark' ? shadowDark : shadow;
   const intent = (name) => ({ success: c.feedback.success, warning: c.feedback.warning, error: c.feedback.error, info: c.feedback.info }[name]);
   return {
@@ -60,8 +63,8 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
           * { margin: 0; padding: 0; box-sizing: border-box; }
           html, body { font-family: ${fontFamily.sans}; overflow-x: clip; max-width: 100vw; }
           #root { height: 100vh; overflow-x: clip; }
-          *:focus-visible { outline: 2px solid ${c.action.focusRing}; outline-offset: 2px; }
-          button:focus-visible, [role="button"]:focus-visible, a:focus-visible { outline: 2px solid ${c.action.focusRing}; outline-offset: 2px; }
+          *:focus-visible { outline: ${ring}; outline-offset: ${k.focus.ring.offset}px; }
+          button:focus-visible, [role="button"]:focus-visible, a:focus-visible { outline: ${ring}; outline-offset: ${k.focus.ring.offset}px; }
           /* WCAG 2.5.8: minimum target size for interactive elements */
           button, [role="button"], a, input, select, textarea { min-height: ${targetMin}px; }
           /* WCAG 2.4.11: focused elements not obscured by sticky headers */
@@ -78,7 +81,7 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
           }
         `,
       },
-      MuiButton: { styleOverrides: { root: { textTransform: 'none', borderRadius: radius.sm } } },
+      MuiButton: { styleOverrides: { root: { textTransform: 'none', borderRadius: k.button.radius } } },
       // Canonical Paper: kills MUI's dark elevation overlay and maps the elevation
       // prop onto the shadow tokens (mode-aware). Covers Menu/Popover/Dialog/Drawer,
       // which are all Paper-based, so floating surfaces stop hand-rolling shadows.
@@ -145,12 +148,12 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
           },
         },
       },
-      // Inputs wired to control.md (40px) so the app stops hand-setting 42px heights.
+      // Inputs wired to the input component tokens (40px, control.md) so the app stops hand-setting 42px heights.
       MuiInputBase: { styleOverrides: { root: { fontFamily: fontFamily.sans, fontSize: fontSize.md } } },
       MuiOutlinedInput: {
         styleOverrides: {
-          root: { borderRadius: radius.sm },
-          input: { height: `${control.md}px`, paddingTop: 0, paddingBottom: 0, boxSizing: 'border-box' },
+          root: { borderRadius: k.input.radius },
+          input: { height: `${k.input.height}px`, paddingTop: 0, paddingBottom: 0, boxSizing: 'border-box' },
         },
       },
       // Alert mapped to the feedback intents (standard / filled / outlined).
@@ -218,8 +221,8 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
       MuiSwitch: {
         styleOverrides: {
           switchBase: {
-            color: '#ffffff',
-            '&.Mui-checked': { color: '#ffffff', '& + .MuiSwitch-track': { backgroundColor: c.action.primary, opacity: 1 } },
+            color: color.white,
+            '&.Mui-checked': { color: color.white, '& + .MuiSwitch-track': { backgroundColor: c.action.primary, opacity: 1 } },
             '&.Mui-disabled + .MuiSwitch-track': { backgroundColor: c.action.disabledBg, opacity: 1 },
           },
           track: { backgroundColor: c.border.control, opacity: 1 },

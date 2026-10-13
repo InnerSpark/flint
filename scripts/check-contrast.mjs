@@ -19,7 +19,7 @@
  *  - action.disabled is exempt under 1.4.3 (inactive controls). Reported as advisory,
  *    but we hold it well above the old value for legibility.
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { resolveTokens } from './resolve.mjs';
@@ -30,7 +30,10 @@ const tokens = resolveTokens(JSON.parse(readFileSync(join(root, 'tokens.json'), 
 const lin = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
 const lum = hex => { const n = parseInt(hex.slice(1), 16); return 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255); };
 const ratio = (a, b) => { const L1 = lum(a), L2 = lum(b), hi = Math.max(L1, L2), lo = Math.min(L1, L2); return (hi + 0.05) / (lo + 0.05); };
-const get = (mode, path) => path.split('.').reduce((o, k) => o[k], tokens.semantic[mode]);
+// Paths starting with "component." read the component tier; everything else reads semantic.
+const get = (mode, path) => path.startsWith('component.')
+  ? path.slice(10).split('.').reduce((o, k) => o[k], tokens.component[mode])
+  : path.split('.').reduce((o, k) => o[k], tokens.semantic[mode]);
 
 // Text pairs must clear AAA. Non-text (1.4.11) has no AAA tier and stays at 3:1.
 const AAA_TEXT = 7;
@@ -76,9 +79,37 @@ const PAIRS = [
   ["primary on page (accent)", "action.primary", "surface.page", 3.0, "ui"],
   ["border.default on default", "border.default", "surface.default", 3.0, "decorative"],
   ["border.strong on default", "border.strong", "surface.default", 3.0, "decorative"],
+  // chart colors (ASDS-40): marks must stand out from the surface they sit on (1.4.11)
+  ...['1', '2', '3', '4', '5'].flatMap((n) => [
+    [`chart.${n} on default`, `chart.${n}`, "surface.default", 3.0, "ui"],
+    [`chart.${n} on page`, `chart.${n}`, "surface.page", 3.0, "ui"],
+  ]),
+  // component tier (ASDS-39): every label on its own fill, every control edge on its surface
+  ["button primary label", "component.button.primary.fg", "component.button.primary.bg", AAA_TEXT, "text"],
+  ["button primary hover label", "component.button.primary.fg", "component.button.primary.bgHover", AAA_TEXT, "text"],
+  ["button secondary label", "component.button.secondary.fg", "component.button.secondary.bg", AAA_TEXT, "text"],
+  ["button secondary hover label", "component.button.secondary.fg", "component.button.secondary.bgHover", AAA_TEXT, "text"],
+  ["button secondary edge", "component.button.secondary.border", "surface.page", 3.0, "control"],
+  ["button danger label", "component.button.danger.fg", "component.button.danger.bg", AAA_TEXT, "text"],
+  ["button danger hover label", "component.button.danger.fg", "component.button.danger.bgHover", AAA_TEXT, "text"],
+  ["button text label", "component.button.text.fg", "surface.page", AAA_TEXT, "text"],
+  ["button text hover label", "component.button.text.fg", "component.button.text.bgHover", AAA_TEXT, "text"],
+  ["button disabled label", "component.button.disabled.fg", "component.button.disabled.bg", 4.5, "exempt"],
+  ["input text", "component.input.fg", "component.input.bg", AAA_TEXT, "text"],
+  ["input placeholder", "component.input.placeholder", "component.input.bg", AAA_TEXT, "text"],
+  ["input edge", "component.input.border", "component.input.bg", 3.0, "control"],
+  ["input hover edge", "component.input.borderHover", "component.input.bg", 3.0, "control"],
+  ["input focus edge", "component.input.borderFocus", "component.input.bg", 3.0, "focus"],
+  ["input error edge", "component.input.borderError", "component.input.bg", 3.0, "control"],
+  ["checkbox edge", "component.checkbox.border", "surface.default", 3.0, "control"],
+  ["checkbox checked fill", "component.checkbox.checkedBg", "surface.default", 3.0, "control"],
+  ["checkbox check mark", "component.checkbox.checkedFg", "component.checkbox.checkedBg", 3.0, "ui"],
+  ["focus ring on page", "component.focus.ring.color", "surface.page", 3.0, "focus"],
+  ["focus ring on default", "component.focus.ring.color", "surface.default", 3.0, "focus"],
 ];
 
 let failures = 0;
+const results = [];
 for (const mode of ["light", "dark"]) {
   console.log(`\n== ${mode} ==`);
   for (const [label, fg, bg, th, kind] of PAIRS) {
@@ -87,6 +118,7 @@ for (const mode of ["light", "dark"]) {
     const ok = r >= th;
     if (!ok && !advisory) failures++;
     const tag = ok ? "PASS" : (advisory ? "ADV " : "FAIL");
+    results.push({ mode, label, fg, bg, ratio: +r.toFixed(2), threshold: th, kind, pass: ok });
     console.log(`${tag} ${r.toFixed(2).padStart(6)} (>=${th}) ${kind.padEnd(11)} ${label}`);
   }
 }
@@ -132,6 +164,10 @@ for (const [name, group] of Object.entries(tokens.density || {})) {
     console.log(`PASS   density.${name} varies only ${ALLOWED_DENSITY_KEYS.join(' + ')}`);
   }
 }
+
+// Contrast guarantees as data (ASDS-25): every checked pairing and its measured ratio, so the
+// workbench and AI tools can trust a pairing without recomputing it.
+writeFileSync(join(root, 'dist', 'contrast.json'), JSON.stringify({ standard: 'WCAG 2.2', textBar: AAA_TEXT, nonTextBar: 3, pairs: results }, null, 2) + '\n');
 
 const total = failures + usageFailures;
 console.log(`\n${failures} required contrast failure(s), ${usageFailures} usage failure(s).`);

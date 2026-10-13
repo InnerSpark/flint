@@ -9,7 +9,21 @@ export interface SemanticScheme {
   feedback: Record<'success' | 'warning' | 'error' | 'info', Record<string, Hex>>;
   accent: Record<string, Hex>;
   selected: Record<string, Hex>;
+  chart: Record<'1' | '2' | '3' | '4' | '5', Hex>;
   overlayScrim: Hex;
+}
+export interface ComponentScheme {
+  button: {
+    radius: number; height: number;
+    primary: { bg: Hex; bgHover: Hex; fg: Hex };
+    secondary: { bg: Hex; bgHover: Hex; fg: Hex; border: Hex };
+    danger: { bg: Hex; bgHover: Hex; fg: Hex };
+    text: { bgHover: Hex; fg: Hex };
+    disabled: { bg: Hex; fg: Hex; border: Hex };
+  };
+  input: { radius: number; height: number; bg: Hex; fg: Hex; placeholder: Hex; border: Hex; borderHover: Hex; borderFocus: Hex; borderError: Hex };
+  checkbox: { size: number; radius: number; border: Hex; checkedBg: Hex; checkedFg: Hex };
+  focus: { ring: { color: Hex; width: number; offset: number } };
 }
 export interface Tokens {
   color: Record<string, Ramp | Hex>;
@@ -30,6 +44,7 @@ export interface Tokens {
   iconSize: Record<string, number>;
   targetMin: number;
   semantic: { light: SemanticScheme; dark: SemanticScheme };
+  component: { light: ComponentScheme; dark: ComponentScheme };
 }
 declare const tokens: Tokens;
 export const color: Tokens['color'];
@@ -50,4 +65,5 @@ export const control: Tokens['control'];
 export const iconSize: Tokens['iconSize'];
 export const targetMin: Tokens['targetMin'];
 export const semantic: Tokens['semantic'];
+export const component: Tokens['component'];
 export default tokens;

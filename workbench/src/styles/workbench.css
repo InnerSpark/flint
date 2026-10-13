@@ -1,0 +1,10 @@
+/* Workbench entry. Order matters: Tailwind, then Flint's variables, then the shadcn bridge,
+   then the plain-CSS implementations and the workbench's own page styles. */
+/* MUI sits between Tailwind's base and its utilities (MUI + Tailwind v4 setup). */
+@layer theme, base, mui, components, utilities;
+@import "tailwindcss";
+@import "../../../dist/tokens.css";
+@import "../../../dist/shadcn.css";
+@import "./plain.css";
+@import "./pages.css";
+@source "../";

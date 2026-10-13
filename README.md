@@ -1,6 +1,8 @@
 # Flint Design System
 
-The single source of truth for color, type, spacing, radius, size, motion, and elevation across AccessSpark, Inner Spark Media, and sister brands. Framework-agnostic tokens, plus a MUI theme factory and a Swift package. No component library in code yet (see ASDS-22); components live in the Figma library.
+**Docs:** [flint.innersparkmedia.com](https://flint.innersparkmedia.com) (built from `workbench/`).
+
+The single source of truth for color, type, spacing, radius, size, motion, and elevation across AccessSpark, Inner Spark Media, and sister brands. Framework-agnostic tokens, plus a MUI theme factory, a shadcn/ui bridge and a Swift package. No shared component library in code yet (see ASDS-22); components live in the Figma library, and the workbench shows Flint versions of Button, Input and Checkbox for MUI, shadcn and plain CSS.
 
 `tokens.json` is the source. The build emits CSS custom properties, typed JS exports, a resolved `tokens.json`, W3C DTCG, and SwiftUI tokens into `dist/`.
 
@@ -8,6 +10,7 @@ The single source of truth for color, type, spacing, radius, size, motion, and e
 
 1. **Primitives:** the raw ladders in `color.*` (`color.blue.700`), plus `space`, `radius`, `fontSize`, and the other scales. Never use a primitive color directly in UI.
 2. **Semantic:** `semantic.light.*` and `semantic.dark.*`, named for intent (`text.link`, `action.primary`). Each color is a reference to a primitive, for example `"link": "{color.blue.700}"`. Change a ladder step and every semantic token that points at it follows.
+3. **Component:** `component.*`, the decisions a component makes (`button.primary.bg`, `input.border`, `focus.ring.width`). Each points at a semantic token without naming a mode (`"bg": "{semantic.action.primary}"`), so it follows light and dark. CSS: `--button-primary-bg`. JS: `component.light.button.primary.bg`. Swift: `Flint.Component.buttonPrimaryBg`.
 
 The build resolves every reference. CSS, JS, MUI, and Swift consumers always get final values. The DTCG export keeps the references so Tokens Studio and Style Dictionary see the link back to the ladder.
 
@@ -24,7 +27,7 @@ The rule: Figma uses `/` and kebab-case, CSS uses `-` and kebab-case with a `--c
 ## Install (private, git tag)
 
 ```bash
-npm install "github:InnerSpark/flint#semver:^1.12.0"
+npm install "github:InnerSpark/flint#semver:^1.13.0"
 ```
 
 The `semver:` range picks up new minor and patch releases on `npm update` and never jumps a major. You can graduate to GitHub Packages later without changing any imports.
@@ -62,6 +65,16 @@ import source from '@innerspark/flint/tokens.source.json'; // source, semantic c
 ```
 
 Read the package export, not the file at the repo root. The root `tokens.json` is the source and holds references, not hex values.
+
+### shadcn/ui (Tailwind v4)
+
+```css
+@import "tailwindcss";
+@import "@innerspark/flint/tokens.css";
+@import "@innerspark/flint/shadcn.css";
+```
+
+Every shadcn variable becomes a `var()` into Flint; `dark:` follows `data-theme="dark"`. Restyle components onto the component tokens (see the workbench for Button, Input and Checkbox).
 
 ### MUI
 
@@ -103,7 +116,7 @@ Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--r
 ## Build
 
 ```bash
-npm run build   # regenerates dist/ (including dist/swift/Flint.swift) from tokens.json, then runs the contrast check
+npm run build   # regenerates dist/ from tokens.json, then runs the contrast check and the parity test
 ```
 
 `dist/` is committed so git-tag installs work without a build step; `prepare` also rebuilds on install.

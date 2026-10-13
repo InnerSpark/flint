@@ -2,6 +2,20 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.13.0
+
+A component tier, a shadcn bridge, chart colors, a parity test across every platform, and a workbench that doubles as the docs site (ASDS-39, ASDS-40, ASDS-41, ASDS-42). Additive: every existing CSS, JS and Swift value is unchanged, and the MUI theme output is identical in light and dark at both densities.
+
+- **Component tokens (ASDS-39).** New `component` group: `button` (radius, height, primary, secondary, danger, text, disabled), `input` (radius, height, bg, fg, placeholder, border, borderHover, borderFocus, borderError), `checkbox` (size, radius, border, checkedBg, checkedFg) and `focus.ring` (color, width, offset). Values are mode-free references like `{semantic.action.primary}`, resolved once per mode. Emitted as CSS vars (`--button-primary-bg: var(--color-action-primary)`) redeclared under `:root, [data-theme]` so a nested dark section resolves its own colors, as `component.light` / `component.dark` in JS, as per-mode aliases in DTCG, and as `Flint.Component.*` in Swift.
+- **Radius roles (ASDS-36).** `radius.control`, `radius.card`, `radius.cardLg` reference the ramp, matching the Figma Sizing collection. New CSS vars `--radius-control`, `--radius-card`, `--radius-card-lg`, plus `--control-sm/md` and `--icon-size-sm/md/lg`.
+- **MUI factory reads component tokens.** Button radius, OutlinedInput radius and height, and the focus ring now come from the component tier. The Switch thumb uses `color.white` instead of a typed `#ffffff`. Output is byte-identical.
+- **shadcn bridge (ASDS-40).** New `dist/shadcn.css` (`@innerspark/flint/shadcn.css`): every shadcn variable is a `var()` into Flint, a `@theme inline` block for Tailwind v4, and a `dark` variant that follows `data-theme="dark"`. `action.secondary` is deliberately not shadcn's secondary.
+- **Chart colors (ASDS-40).** `semantic.{light,dark}.chart.1` to `.5` (blue, amber, violet, green, red), each at least 4.6:1 on page and default surfaces. Guarded at 3:1.
+- **Contrast guard covers components and charts,** and writes every result to `dist/contrast.json` (`@innerspark/flint/contrast.json`): pairs, ratios, bars, pass or fail.
+- **Parity test (ASDS-41).** `scripts/check-parity.mjs` runs in `npm run build`: 672 checks that CSS, shadcn, MUI and Swift land on the values tokens.json gives them, in light and dark, and that the MUI factory hardcodes no colors. A hand edit to any generated file fails the build.
+- **Workbench and docs (ASDS-42).** `workbench/` is a Storybook with guides, generated token pages, and Button, Input and Checkbox as MUI, shadcn and plain CSS in every state. `npm run verify` runs axe on all 19 pages in light and dark. Publishes to flint.innersparkmedia.com through Cloudflare Pages (setup in `workbench/README.md`).
+- **Found by the workbench, not fixed here:** the MUI adapter ignores the component tier for outlined buttons, input edges, input placeholders and checkbox focus. Fixing it changes how AccessSpark looks, so it is its own ticket.
+
 ## v1.12.0
 
 Semantic colors now point at the ladder instead of copying its values, and the contrast guard enforces the AAA bar Flint already meets (ASDS-25, ASDS-35). Every CSS, JS, MUI and Swift output is byte-for-byte unchanged.

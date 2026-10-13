@@ -1,0 +1,28 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Start here/Welcome" />
+
+# Flint Design System
+
+Flint is the design system behind AccessSpark, Inner Spark Media and their sister products. One token source drives the web (CSS, MUI, shadcn/ui) and iOS (SwiftUI).
+
+## How it works
+
+- **One source.** Every value lives in `tokens.json`. Nothing downstream picks its own color, size or radius.
+- **Three tiers.** Primitives (the raw ladders), semantic tokens (named for intent, like `text.link`), and component tokens (button, input, checkbox, focus ring). Each tier points at the one below it.
+- **Thin adapters.** The build turns tokens into CSS variables, a MUI theme, a shadcn bridge and a Swift package. Adapters rename. They never decide.
+- **Checked on every build.** Text pairs must clear 7:1. Control edges, focus rings and chart marks must clear 3:1. A parity test proves every platform lands on the same value.
+
+## Accessibility is the floor
+
+- Text contrast is held at **7:1 (WCAG AAA)** internally. Flint's published claim stays **WCAG 2.2 AA**.
+- Minimum target size is a token (24px, 44pt on iOS), so a denser layout can never shrink it.
+- Focus is a solid 2px ring, never removed, never transparent.
+- Color never carries meaning alone. Status, selection and errors always pair color with text, an icon or a shape.
+
+## Where to go next
+
+- **Getting started:** install Flint on your platform.
+- **Guides:** token tiers, usage rules, contributing.
+- **Foundations:** every token, live, in light and dark.
+- **Components:** every built component as MUI, shadcn and plain CSS side by side.

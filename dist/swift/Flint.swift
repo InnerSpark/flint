@@ -69,6 +69,11 @@ public enum Flint {
     public static let accentCyan = dynamic(light: 0x0c4a6e, dark: 0x7dd3fc)
     public static let selectedSurface = dynamic(light: 0xeff6ff, dark: 0x0d3b6e)
     public static let selectedText = dynamic(light: 0x1550a0, dark: 0xbfdbfe)
+    public static let chart1 = dynamic(light: 0x1a5fa8, dark: 0x60a5fa)
+    public static let chart2 = dynamic(light: 0xb45309, dark: 0xfbbf24)
+    public static let chart3 = dynamic(light: 0x7c3aed, dark: 0xa78bfa)
+    public static let chart4 = dynamic(light: 0x15803d, dark: 0x4ade80)
+    public static let chart5 = dynamic(light: 0xdc2626, dark: 0xf87171)
     public static let overlayScrim = dynamic(light: 0x0f172a, lightOpacity: 0.5, dark: 0x000000, darkOpacity: 0.6)
   }
 
@@ -132,6 +137,11 @@ public enum Flint {
     public static let accentCyan = dynamicPlatform(light: 0x0c4a6e, dark: 0x7dd3fc)
     public static let selectedSurface = dynamicPlatform(light: 0xeff6ff, dark: 0x0d3b6e)
     public static let selectedText = dynamicPlatform(light: 0x1550a0, dark: 0xbfdbfe)
+    public static let chart1 = dynamicPlatform(light: 0x1a5fa8, dark: 0x60a5fa)
+    public static let chart2 = dynamicPlatform(light: 0xb45309, dark: 0xfbbf24)
+    public static let chart3 = dynamicPlatform(light: 0x7c3aed, dark: 0xa78bfa)
+    public static let chart4 = dynamicPlatform(light: 0x15803d, dark: 0x4ade80)
+    public static let chart5 = dynamicPlatform(light: 0xdc2626, dark: 0xf87171)
     public static let overlayScrim = dynamicPlatform(light: 0x0f172a, lightOpacity: 0.5, dark: 0x000000, darkOpacity: 0.6)
   }
   #elseif canImport(AppKit)
@@ -193,6 +203,11 @@ public enum Flint {
     public static let accentCyan = dynamicPlatform(light: 0x0c4a6e, dark: 0x7dd3fc)
     public static let selectedSurface = dynamicPlatform(light: 0xeff6ff, dark: 0x0d3b6e)
     public static let selectedText = dynamicPlatform(light: 0x1550a0, dark: 0xbfdbfe)
+    public static let chart1 = dynamicPlatform(light: 0x1a5fa8, dark: 0x60a5fa)
+    public static let chart2 = dynamicPlatform(light: 0xb45309, dark: 0xfbbf24)
+    public static let chart3 = dynamicPlatform(light: 0x7c3aed, dark: 0xa78bfa)
+    public static let chart4 = dynamicPlatform(light: 0x15803d, dark: 0x4ade80)
+    public static let chart5 = dynamicPlatform(light: 0xdc2626, dark: 0xf87171)
     public static let overlayScrim = dynamicPlatform(light: 0x0f172a, lightOpacity: 0.5, dark: 0x000000, darkOpacity: 0.6)
   }
   #endif
@@ -287,6 +302,45 @@ public enum Flint {
     public static let black = Color(flintHex: 0x0a0f1a)
   }
 
+  /// Component tokens (ASDS-39): the decisions buttons, inputs, checkboxes and focus rings share
+  /// across MUI, shadcn and SwiftUI. Colors follow the system appearance like Flint.Colors.
+  public enum Component {
+    public static let buttonRadius: CGFloat = 8
+    public static let buttonHeight: CGFloat = 40
+    public static let buttonPrimaryBg = dynamic(light: 0x1550a0, dark: 0x93c5fd)
+    public static let buttonPrimaryBgHover = dynamic(light: 0x0d3b6e, dark: 0xbfdbfe)
+    public static let buttonPrimaryFg = dynamic(light: 0xffffff, dark: 0x0d1117)
+    public static let buttonSecondaryBg = dynamic(light: 0xffffff, dark: 0x161b22)
+    public static let buttonSecondaryBgHover = dynamic(light: 0xf1f5f9, dark: 0x21262d)
+    public static let buttonSecondaryFg = dynamic(light: 0x1550a0, dark: 0x93c5fd)
+    public static let buttonSecondaryBorder = dynamic(light: 0x64748b, dark: 0x6e7681)
+    public static let buttonDangerBg = dynamic(light: 0x991b1b, dark: 0xfca5a5)
+    public static let buttonDangerBgHover = dynamic(light: 0x7f1d1d, dark: 0xfecaca)
+    public static let buttonDangerFg = dynamic(light: 0xffffff, dark: 0x0d1117)
+    public static let buttonTextBgHover = dynamic(light: 0xf1f5f9, dark: 0x21262d)
+    public static let buttonTextFg = dynamic(light: 0x1550a0, dark: 0x93c5fd)
+    public static let buttonDisabledBg = dynamic(light: 0xf1f5f9, dark: 0x21262d)
+    public static let buttonDisabledFg = dynamic(light: 0x64748b, dark: 0x828b95)
+    public static let buttonDisabledBorder = dynamic(light: 0xe2e8f0, dark: 0x545d68)
+    public static let inputRadius: CGFloat = 8
+    public static let inputHeight: CGFloat = 40
+    public static let inputBg = dynamic(light: 0xffffff, dark: 0x161b22)
+    public static let inputFg = dynamic(light: 0x1e293b, dark: 0xc9d1d9)
+    public static let inputPlaceholder = dynamic(light: 0x334155, dark: 0xaeb8c2)
+    public static let inputBorder = dynamic(light: 0x64748b, dark: 0x6e7681)
+    public static let inputBorderHover = dynamic(light: 0x475569, dark: 0x9aa4af)
+    public static let inputBorderFocus = dynamic(light: 0x1550a0, dark: 0x60a5fa)
+    public static let inputBorderError = dynamic(light: 0xdc2626, dark: 0xf87171)
+    public static let checkboxSize: CGFloat = 24
+    public static let checkboxRadius: CGFloat = 4
+    public static let checkboxBorder = dynamic(light: 0x64748b, dark: 0x6e7681)
+    public static let checkboxCheckedBg = dynamic(light: 0x1550a0, dark: 0x93c5fd)
+    public static let checkboxCheckedFg = dynamic(light: 0xffffff, dark: 0x0d1117)
+    public static let focusRingColor = dynamic(light: 0x1550a0, dark: 0x60a5fa)
+    public static let focusRingWidth: CGFloat = 2
+    public static let focusRingOffset: CGFloat = 2
+  }
+
   public enum Space {
     public static let s0: CGFloat = 0
     public static let s2: CGFloat = 2
@@ -307,6 +361,9 @@ public enum Flint {
     public static let md: CGFloat = 12
     public static let lg: CGFloat = 16
     public static let pill: CGFloat = 9999
+    public static let control: CGFloat = 8
+    public static let card: CGFloat = 12
+    public static let cardLg: CGFloat = 16
   }
 
   /// Control heights.
