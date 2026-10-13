@@ -1,0 +1,21 @@
+{
+  "name": "flint-docs",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Flint Design System docs, published at flint.innersparkmedia.com.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm --prefix .. run build && npm --prefix ../workbench run build:storybook && astro build && node scripts/copy-workbench.mjs",
+    "preview": "astro preview",
+    "verify": "node scripts/verify.mjs"
+  },
+  "dependencies": {
+    "@fontsource/open-sans": "^5.3.0",
+    "astro": "^5.18.2"
+  },
+  "devDependencies": {
+    "axe-core": "^4.14.0",
+    "playwright-core": "^1.64.0"
+  }
+}

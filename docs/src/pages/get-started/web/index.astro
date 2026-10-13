@@ -1,0 +1,65 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import Code from '../../../components/Code.astro';
+import Notice from '../../../components/Notice.astro';
+const toc = [{ id: 'import', text: 'Import the variables' }, { id: 'use', text: 'Use them' }, { id: 'dark', text: 'Dark mode' }, { id: 'density', text: 'Density' }, { id: 'fonts', text: 'Fonts' }];
+const importCode = `import '@innerspark/flint/tokens.css';`;
+const useCode = `.card {
+  background: var(--color-surface-default);
+  color: var(--color-text-default);
+  padding: var(--inset-md);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-card);
+}
+
+.card h2 {
+  color: var(--color-text-heading);
+  font-size: var(--type-heading-h3-size);
+  font-weight: var(--type-heading-h3-weight);
+}
+
+.save {
+  min-height: var(--button-height);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-fg);
+  border-radius: var(--button-radius);
+}
+.save:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}`;
+const darkCode = `<!-- the whole page -->
+<html data-theme="dark">
+
+<!-- or one section -->
+<section data-theme="dark">...</section>
+<section data-theme="light">...</section>`;
+const mediaCode = `import '@innerspark/flint/tokens.media.css';`;
+const densityCode = `<main data-density="compact">...</main>`;
+const fontCode = `import '@innerspark/flint/fonts.css';`;
+---
+<Docs title="Web and CSS" crumb="Get started" lead="Flint as CSS variables. Works anywhere you can load a stylesheet: Astro, EJS, plain HTML." toc={toc}>
+  <h2 id="import">Import the variables</h2>
+  <Code label="JavaScript or your CSS entry" code={importCode} />
+
+  <h2 id="use">Use them</h2>
+  <p>Reach for semantic and component variables. Never a primitive like <code>--color-blue-700</code>, and never a raw hex.</p>
+  <Code label="CSS" code={useCode} />
+
+  <h2 id="dark">Dark mode</h2>
+  <p>Set <code>data-theme</code> on the page or on any section. Every color variable switches, component variables included, and a light section can sit inside a dark page.</p>
+  <Code label="HTML" code={darkCode} />
+  <p>For automatic dark mode with no toggle, import the media version instead. It follows <code>prefers-color-scheme</code>.</p>
+  <Code label="JavaScript" code={mediaCode} />
+
+  <h2 id="density">Density</h2>
+  <p>Compact tightens <code>--inset-*</code> and <code>--gap-*</code> by one step. Control heights and the 24px minimum target never change.</p>
+  <Code label="HTML" code={densityCode} />
+
+  <h2 id="fonts">Fonts</h2>
+  <p>Flint uses Open Sans. Load it yourself (Flint uses <code>@fontsource/open-sans</code>), and add the metric-matched fallback so the page doesn't shift while it loads.</p>
+  <Code label="JavaScript" code={fontCode} />
+  <Notice title="Add the fallback to your stack">
+    <p>After importing <code>fonts.css</code>, add <code>'Open Sans Fallback'</code> to your font stack after Open Sans.</p>
+  </Notice>
+</Docs>

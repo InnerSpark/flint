@@ -1,0 +1,4 @@
+---
+const { value, note } = Astro.props;
+---
+<span class="swatch"><span class="swatch-chip" style={`background:${value}`} aria-hidden="true"></span><span><code>{value}</code>{note && <small>{note}</small>}</span></span>

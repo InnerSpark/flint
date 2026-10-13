@@ -9,6 +9,7 @@ export const Overview = () => (
       Every semantic token and every built component, in one place. Values come straight from Flint's build, so this page cannot show
       a value the build did not produce. Theme and Density in the toolbar switch MUI, shadcn and plain CSS together.
     </p>
+    <p>Usage guidance, code and accessibility notes live in the <a href="https://flint.innersparkmedia.com/" target="_top">Flint docs</a>. This workbench is for testing.</p>
     <table className="wb-table">
       <tbody>
         <tr><td className="state">Semantic tokens</td><td>{leaves(resolved.semantic.light).length} per mode</td></tr>

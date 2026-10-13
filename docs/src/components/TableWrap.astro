@@ -1,0 +1,5 @@
+---
+// Scrollable table region: focusable so keyboard users can scroll it, named by its caption.
+const { label } = Astro.props;
+---
+<div class="table-wrap" role="region" aria-label={label} tabindex="0"><slot /></div>

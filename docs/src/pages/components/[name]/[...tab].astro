@@ -1,0 +1,137 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import Example from '../../../components/Example.astro';
+import Guidance from '../../../components/Guidance.astro';
+import Code from '../../../components/Code.astro';
+import Notice from '../../../components/Notice.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Swatch from '../../../components/Swatch.astro';
+import Result from '../../../components/Result.astro';
+import { COMPONENTS, TABS } from '../../../data/components.js';
+import { resolved, source, contrast, leaves, at, refName, componentVar, camel, isColor } from '../../../lib/flint.js';
+
+export function getStaticPaths() {
+  return Object.keys(COMPONENTS).flatMap((name) => TABS.map(([tab]) => ({ params: { name, tab: tab === 'usage' ? undefined : tab } })));
+}
+
+const { name } = Astro.params;
+const tab = Astro.params.tab || 'usage';
+const c = COMPONENTS[name];
+const base = `/components/${name}/`;
+const tabs = TABS.map(([t, label]) => ({ label, href: t === 'usage' ? base : `${base}${t}/` }));
+
+const tokenRows = [...leaves(source.component[name]).map(([p, v]) => [[name, ...p], v]), ...leaves(source.component.focus).map(([p, v]) => [['focus', ...p], v])];
+const pairs = contrast.pairs.filter((p) => p.label.startsWith(name) || p.label.startsWith('focus ring'));
+const pairLabels = [...new Set(pairs.map((p) => p.label))];
+
+const tocByTab = {
+  usage: [{ id: 'example', text: 'Example' }, { id: 'when', text: 'When to use' }, { id: 'variants', text: 'Variants and states' }, { id: 'guidance', text: 'Guidance' }],
+  style: [{ id: 'tokens', text: 'Component tokens' }, { id: 'contrast', text: 'Contrast' }],
+  code: [{ id: 'css', text: 'CSS' }, { id: 'mui', text: 'MUI' }, { id: 'shadcn', text: 'shadcn/ui' }, { id: 'swift', text: 'SwiftUI' }],
+  accessibility: [{ id: 'keyboard', text: 'Keyboard' }, { id: 'screen-readers', text: 'Screen readers' }, { id: 'contrast', text: 'Contrast' }, { id: 'target', text: 'Target size' }],
+};
+const tabLabel = TABS.find(([t]) => t === tab)[1];
+---
+<Docs title={c.name} crumb="Components" lead={c.lead} tabs={tabs} toc={tocByTab[tab]} wide={tab === 'style'} description={`${c.name} ${tabLabel.toLowerCase()} in the Flint Design System. ${c.lead}`}>
+  {tab === 'usage' && (
+    <>
+      <h2 id="example">Example</h2>
+      <Example label={`${c.name} example in light and dark`}><Fragment set:html={c.example} /></Example>
+      <h2 id="when">When to use</h2>
+      <ul>{c.when.map((w) => <li>{w}</li>)}</ul>
+      <h2 id="variants">Variants and states</h2>
+      <TableWrap label={`${c.name} variants`}>
+        <table class="data">
+          <thead><tr><th scope="col">Variant or state</th><th scope="col">Use</th></tr></thead>
+          <tbody>{c.variants.map(([v, d]) => <tr><th scope="row">{v}</th><td>{d}</td></tr>)}</tbody>
+        </table>
+      </TableWrap>
+      <h2 id="guidance">Guidance</h2>
+      {c.guidance.map(([d, dn]) => <Guidance doText={d} dontText={dn} />)}
+    </>
+  )}
+
+  {tab === 'style' && (
+    <>
+      <h2 id="tokens">Component tokens</h2>
+      <p>Every value {c.name.toLowerCase()} uses, on every platform. Colors point at semantic tokens, so they follow light and dark on their own. The focus ring is shared by every component.</p>
+      <TableWrap label={`${c.name} component tokens`}>
+        <table class="data">
+          <thead><tr><th scope="col">Token</th><th scope="col">CSS</th><th scope="col">Swift</th><th scope="col">Points at</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+          <tbody>
+            {tokenRows.map(([p, v]) => {
+              const l = at(resolved.component.light, p), d = at(resolved.component.dark, p);
+              return (
+                <tr>
+                  <th scope="row"><code>{p.join('.')}</code></th>
+                  <td><code>{componentVar(p)}</code></td>
+                  <td><code>Flint.Component.{camel(...p)}</code></td>
+                  <td><code>{refName(v) || `${v}`}</code></td>
+                  <td>{isColor(l) ? <Swatch value={l} /> : <code>{l}px</code>}</td>
+                  <td>{isColor(d) ? <Swatch value={d} /> : <code>{d}px</code>}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </TableWrap>
+      <h2 id="contrast">Contrast</h2>
+      <p>Measured on every build. See <a href="/foundations/contrast/">Contrast</a> for every pairing.</p>
+      <TableWrap label={`${c.name} contrast`}>
+        <table class="data">
+          <thead><tr><th scope="col">Pairing</th><th scope="col">Needs</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+          <tbody>
+            {pairLabels.map((label) => {
+              const l = pairs.find((p) => p.label === label && p.mode === 'light');
+              const d = pairs.find((p) => p.label === label && p.mode === 'dark');
+              return <tr><th scope="row">{label}</th><td>{l.threshold}:1</td><td class="nowrap">{l.ratio.toFixed(2)}:1 <Result pair={l} /></td><td class="nowrap">{d.ratio.toFixed(2)}:1 <Result pair={d} /></td></tr>;
+            })}
+          </tbody>
+        </table>
+      </TableWrap>
+    </>
+  )}
+
+  {tab === 'code' && (
+    <>
+      <h2 id="css">CSS</h2>
+      <p>For Astro, EJS and plain HTML. These rules read only component tokens.</p>
+      <Code label={c.code.css.label} code={c.code.css.code} />
+      <Code label="CSS" code={c.code.css.rules} />
+      <h2 id="mui">MUI</h2>
+      <Code label="React (MUI)" code={c.code.mui} />
+      <Notice tone="warning" title="Known gap"><p>{c.code.muiGap}</p></Notice>
+      <h2 id="shadcn">shadcn/ui</h2>
+      <p>The Flint version of the shadcn component. Same API as upstream; every value reads a Flint token.</p>
+      <Code label={`components/ui/${name}.jsx`} code={c.code.shadcn} />
+      <h2 id="swift">SwiftUI</h2>
+      <Code label="SwiftUI" code={c.code.swift} />
+      <Notice><p>A ready-made SwiftUI {c.name.toLowerCase()} is moving into the Flint package (ASDS-38). Until then, build it from the component tokens as above.</p></Notice>
+    </>
+  )}
+
+  {tab === 'accessibility' && (
+    <>
+      <h2 id="keyboard">Keyboard</h2>
+      <TableWrap label={`${c.name} keyboard support`}>
+        <table class="data">
+          <thead><tr><th scope="col">Key</th><th scope="col">What it does</th></tr></thead>
+          <tbody>{c.keyboard.map(([k, d]) => <tr><th scope="row"><kbd>{k}</kbd></th><td>{d}</td></tr>)}</tbody>
+        </table>
+      </TableWrap>
+      <h2 id="screen-readers">Screen readers</h2>
+      <ul>{c.screenReader.map((s) => <li>{s}</li>)}</ul>
+      <h2 id="contrast">Contrast</h2>
+      <ul>
+        {pairLabels.filter((l) => !pairs.find((p) => p.label === l).kind.match(/decorative|exempt/)).map((label) => {
+          const l = pairs.find((p) => p.label === label && p.mode === 'light');
+          const d = pairs.find((p) => p.label === label && p.mode === 'dark');
+          return <li>{label[0].toUpperCase() + label.slice(1)}: {l.ratio.toFixed(2)}:1 light, {d.ratio.toFixed(2)}:1 dark (needs {l.threshold}:1).</li>;
+        })}
+      </ul>
+      <h2 id="target">Target size</h2>
+      <p>{c.target}</p>
+      <p>The test for every component: can someone finish the task with a keyboard alone, and with VoiceOver or NVDA alone?</p>
+    </>
+  )}
+</Docs>

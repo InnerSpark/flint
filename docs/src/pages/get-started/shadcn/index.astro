@@ -1,0 +1,49 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import Code from '../../../components/Code.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Notice from '../../../components/Notice.astro';
+import { SHADCN_MAP, cssVarForPath } from '../../../lib/flint.js';
+const toc = [{ id: 'import', text: 'Import the bridge' }, { id: 'mapping', text: 'How the variables map' }, { id: 'components', text: 'Restyle the components' }];
+const importCode = `@import "tailwindcss";
+@import "@innerspark/flint/tokens.css";
+@import "@innerspark/flint/shadcn.css";`;
+const buttonCode = `const buttonVariants = cva(
+  'inline-flex items-center justify-center rounded-[var(--button-radius)] min-h-[var(--button-height)] px-4 text-sm font-bold focus-visible:[outline:var(--focus-ring-width)_solid_var(--focus-ring-color)] focus-visible:[outline-offset:var(--focus-ring-offset)]',
+  {
+    variants: {
+      variant: {
+        default: 'bg-[var(--button-primary-bg)] text-[var(--button-primary-fg)] hover:bg-[var(--button-primary-bg-hover)]',
+        secondary: 'border border-[var(--button-secondary-border)] bg-[var(--button-secondary-bg)] text-[var(--button-secondary-fg)]',
+        destructive: 'bg-[var(--button-danger-bg)] text-[var(--button-danger-fg)] hover:bg-[var(--button-danger-bg-hover)]',
+      },
+    },
+  },
+);`;
+const rows = Object.entries(SHADCN_MAP);
+---
+<Docs title="shadcn/ui" crumb="Get started" lead="One CSS import points every shadcn/ui variable at Flint. Values and dark mode stay Flint's." toc={toc} wide>
+  <h2 id="import">Import the bridge</h2>
+  <p>In your Tailwind v4 entry CSS:</p>
+  <Code label="CSS" code={importCode} />
+  <p>Dark mode follows <code>data-theme="dark"</code>, the same attribute as everywhere else in Flint. The bridge also points Tailwind's <code>dark:</code> variant at it, so you need no <code>.dark</code> class.</p>
+
+  <h2 id="mapping">How the variables map</h2>
+  <p>Each shadcn variable becomes a reference to a Flint variable. The bridge picks no values of its own.</p>
+  <TableWrap label="shadcn to Flint variable mapping">
+    <table class="data">
+      <thead><tr><th scope="col">shadcn variable</th><th scope="col">Flint variable</th><th scope="col">Flint token</th></tr></thead>
+      <tbody>
+        {rows.map(([name, path]) => <tr><th scope="row"><code>{name}</code></th><td><code>{cssVarForPath(path)}</code></td><td><code>{path}</code></td></tr>)}
+      </tbody>
+    </table>
+  </TableWrap>
+  <Notice title="Why secondary is a quiet surface">
+    <p>Flint's <code>action.secondary</code> is a bright sky blue. White text on it fails contrast, so shadcn's secondary maps to <code>surface.subtle</code> with heading text instead.</p>
+  </Notice>
+
+  <h2 id="components">Restyle the components</h2>
+  <p>The bridge fixes colors. shadcn's components still ship with their own sizes, a 50% transparent focus ring and a 16px checkbox. Restyle each one onto Flint's component tokens before you call it Flint. The button, for example:</p>
+  <Code label="components/ui/button.jsx" code={buttonCode} />
+  <p>Flint versions of Button, Input and Checkbox live in the <a href="/workbench/">workbench</a>, with their source in <code>workbench/src/components/ui</code>.</p>
+</Docs>

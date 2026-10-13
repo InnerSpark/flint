@@ -1,0 +1,41 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Code from '../../../components/Code.astro';
+const toc = [{ id: 'path', text: 'The path for anything new' }, { id: 'checks', text: 'What the build checks' }, { id: 'run', text: 'Run the checks' }, { id: 'versioning', text: 'Versioning' }];
+const runCode = `npm run build          # tokens, contrast, usage, parity
+cd workbench && npm run build && npm run verify
+cd ../docs && npm run build && npm run verify`;
+---
+<Docs title="Contributing" crumb="Guides" lead="How a token or component gets into Flint, and what has to pass before it ships." toc={toc}>
+  <h2 id="path">The path for anything new</h2>
+  <ol>
+    <li><strong>File an ASDS ticket</strong> describing the need.</li>
+    <li><strong>Reuse first.</strong> Build only when no token or component fits.</li>
+    <li><strong>Tokens first.</strong> Add or change tokens before touching a component.</li>
+    <li><strong>Every state,</strong> with an accessibility note.</li>
+    <li><strong>Walk it in the workbench:</strong> every state, light and dark, both densities, keyboard only.</li>
+    <li><strong>Document it here:</strong> usage, style, code and accessibility.</li>
+    <li><strong>Release:</strong> bump the version, add a changelog entry, tag it.</li>
+  </ol>
+
+  <h2 id="checks">What the build checks</h2>
+  <TableWrap label="Build checks">
+    <table class="data">
+      <thead><tr><th scope="col">Check</th><th scope="col">Fails when</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Contrast</th><td>A text pair drops under 7:1, or a control edge, focus ring or chart color under 3:1, in either mode.</td></tr>
+        <tr><th scope="row">Usage</th><td>A control is drawn with a decorative border, or a density shrinks a control or target.</td></tr>
+        <tr><th scope="row">Parity</th><td>CSS, MUI, shadcn or Swift lands on a value tokens.json didn't give it, or the MUI theme hardcodes a color.</td></tr>
+        <tr><th scope="row">Workbench</th><td>Any axe violation on any page, light or dark, or a token with no row on its page.</td></tr>
+        <tr><th scope="row">Docs</th><td>Any axe violation, sideways scroll at phone width, or focus not landing and holding on headings.</td></tr>
+      </tbody>
+    </table>
+  </TableWrap>
+
+  <h2 id="run">Run the checks</h2>
+  <Code label="Terminal" code={runCode} />
+
+  <h2 id="versioning">Versioning</h2>
+  <p>Flint uses semver, separate from the apps that use it. A new token or component is a minor. A value fix is a patch. A rename or removal is a major. Deprecated tokens keep working for one minor release, then go in the next major.</p>
+</Docs>

@@ -1,0 +1,24 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import { resolved } from '../../../lib/flint.js';
+const toc = [{ id: 'shadows', text: 'Shadows' }, { id: 'layers', text: 'Layers' }];
+const use = { card: 'Cards and panels', popover: 'Menus and popovers', dialog: 'Dialogs and drawers', raised: 'Raised, floating elements' };
+---
+<Docs title="Elevation" crumb="Foundations" lead="Four shadow levels, each with a dark-mode version, and a fixed stacking order." toc={toc}>
+  <h2 id="shadows">Shadows</h2>
+  <p>The same variable name switches to its dark version under <code>data-theme="dark"</code>.</p>
+  <TableWrap label="Shadows">
+    <table class="data">
+      <thead><tr><th scope="col">Token</th><th scope="col">Use</th><th scope="col">Sample</th></tr></thead>
+      <tbody>{Object.keys(resolved.shadow).map((k) => <tr><th scope="row"><code>--shadow-{k}</code></th><td>{use[k] || ''}</td><td><div style={`width:96px;height:48px;border-radius:var(--radius-card);background:var(--color-surface-default);box-shadow:var(--shadow-${k})`}></div></td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+  <h2 id="layers">Layers</h2>
+  <TableWrap label="Stacking order">
+    <table class="data">
+      <thead><tr><th scope="col">Token</th><th scope="col">z-index</th></tr></thead>
+      <tbody>{Object.entries(resolved.zIndex).map(([k, v]) => <tr><th scope="row"><code>--z-{k}</code></th><td>{v}</td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+</Docs>

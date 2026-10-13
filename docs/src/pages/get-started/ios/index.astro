@@ -1,0 +1,61 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import Code from '../../../components/Code.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Notice from '../../../components/Notice.astro';
+const toc = [{ id: 'add', text: 'Add the package' }, { id: 'use', text: 'Use it' }, { id: 'reference', text: 'What is in the package' }, { id: 'uikit', text: 'UIKit colors' }];
+const useCode = `import SwiftUI
+import Flint
+
+struct TripCard: View {
+  var body: some View {
+    Text("Awning lights")
+      .flintText(Flint.Typography.headingH2)
+      .foregroundStyle(Flint.Colors.textHeading)
+      .padding(Flint.Space.s16)
+      .frame(minHeight: Flint.Target.touch)
+      .background(Flint.Colors.surfaceDefault,
+                  in: RoundedRectangle(cornerRadius: Flint.Radius.card))
+  }
+}`;
+const uikitCode = `let bar = UINavigationBarAppearance()
+bar.backgroundColor = Flint.UIColors.surfacePage
+bar.titleTextAttributes = [.foregroundColor: Flint.UIColors.textHeading]`;
+---
+<Docs title="iOS and SwiftUI" crumb="Get started" lead="A Swift package for iOS 16 and macOS 13 or later, built from the same tokens as the web." toc={toc}>
+  <h2 id="add">Add the package</h2>
+  <ol>
+    <li>In Xcode, open File, then Add Package Dependencies.</li>
+    <li>Enter <code>https://github.com/InnerSpark/flint</code> and pin it to a version.</li>
+    <li>The repository is private, so add your GitHub account under Xcode, Settings, Accounts first.</li>
+    <li>Bundle the Open Sans static fonts (Regular, Medium, SemiBold, Bold, ExtraBold) and list them under <code>UIAppFonts</code>.</li>
+  </ol>
+
+  <h2 id="use">Use it</h2>
+  <Code label="SwiftUI" code={useCode} />
+
+  <h2 id="reference">What is in the package</h2>
+  <TableWrap label="Swift package contents">
+    <table class="data">
+      <thead><tr><th scope="col">Name</th><th scope="col">What it holds</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><code>Flint.Colors</code></th><td>Semantic colors. Each follows the system light and dark appearance.</td></tr>
+        <tr><th scope="row"><code>Flint.UIColors</code></th><td>The same colors as dynamic <code>UIColor</code>, for UIKit APIs. <code>Flint.NSColors</code> on macOS.</td></tr>
+        <tr><th scope="row"><code>Flint.Component</code></th><td>Button, input, checkbox and focus ring decisions.</td></tr>
+        <tr><th scope="row"><code>Flint.Palette</code></th><td>The raw ladders. Reference only.</td></tr>
+        <tr><th scope="row"><code>Flint.Typography</code></th><td>Type styles. Apply with <code>.flintText(_:)</code>; they scale with Dynamic Type.</td></tr>
+        <tr><th scope="row"><code>Flint.Space</code>, <code>Flint.Radius</code></th><td>The spacing scale and radius, including <code>Radius.control</code> and <code>Radius.card</code>.</td></tr>
+        <tr><th scope="row"><code>Flint.Control</code>, <code>Flint.IconSize</code></th><td>Control heights and icon sizes.</td></tr>
+        <tr><th scope="row"><code>Flint.Target</code></th><td><code>minimum</code> is 24 (WCAG 2.5.8). Use <code>touch</code>, 44 (Apple HIG), for touch UI.</td></tr>
+        <tr><th scope="row"><code>Flint.Motion</code></th><td>Durations and easing. <code>animation(_:duration:reduceMotion:)</code> returns nil when Reduce Motion is on.</td></tr>
+      </tbody>
+    </table>
+  </TableWrap>
+
+  <h2 id="uikit">UIKit colors</h2>
+  <p><code>UIColor(Flint.Colors.x)</code> locks to light mode. For UIKit APIs such as navigation bar appearance, use <code>Flint.UIColors</code>, which switch with the appearance.</p>
+  <Code label="Swift" code={uikitCode} />
+  <Notice title="SwiftUI components are on the way">
+    <p>The package ships tokens today. Buttons, notices, tags and controls proven in Bounder are moving into it (ASDS-38).</p>
+  </Notice>
+</Docs>

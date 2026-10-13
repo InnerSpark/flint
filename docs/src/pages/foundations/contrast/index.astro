@@ -1,0 +1,37 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Result from '../../../components/Result.astro';
+import { contrast, MODES } from '../../../lib/flint.js';
+const toc = MODES.map((m) => ({ id: m, text: m === 'light' ? 'Light' : 'Dark' }));
+const n = contrast.pairs.length / 2;
+const passed = contrast.pairs.filter((p) => p.pass).length;
+---
+<Docs title="Contrast" crumb="Foundations" lead={`The build measures ${n} pairings in each mode and fails if a required one drops below its bar. This page is that report, read from contrast.json.`} toc={toc} wide>
+  <p>
+    Text clears <strong>{contrast.textBar}:1</strong> (WCAG AAA) as Flint's internal bar. Control edges, focus rings and chart marks clear <strong>{contrast.nonTextBar}:1</strong>.
+    Decorative borders and disabled text are measured but advisory: WCAG exempts them. Flint's published claim stays WCAG 2.2 AA. {passed} of {contrast.pairs.length} checks pass outright; the rest are advisory.
+  </p>
+  {MODES.map((m) => (
+    <section aria-labelledby={m}>
+      <h2 id={m}>{m === 'light' ? 'Light' : 'Dark'}</h2>
+      <TableWrap label={`${m} mode contrast`}>
+        <table class="data">
+          <thead><tr><th scope="col">Pairing</th><th scope="col">Foreground</th><th scope="col">Background</th><th scope="col">Ratio</th><th scope="col">Needs</th><th scope="col">Result</th></tr></thead>
+          <tbody>
+            {contrast.pairs.filter((p) => p.mode === m).map((p) => (
+              <tr>
+                <th scope="row">{p.label}</th>
+                <td><code>{p.fg}</code></td>
+                <td><code>{p.bg}</code></td>
+                <td class="nowrap"><strong>{p.ratio.toFixed(2)}:1</strong></td>
+                <td class="nowrap">{p.threshold}:1</td>
+                <td><Result pair={p} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </TableWrap>
+    </section>
+  ))}
+</Docs>

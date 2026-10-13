@@ -1,0 +1,48 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Code from '../../../components/Code.astro';
+import { resolved, kebab } from '../../../lib/flint.js';
+const styles = Object.entries(resolved.typography);
+const use = {
+  displayXl: 'Marketing heroes only', display: 'Marketing heroes only', headingH1: 'One per page, the page title', headingH2: 'Section titles', headingH3: 'Card and panel titles',
+  bodyLg: 'Lead paragraphs', bodyMd: 'Running text', bodySm: 'App default for dense UI', labelButton: 'Buttons', labelDefault: 'Field labels and nav items',
+  labelCaption: 'Captions and metadata', labelHelper: 'Helper text under fields', labelKicker: 'Section eyebrows, sparingly', labelFinePrint: 'Legal and fine print',
+};
+const toc = [{ id: 'styles', text: 'Type styles' }, { id: 'rules', text: 'Rules' }, { id: 'css', text: 'In CSS' }];
+const cssCode = `.card-title {
+  font-family: var(--font-sans);
+  font-size: var(--type-heading-h3-size);
+  font-weight: var(--type-heading-h3-weight);
+  line-height: var(--type-heading-h3-line-height);
+  letter-spacing: var(--type-heading-h3-tracking);
+}`;
+---
+<Docs title="Typography" crumb="Foundations" lead={`${styles.length} type styles, all Open Sans. Use a style, never a hand-set size.`} toc={toc} wide>
+  <h2 id="styles">Type styles</h2>
+  <TableWrap label="Type styles">
+    <table class="data">
+      <thead><tr><th scope="col">Style</th><th scope="col">Sample</th><th scope="col">Size, weight, line height</th><th scope="col">Use for</th></tr></thead>
+      <tbody>
+        {styles.map(([name, t]) => (
+          <tr>
+            <th scope="row"><code>{name}</code><br /><span class="muted"><code>--type-{kebab(name)}-*</code></span></th>
+            <td style={`font-family:${t.fontFamily};font-size:${t.fontSize}px;font-weight:${t.fontWeight};line-height:${t.lineHeight};letter-spacing:${t.letterSpacing};color:var(--color-text-heading)`}>Trail ready at dawn</td>
+            <td class="nowrap">{t.fontSize}px / {t.fontWeight} / {t.lineHeight}</td>
+            <td>{use[name] || ''}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </TableWrap>
+  <h2 id="rules">Rules</h2>
+  <ul>
+    <li>Nothing below 12px.</li>
+    <li>Headings follow document order: h1, then h2, then h3. Never pick a heading level for its size.</li>
+    <li>Keep running text under about 80 characters a line.</li>
+    <li>On iOS, <code>.flintText(_:)</code> scales every style with Dynamic Type.</li>
+  </ul>
+  <h2 id="css">In CSS</h2>
+  <p>Every style is available as four variables: size, weight, line height and tracking.</p>
+  <Code label="CSS" code={cssCode} />
+</Docs>

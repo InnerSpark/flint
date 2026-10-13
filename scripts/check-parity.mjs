@@ -45,7 +45,7 @@ const cssScope = (files, mode) => {
   for (const f of files) {
     for (const b of blocks(read(f))) {
       const s = b.selector;
-      const applies = s === ':root' || s === ':root, [data-theme]' || (mode === 'dark' && s === '[data-theme="dark"]');
+      const applies = s === ':root' || s === ':root, [data-theme]' || s === `[data-theme="${mode}"]`;
       if (applies) Object.assign(scope, b.vars);
     }
   }
@@ -73,6 +73,17 @@ for (const mode of MODES) {
     if (raw !== `var(${cssVarForPath(path)})`) fails.push(`shadcn ${mode.padEnd(5)} ${name}: must be var(${cssVarForPath(path)}), got ${raw ?? 'missing'}`);
     const wanted = path.startsWith('semantic.') ? at(tokens.semantic[mode], path.split('.').slice(1)) : asCss(at(tokens, path.split('.')));
     expect('shadcn', name, mode, css.get(name), typeof wanted === 'number' ? `${wanted}px` : wanted);
+  }
+}
+
+// type styles as CSS variables
+{
+  const css = cssScope(['dist/tokens.css'], 'light');
+  for (const [name, t] of Object.entries(tokens.typography || {})) {
+    const k = name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+    expect('css', `typography.${name}.fontSize`, 'any', css.get(`--type-${k}-size`), `${t.fontSize}px`);
+    expect('css', `typography.${name}.fontWeight`, 'any', css.get(`--type-${k}-weight`), String(t.fontWeight));
+    expect('css', `typography.${name}.lineHeight`, 'any', css.get(`--type-${k}-line-height`), String(t.lineHeight));
   }
 }
 

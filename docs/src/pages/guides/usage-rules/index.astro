@@ -1,0 +1,41 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import Guidance from '../../../components/Guidance.astro';
+const toc = [{ id: 'color', text: 'Color' }, { id: 'type', text: 'Type' }, { id: 'space', text: 'Space and size' }, { id: 'components', text: 'Components' }];
+---
+<Docs title="Usage rules" crumb="Guides" lead="The short list. Every rule here exists because something shipped broken without it." toc={toc}>
+  <h2 id="color">Color</h2>
+  <ul>
+    <li><strong>Use semantic tokens, never ladder steps,</strong> and never a raw hex.</li>
+    <li><strong>Text on a fill uses its "on" token.</strong> Labels on <code>action.primary</code> use <code>action.onPrimary</code>. In dark mode the fills are light, so typed white text drops to about 1.8:1.</li>
+    <li><strong>Code blocks use <code>text.onCode</code>,</strong> not <code>text.inverse</code>. Both flip in dark mode, and together they fall to about 1.1:1.</li>
+    <li><strong>Muted text is for secondary information,</strong> never anything someone must read to finish a task.</li>
+    <li><strong>Decorative borders are decorative.</strong> <code>border.default</code> and <code>border.strong</code> never form the only edge of a control. Controls use <code>border.control</code>.</li>
+    <li><strong>Feedback families stay together.</strong> An error uses the error surface, border and text, never a mix.</li>
+    <li><strong>Never color alone.</strong> Status, selection and errors pair color with text, an icon, weight or a shape.</li>
+  </ul>
+  <Guidance doText="Show a selected nav item with the selected surface, selected text and a 3px bar." dontText="Show it with a tinted background only. Some people can't see the difference." />
+
+  <h2 id="type">Type</h2>
+  <ul>
+    <li>Open Sans for everything. Use the type styles, never a hand-set size.</li>
+    <li>Nothing below 12px. Running text stays under about 80 characters a line.</li>
+    <li>Headings follow document order. Never pick a heading level for its size.</li>
+  </ul>
+
+  <h2 id="space">Space and size</h2>
+  <ul>
+    <li>Spacing stays on the scale: 0, 2, 4, 8, 12, 16, 24, 32, 40, 48, 64.</li>
+    <li>Targets are at least 24px (44pt on iOS). Aim for 40px on anything used often.</li>
+    <li>Density changes inset and gap only.</li>
+  </ul>
+
+  <h2 id="components">Components</h2>
+  <ul>
+    <li>One primary button per view. Everything else is secondary or text.</li>
+    <li>Destructive actions use the danger button and a confirm step.</li>
+    <li>Fields always have a visible label. Errors replace the helper text, and focus moves to the first field with an error.</li>
+    <li>Dialogs and drawers trap focus, close on Esc and return focus to what opened them.</li>
+    <li>Every interactive thing has every state: default, hover, focus, disabled, and selected or error where they apply.</li>
+  </ul>
+</Docs>

@@ -4,11 +4,11 @@ import tailwindcss from '@tailwindcss/vite';
 const flintRoot = fileURLToPath(new URL('../..', import.meta.url));
 
 /**
- * Flint workbench and docs site (ASDS-42), published at flint.innersparkmedia.com.
+ * Flint workbench (ASDS-42), published at flint.innersparkmedia.com/workbench/. The written docs live in ../docs.
  * Reads Flint straight from ../dist, so it always shows the current build.
  */
 export default {
-  stories: ['../src/docs/**/*.mdx', '../src/stories/**/*.stories.jsx'],
+  stories: ['../src/stories/**/*.stories.jsx'],
   staticDirs: ['../public'],
   addons: ['@storybook/addon-essentials', '@storybook/addon-a11y', 'storybook-addon-pseudo-states'],
   framework: { name: '@storybook/react-vite', options: {} },

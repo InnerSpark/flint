@@ -1,0 +1,52 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Code from '../../../components/Code.astro';
+import { source, refName } from '../../../lib/flint.js';
+const toc = [{ id: 'tiers', text: 'The three tiers' }, { id: 'references', text: 'References' }, { id: 'names', text: 'One token, every name' }, { id: 'changing', text: 'Adding or changing a token' }];
+const refCode = `"semantic": {
+  "light": { "text": { "link": "${source.semantic.light.text.link}" } },
+  "dark":  { "text": { "link": "${source.semantic.dark.text.link}" } }
+},
+"component": {
+  "button": { "primary": { "bg": "${source.component.button.primary.bg}" } }
+}`;
+---
+<Docs title="Token tiers" crumb="Guides" lead="Flint has three tiers. Each points at the one below it, so a change at the bottom flows everywhere above it, and nothing above can drift." toc={toc}>
+  <h2 id="tiers">The three tiers</h2>
+  <TableWrap label="Token tiers">
+    <table class="data">
+      <thead><tr><th scope="col">Tier</th><th scope="col">Example</th><th scope="col">Use it for</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Primitive</th><td><code>color.blue.700</code>, <code>space.16</code>, <code>radius.sm</code></td><td>Nothing in UI. Primitives only feed the tiers above.</td></tr>
+        <tr><th scope="row">Semantic</th><td><code>text.link</code> points at <code>{refName(source.semantic.light.text.link)}</code></td><td>Colors and roles in UI: surfaces, text, borders, feedback, charts.</td></tr>
+        <tr><th scope="row">Component</th><td><code>button.primary.bg</code> points at <code>{refName(source.component.button.primary.bg)}</code></td><td>The decisions a component makes, shared by MUI, shadcn, CSS and SwiftUI.</td></tr>
+      </tbody>
+    </table>
+  </TableWrap>
+
+  <h2 id="references">References</h2>
+  <p>Semantic colors exist twice, once per mode, and each points at a ladder step. Component tokens point at a semantic token without naming a mode, so they follow light and dark on their own. The build resolves every reference and fails on one that points nowhere.</p>
+  <Code label="tokens.json" code={refCode} />
+
+  <h2 id="names">One token, every name</h2>
+  <TableWrap label="Token names by platform">
+    <table class="data">
+      <thead><tr><th scope="col">Figma</th><th scope="col">CSS</th><th scope="col">JS</th><th scope="col">Swift</th></tr></thead>
+      <tbody>
+        <tr><td><code>text/link</code></td><td><code>--color-text-link</code></td><td><code>semantic.light.text.link</code></td><td><code>Flint.Colors.textLink</code></td></tr>
+        <tr><td><code>feedback/success/text</code></td><td><code>--color-feedback-success-text</code></td><td><code>semantic.light.feedback.success.text</code></td><td><code>Flint.Colors.feedbackSuccessText</code></td></tr>
+        <tr><td><code>button/primary/bg</code></td><td><code>--button-primary-bg</code></td><td><code>component.light.button.primary.bg</code></td><td><code>Flint.Component.buttonPrimaryBg</code></td></tr>
+      </tbody>
+    </table>
+  </TableWrap>
+  <p>Figma uses slashes, CSS uses kebab-case with a prefix, JS keeps the path, Swift joins the path in camelCase.</p>
+
+  <h2 id="changing">Adding or changing a token</h2>
+  <ol>
+    <li>Edit <code>tokens.json</code>. Point at an existing token with a reference wherever you can.</li>
+    <li>Run <code>npm run build</code>. It rebuilds every output, then runs the contrast, usage and parity checks.</li>
+    <li>Check the result in these docs and in the <a href="/workbench/">workbench</a>, light and dark.</li>
+    <li>Bump the version: a new token is a minor, a value fix is a patch, a rename or removal is a major.</li>
+  </ol>
+</Docs>

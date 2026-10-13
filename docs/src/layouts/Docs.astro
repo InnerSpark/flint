@@ -1,0 +1,193 @@
+---
+import '@fontsource/open-sans/400.css';
+import '@fontsource/open-sans/600.css';
+import '@fontsource/open-sans/700.css';
+import '@fontsource/open-sans/800.css';
+import '../styles/site.css';
+import Icon from '../components/Icon.astro';
+import { NAV } from '../data/nav.js';
+import { pkg } from '../lib/flint.js';
+
+/**
+ * title: page h1. lead: one-paragraph answer under it. toc: [{ id, text }] for "On this page".
+ * tabs: [{ label, href }] page-level tabs (each is its own URL). wide: drop the reading measure for tables.
+ * home: render the slot full-bleed with no page head (the home page builds its own).
+ */
+const { title, lead, crumb, toc = [], tabs, wide = false, home = false, description } = Astro.props;
+const path = Astro.url.pathname;
+const isCurrent = (href) => path === href;
+const pageTitle = home ? 'Flint Design System' : `${title} | Flint Design System`;
+const metaDescription = description || lead || 'Flint is the design system behind AccessSpark and Inner Spark Media: one token source for web and iOS.';
+const canonical = new URL(path, Astro.site).href;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={metaDescription} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={metaDescription} />
+  <meta property="og:url" content={canonical} />
+  <!-- Theme before first paint: saved choice, else the system setting. -->
+  <script is:inline>
+    (function () {
+      var t;
+      try { t = localStorage.getItem('flint-theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#page-title">Skip to content</a>
+  <header class="site-header">
+    <button class="header-button menu-button" type="button" aria-expanded="false" aria-controls="sidenav" id="menu-button">
+      <Icon name="menu" /> Menu
+    </button>
+    <a class="brand" href="/"><img src="/flint-icon.svg" alt="" width="28" height="28" />Flint <span>Design System</span></a>
+    <nav class="header-links" aria-label="Site tools">
+      <a class="hide-small" href="/workbench/">Workbench</a>
+      <button class="header-button" type="button" id="theme-toggle" aria-pressed="false"><Icon name="moon" /> Dark mode</button>
+    </nav>
+  </header>
+
+  <div class="shell">
+    <nav class="sidenav" id="sidenav" aria-label="Docs">
+      {NAV.map((group) => (
+        <>
+          <h2 id={`nav-${group.title.toLowerCase().replace(/[^a-z]+/g, '-')}`}>{group.title}</h2>
+          <ul aria-labelledby={`nav-${group.title.toLowerCase().replace(/[^a-z]+/g, '-')}`}>
+            {group.items.map(([label, href]) => (
+              <li><a href={href} aria-current={isCurrent(href) || (href !== '/components/' && href.startsWith('/components/') && path.startsWith(href)) ? 'page' : undefined}>{label}</a></li>
+            ))}
+          </ul>
+        </>
+      ))}
+      <div class="nav-tools">
+        <a href="/workbench/">Workbench</a>
+        <p class="muted">Live MUI, shadcn and CSS test bench for every component.</p>
+      </div>
+    </nav>
+
+    <div class="shell-main">
+      {home ? (
+        <main id="main"><slot /></main>
+      ) : (
+        <div class={`page ${wide ? 'wide' : ''} ${toc.length ? '' : 'no-toc'}`}>
+          <main id="main" class="page-main">
+            <header class="page-head">
+              {crumb && <p class="crumb">{crumb}</p>}
+              <h1 id="page-title" tabindex="-1">{title}</h1>
+              {lead && <p class="lead">{lead}</p>}
+            </header>
+            {tabs && (
+              <nav class="page-tabs" aria-label={`${title} sections`}>
+                <ul>
+                  {tabs.map((t) => <li><a href={t.href} aria-current={isCurrent(t.href) ? 'page' : undefined}>{t.label}</a></li>)}
+                </ul>
+              </nav>
+            )}
+            <div class="prose"><slot /></div>
+          </main>
+          {toc.length > 0 && (
+            <nav class="toc" aria-labelledby="toc-title">
+              <h2 id="toc-title">On this page</h2>
+              <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.text}</a></li>)}</ul>
+            </nav>
+          )}
+        </div>
+      )}
+      <footer class="site-footer">
+        <p>Flint {pkg.version}. Built and audited by Inner Spark Media. Published accessibility target: WCAG 2.2 AA.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Theme toggle: aria-pressed mirrors dark mode; the label stays constant.
+      var toggle = document.getElementById('theme-toggle');
+      function syncToggle() { toggle.setAttribute('aria-pressed', root.getAttribute('data-theme') === 'dark' ? 'true' : 'false'); }
+      syncToggle();
+      toggle.addEventListener('click', function () {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('flint-theme', next); } catch (e) {}
+        syncToggle();
+      });
+
+      // Mobile nav disclosure. Esc closes it and returns focus to the button.
+      var menu = document.getElementById('menu-button');
+      var nav = document.getElementById('sidenav');
+      function setOpen(open) { menu.setAttribute('aria-expanded', String(open)); nav.setAttribute('data-open', String(open)); }
+      menu.addEventListener('click', function () {
+        var open = menu.getAttribute('aria-expanded') !== 'true';
+        setOpen(open);
+        if (open) { var first = nav.querySelector('a'); if (first) first.focus(); }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { setOpen(false); menu.focus(); }
+      });
+
+      // Same-page links move focus to the destination heading, not just the scroll position.
+      // The browser's own fragment jump would park focus on <body> a frame later, so we take over.
+      function headingFor(id) {
+        var el = document.getElementById(id);
+        if (!el) return null;
+        var h = /^H[1-6]$/.test(el.tagName) ? el : el.querySelector('h1, h2, h3');
+        return h || el;
+      }
+      function focusHeading(target) {
+        if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+      }
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href^="#"]');
+        if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        var id = decodeURIComponent(a.getAttribute('href').slice(1));
+        var target = id && headingFor(id);
+        if (!target) return;
+        e.preventDefault();
+        focusHeading(target);
+        if (location.hash !== '#' + id) history.pushState(null, '', '#' + id);
+      });
+
+      // Arriving with a hash (a shared link): focus the heading, and re-take it from <body> only,
+      // for a short window, because the browser resets focus late. Never take it from where the user moved.
+      if (location.hash.length > 1) {
+        var start = performance.now();
+        var target = headingFor(decodeURIComponent(location.hash.slice(1)));
+        if (target) {
+          focusHeading(target);
+          (function hold() {
+            if (document.activeElement === document.body || document.activeElement === null) focusHeading(target);
+            if (performance.now() - start < 900) requestAnimationFrame(hold);
+          })();
+        }
+      }
+
+      // Copy buttons on code blocks announce the result through a polite live region.
+      var status = document.getElementById('copy-status');
+      document.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('.copy-button');
+        if (!b) return;
+        var code = document.getElementById(b.getAttribute('data-copy'));
+        if (!code || !navigator.clipboard) return;
+        navigator.clipboard.writeText(code.innerText).then(function () {
+          status.textContent = 'Copied ' + b.getAttribute('data-label') + ' to the clipboard.';
+          setTimeout(function () { status.textContent = ''; }, 4000);
+        });
+      });
+    })();
+  </script>
+  <p id="copy-status" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
+</body>
+</html>

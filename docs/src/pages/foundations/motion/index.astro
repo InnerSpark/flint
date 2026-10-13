@@ -1,0 +1,32 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Code from '../../../components/Code.astro';
+import { resolved } from '../../../lib/flint.js';
+const toc = [{ id: 'duration', text: 'Duration' }, { id: 'easing', text: 'Easing' }, { id: 'reduced', text: 'Reduced motion' }];
+const cssCode = `.drawer {
+  transition: transform var(--duration-base) var(--ease-entrance);
+}
+@media (prefers-reduced-motion: reduce) {
+  .drawer { transition: none; }
+}`;
+---
+<Docs title="Motion" crumb="Foundations" lead="Short, purposeful motion that shows what changed. Every animation has a reduced-motion version." toc={toc}>
+  <h2 id="duration">Duration</h2>
+  <TableWrap label="Durations">
+    <table class="data">
+      <thead><tr><th scope="col">Token</th><th scope="col">Value</th></tr></thead>
+      <tbody>{Object.entries(resolved.motion.duration).map(([k, v]) => <tr><th scope="row"><code>--duration-{k}</code></th><td>{v}</td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+  <h2 id="easing">Easing</h2>
+  <TableWrap label="Easing curves">
+    <table class="data">
+      <thead><tr><th scope="col">Token</th><th scope="col">Curve</th><th scope="col">Use</th></tr></thead>
+      <tbody>{Object.entries(resolved.motion.easing).map(([k, v]) => <tr><th scope="row"><code>--ease-{k}</code></th><td><code>{v}</code></td><td>{{ standard: 'Moving between states', entrance: 'Things arriving', exit: 'Things leaving' }[k] || ''}</td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+  <h2 id="reduced">Reduced motion</h2>
+  <p>Gate every non-essential animation on <code>prefers-reduced-motion</code>, and name in the design what each animation becomes when it is off. On iOS, <code>Flint.Motion.animation(_:duration:reduceMotion:)</code> returns no animation when Reduce Motion is on.</p>
+  <Code label="CSS" code={cssCode} />
+</Docs>

@@ -1,0 +1,8 @@
+---
+import Icon from './Icon.astro';
+const { doText, dontText } = Astro.props;
+---
+<div class="guidance">
+  <figure class="do"><figcaption><Icon name="check" />Do</figcaption><p>{doText}</p></figure>
+  <figure class="dont"><figcaption><Icon name="x" />Don't</figcaption><p>{dontText}</p></figure>
+</div>

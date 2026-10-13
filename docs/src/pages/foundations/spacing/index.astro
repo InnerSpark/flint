@@ -1,0 +1,46 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import { resolved, source, refName, leaves, at, kebab } from '../../../lib/flint.js';
+const toc = [{ id: 'space', text: 'Spacing scale' }, { id: 'radius', text: 'Radius' }, { id: 'sizes', text: 'Controls, icons and targets' }, { id: 'density', text: 'Density' }];
+---
+<Docs title="Spacing and size" crumb="Foundations" lead="One spacing scale, a radius set, control heights and a minimum target. Nothing off scale." toc={toc}>
+  <h2 id="space">Spacing scale</h2>
+  <TableWrap label="Spacing scale">
+    <table class="data">
+      <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col" style="width:50%">Size</th></tr></thead>
+      <tbody>{Object.entries(resolved.space).map(([k, v]) => <tr><th scope="row"><code>--space-{k}</code></th><td>{v}px</td><td><div style={`height:16px;width:${v}px;background:var(--color-action-primary);border-radius:var(--radius-xs)`}></div></td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+
+  <h2 id="radius">Radius</h2>
+  <p>Use the roles: <code>control</code> for buttons, inputs and nav items, <code>card</code> for cards and panels, <code>cardLg</code> for dialogs, <code>pill</code> for chips and avatars.</p>
+  <TableWrap label="Radius">
+    <table class="data">
+      <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Points at</th><th scope="col">Shape</th></tr></thead>
+      <tbody>{Object.entries(resolved.radius).map(([k, v]) => <tr><th scope="row"><code>--radius-{kebab(k)}</code></th><td>{v}px</td><td>{refName(source.radius[k]) ? <code>{refName(source.radius[k])}</code> : <span class="muted">ramp step</span>}</td><td><div style={`width:80px;height:40px;border:2px solid var(--color-border-control);border-radius:${Math.min(v, 20)}px`}></div></td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+
+  <h2 id="sizes">Controls, icons and targets</h2>
+  <TableWrap label="Control, icon and target sizes">
+    <table class="data">
+      <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Use</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><code>--control-sm</code></th><td>{resolved.control.sm}px</td><td>Compact controls</td></tr>
+        <tr><th scope="row"><code>--control-md</code></th><td>{resolved.control.md}px</td><td>Default buttons and inputs</td></tr>
+        {Object.entries(resolved.iconSize).map(([k, v]) => <tr><th scope="row"><code>--icon-size-{k}</code></th><td>{v}px</td><td>Icons</td></tr>)}
+        <tr><th scope="row"><code>--target-min</code></th><td>{resolved.targetMin}px</td><td>The smallest anything clickable may be (WCAG 2.5.8). Aim for 40px on anything used often; 44pt on iOS.</td></tr>
+      </tbody>
+    </table>
+  </TableWrap>
+
+  <h2 id="density">Density</h2>
+  <p>Set <code>data-density="compact"</code> to tighten inset and gap by one step. Control heights, icon sizes and the minimum target stay the same, so a denser layout never shrinks a target.</p>
+  <TableWrap label="Density">
+    <table class="data">
+      <thead><tr><th scope="col">Token</th><th scope="col">Comfortable</th><th scope="col">Compact</th></tr></thead>
+      <tbody>{leaves(resolved.density.comfortable).map(([p, v]) => <tr><th scope="row"><code>--{p.map(kebab).join('-')}</code></th><td>{v}px</td><td>{at(resolved.density.compact, p)}px</td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+</Docs>

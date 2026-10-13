@@ -1,0 +1,37 @@
+---
+import Docs from '../../layouts/Docs.astro';
+import TableWrap from '../../components/TableWrap.astro';
+import Icon from '../../components/Icon.astro';
+import { COMPONENTS } from '../../data/components.js';
+// The component list from FIGMA_LIBRARY_GUIDELINES.md, section 5.
+const LIBRARY = [
+  ['Actions', ['Button', 'Split button']],
+  ['Forms', ['Form field', 'Input', 'Select', 'Checkbox', 'Radio', 'Toggle']],
+  ['Status', ['Chip', 'Badge', 'Alert', 'Toast']],
+  ['Navigation', ['Tab', 'Pagination', 'Skip link', 'Menu item']],
+  ['Containers', ['Dialog', 'Drawer', 'Empty state', 'Tooltip']],
+  ['Data', ['Table cell', 'Progress']],
+];
+const documented = Object.entries(COMPONENTS).map(([slug, c]) => [c.name, slug]);
+const all = LIBRARY.flatMap(([, l]) => l);
+const toc = [{ id: 'documented', text: 'Documented' }, { id: 'library', text: 'Everything in the library' }];
+---
+<Docs title="Components" lead="Each component has one spec, written once and built per platform. These pages cover usage, the tokens it reads, code for each platform and how it works with a keyboard and screen reader." toc={toc}>
+  <h2 id="documented">Documented</h2>
+  <ul class="link-list">
+    {documented.map(([name, slug]) => <li><a href={`/components/${slug}/`}><strong>{name}</strong><span>{COMPONENTS[slug].lead}</span></a></li>)}
+  </ul>
+  <h2 id="library">Everything in the library</h2>
+  <p>{documented.length} of {all.length} Figma library components are documented here so far. The rest arrive with the SwiftUI components (ASDS-38) and the shadcn pilot. Product patterns used only by AccessSpark are moving to its own library (ASDS-37).</p>
+  <TableWrap label="Component coverage">
+    <table class="data">
+      <thead><tr><th scope="col">Group</th><th scope="col">Component</th><th scope="col">Docs</th></tr></thead>
+      <tbody>
+        {LIBRARY.flatMap(([group, list]) => list.map((n) => {
+          const d = documented.find(([name]) => name === n);
+          return <tr><td class="muted">{group}</td><th scope="row">{d ? <a href={`/components/${d[1]}/`}>{n}</a> : n}</th><td>{d ? <span class="result pass"><Icon name="check" />Documented</span> : <span class="muted">Not yet</span>}</td></tr>;
+        }))}
+      </tbody>
+    </table>
+  </TableWrap>
+</Docs>

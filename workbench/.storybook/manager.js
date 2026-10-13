@@ -5,9 +5,9 @@ import { semantic, fontFamily } from '../../dist/index.js';
 addons.setConfig({
   theme: create({
     base: 'light',
-    brandTitle: 'Flint Design System',
-    brandUrl: 'https://flint.innersparkmedia.com',
-    brandImage: '/flint-icon.svg',
+    brandTitle: 'Flint workbench',
+    brandUrl: '/',
+    brandImage: 'flint-icon.svg',
     brandTarget: '_self',
     fontBase: fontFamily.sans,
     colorPrimary: semantic.light.action.primary,

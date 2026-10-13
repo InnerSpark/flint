@@ -1,0 +1,14 @@
+---
+// A labeled code block with a copy button. `code` is the exact text; no highlighting, so it
+// reads at full contrast on Flint's code surface in both modes.
+const { code, label = 'Code', id } = Astro.props;
+const codeId = id || `code-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Math.abs([...code].reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7))}`;
+---
+<div class="code">
+  <div class="code-head">
+    <span>{label}</span>
+    <button type="button" class="copy-button" data-copy={codeId} data-label={label}>Copy<span class="sr-only"> {label}</span></button>
+  </div>
+  <pre tabindex="0" aria-label={`${label} code`}><code id={codeId}>{code.trim()}</code></pre>
+</div>
+<style>.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }</style>

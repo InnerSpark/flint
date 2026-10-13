@@ -1,0 +1,8 @@
+---
+import Icon from './Icon.astro';
+const { tone = 'info', title } = Astro.props;
+---
+<div class={`notice ${tone === 'warning' ? 'warning' : ''}`} role="note">
+  <Icon name={tone === 'warning' ? 'warning' : 'info'} />
+  <div>{title && <p><strong>{title}</strong></p>}<slot /></div>
+</div>

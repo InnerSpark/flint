@@ -1,0 +1,39 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Swatch from '../../../components/Swatch.astro';
+import Result from '../../../components/Result.astro';
+import { resolved, source, refName, pairResult } from '../../../lib/flint.js';
+const keys = Object.keys(resolved.semantic.light.chart);
+const toc = [{ id: 'categorical', text: 'Categorical colors' }, { id: 'rules', text: 'Rules' }];
+---
+<Docs title="Data visualization" crumb="Foundations" lead="Five categorical colors for charts, each clearing 3:1 against the surfaces charts sit on, in both modes." toc={toc} wide>
+  <h2 id="categorical">Categorical colors</h2>
+  <p>Use them in order. They map to shadcn's <code>--chart-1</code> through <code>--chart-5</code>.</p>
+  <TableWrap label="Chart colors">
+    <table class="data">
+      <thead><tr><th scope="col">Token</th><th scope="col">Light</th><th scope="col">On default (light)</th><th scope="col">Dark</th><th scope="col">On default (dark)</th></tr></thead>
+      <tbody>
+        {keys.map((k) => {
+          const r = pairResult(`chart.${k} on default`);
+          return (
+            <tr>
+              <th scope="row"><code>--color-chart-{k}</code></th>
+              <td><Swatch value={resolved.semantic.light.chart[k]} note={refName(source.semantic.light.chart[k])} /></td>
+              <td class="nowrap">{r.light.ratio.toFixed(2)}:1 <Result pair={r.light} /></td>
+              <td><Swatch value={resolved.semantic.dark.chart[k]} note={refName(source.semantic.dark.chart[k])} /></td>
+              <td class="nowrap">{r.dark.ratio.toFixed(2)}:1 <Result pair={r.dark} /></td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </TableWrap>
+  <h2 id="rules">Rules</h2>
+  <ul>
+    <li>Never let color carry meaning alone. Label series directly, or pair color with a pattern or marker shape.</li>
+    <li>Keep to five series or fewer. More than that, group the rest or use small multiples.</li>
+    <li>Give every chart a text summary of what it shows, for screen readers and for a quick read.</li>
+    <li>Chart colors 1 and 5 are blue and red, and 4 is green: never rely on red against green to tell two series apart.</li>
+  </ul>
+</Docs>

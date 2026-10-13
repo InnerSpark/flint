@@ -56,6 +56,6 @@ export default {
     controls: { disable: true },
     actions: { disable: true },
     a11y: { config: { rules: [] } },
-    options: { storySort: { order: ['Start here', ['Welcome', 'Getting started', 'Overview'], 'Guides', ['Token tiers', 'Usage rules', 'Contributing'], 'Foundations', 'Components', 'Coverage'] } },
+    options: { storySort: { order: ['Start here', 'Foundations', 'Components', 'Coverage'] } },
   },
 };

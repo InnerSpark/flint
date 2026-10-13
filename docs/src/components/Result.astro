@@ -1,0 +1,10 @@
+---
+import Icon from './Icon.astro';
+// Pass / fail / advisory as an icon plus a word, never color alone.
+const { pair } = Astro.props;
+const advisory = pair && (pair.kind === 'decorative' || pair.kind === 'exempt');
+const state = !pair ? 'adv' : pair.pass ? 'pass' : advisory ? 'adv' : 'fail';
+const word = { pass: 'Pass', fail: 'Fail', adv: 'Advisory' }[state];
+const icon = { pass: 'check', fail: 'error', adv: 'warning' }[state];
+---
+<span class={`result ${state}`}><Icon name={icon} />{word}</span>

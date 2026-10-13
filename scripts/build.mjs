@@ -75,6 +75,11 @@ function staticVars() {
   for (const [k, v] of Object.entries(tokens.zIndex || {})) out.push([`--z-${k}`, `${v}`]);
   for (const [k, v] of Object.entries(tokens.breakpoint || {})) out.push([`--breakpoint-${k}`, `${v}px`]);
   out.push(['--target-min', `${tokens.targetMin}px`]);
+  // Type styles as variables (size, weight, line height, tracking), so plain CSS can use them too.
+  for (const [name, t] of Object.entries(tokens.typography || {})) {
+    const k = kebab(name);
+    out.push([`--type-${k}-size`, `${t.fontSize}px`], [`--type-${k}-weight`, `${t.fontWeight}`], [`--type-${k}-line-height`, `${t.lineHeight}`], [`--type-${k}-tracking`, t.letterSpacing]);
+  }
   out.push(...densityVars('comfortable'));
   out.push(['--font-sans', tokens.fontFamily.sans]);
   out.push(['--font-prose', tokens.fontFamily.prose]);
@@ -115,6 +120,14 @@ ${fmt(semanticVars('dark'))}
 
   /* elevation (dark) */
 ${fmt(shadowDarkVars())}
+}
+
+[data-theme="light"] {
+  /* semantic (light) again, so a light section can sit inside a dark page */
+${fmt(semanticVars('light'))}
+
+  /* elevation (light) */
+${fmt(Object.entries(tokens.shadow || {}).map(([k, v]) => [`--shadow-${k}`, v]))}
 }
 
 [data-density="compact"] {

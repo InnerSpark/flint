@@ -1,0 +1,50 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import { contrast } from '../../../lib/flint.js';
+const toc = [{ id: 'commitments', text: 'What Flint guarantees' }, { id: 'annotations', text: 'Annotate every screen' }, { id: 'focus', text: 'Focus' }, { id: 'test', text: 'How to test' }];
+---
+<Docs title="Accessibility" crumb="Guides" lead="Accessibility is built into Flint's tokens, not added at the end. The build enforces most of it; the rest is up to each screen." toc={toc}>
+  <h2 id="commitments">What Flint guarantees</h2>
+  <TableWrap label="Accessibility guarantees">
+    <table class="data">
+      <thead><tr><th scope="col">Area</th><th scope="col">Guarantee</th><th scope="col">WCAG</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Text contrast</th><td>Every semantic text pairing clears {contrast.textBar}:1 in light and dark. The build fails otherwise.</td><td>1.4.3, 1.4.6</td></tr>
+        <tr><th scope="row">Non-text contrast</th><td>Control edges, focus rings and chart marks clear {contrast.nonTextBar}:1.</td><td>1.4.11</td></tr>
+        <tr><th scope="row">Focus</th><td>A solid 2px ring, offset 2px, in the focus color. Never removed, never transparent.</td><td>2.4.7, 2.4.11</td></tr>
+        <tr><th scope="row">Target size</th><td>24px minimum as a token. Density can't shrink it. 44pt on iOS.</td><td>2.5.8</td></tr>
+        <tr><th scope="row">Motion</th><td>Every animation has a reduced-motion version; Swift's helper returns none when Reduce Motion is on.</td><td>2.3.3</td></tr>
+        <tr><th scope="row">Text size</th><td>Nothing below 12px. Swift type styles scale with Dynamic Type.</td><td>1.4.4</td></tr>
+      </tbody>
+    </table>
+  </TableWrap>
+  <p>Flint holds text to AAA internally. Its published claim stays WCAG 2.2 AA. An AAA token pass is not a AAA conformance claim.</p>
+
+  <h2 id="annotations">Annotate every screen</h2>
+  <p>Every new screen or component ships with notes engineering can build from without guessing:</p>
+  <ul>
+    <li>Landmarks: header, nav with a label, main, footer.</li>
+    <li>Accessible names for icon-only controls.</li>
+    <li>States: <code>aria-current="page"</code> for nav, <code>aria-selected</code> for tabs and options, <code>aria-pressed</code> for toggles, <code>aria-expanded</code> for anything that opens.</li>
+    <li>Live regions: <code>role="status"</code> for progress and counts, <code>role="alert"</code> for errors. Keep them in the page, empty when unused.</li>
+    <li>Focus order, and where focus goes when something opens or closes.</li>
+    <li>What each animation becomes under reduced motion.</li>
+  </ul>
+
+  <h2 id="focus">Focus</h2>
+  <ul>
+    <li>Skip links and same-page links move focus to the destination heading, not just the scroll position.</li>
+    <li>On a field error, focus moves to the first field with an error.</li>
+    <li>Dialogs trap focus inside and return it to the control that opened them.</li>
+    <li>Icons inside a labeled control are <code>aria-hidden</code>, so they aren't read twice.</li>
+  </ul>
+
+  <h2 id="test">How to test</h2>
+  <ol>
+    <li>Run the build. Contrast, usage and parity checks must pass.</li>
+    <li>Walk the component in the <a href="/workbench/">workbench</a>: every state, light and dark, both densities.</li>
+    <li>Use it with a keyboard only.</li>
+    <li>Use it with VoiceOver or NVDA only. If someone can't finish the task that way, it isn't done.</li>
+  </ol>
+</Docs>

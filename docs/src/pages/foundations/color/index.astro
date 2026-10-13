@@ -1,0 +1,65 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import Swatch from '../../../components/Swatch.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Guidance from '../../../components/Guidance.astro';
+import { resolved, source, leaves, at, refName, cssVarForPath, isColor } from '../../../lib/flint.js';
+
+const rows = leaves(resolved.semantic.light);
+const groups = [...new Set(rows.map(([p]) => p[0]))];
+const about = {
+  surface: 'Backgrounds: the page, cards, tinted areas, inverse bands and code.',
+  text: 'Text and icons that sit on surfaces. Every pairing clears 7:1.',
+  action: 'Interactive fills and their labels. Labels on a fill use its "on" token.',
+  border: 'Edges. Only control, controlHover, focus and error may outline a control.',
+  feedback: 'Success, warning, error and info. Keep each family together.',
+  accent: 'Small highlights. Not for large fills.',
+  selected: 'The selected state, always paired with a second cue such as weight or a bar.',
+  chart: 'Data visualization marks. See Data visualization.',
+  overlayScrim: 'The dimmed layer behind dialogs and drawers.',
+};
+const ramps = Object.entries(resolved.color).filter(([, v]) => typeof v === 'object');
+const toc = [...groups.map((g) => ({ id: g, text: g === 'overlayScrim' ? 'Overlay' : g[0].toUpperCase() + g.slice(1) })), { id: 'ladders', text: 'The ladders' }];
+---
+<Docs title="Color" crumb="Foundations" lead={`${rows.length} semantic colors in each mode, each one a reference to a step on the ladders below. Use semantic colors in UI. Never a ladder step, never a raw hex.`} toc={toc} wide>
+  <Guidance doText="Use the semantic token for the role: text.muted for secondary text on any surface." dontText="Pick a gray from the ladder because it looks right. It won't follow dark mode or a future contrast fix." />
+  {groups.map((g) => {
+    const groupRows = rows.filter(([p]) => p[0] === g);
+    return (
+      <section aria-labelledby={g}>
+        <h2 id={g}>{g === 'overlayScrim' ? 'Overlay' : g[0].toUpperCase() + g.slice(1)}</h2>
+        <p>{about[g]}</p>
+        <TableWrap label={`${g} colors`}>
+          <table class="data">
+            <thead><tr><th scope="col">Token</th><th scope="col">CSS variable</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+            <tbody>
+              {groupRows.map(([p]) => {
+                const light = at(resolved.semantic.light, p), dark = at(resolved.semantic.dark, p);
+                return (
+                  <tr>
+                    <th scope="row"><code>{p.join('.')}</code></th>
+                    <td><code>{cssVarForPath(['semantic', ...p].join('.'))}</code></td>
+                    <td>{isColor(light) && <Swatch value={light} note={refName(at(source.semantic.light, p)) || 'literal value'} />}</td>
+                    <td>{isColor(dark) && <Swatch value={dark} note={refName(at(source.semantic.dark, p)) || 'literal value'} />}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </TableWrap>
+      </section>
+    );
+  })}
+
+  <h2 id="ladders">The ladders</h2>
+  <p>The primitive ramps every semantic color points at. Reference only.</p>
+  {ramps.map(([ramp, steps]) => (
+    <TableWrap label={`${ramp} ladder`}>
+      <table class="data">
+        <caption>{ramp}</caption>
+        <thead><tr><th scope="col">Step</th>{Object.keys(steps).map((s) => <th scope="col">{s}</th>)}</tr></thead>
+        <tbody><tr><th scope="row">Value</th>{Object.entries(steps).map(([, hex]) => <td><span class="swatch"><span class="swatch-chip" style={`background:${hex}`} aria-hidden="true"></span></span><br /><code>{hex}</code></td>)}</tr></tbody>
+      </table>
+    </TableWrap>
+  ))}
+</Docs>

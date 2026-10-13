@@ -1,0 +1,34 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import Notice from '../../../components/Notice.astro';
+const toc = [{ id: 'library', text: 'The library' }, { id: 'rules', text: 'Rules for designing' }, { id: 'make', text: 'Figma Make' }, { id: 'publishing', text: 'Publishing changes' }];
+---
+<Docs title="Figma" crumb="Get started" lead="The Flint library mirrors tokens.json. If the two ever disagree, the repo wins and the library gets fixed." toc={toc}>
+  <h2 id="library">The library</h2>
+  <p>Enable the <a href="https://www.figma.com/design/SPVtGNr2eMf2LrwV4F3VVo/Flint-Design-System">Flint Design System library</a> in your file. Variables live in three collections: Primitives, Semantic (with Light and Dark modes) and Sizing (with Comfortable and Compact).</p>
+
+  <h2 id="rules">Rules for designing</h2>
+  <ul>
+    <li><strong>Tokens only.</strong> Bind every fill, stroke, text color, radius, spacing and size to a Semantic or Sizing variable. No raw hex, no Primitives.</li>
+    <li><strong>Library components first.</strong> Use an instance before drawing anything. If nothing fits, file an ASDS ticket.</li>
+    <li><strong>Don't detach instances.</strong> If an instance can't do what you need, that's a ticket too.</li>
+    <li><strong>Every state.</strong> Default, hover, focus, disabled, and selected or error where they apply.</li>
+    <li><strong>Check both modes.</strong> Set the mode on the top frame and look at every screen in Light and Dark before handoff.</li>
+    <li><strong>Annotate for accessibility.</strong> Landmarks, names for icon-only controls, states, live regions and focus order. See <a href="/guides/accessibility/">Accessibility</a>.</li>
+    <li><strong>Demo data</strong> uses the Sam Carter persona and example.com. Never real personal data or another company's brand.</li>
+  </ul>
+
+  <h2 id="make">Figma Make</h2>
+  <p>Point Figma Make at <code>dist/tokens.css</code> for the full set of variables in light and dark, or at <code>dist/tokens.json</code> for structured values. For Tokens Studio, use <code>dist/tokens.dtcg.json</code>.</p>
+
+  <h2 id="publishing">Publishing changes</h2>
+  <ol>
+    <li>Change the variable or component in place. Never make a second variable with the same name.</li>
+    <li>Publish from the Assets panel with a note of what changed and the version.</li>
+    <li>Accept the update in every consuming file.</li>
+    <li>Spot-check contrast in a consuming file in Light and Dark.</li>
+  </ol>
+  <Notice title="Versions match the repo">
+    <p>A breaking change is a major, a new token or component is a minor, a fix is a patch. Log every publish in the library changelog and in the repo.</p>
+  </Notice>
+</Docs>

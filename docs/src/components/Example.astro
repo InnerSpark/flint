@@ -1,0 +1,12 @@
+---
+// The same markup rendered in a light pane and a dark pane, side by side. Works because Flint
+// redeclares its variables under [data-theme], so each pane resolves its own colors.
+// Write "__P__" inside ids and for/aria references; each pane gets its own suffix so ids stay unique.
+const { label } = Astro.props;
+const html = await Astro.slots.render('default');
+const pane = (suffix) => html.replaceAll('__P__', suffix);
+---
+<div class="example" role="group" aria-label={label}>
+  <div class="example-pane" data-theme="light"><p class="pane-label">Light</p><Fragment set:html={pane('light')} /></div>
+  <div class="example-pane" data-theme="dark"><p class="pane-label">Dark</p><Fragment set:html={pane('dark')} /></div>
+</div>

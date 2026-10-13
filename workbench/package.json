@@ -2,11 +2,12 @@
   "name": "flint-workbench",
   "private": true,
   "version": "0.1.0",
-  "description": "Flint test environment: every semantic token and component, as MUI, shadcn and plain CSS, in light and dark (ASDS-42).",
+  "description": "Flint workbench: every semantic token and component as MUI, shadcn and plain CSS, light and dark (ASDS-42). Published at flint.innersparkmedia.com/workbench/.",
   "type": "module",
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "build": "npm --prefix .. run build && storybook build -o storybook-static",
+    "build:storybook": "storybook build -o storybook-static",
+    "build": "npm --prefix .. run build && npm run build:storybook",
     "verify": "node scripts/verify.mjs"
   },
   "devDependencies": {
