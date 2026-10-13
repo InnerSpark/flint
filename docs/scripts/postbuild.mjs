@@ -2,7 +2,9 @@
 //   1. CSP: rehash every inline script from the final HTML (Astro hashes some before its last transform, so
 //      its hash can miss), and drop the style hashes: any hash makes browsers ignore 'unsafe-inline', and
 //      swatches set their color in a style attribute. Scripts stay hash-only, the part that stops XSS.
-//   2. Writes dist/sitemap.xml.
+//   2. Section headings with an id get tabindex="-1" in the HTML itself, so a hash jump can take focus
+//      even before the layout script runs (it also adds one on click).
+//   3. Writes dist/sitemap.xml.
 import { readdirSync, statSync, writeFileSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, relative } from 'node:path';
@@ -24,6 +26,7 @@ for (const p of pages) {
   const hashes = [...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*type="application\/(?:ld\+)?json")[^>]*>([\s\S]*?)<\/script>/g)]
     .map(([, body]) => `'sha256-${createHash('sha256').update(body).digest('base64')}'`);
   const fixed = html
+    .replace(/<(h[2-4]) id="([^"]+)"(?![^>]*tabindex)/g, '<$1 id="$2" tabindex="-1"')
     .replace(/script-src 'self'(?: 'sha256-[^']+')*/, `script-src 'self' ${[...new Set(hashes)].join(' ')}`)
     .replace(/(style-src 'self' 'unsafe-inline')(?: 'sha256-[^']+')+/g, '$1');
   if (!fixed.includes("style-src 'self' 'unsafe-inline';")) throw new Error(`CSP style-src not as expected in ${file}`);
