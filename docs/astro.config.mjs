@@ -1,4 +1,6 @@
 import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
 
 const flintRoot = fileURLToPath(new URL('..', import.meta.url));
@@ -17,5 +19,7 @@ export default defineConfig({
       directives: ["default-src 'self'", "img-src 'self' data:", "font-src 'self' data:", "connect-src 'self'", "object-src 'none'", "base-uri 'self'", "form-action 'self'"],
     },
   },
-  vite: { server: { fs: { allow: [flintRoot] } } },
+  // React for the workbench islands (MUI and shadcn render live); Tailwind only for the shadcn bench.
+  integrations: [react()],
+  vite: { plugins: [tailwindcss()], server: { fs: { allow: [flintRoot] } } },
 });

@@ -1,9 +1,9 @@
 // Component docs content. Live examples use the plain-CSS classes from the workbench; code tabs read
 // the workbench source directly, so the docs show the exact code the workbench tests.
-import plainCss from '../../../workbench/src/styles/plain.css?raw';
-import shadButton from '../../../workbench/src/components/ui/button.jsx?raw';
-import shadInput from '../../../workbench/src/components/ui/input.jsx?raw';
-import shadCheckbox from '../../../workbench/src/components/ui/checkbox.jsx?raw';
+import plainCss from '../workbench/plain.css?raw';
+import shadButton from '../workbench/ui/button.jsx?raw';
+import shadInput from '../workbench/ui/input.jsx?raw';
+import shadCheckbox from '../workbench/ui/checkbox.jsx?raw';
 
 /** The plain.css rules whose selector starts with the given class, comments dropped. */
 const cssFor = (cls) => (plainCss.match(/[^{}]+\{[^}]*\}/g) || [])

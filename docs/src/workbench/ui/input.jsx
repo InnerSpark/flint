@@ -1,6 +1,6 @@
 // shadcn/ui Input, restyled to Flint input tokens. Error state follows aria-invalid, as upstream.
 // Gap: Flint has no input.disabled tokens yet, so disabled reads the semantic disabled colors.
-import { cn } from '../../lib/cn';
+import { cn } from '../cn';
 
 export function Input({ className, type = 'text', ...props }) {
   return (

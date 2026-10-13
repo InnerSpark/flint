@@ -1,7 +1,7 @@
 // shadcn/ui Checkbox (Radix), restyled to Flint. Changed from upstream: 24px box (Flint's
 // targetMin, upstream is 16px), 2px control-colored edge, Flint focus ring.
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { cn } from '../../lib/cn';
+import { cn } from '../cn';
 
 export function Checkbox({ className, ...props }) {
   return (

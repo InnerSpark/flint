@@ -1,0 +1,25 @@
+---
+import Docs from '../../layouts/Docs.astro';
+import Notice from '../../components/Notice.astro';
+import DensitySwitch from '../../components/DensitySwitch.astro';
+import Bench from '../../workbench/Bench.jsx';
+import { WORKBENCH } from '../../data/workbench.js';
+
+export function getStaticPaths() {
+  return Object.keys(WORKBENCH).map((name) => ({ params: { name } }));
+}
+const { name } = Astro.params;
+const c = WORKBENCH[name];
+const toc = c.benches.map(([id, text]) => ({ id, text }));
+---
+<Docs title={`${c.name} workbench`} crumb="Workbench" lead={c.lead} toc={toc.length > 1 ? toc : []} wide>
+  <DensitySwitch />
+  <p>Guidance and code: <a href={`/components/${name}/`}>{c.name} docs</a>.</p>
+  {c.gap && <Notice tone="warning" title="Known MUI gap">{c.gap}</Notice>}
+  {c.benches.map(([id, text, bench]) => (
+    <>
+      <h2 id={id}>{text}</h2>
+      <Bench client:load bench={bench} labelledBy={id} />
+    </>
+  ))}
+</Docs>

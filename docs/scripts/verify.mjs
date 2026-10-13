@@ -3,6 +3,8 @@
  *   - axe, WCAG 2.0 to 2.2 A and AA, in light and dark
  *   - no sideways scroll at 375px wide
  *   - no Content-Security-Policy violations (scripts or styles the CSP did not allow)
+ *   - workbench pages: islands hydrate, axe passes at compact density too, and forced Hover rows really differ
+ *   - every semantic and component token from the build has a row (data-token) somewhere in the docs
  * Plus focus checks, sampled over 700ms because browsers reset focus late:
  *   - the skip link lands focus on the page heading and it stays there
  *   - loading a URL with a #hash lands focus on that heading
@@ -39,7 +41,7 @@ async function pagesIn(dir) {
   const out = [];
   for (const name of await readdir(dir)) {
     const full = join(dir, name);
-    if ((await stat(full)).isDirectory()) { if (name !== 'workbench' && name !== '_astro') out.push(...(await pagesIn(full))); }
+    if ((await stat(full)).isDirectory()) { if (name !== '_astro') out.push(...(await pagesIn(full))); }
     else if (name === 'index.html') out.push('/' + relative(dist, dir).split('\\').join('/') + (dir === dist ? '' : '/'));
   }
   return out.map((p) => p.replace('//', '/'));
@@ -60,6 +62,10 @@ const sampleFocus = (page, ms = 700) => page.evaluate((ms) => new Promise((done)
   (function tick() { seen.push(document.activeElement && (document.activeElement.id || document.activeElement.tagName)); if (performance.now() - start < ms) requestAnimationFrame(tick); else done(seen); })();
 }), ms);
 
+const hydrated = (page) => page.waitForFunction(() => [...document.querySelectorAll('astro-island')].every((i) => !i.hasAttribute('ssr')), null, { timeout: 15000 });
+const axeRun = () => window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] } });
+const tokensSeen = new Set();
+
 for (const theme of ['light', 'dark']) {
   const { ctx, page } = await open(theme);
   let current = '';
@@ -69,14 +75,49 @@ for (const theme of ['light', 'dark']) {
     current = path;
     await page.goto(base + path, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
+    await hydrated(page);
+    for (const tk of await page.$$eval('[data-token]', (els) => els.map((e) => e.dataset.token))) tokensSeen.add(tk);
     const applied = await page.evaluate(() => document.documentElement.dataset.theme);
     if (applied !== theme) problems.push(`${path} [${theme}]: theme did not apply`);
     await page.evaluate(axeSource); // Runtime.evaluate is not subject to the page CSP, so axe loads without weakening it.
-    const r = await page.evaluate(() => window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] } }));
+    const r = await page.evaluate(axeRun);
     for (const v of r.violations) for (const n of v.nodes) problems.push(`${path} [${theme}]: axe ${v.id} at ${n.target.join(' ')}: ${n.failureSummary?.split('\n')[1]?.trim() || v.help}`);
+    if (path.startsWith('/workbench/') && path !== '/workbench/') {
+      // Compact density: same page, same bar.
+      await page.check('.density-switch input[value="compact"]');
+      await page.waitForFunction(() => document.documentElement.dataset.density === 'compact');
+      await page.waitForTimeout(150);
+      const rc = await page.evaluate(axeRun);
+      for (const v of rc.violations) for (const n of v.nodes) problems.push(`${path} [${theme}, compact]: axe ${v.id} at ${n.target.join(' ')}`);
+      await page.check('.density-switch input[value="comfortable"]');
+      // Forced states are real: in every bench, the Hover row's plain-CSS and shadcn cells must not look like Default.
+      const same = await page.evaluate(() => {
+        const out = [];
+        for (const table of document.querySelectorAll('.tb-stage table')) {
+          const rows = [...table.tBodies[0].rows];
+          const def = rows[0], hov = rows.find((r) => r.cells[0].textContent.startsWith('Hover'));
+          if (!hov) continue;
+          for (const col of [2, 3]) {
+            const look = (row) => { const el = row.cells[col].querySelector('button, input'); const s = getComputedStyle(el); return s.backgroundColor + s.borderColor; };
+            if (look(def) === look(hov)) out.push(`${table.getAttribute('aria-labelledby')} column ${col}`);
+          }
+        }
+        return out;
+      });
+      for (const s of same) problems.push(`${path} [${theme}]: forced Hover looks the same as Default (${s})`);
+    }
     if (shots) await page.screenshot({ path: join(shots, `${(path.replace(/\//g, '_') || 'home').replace(/^_|_$/g, '') || 'home'}--${theme}.png`), fullPage: true });
   }
   await ctx.close();
+}
+
+// Token coverage: every semantic and component token from the build has a row in the docs.
+{
+  const tokens = JSON.parse(await readFile(join(here, '..', '..', 'dist', 'tokens.json'), 'utf8'));
+  const paths = (node, pre) => Object.entries(node).flatMap(([k, v]) => (v && typeof v === 'object' ? paths(v, `${pre}.${k}`) : [`${pre}.${k}`]));
+  for (const tk of [...paths(tokens.semantic.light, 'semantic'), ...paths(tokens.component.light, 'component')]) {
+    if (!tokensSeen.has(tk)) problems.push(`tokens: ${tk} has no row in the docs`);
+  }
 }
 
 // Phone width: nothing scrolls sideways.
@@ -84,6 +125,7 @@ for (const theme of ['light', 'dark']) {
   const { ctx, page } = await open('light', 375);
   for (const path of pages) {
     await page.goto(base + path, { waitUntil: 'networkidle' });
+    await hydrated(page);
     const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     if (over > 0) problems.push(`${path} [375px]: scrolls sideways by ${over}px`);
   }

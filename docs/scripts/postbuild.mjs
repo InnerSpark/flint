@@ -2,7 +2,7 @@
 //   1. CSP: rehash every inline script from the final HTML (Astro hashes some before its last transform, so
 //      its hash can miss), and drop the style hashes: any hash makes browsers ignore 'unsafe-inline', and
 //      swatches set their color in a style attribute. Scripts stay hash-only, the part that stops XSS.
-//   2. Writes dist/sitemap.xml. The workbench is a test bench, so it stays out.
+//   2. Writes dist/sitemap.xml.
 import { readdirSync, statSync, writeFileSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, relative } from 'node:path';
@@ -14,7 +14,7 @@ const pages = [];
 (function walk(dir) {
   for (const name of readdirSync(dir)) {
     const full = join(dir, name);
-    if (statSync(full).isDirectory()) { if (!['workbench', '_astro'].includes(name)) walk(full); }
+    if (statSync(full).isDirectory()) { if (name !== '_astro') walk(full); }
     else if (name === 'index.html') pages.push('/' + relative(dist, dir).split('\\').join('/'));
   }
 })(dist);

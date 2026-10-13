@@ -1,6 +1,6 @@
 # Flint Design System
 
-**Docs:** [flint.innersparkmedia.com](https://flint.innersparkmedia.com) (built from `docs/`, with the workbench at `/workbench/`).
+**Docs:** [flint.innersparkmedia.com](https://flint.innersparkmedia.com) (built from `docs/`). The workbench, every component live as MUI, shadcn/ui and plain CSS, is at `/workbench/`.
 
 The single source of truth for color, type, spacing, radius, size, motion, and elevation across AccessSpark, Inner Spark Media, and sister brands. Framework-agnostic tokens, plus a MUI theme factory, a shadcn/ui bridge and a Swift package. No shared component library in code yet (see ASDS-22); components live in the Figma library, and the workbench shows Flint versions of Button, Input and Checkbox for MUI, shadcn and plain CSS.
 

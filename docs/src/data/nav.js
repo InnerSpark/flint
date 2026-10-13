@@ -32,6 +32,15 @@ export const NAV = [
     ],
   },
   {
+    title: 'Workbench',
+    items: [
+      ['Overview', '/workbench/'],
+      ['Button', '/workbench/button/'],
+      ['Checkbox', '/workbench/checkbox/'],
+      ['Input', '/workbench/input/'],
+    ],
+  },
+  {
     title: 'Guides',
     items: [
       ['Token tiers', '/guides/token-tiers/'],

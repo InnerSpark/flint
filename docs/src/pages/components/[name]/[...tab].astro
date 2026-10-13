@@ -62,7 +62,7 @@ const tabLabel = TABS.find(([t]) => t === tab)[1];
             {tokenRows.map(([p, v]) => {
               const l = at(resolved.component.light, p), d = at(resolved.component.dark, p);
               return (
-                <tr>
+                <tr data-token={`component.${p.join('.')}`}>
                   <th scope="row"><code>{p.join('.')}</code></th>
                   <td><code>{componentVar(p)}</code></td>
                   <td><code>Flint.Component.{camel(...p)}</code></td>

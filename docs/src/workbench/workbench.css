@@ -1,0 +1,20 @@
+/* Workbench pages only (imported by the Bench island). Tailwind without its preflight, so the docs
+   pages keep their own base styles. Layer order puts MUI between base and Tailwind's utilities, the
+   same setup an app mixing MUI and Tailwind v4 uses. Plain CSS (plain.css, loaded by site.css) is
+   unlayered, so it sits above all of it, the way it would on a static site. */
+@layer theme, base, mui, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "../../../dist/shadcn.css";
+@source "./";
+
+/* The few preflight resets the shadcn components rely on, scoped to the bench. */
+@layer base {
+  .tb-stage button, .tb-stage input { font: inherit; color: inherit; margin: 0; }
+  .tb-stage button { background: none; border: 0 solid; padding: 0; }
+}
+
+.tb-stage td .tb-cell { display: flex; align-items: center; gap: var(--space-12); min-width: 180px; }
+.tb-stage label.tb-cell { cursor: pointer; }
+.tb-stage td.tb-state { font-weight: 600; color: var(--color-text-heading); white-space: nowrap; width: 1%; }
+.tb-stage td.tb-state span { display: block; font-weight: 400; color: var(--color-text-muted); }

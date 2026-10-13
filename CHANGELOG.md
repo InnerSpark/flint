@@ -2,6 +2,10 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## Unreleased
+
+- **Workbench moves into the docs site.** Storybook is gone: its own interface failed accessibility checks Flint can't fix. `/workbench/` now renders Button, Checkbox and Input live as MUI, shadcn/ui and plain CSS in every state, with a density switch and the site's theme toggle. Forced hover and focus rows reuse each implementation's real CSS. The shadcn components and plain CSS live in `docs/src/workbench/`. `docs` verify now also checks workbench pages at both densities, that forced Hover rows differ from Default, and that every semantic and component token has a row.
+
 ## v1.13.0
 
 A component tier, a shadcn bridge, chart colors, a parity test across every platform, a workbench and a docs site (ASDS-39, ASDS-40, ASDS-41, ASDS-42, ASDS-9). Additive: every existing CSS, JS and Swift value is unchanged, and the MUI theme output is identical in light and dark at both densities.

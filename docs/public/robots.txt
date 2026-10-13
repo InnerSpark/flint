@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /workbench/
 
 Sitemap: https://flint.innersparkmedia.com/sitemap.xml

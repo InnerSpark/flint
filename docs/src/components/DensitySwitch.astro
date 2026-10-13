@@ -1,0 +1,22 @@
+---
+// Density for the workbench: sets data-density on <html>, which drives the CSS variables (plain CSS,
+// shadcn) and the MUI theme together. Remembered per browser.
+---
+<fieldset class="density-switch">
+  <legend>Density</legend>
+  <label><input type="radio" name="density" value="comfortable" checked /> Comfortable</label>
+  <label><input type="radio" name="density" value="compact" /> Compact</label>
+</fieldset>
+<script>
+  const root = document.documentElement;
+  let saved = null;
+  try { saved = localStorage.getItem('flint-density'); } catch (e) {}
+  if (saved === 'compact' || saved === 'comfortable') root.dataset.density = saved;
+  for (const radio of document.querySelectorAll<HTMLInputElement>('.density-switch input')) {
+    radio.checked = radio.value === (root.dataset.density || 'comfortable');
+    radio.addEventListener('change', () => {
+      root.dataset.density = radio.value;
+      try { localStorage.setItem('flint-density', radio.value); } catch (e) {}
+    });
+  }
+</script>

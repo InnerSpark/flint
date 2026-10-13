@@ -36,7 +36,7 @@ const toc = [...groups.map((g) => ({ id: g, text: g === 'overlayScrim' ? 'Overla
               {groupRows.map(([p]) => {
                 const light = at(resolved.semantic.light, p), dark = at(resolved.semantic.dark, p);
                 return (
-                  <tr>
+                  <tr data-token={`semantic.${p.join('.')}`}>
                     <th scope="row"><code>{p.join('.')}</code></th>
                     <td><code>{cssVarForPath(['semantic', ...p].join('.'))}</code></td>
                     <td>{isColor(light) && <Swatch value={light} note={refName(at(source.semantic.light, p)) || 'literal value'} />}</td>

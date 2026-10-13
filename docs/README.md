@@ -1,6 +1,6 @@
 # Flint docs
 
-The Flint docs site, published at **flint.innersparkmedia.com**. Astro, static, styled only with Flint's own CSS variables. The workbench (`../workbench`) is built and copied in at `/workbench/`.
+The Flint docs site, published at **flint.innersparkmedia.com**. Astro, static, styled only with Flint's own CSS variables. The workbench lives at `/workbench/`: Button, Checkbox and Input rendered live as MUI, shadcn/ui and plain CSS, from `src/workbench/` (React islands).
 
 Every token value, contrast ratio and code sample is read from the Flint build or the workbench source. Nothing is typed by hand.
 
@@ -8,9 +8,8 @@ Every token value, contrast ratio and code sample is read from the Flint build o
 
 ```bash
 npm ci
-npm --prefix ../workbench ci
-npm run dev       # http://localhost:4321 (no workbench in dev)
-npm run build     # Flint build and checks, workbench, docs, then copies the workbench into dist/
+npm run dev       # http://localhost:4321
+npm run build     # Flint build and checks, then the docs and workbench
 ```
 
 ## Check it
@@ -31,15 +30,15 @@ Static assets on a Worker, configured in `wrangler.jsonc`. One-time setup in the
 | --- | --- |
 | Repository | `InnerSpark/flint` |
 | Project name | `flint-docs` (must match `name` in `wrangler.jsonc`) |
-| Build command | `npm ci && npm --prefix ../workbench ci && npm run build` |
+| Build command | `npm ci && npm run build` |
 | Deploy command | `npx wrangler deploy` |
 | Path (Advanced settings) | `docs` |
 | Variable | `NODE_VERSION` = `22` (also pinned in `.node-version`) |
 
 Then the Worker, Settings, Domains & Routes, Add, Custom domain, `flint.innersparkmedia.com`. This needs innersparkmedia.com's DNS on Cloudflare.
 
-Every push to `main` rebuilds and redeploys. `public/_headers` sets the security headers. Each page also carries a Content-Security-Policy meta tag: scripts run only if their hash is listed (`scripts/postbuild.mjs` rehashes them from the final HTML), and `verify.mjs` fails on any CSP violation. The postbuild step also writes `sitemap.xml`. The workbench is `noindex` and left out of the sitemap.
+Every push to `main` rebuilds and redeploys. `public/_headers` sets the security headers. Each page also carries a Content-Security-Policy meta tag: scripts run only if their hash is listed (`scripts/postbuild.mjs` rehashes them from the final HTML), and `verify.mjs` fails on any CSP violation. The postbuild step also writes `sitemap.xml`. 
 
 ## Adding a component
 
-Add it to the workbench first (stories plus `src/styles/plain.css`), then add an entry to `src/data/components.js`. The page, its four tabs and the nav come from that entry.
+Add the plain CSS to `src/workbench/plain.css` and the shadcn version to `src/workbench/ui/`, then a bench in `src/workbench/benches.jsx` and `src/data/workbench.js`, and an entry in `src/data/components.js`. The pages, tabs and nav come from those entries.

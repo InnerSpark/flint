@@ -1,6 +1,6 @@
 /* Flint docs. Every value is a Flint variable: the site is the system's first consumer. */
 @import "../../../dist/tokens.css";
-@import "../../../workbench/src/styles/plain.css";
+@import "../workbench/plain.css";
 
 /* Site roles, composed from semantic tokens. The header stays a dark band in both modes. */
 :root {
@@ -260,3 +260,9 @@ table.data th[scope="row"] { font-weight: 600; color: var(--color-text-heading);
   .site-footer { padding: var(--space-24) var(--space-16); }
   .header-links .hide-small { display: none; }
 }
+
+/* Workbench density switch */
+.density-switch { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-16); margin: 0 0 var(--space-24); padding: var(--space-8) var(--space-16); border: 1px solid var(--color-border-control); border-radius: var(--radius-card); }
+.density-switch legend { float: left; padding: 0; margin-right: var(--space-8); font-weight: 700; color: var(--color-text-heading); }
+.density-switch label { display: inline-flex; align-items: center; gap: var(--space-8); min-height: 24px; cursor: pointer; }
+.density-switch input { width: 20px; height: 20px; margin: 0; accent-color: var(--color-action-primary); }
