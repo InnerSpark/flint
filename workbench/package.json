@@ -36,5 +36,6 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "tailwind-merge": "^3.7.0"
-  }
+  },
+  "license": "SEE LICENSE IN ../LICENSE"
 }

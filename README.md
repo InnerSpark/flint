@@ -129,3 +129,7 @@ Flint semver, independent of the consuming apps. See CHANGELOG.md for releases. 
 
 - Colored text, icons, and numbers use the readable tokens: `feedback.{success,warning,error,info}.text`, `text.link` for primary-colored text, `accent.aaaText` for purple. These pass AA on the surfaces they sit on, in both light and dark.
 - The saturated `*.solid` tokens, plus `action.primary` and `accent.aaaSolid`, are fills only. Put white `*.onSolid` text on top. Never use a `*.solid` as a foreground color on a page or card: its value does not change between modes, so as text it fails on dark surfaces.
+
+## License
+
+Source-available, not open source. You can read this repo; you can't use, copy, or adapt it without written permission from Inner Spark Media, LLC. Third-party parts (shadcn/ui code, Open Sans) keep their own licenses. See [LICENSE](LICENSE) and [NOTICE](NOTICE).

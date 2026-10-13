@@ -1,7 +1,64 @@
+Flint Design System License
 Copyright (c) 2026 Inner Spark Media, LLC. All rights reserved.
 
-The Flint Design System and its tokens are proprietary to Inner Spark Media, LLC
-and are provided for use in Inner Spark Media, LLC products and brands (including
-AccessSpark). No license is granted to copy, modify, distribute, sublicense, or
-use these materials outside Inner Spark Media, LLC without prior written
-permission.
+This repository is source-available, not open source. You may read it. You may
+not use it. The terms below apply to everything in this repository and on
+flint.innersparkmedia.com ("the Materials"), including design tokens, generated
+outputs (CSS, JavaScript, JSON, Swift, themes), components, documentation, the
+workbench, brand assets, and Figma libraries, except third-party parts listed in
+NOTICE.
+
+1. Ownership
+   The Materials are owned by Inner Spark Media, LLC ("Inner Spark Media") and
+   are protected by copyright and other laws. Inner Spark Media keeps all rights
+   not expressly granted here.
+
+2. What you may do
+   a. View the Materials on GitHub and on flint.innersparkmedia.com.
+   b. Fork the repository on GitHub only as GitHub's Terms of Service require,
+      and only to view it there.
+   c. Quote short excerpts in commentary, reviews, or teaching, with credit to
+      "Flint Design System by Inner Spark Media."
+
+3. What you may not do without written permission
+   a. Use the Materials, in whole or in part, in any product, website, app, or
+      service, commercial or not.
+   b. Copy, modify, adapt, translate, or create derivative works, including
+      design systems, token sets, themes, or UI kits based on the Materials.
+   c. Distribute, publish, sell, sublicense, or host the Materials or any
+      derivative.
+   d. Use the Materials to train, fine-tune, or evaluate machine learning or AI
+      models, or include them in datasets for that purpose.
+   e. Remove or change any copyright, license, or ownership notice.
+
+4. Trademarks
+   "Flint," "Flint Design System," "Inner Spark Media," "AccessSpark," and their
+   logos are trademarks of Inner Spark Media. This license grants no rights in
+   them.
+
+5. Authorized users
+   Inner Spark Media and anyone it authorizes in writing may use the Materials
+   under the terms of that authorization.
+
+6. No warranty
+   THE MATERIALS ARE PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+   NON-INFRINGEMENT. Accessibility results described in the Materials (contrast
+   ratios, audit results, WCAG conformance) are informational and are not a
+   guarantee that any product built with them is accessible or legally
+   compliant.
+
+7. Limitation of liability
+   TO THE FULLEST EXTENT ALLOWED BY LAW, INNER SPARK MEDIA IS NOT LIABLE FOR ANY
+   DAMAGES ARISING FROM THE MATERIALS OR THEIR USE.
+
+8. Termination
+   Any use outside these terms ends every permission granted here, and you must
+   stop using and delete any copies.
+
+9. Governing law
+   These terms are governed by the laws of the State of Texas, USA, without
+   regard to conflict-of-law rules. Courts in Williamson County, Texas, have
+   exclusive jurisdiction.
+
+To ask about a license: mike@innersparkmedia.com

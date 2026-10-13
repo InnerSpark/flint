@@ -2,9 +2,25 @@ Flint Design System (@innerspark/flint)
 Copyright (c) 2026 Inner Spark Media, LLC. All rights reserved.
 
 The Flint Design System, including its tokens, components, brand assets, and
-documentation in this repository, is the property of Inner Spark Media, LLC. It
-is the shared design system across Inner Spark Media, LLC's products and brands.
-Use is governed by the terms in the LICENSE file in this repository.
+documentation in this repository, is the property of Inner Spark Media, LLC.
+Use is governed by the LICENSE file in this repository.
 
 Owner:   Inner Spark Media, LLC
 Contact: mike@innersparkmedia.com
+
+Third-party materials
+---------------------
+These parts are not covered by the Flint license. Each stays under its own
+license, and nothing in LICENSE limits rights those licenses grant.
+
+- shadcn/ui (workbench/src/components/ui): Button, Input and Checkbox are
+  adapted from shadcn/ui. MIT License, Copyright (c) 2023 shadcn.
+  https://github.com/shadcn-ui/ui/blob/main/LICENSE.md
+  The Flint-specific changes in those files are Inner Spark Media's.
+
+- Open Sans (via @fontsource/open-sans): SIL Open Font License 1.1.
+  https://openfontlicense.org
+
+- Packages installed from npm (MUI, Radix UI, Tailwind CSS, Storybook, Astro,
+  axe-core, Playwright and their dependencies) keep their own licenses, listed
+  in each package under node_modules.
