@@ -1,5 +1,6 @@
 /**
  * Flint token build. Reads tokens.json (single source of truth) and emits:
+ *   dist/tokens.json  tokens.json with every {reference} resolved to its value
  *   dist/tokens.css   CSS custom properties (:root + [data-theme="dark"])
  *   dist/fonts.css    metric-matched Open Sans fallback @font-face
  *   dist/index.js     ESM named + default exports of the resolved tokens
@@ -10,9 +11,13 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { resolveTokens } from './resolve.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const tokens = JSON.parse(readFileSync(join(root, 'tokens.json'), 'utf8'));
+// source keeps semantic tokens as {color.*} references (DTCG output preserves them);
+// tokens is the resolved copy every other output is built from.
+const source = JSON.parse(readFileSync(join(root, 'tokens.json'), 'utf8'));
+const tokens = resolveTokens(source);
 const dist = join(root, 'dist');
 mkdirSync(join(dist, 'swift'), { recursive: true });
 
@@ -132,6 +137,8 @@ writeFileSync(join(dist, 'fonts.css'), `/* Flint: metric-matched Open Sans fallb
 }
 `);
 
+writeFileSync(join(dist, 'tokens.json'), JSON.stringify(tokens, null, 2) + '\n');
+
 const keys = Object.keys(tokens);
 writeFileSync(join(dist, 'index.js'), `// GENERATED from tokens.json. Flint Design System.
 const tokens = ${JSON.stringify(tokens, null, 2)};
@@ -228,7 +235,8 @@ const dtcg = {
   shadow: Object.fromEntries(Object.entries(tokens.shadow).map(([k, v]) => [k, { $type: 'shadow', $value: shadowVal(v) }])),
   shadowDark: Object.fromEntries(Object.entries(tokens.shadowDark).map(([k, v]) => [k, { $type: 'shadow', $value: shadowVal(v) }])),
   typography: Object.fromEntries(Object.entries(tokens.typography).map(([k, t]) => [k, { $type: 'typography', $value: { fontFamily: t.fontFamily, fontSize: px(t.fontSize), fontWeight: t.fontWeight, lineHeight: t.lineHeight, letterSpacing: px(t.letterSpacing) } }])),
-  semantic: { light: colorGroup(tokens.semantic.light), dark: colorGroup(tokens.semantic.dark) },
+  // Semantic values stay as {color.*} aliases so DTCG tools (Tokens Studio, Style Dictionary) keep the link to the ladder.
+  semantic: { light: colorGroup(source.semantic.light), dark: colorGroup(source.semantic.dark) },
 };
 writeFileSync(join(dist, 'tokens.dtcg.json'), JSON.stringify(dtcg, null, 2));
 
@@ -435,4 +443,4 @@ private func dynamic(light: UInt32, lightOpacity: Double = 1, dark: UInt32, dark
 }
 `);
 
-console.log('Built dist/: tokens.css, tokens.media.css, fonts.css, index.js, index.d.ts, tokens.dtcg.json, swift/Flint.swift');
+console.log('Built dist/: tokens.json, tokens.css, tokens.media.css, fonts.css, index.js, index.d.ts, tokens.dtcg.json, swift/Flint.swift');

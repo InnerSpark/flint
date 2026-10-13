@@ -2,6 +2,17 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.12.0
+
+Semantic colors now point at the ladder instead of copying its values, and the contrast guard enforces the AAA bar Flint already meets (ASDS-25, ASDS-35). Every CSS, JS, MUI and Swift output is byte-for-byte unchanged.
+
+- **Semantic colors are references.** All 112 semantic color values in `tokens.json` are now `{color.<ramp>.<step>}` references (`"link": "{color.blue.700}"`) instead of copied hex. A ladder change now flows to every semantic token that uses it, and the data says where each value comes from. The two overlay scrims stay literal `rgba()` values since no ladder step carries alpha. First item of ASDS-25.
+- **`scripts/resolve.mjs`** resolves references at build time. Unknown, circular, or group-pointing references throw, so a typo fails the build.
+- **DTCG keeps the references.** `tokens.dtcg.json` semantic values are now DTCG aliases, so Tokens Studio and Style Dictionary see the link to the ladder.
+- **New `dist/tokens.json`** holds the resolved values. The `@innerspark/flint/tokens.json` export now points at it, so importers keep getting hex. The source is available as `@innerspark/flint/tokens.source.json`. **Consumers that read the root `tokens.json` file by path, not through the package export, now see references** and should switch to the export or `dist/tokens.json`.
+- **Contrast guard at 7:1.** All 27 text and on-solid pairs now check at AAA instead of 4.5:1, matching the bar set in v1.9.0. Non-text pairs stay at 3:1. A regression like light `text.link` at 6.18:1 used to pass and now fails (ASDS-35).
+- **README:** token layers, a Figma/CSS/JS/Swift naming map, a `semver:^1.12.0` install line in place of the stale `#v1.0.0` pin, and an accurate description (tokens plus MUI and Swift outputs). Part of ASDS-26.
+
 ## v1.11.0
 
 Closes the density gap. Comfortable and Compact existed in the Figma Sizing collection but had no code equivalent, so a dimension the design system promised was unavailable to consumers (ASDS-33). Additive, and comfortable output is unchanged.

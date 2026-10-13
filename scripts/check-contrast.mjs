@@ -4,8 +4,9 @@
  * the build fails before a bad token ships.
  *
  * Policy notes:
- *  - text and on-solid pairs: 4.5:1 (WCAG 1.4.3 normal text).
- *  - placeholder: 4.5:1 on input surfaces (default, page). Inputs render there, not on
+ *  - text and on-solid pairs: 7:1 (WCAG 1.4.6 AAA). Flint's internal bar since v1.9.0
+ *    (ASDS-23). The published conformance claim stays WCAG 2.2 AA; AAA is not a claim.
+ *  - placeholder: 7:1 on input surfaces (default, page). Inputs render there, not on
  *    the tinted subtle surface, so it is checked on those two only.
  *  - text.muted is checked on every surface including subtle (captions sit on cards).
  *  - focus indicators (border.focus, action.focusRing) and primary-as-accent: 3:1 (1.4.11).
@@ -21,44 +22,48 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { resolveTokens } from './resolve.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const tokens = JSON.parse(readFileSync(join(root, 'tokens.json'), 'utf8'));
+const tokens = resolveTokens(JSON.parse(readFileSync(join(root, 'tokens.json'), 'utf8')));
 
 const lin = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
 const lum = hex => { const n = parseInt(hex.slice(1), 16); return 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255); };
 const ratio = (a, b) => { const L1 = lum(a), L2 = lum(b), hi = Math.max(L1, L2), lo = Math.min(L1, L2); return (hi + 0.05) / (lo + 0.05); };
 const get = (mode, path) => path.split('.').reduce((o, k) => o[k], tokens.semantic[mode]);
 
+// Text pairs must clear AAA. Non-text (1.4.11) has no AAA tier and stays at 3:1.
+const AAA_TEXT = 7;
+
 // [label, fgPath, bgPath, threshold, kind]
 const PAIRS = [
-  ["heading on page", "text.heading", "surface.page", 4.5, "text"],
-  ["heading on default", "text.heading", "surface.default", 4.5, "text"],
-  ["default on page", "text.default", "surface.page", 4.5, "text"],
-  ["default on default", "text.default", "surface.default", 4.5, "text"],
-  ["default on subtle", "text.default", "surface.subtle", 4.5, "text"],
-  ["muted on page", "text.muted", "surface.page", 4.5, "text"],
-  ["muted on default", "text.muted", "surface.default", 4.5, "text"],
-  ["muted on subtle", "text.muted", "surface.subtle", 4.5, "text"],
-  ["link on page", "text.link", "surface.page", 4.5, "text"],
-  ["link on default", "text.link", "surface.default", 4.5, "text"],
-  ["placeholder on default", "text.placeholder", "surface.default", 4.5, "text"],
-  ["placeholder on page", "text.placeholder", "surface.page", 4.5, "text"],
-  ["success.text on surface", "feedback.success.text", "feedback.success.surface", 4.5, "text"],
-  ["warning.text on surface", "feedback.warning.text", "feedback.warning.surface", 4.5, "text"],
-  ["error.text on surface", "feedback.error.text", "feedback.error.surface", 4.5, "text"],
-  ["info.text on surface", "feedback.info.text", "feedback.info.surface", 4.5, "text"],
-  ["success.onSolid on solid", "feedback.success.onSolid", "feedback.success.solid", 4.5, "text"],
-  ["warning.onSolid on solid", "feedback.warning.onSolid", "feedback.warning.solid", 4.5, "text"],
-  ["error.onSolid on solid", "feedback.error.onSolid", "feedback.error.solid", 4.5, "text"],
-  ["info.onSolid on solid", "feedback.info.onSolid", "feedback.info.solid", 4.5, "text"],
-  ["onPrimary on primary", "action.onPrimary", "action.primary", 4.5, "text"],
-  ["onDanger on danger", "action.onDanger", "action.danger", 4.5, "text"],
-  ["aaaText on aaaSurface", "accent.aaaText", "accent.aaaSurface", 4.5, "text"],
-  ["onAaa on aaaSolid", "accent.onAaa", "accent.aaaSolid", 4.5, "text"],
-  ["cyan accent on default", "accent.cyan", "surface.default", 4.5, "text"],
-  ["cyan accent on page", "accent.cyan", "surface.page", 4.5, "text"],
-  ["selected.text on surface", "selected.text", "selected.surface", 4.5, "text"],
+  ["heading on page", "text.heading", "surface.page", AAA_TEXT, "text"],
+  ["heading on default", "text.heading", "surface.default", AAA_TEXT, "text"],
+  ["default on page", "text.default", "surface.page", AAA_TEXT, "text"],
+  ["default on default", "text.default", "surface.default", AAA_TEXT, "text"],
+  ["default on subtle", "text.default", "surface.subtle", AAA_TEXT, "text"],
+  ["muted on page", "text.muted", "surface.page", AAA_TEXT, "text"],
+  ["muted on default", "text.muted", "surface.default", AAA_TEXT, "text"],
+  ["muted on subtle", "text.muted", "surface.subtle", AAA_TEXT, "text"],
+  ["link on page", "text.link", "surface.page", AAA_TEXT, "text"],
+  ["link on default", "text.link", "surface.default", AAA_TEXT, "text"],
+  ["placeholder on default", "text.placeholder", "surface.default", AAA_TEXT, "text"],
+  ["placeholder on page", "text.placeholder", "surface.page", AAA_TEXT, "text"],
+  ["success.text on surface", "feedback.success.text", "feedback.success.surface", AAA_TEXT, "text"],
+  ["warning.text on surface", "feedback.warning.text", "feedback.warning.surface", AAA_TEXT, "text"],
+  ["error.text on surface", "feedback.error.text", "feedback.error.surface", AAA_TEXT, "text"],
+  ["info.text on surface", "feedback.info.text", "feedback.info.surface", AAA_TEXT, "text"],
+  ["success.onSolid on solid", "feedback.success.onSolid", "feedback.success.solid", AAA_TEXT, "text"],
+  ["warning.onSolid on solid", "feedback.warning.onSolid", "feedback.warning.solid", AAA_TEXT, "text"],
+  ["error.onSolid on solid", "feedback.error.onSolid", "feedback.error.solid", AAA_TEXT, "text"],
+  ["info.onSolid on solid", "feedback.info.onSolid", "feedback.info.solid", AAA_TEXT, "text"],
+  ["onPrimary on primary", "action.onPrimary", "action.primary", AAA_TEXT, "text"],
+  ["onDanger on danger", "action.onDanger", "action.danger", AAA_TEXT, "text"],
+  ["aaaText on aaaSurface", "accent.aaaText", "accent.aaaSurface", AAA_TEXT, "text"],
+  ["onAaa on aaaSolid", "accent.onAaa", "accent.aaaSolid", AAA_TEXT, "text"],
+  ["cyan accent on default", "accent.cyan", "surface.default", AAA_TEXT, "text"],
+  ["cyan accent on page", "accent.cyan", "surface.page", AAA_TEXT, "text"],
+  ["selected.text on surface", "selected.text", "selected.surface", AAA_TEXT, "text"],
   ["control border on default", "border.control", "surface.default", 3.0, "control"],
   ["control hover border on default", "border.controlHover", "surface.default", 3.0, "control"],
   ["control hover border on page", "border.controlHover", "surface.page", 3.0, "control"],

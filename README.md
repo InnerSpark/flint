@@ -1,16 +1,33 @@
-# Flint Design System: Tokens
+# Flint Design System
 
-The single source of truth for color, type, spacing, and radius across AccessSpark and its sister brands. Tokens only (no components); framework-agnostic.
+The single source of truth for color, type, spacing, radius, size, motion, and elevation across AccessSpark, Inner Spark Media, and sister brands. Framework-agnostic tokens, plus a MUI theme factory and a Swift package. No component library in code yet (see ASDS-22); components live in the Figma library.
 
-`tokens.json` is the source. The build emits CSS custom properties, typed JS exports, and SwiftUI tokens into `dist/`.
+`tokens.json` is the source. The build emits CSS custom properties, typed JS exports, a resolved `tokens.json`, W3C DTCG, and SwiftUI tokens into `dist/`.
+
+## Token layers
+
+1. **Primitives:** the raw ladders in `color.*` (`color.blue.700`), plus `space`, `radius`, `fontSize`, and the other scales. Never use a primitive color directly in UI.
+2. **Semantic:** `semantic.light.*` and `semantic.dark.*`, named for intent (`text.link`, `action.primary`). Each color is a reference to a primitive, for example `"link": "{color.blue.700}"`. Change a ladder step and every semantic token that points at it follows.
+
+The build resolves every reference. CSS, JS, MUI, and Swift consumers always get final values. The DTCG export keeps the references so Tokens Studio and Style Dictionary see the link back to the ladder.
+
+### One token, four names
+
+| Figma variable | CSS | JS | Swift |
+|---|---|---|---|
+| `text/link` | `--color-text-link` | `semantic.light.text.link` | `Flint.Colors.textLink` |
+| `text/on-code` | `--color-text-on-code` | `semantic.light.text.onCode` | `Flint.Colors.textOnCode` |
+| `feedback/success/text` | `--color-feedback-success-text` | `semantic.light.feedback.success.text` | `Flint.Colors.feedbackSuccessText` |
+
+The rule: Figma uses `/` and kebab-case, CSS uses `-` and kebab-case with a `--color-` prefix, JS keeps the camelCase path, and Swift joins the path in camelCase.
 
 ## Install (private, git tag)
 
 ```bash
-npm install github:InnerSpark/flint#v1.0.0
+npm install "github:InnerSpark/flint#semver:^1.12.0"
 ```
 
-Point it at wherever you host the repo. You can graduate to GitHub Packages later without changing any imports.
+The `semver:` range picks up new minor and patch releases on `npm update` and never jumps a major. You can graduate to GitHub Packages later without changing any imports.
 
 ## Use
 
@@ -40,8 +57,11 @@ const h1 = typography.headingH1;              // { fontFamily, fontSize, fontWei
 ### Raw JSON (Figma Make, Style Dictionary, Tailwind, etc.)
 
 ```ts
-import tokens from '@innerspark/flint/tokens.json';
+import tokens from '@innerspark/flint/tokens.json';        // resolved values (dist/tokens.json)
+import source from '@innerspark/flint/tokens.source.json'; // source, semantic colors as {references}
 ```
+
+Read the package export, not the file at the repo root. The root `tokens.json` is the source and holds references, not hex values.
 
 ### MUI
 
@@ -77,12 +97,12 @@ Text("Awning")
 
 ## Figma Make
 
-Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--radius` / `--font` set in light and dark) or at **`tokens.json`** for the structured values. Either gives Make the whole Flint scale to design against. For a standards-based ingest (Tokens Studio, Style Dictionary), use `@innerspark/flint/tokens.dtcg.json` (W3C DTCG `$type` / `$value`, semantic split into `light` and `dark`).
+Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--radius` / `--font` set in light and dark) or at **`dist/tokens.json`** for the structured, resolved values. Either gives Make the whole Flint scale to design against. For a standards-based ingest (Tokens Studio, Style Dictionary), use `@innerspark/flint/tokens.dtcg.json` (W3C DTCG `$type` / `$value`, semantic split into `light` and `dark`).
 
 ## Build
 
 ```bash
-npm run build   # runs scripts/build.mjs, regenerates dist/ (including dist/swift/Flint.swift) from tokens.json
+npm run build   # regenerates dist/ (including dist/swift/Flint.swift) from tokens.json, then runs the contrast check
 ```
 
 `dist/` is committed so git-tag installs work without a build step; `prepare` also rebuilds on install.
