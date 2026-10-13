@@ -1,7 +1,7 @@
 /**
  * Docs verify. Serves dist/ and, for every docs page (the workbench has its own verify):
  *   - axe, WCAG 2.0 to 2.2 A and AA, in light and dark
- *   - no sideways scroll at 375px wide
+ *   - no sideways scroll at 375px and 320px wide, and the header stays on one line
  *   - no Content-Security-Policy violations (scripts or styles the CSP did not allow)
  *   - workbench pages: islands hydrate, axe passes at compact density too, and forced Hover rows really differ
  *   - every semantic and component token from the build has a row (data-token) somewhere in the docs
@@ -120,14 +120,18 @@ for (const theme of ['light', 'dark']) {
   }
 }
 
-// Phone width: nothing scrolls sideways.
-{
-  const { ctx, page } = await open('light', 375);
+// Phone widths: nothing scrolls sideways, and the header stays on one line.
+for (const width of [375, 320]) {
+  const { ctx, page } = await open('light', width);
   for (const path of pages) {
     await page.goto(base + path, { waitUntil: 'networkidle' });
     await hydrated(page);
     const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-    if (over > 0) problems.push(`${path} [375px]: scrolls sideways by ${over}px`);
+    if (over > 0) problems.push(`${path} [${width}px]: scrolls sideways by ${over}px`);
+    const wrapped = await page.evaluate(() => [...document.querySelectorAll('.site-header .brand, .site-header .header-button, .site-header .header-links a')]
+      .filter((el) => getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 48)
+      .map((el) => el.id || el.className));
+    if (wrapped.length) problems.push(`${path} [${width}px]: header item wraps to two lines (${wrapped.join(', ')})`);
   }
   await ctx.close();
 }

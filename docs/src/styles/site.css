@@ -60,7 +60,8 @@ code, kbd { font-family: var(--font-mono); font-size: 0.9em; }
   background: transparent; border: 1px solid transparent; cursor: pointer;
 }
 .header-links a:hover, .header-button:hover { border-color: currentColor; }
-.header-button svg { width: 18px; height: 18px; }
+.header-links a, .header-button, .brand { white-space: nowrap; }
+.header-button svg { width: 18px; height: 18px; flex: none; }
 .menu-button { display: none; }
 
 /* ---------- shell ---------- */
@@ -259,6 +260,16 @@ table.data th[scope="row"] { font-weight: 600; color: var(--color-text-heading);
   .link-list a { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
   .site-footer { padding: var(--space-24) var(--space-16); }
   .header-links .hide-small { display: none; }
+}
+/* Phones: the header keeps one line. "Design System" and the theme button's words stay in the
+   accessible name but leave the screen; the moon icon carries the button visually. */
+@media (max-width: 600px) {
+  .site-header { gap: var(--space-8); padding: 0 var(--space-8); }
+  .brand span, .theme-label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+  }
+  #theme-toggle { min-width: 44px; justify-content: center; padding: 0 var(--space-8); }
 }
 
 /* Workbench density switch */
