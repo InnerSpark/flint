@@ -38,7 +38,7 @@ Static assets on a Worker, configured in `wrangler.jsonc`. One-time setup in the
 
 Then the Worker, Settings, Domains & Routes, Add, Custom domain, `flint.innersparkmedia.com`. This needs innersparkmedia.com's DNS on Cloudflare.
 
-Every push to `main` rebuilds and redeploys. `public/_headers` sets the security headers.
+Every push to `main` rebuilds and redeploys. `public/_headers` sets the security headers. Each page also carries a Content-Security-Policy meta tag: scripts run only if their hash is listed (`scripts/postbuild.mjs` rehashes them from the final HTML), and `verify.mjs` fails on any CSP violation. The postbuild step also writes `sitemap.xml`. The workbench is `noindex` and left out of the sitemap.
 
 ## Adding a component
 

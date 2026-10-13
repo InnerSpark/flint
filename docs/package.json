@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "npm --prefix .. run build && npm --prefix ../workbench run build:storybook && astro build && node scripts/copy-workbench.mjs",
+    "build": "npm --prefix .. run build && npm --prefix ../workbench run build:storybook && astro build && node scripts/copy-workbench.mjs && node scripts/postbuild.mjs",
     "preview": "astro preview",
     "verify": "node scripts/verify.mjs"
   },

@@ -12,5 +12,7 @@ addons.setConfig({
     fontBase: fontFamily.sans,
     colorPrimary: semantic.light.action.primary,
     colorSecondary: semantic.light.action.primary,
+    textColor: semantic.light.text.default,
+    textMutedColor: semantic.light.text.muted,
   }),
 });

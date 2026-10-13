@@ -2,6 +2,7 @@
  * Docs verify. Serves dist/ and, for every docs page (the workbench has its own verify):
  *   - axe, WCAG 2.0 to 2.2 A and AA, in light and dark
  *   - no sideways scroll at 375px wide
+ *   - no Content-Security-Policy violations (scripts or styles the CSP did not allow)
  * Plus focus checks, sampled over 700ms because browsers reset focus late:
  *   - the skip link lands focus on the page heading and it stays there
  *   - loading a URL with a #hash lands focus on that heading
@@ -61,12 +62,16 @@ const sampleFocus = (page, ms = 700) => page.evaluate((ms) => new Promise((done)
 
 for (const theme of ['light', 'dark']) {
   const { ctx, page } = await open(theme);
+  let current = '';
+  // The CSP meta tag blocks anything it didn't hash. A blocked script or style is a broken page.
+  page.on('console', (m) => { if (/Content Security Policy/i.test(m.text())) problems.push(`${current} [${theme}]: CSP blocked something: ${m.text().slice(0, 160)}`); });
   for (const path of pages) {
+    current = path;
     await page.goto(base + path, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
     const applied = await page.evaluate(() => document.documentElement.dataset.theme);
     if (applied !== theme) problems.push(`${path} [${theme}]: theme did not apply`);
-    await page.addScriptTag({ content: axeSource });
+    await page.evaluate(axeSource); // Runtime.evaluate is not subject to the page CSP, so axe loads without weakening it.
     const r = await page.evaluate(() => window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] } }));
     for (const v of r.violations) for (const n of v.nodes) problems.push(`${path} [${theme}]: axe ${v.id} at ${n.target.join(' ')}: ${n.failureSummary?.split('\n')[1]?.trim() || v.help}`);
     if (shots) await page.screenshot({ path: join(shots, `${(path.replace(/\//g, '_') || 'home').replace(/^_|_$/g, '') || 'home'}--${theme}.png`), fullPage: true });
