@@ -11,6 +11,7 @@ Semantic colors now point at the ladder instead of copying its values, and the c
 - **DTCG keeps the references.** `tokens.dtcg.json` semantic values are now DTCG aliases, so Tokens Studio and Style Dictionary see the link to the ladder.
 - **New `dist/tokens.json`** holds the resolved values. The `@innerspark/flint/tokens.json` export now points at it, so importers keep getting hex. The source is available as `@innerspark/flint/tokens.source.json`. **Consumers that read the root `tokens.json` file by path, not through the package export, now see references** and should switch to the export or `dist/tokens.json`.
 - **Contrast guard at 7:1.** All 27 text and on-solid pairs now check at AAA instead of 4.5:1, matching the bar set in v1.9.0. Non-text pairs stay at 3:1. A regression like light `text.link` at 6.18:1 used to pass and now fails (ASDS-35).
+- **`Flint.UIColors` (iOS) and `Flint.NSColors` (macOS).** Every semantic color as a dynamic platform color for UIKit and AppKit APIs such as `UINavigationBarAppearance`. `UIColor(Flint.Colors.x)` locks to the current appearance, which forced apps to hand-copy palette values for each mode. Additive (ASDS-38).
 - **README:** token layers, a Figma/CSS/JS/Swift naming map, a `semver:^1.12.0` install line in place of the stale `#v1.0.0` pin, and an accurate description (tokens plus MUI and Swift outputs). Part of ASDS-26.
 
 ## v1.11.0

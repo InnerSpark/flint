@@ -89,6 +89,7 @@ Text("Awning")
   .background(Flint.Colors.surfaceDefault, in: RoundedRectangle(cornerRadius: Flint.Radius.md))
 ```
 
+- **UIKit / AppKit colors:** `Flint.UIColors.*` (iOS) and `Flint.NSColors.*` (macOS) are the same semantic tokens as dynamic platform colors. Use them for `UINavigationBarAppearance` and other UIKit APIs; `UIColor(Flint.Colors.x)` locks to light mode.
 - **Colors:** `Flint.Colors.*` are the semantic tokens, flat camelCase (`--color-feedback-success-text` is `feedback.success.text` is `Flint.Colors.feedbackSuccessText`). Each follows the system light/dark appearance. `Flint.Palette.*` holds the raw ramps (`blue500`) and does not change between modes.
 - **Layout:** `Flint.Space.s0` to `s64`, `Flint.Radius`, `Flint.Control`, `Flint.IconSize`. `Flint.Target.minimum` is `targetMin` (24); use `Flint.Target.touch` (44, Apple HIG) for touch UI.
 - **Type:** `.flintText(Flint.Typography.bodyMd)` sets font, line height, and tracking, all scaled with Dynamic Type. Bundle the Open Sans static TTFs (Regular, Medium, SemiBold, Bold, ExtraBold) in the app and list them under `UIAppFonts`; the styles use PostScript names like `OpenSans-Bold`.

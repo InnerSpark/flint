@@ -72,6 +72,131 @@ public enum Flint {
     public static let overlayScrim = dynamic(light: 0x0f172a, lightOpacity: 0.5, dark: 0x000000, darkOpacity: 0.6)
   }
 
+  #if canImport(UIKit)
+  /// Semantic colors as dynamic UIColors, for UIKit APIs (UINavigationBarAppearance, attributed strings).
+  /// Each resolves to its light or dark value at draw time. In SwiftUI, use Flint.Colors.
+  public enum UIColors {
+    public static let surfacePage = dynamicPlatform(light: 0xf8fafc, dark: 0x0d1117)
+    public static let surfaceDefault = dynamicPlatform(light: 0xffffff, dark: 0x161b22)
+    public static let surfaceSubtle = dynamicPlatform(light: 0xf1f5f9, dark: 0x21262d)
+    public static let surfaceInverse = dynamicPlatform(light: 0x0d2b45, dark: 0xf8fafc)
+    public static let surfaceCode = dynamicPlatform(light: 0x1e293b, dark: 0x010409)
+    public static let textHeading = dynamicPlatform(light: 0x0d2b45, dark: 0xf0f6fc)
+    public static let textDefault = dynamicPlatform(light: 0x1e293b, dark: 0xc9d1d9)
+    public static let textMuted = dynamicPlatform(light: 0x334155, dark: 0xaeb8c2)
+    public static let textPlaceholder = dynamicPlatform(light: 0x334155, dark: 0xaeb8c2)
+    public static let textLink = dynamicPlatform(light: 0x1550a0, dark: 0x93c5fd)
+    public static let textInverse = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let textOnCode = dynamicPlatform(light: 0xffffff, dark: 0xffffff)
+    public static let actionPrimary = dynamicPlatform(light: 0x1550a0, dark: 0x93c5fd)
+    public static let actionPrimaryHover = dynamicPlatform(light: 0x0d3b6e, dark: 0xbfdbfe)
+    public static let actionOnPrimary = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let actionSecondary = dynamicPlatform(light: 0x38bdf8, dark: 0x38bdf8)
+    public static let actionFocusRing = dynamicPlatform(light: 0x1550a0, dark: 0x60a5fa)
+    public static let actionDanger = dynamicPlatform(light: 0x991b1b, dark: 0xfca5a5)
+    public static let actionDangerHover = dynamicPlatform(light: 0x7f1d1d, dark: 0xfecaca)
+    public static let actionOnDanger = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let actionDisabled = dynamicPlatform(light: 0x64748b, dark: 0x828b95)
+    public static let actionDisabledBg = dynamicPlatform(light: 0xf1f5f9, dark: 0x21262d)
+    public static let borderDefault = dynamicPlatform(light: 0xe2e8f0, dark: 0x6e7681)
+    public static let borderControl = dynamicPlatform(light: 0x64748b, dark: 0x6e7681)
+    public static let borderControlHover = dynamicPlatform(light: 0x475569, dark: 0x9aa4af)
+    public static let borderStrong = dynamicPlatform(light: 0xcbd5e1, dark: 0xaeb8c2)
+    public static let borderFocus = dynamicPlatform(light: 0x1550a0, dark: 0x60a5fa)
+    public static let borderError = dynamicPlatform(light: 0xdc2626, dark: 0xf87171)
+    public static let borderDisabled = dynamicPlatform(light: 0xe2e8f0, dark: 0x545d68)
+    public static let feedbackSuccessSurface = dynamicPlatform(light: 0xf0fdf4, dark: 0x14532d)
+    public static let feedbackSuccessBorder = dynamicPlatform(light: 0xbbf7d0, dark: 0x166534)
+    public static let feedbackSuccessSolid = dynamicPlatform(light: 0x166534, dark: 0x4ade80)
+    public static let feedbackSuccessText = dynamicPlatform(light: 0x14532d, dark: 0xbbf7d0)
+    public static let feedbackSuccessOnSolid = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let feedbackWarningSurface = dynamicPlatform(light: 0xfffbeb, dark: 0x78350f)
+    public static let feedbackWarningBorder = dynamicPlatform(light: 0xfde68a, dark: 0x92400e)
+    public static let feedbackWarningSolid = dynamicPlatform(light: 0x92400e, dark: 0xfbbf24)
+    public static let feedbackWarningText = dynamicPlatform(light: 0x78350f, dark: 0xfde68a)
+    public static let feedbackWarningOnSolid = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let feedbackErrorSurface = dynamicPlatform(light: 0xfef2f2, dark: 0x7f1d1d)
+    public static let feedbackErrorBorder = dynamicPlatform(light: 0xfecaca, dark: 0x991b1b)
+    public static let feedbackErrorSolid = dynamicPlatform(light: 0x991b1b, dark: 0xfca5a5)
+    public static let feedbackErrorText = dynamicPlatform(light: 0x7f1d1d, dark: 0xfee2e2)
+    public static let feedbackErrorOnSolid = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let feedbackInfoSurface = dynamicPlatform(light: 0xeff6ff, dark: 0x0d2b45)
+    public static let feedbackInfoBorder = dynamicPlatform(light: 0xdbeafe, dark: 0x0d3b6e)
+    public static let feedbackInfoSolid = dynamicPlatform(light: 0x1550a0, dark: 0x93c5fd)
+    public static let feedbackInfoText = dynamicPlatform(light: 0x0d3b6e, dark: 0x93c5fd)
+    public static let feedbackInfoOnSolid = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let accentAaaSurface = dynamicPlatform(light: 0xede9fe, dark: 0x4c1d95)
+    public static let accentAaaSolid = dynamicPlatform(light: 0x6d28d9, dark: 0xc4b5fd)
+    public static let accentAaaText = dynamicPlatform(light: 0x5b21b6, dark: 0xddd6fe)
+    public static let accentOnAaa = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let accentCyan = dynamicPlatform(light: 0x0c4a6e, dark: 0x7dd3fc)
+    public static let selectedSurface = dynamicPlatform(light: 0xeff6ff, dark: 0x0d3b6e)
+    public static let selectedText = dynamicPlatform(light: 0x1550a0, dark: 0xbfdbfe)
+    public static let overlayScrim = dynamicPlatform(light: 0x0f172a, lightOpacity: 0.5, dark: 0x000000, darkOpacity: 0.6)
+  }
+  #elseif canImport(AppKit)
+  /// Semantic colors as dynamic NSColors, for AppKit APIs. In SwiftUI, use Flint.Colors.
+  public enum NSColors {
+    public static let surfacePage = dynamicPlatform(light: 0xf8fafc, dark: 0x0d1117)
+    public static let surfaceDefault = dynamicPlatform(light: 0xffffff, dark: 0x161b22)
+    public static let surfaceSubtle = dynamicPlatform(light: 0xf1f5f9, dark: 0x21262d)
+    public static let surfaceInverse = dynamicPlatform(light: 0x0d2b45, dark: 0xf8fafc)
+    public static let surfaceCode = dynamicPlatform(light: 0x1e293b, dark: 0x010409)
+    public static let textHeading = dynamicPlatform(light: 0x0d2b45, dark: 0xf0f6fc)
+    public static let textDefault = dynamicPlatform(light: 0x1e293b, dark: 0xc9d1d9)
+    public static let textMuted = dynamicPlatform(light: 0x334155, dark: 0xaeb8c2)
+    public static let textPlaceholder = dynamicPlatform(light: 0x334155, dark: 0xaeb8c2)
+    public static let textLink = dynamicPlatform(light: 0x1550a0, dark: 0x93c5fd)
+    public static let textInverse = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let textOnCode = dynamicPlatform(light: 0xffffff, dark: 0xffffff)
+    public static let actionPrimary = dynamicPlatform(light: 0x1550a0, dark: 0x93c5fd)
+    public static let actionPrimaryHover = dynamicPlatform(light: 0x0d3b6e, dark: 0xbfdbfe)
+    public static let actionOnPrimary = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let actionSecondary = dynamicPlatform(light: 0x38bdf8, dark: 0x38bdf8)
+    public static let actionFocusRing = dynamicPlatform(light: 0x1550a0, dark: 0x60a5fa)
+    public static let actionDanger = dynamicPlatform(light: 0x991b1b, dark: 0xfca5a5)
+    public static let actionDangerHover = dynamicPlatform(light: 0x7f1d1d, dark: 0xfecaca)
+    public static let actionOnDanger = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let actionDisabled = dynamicPlatform(light: 0x64748b, dark: 0x828b95)
+    public static let actionDisabledBg = dynamicPlatform(light: 0xf1f5f9, dark: 0x21262d)
+    public static let borderDefault = dynamicPlatform(light: 0xe2e8f0, dark: 0x6e7681)
+    public static let borderControl = dynamicPlatform(light: 0x64748b, dark: 0x6e7681)
+    public static let borderControlHover = dynamicPlatform(light: 0x475569, dark: 0x9aa4af)
+    public static let borderStrong = dynamicPlatform(light: 0xcbd5e1, dark: 0xaeb8c2)
+    public static let borderFocus = dynamicPlatform(light: 0x1550a0, dark: 0x60a5fa)
+    public static let borderError = dynamicPlatform(light: 0xdc2626, dark: 0xf87171)
+    public static let borderDisabled = dynamicPlatform(light: 0xe2e8f0, dark: 0x545d68)
+    public static let feedbackSuccessSurface = dynamicPlatform(light: 0xf0fdf4, dark: 0x14532d)
+    public static let feedbackSuccessBorder = dynamicPlatform(light: 0xbbf7d0, dark: 0x166534)
+    public static let feedbackSuccessSolid = dynamicPlatform(light: 0x166534, dark: 0x4ade80)
+    public static let feedbackSuccessText = dynamicPlatform(light: 0x14532d, dark: 0xbbf7d0)
+    public static let feedbackSuccessOnSolid = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let feedbackWarningSurface = dynamicPlatform(light: 0xfffbeb, dark: 0x78350f)
+    public static let feedbackWarningBorder = dynamicPlatform(light: 0xfde68a, dark: 0x92400e)
+    public static let feedbackWarningSolid = dynamicPlatform(light: 0x92400e, dark: 0xfbbf24)
+    public static let feedbackWarningText = dynamicPlatform(light: 0x78350f, dark: 0xfde68a)
+    public static let feedbackWarningOnSolid = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let feedbackErrorSurface = dynamicPlatform(light: 0xfef2f2, dark: 0x7f1d1d)
+    public static let feedbackErrorBorder = dynamicPlatform(light: 0xfecaca, dark: 0x991b1b)
+    public static let feedbackErrorSolid = dynamicPlatform(light: 0x991b1b, dark: 0xfca5a5)
+    public static let feedbackErrorText = dynamicPlatform(light: 0x7f1d1d, dark: 0xfee2e2)
+    public static let feedbackErrorOnSolid = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let feedbackInfoSurface = dynamicPlatform(light: 0xeff6ff, dark: 0x0d2b45)
+    public static let feedbackInfoBorder = dynamicPlatform(light: 0xdbeafe, dark: 0x0d3b6e)
+    public static let feedbackInfoSolid = dynamicPlatform(light: 0x1550a0, dark: 0x93c5fd)
+    public static let feedbackInfoText = dynamicPlatform(light: 0x0d3b6e, dark: 0x93c5fd)
+    public static let feedbackInfoOnSolid = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let accentAaaSurface = dynamicPlatform(light: 0xede9fe, dark: 0x4c1d95)
+    public static let accentAaaSolid = dynamicPlatform(light: 0x6d28d9, dark: 0xc4b5fd)
+    public static let accentAaaText = dynamicPlatform(light: 0x5b21b6, dark: 0xddd6fe)
+    public static let accentOnAaa = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let accentCyan = dynamicPlatform(light: 0x0c4a6e, dark: 0x7dd3fc)
+    public static let selectedSurface = dynamicPlatform(light: 0xeff6ff, dark: 0x0d3b6e)
+    public static let selectedText = dynamicPlatform(light: 0x1550a0, dark: 0xbfdbfe)
+    public static let overlayScrim = dynamicPlatform(light: 0x0f172a, lightOpacity: 0.5, dark: 0x000000, darkOpacity: 0.6)
+  }
+  #endif
+
   /// Raw color ramps. Prefer Flint.Colors in UI; these values do not change between modes.
   public enum Palette {
     public static let blue50 = Color(flintHex: 0xeff6ff)
@@ -310,6 +435,28 @@ extension Color {
     self.init(.sRGB, red: Double((hex >> 16) & 0xff) / 255, green: Double((hex >> 8) & 0xff) / 255, blue: Double(hex & 0xff) / 255, opacity: opacity)
   }
 }
+
+#if canImport(UIKit)
+private func dynamicPlatform(light: UInt32, lightOpacity: Double = 1, dark: UInt32, darkOpacity: Double = 1) -> UIColor {
+  func rgb(_ h: UInt32) -> (CGFloat, CGFloat, CGFloat) { (CGFloat((h >> 16) & 0xff) / 255, CGFloat((h >> 8) & 0xff) / 255, CGFloat(h & 0xff) / 255) }
+  let l = rgb(light), d = rgb(dark)
+  return UIColor { traits in
+    traits.userInterfaceStyle == .dark
+      ? UIColor(red: d.0, green: d.1, blue: d.2, alpha: darkOpacity)
+      : UIColor(red: l.0, green: l.1, blue: l.2, alpha: lightOpacity)
+  }
+}
+#elseif canImport(AppKit)
+private func dynamicPlatform(light: UInt32, lightOpacity: Double = 1, dark: UInt32, darkOpacity: Double = 1) -> NSColor {
+  func rgb(_ h: UInt32) -> (CGFloat, CGFloat, CGFloat) { (CGFloat((h >> 16) & 0xff) / 255, CGFloat((h >> 8) & 0xff) / 255, CGFloat(h & 0xff) / 255) }
+  let l = rgb(light), d = rgb(dark)
+  return NSColor(name: nil) { appearance in
+    appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+      ? NSColor(srgbRed: d.0, green: d.1, blue: d.2, alpha: darkOpacity)
+      : NSColor(srgbRed: l.0, green: l.1, blue: l.2, alpha: lightOpacity)
+  }
+}
+#endif
 
 private func dynamic(light: UInt32, lightOpacity: Double = 1, dark: UInt32, darkOpacity: Double = 1) -> Color {
   func rgb(_ h: UInt32) -> (CGFloat, CGFloat, CGFloat) { (CGFloat((h >> 16) & 0xff) / 255, CGFloat((h >> 8) & 0xff) / 255, CGFloat(h & 0xff) / 255) }

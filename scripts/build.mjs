@@ -254,13 +254,17 @@ const flatten = (obj, path = []) => Object.entries(obj).flatMap(([k, v]) => (typ
 const at = (obj, path) => path.reduce((o, k) => (o == null ? undefined : o[k]), obj);
 const num = (n) => (Number.isInteger(n) ? `${n}` : `${+n.toFixed(4)}`);
 
-const semanticLines = flatten(tokens.semantic.light).map(([path, lightVal]) => {
+const semanticArgs = flatten(tokens.semantic.light).map(([path, lightVal]) => {
   const darkVal = at(tokens.semantic.dark, path);
   if (typeof darkVal !== 'string') throw new Error(`Swift export: semantic.dark.${path.join('.')} missing`);
   const l = swiftColor(lightVal), d = swiftColor(darkVal);
   const args = [`light: ${l.hex}`, l.a !== 1 ? `lightOpacity: ${l.a}` : null, `dark: ${d.hex}`, d.a !== 1 ? `darkOpacity: ${d.a}` : null].filter(Boolean).join(', ');
-  return `    public static let ${camel(...path)} = dynamic(${args})`;
+  return [camel(...path), args];
 });
+const semanticLines = semanticArgs.map(([name, args]) => `    public static let ${name} = dynamic(${args})`);
+// Same semantic tokens as UIColor / NSColor (ASDS-38). UIColor(Flint.Colors.x) resolves once and
+// locks to the current appearance, so UIKit APIs like UINavigationBarAppearance need these instead.
+const platformLines = semanticArgs.map(([name, args]) => `    public static let ${name} = dynamicPlatform(${args})`);
 const paletteLines = Object.entries(tokens.color).flatMap(([ramp, steps]) =>
   typeof steps === 'string'
     ? [`    public static let ${camel(ramp)} = Color(flintHex: ${swiftColor(steps).hex})`]
@@ -302,6 +306,19 @@ public enum Flint {
   public enum Colors {
 ${semanticLines.join('\n')}
   }
+
+  #if canImport(UIKit)
+  /// Semantic colors as dynamic UIColors, for UIKit APIs (UINavigationBarAppearance, attributed strings).
+  /// Each resolves to its light or dark value at draw time. In SwiftUI, use Flint.Colors.
+  public enum UIColors {
+${platformLines.join('\n')}
+  }
+  #elseif canImport(AppKit)
+  /// Semantic colors as dynamic NSColors, for AppKit APIs. In SwiftUI, use Flint.Colors.
+  public enum NSColors {
+${platformLines.join('\n')}
+  }
+  #endif
 
   /// Raw color ramps. Prefer Flint.Colors in UI; these values do not change between modes.
   public enum Palette {
@@ -421,6 +438,28 @@ extension Color {
     self.init(.sRGB, red: Double((hex >> 16) & 0xff) / 255, green: Double((hex >> 8) & 0xff) / 255, blue: Double(hex & 0xff) / 255, opacity: opacity)
   }
 }
+
+#if canImport(UIKit)
+private func dynamicPlatform(light: UInt32, lightOpacity: Double = 1, dark: UInt32, darkOpacity: Double = 1) -> UIColor {
+  func rgb(_ h: UInt32) -> (CGFloat, CGFloat, CGFloat) { (CGFloat((h >> 16) & 0xff) / 255, CGFloat((h >> 8) & 0xff) / 255, CGFloat(h & 0xff) / 255) }
+  let l = rgb(light), d = rgb(dark)
+  return UIColor { traits in
+    traits.userInterfaceStyle == .dark
+      ? UIColor(red: d.0, green: d.1, blue: d.2, alpha: darkOpacity)
+      : UIColor(red: l.0, green: l.1, blue: l.2, alpha: lightOpacity)
+  }
+}
+#elseif canImport(AppKit)
+private func dynamicPlatform(light: UInt32, lightOpacity: Double = 1, dark: UInt32, darkOpacity: Double = 1) -> NSColor {
+  func rgb(_ h: UInt32) -> (CGFloat, CGFloat, CGFloat) { (CGFloat((h >> 16) & 0xff) / 255, CGFloat((h >> 8) & 0xff) / 255, CGFloat(h & 0xff) / 255) }
+  let l = rgb(light), d = rgb(dark)
+  return NSColor(name: nil) { appearance in
+    appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+      ? NSColor(srgbRed: d.0, green: d.1, blue: d.2, alpha: darkOpacity)
+      : NSColor(srgbRed: l.0, green: l.1, blue: l.2, alpha: lightOpacity)
+  }
+}
+#endif
 
 private func dynamic(light: UInt32, lightOpacity: Double = 1, dark: UInt32, darkOpacity: Double = 1) -> Color {
   func rgb(_ h: UInt32) -> (CGFloat, CGFloat, CGFloat) { (CGFloat((h >> 16) & 0xff) / 255, CGFloat((h >> 8) & 0xff) / 255, CGFloat(h & 0xff) / 255) }
