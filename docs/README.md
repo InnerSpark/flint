@@ -23,20 +23,20 @@ node scripts/verify.mjs --shots ./shots
 
 Focus checks sample `document.activeElement` over 700ms: the skip link, an "On this page" link, and loading a URL with a hash must all land and stay on the heading.
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare Workers)
 
-One-time setup in the Cloudflare dashboard, Workers & Pages, Create, Pages, Connect to Git:
+Static assets on a Worker, configured in `wrangler.jsonc`. One-time setup in the Cloudflare dashboard, Workers & Pages, Create, Import a repository:
 
 | Setting | Value |
 | --- | --- |
-| Repository | `InnerSpark/flint` (grant the Cloudflare GitHub app access to it) |
-| Production branch | `main` |
-| Root directory | `docs` |
+| Repository | `InnerSpark/flint` |
+| Project name | `flint-docs` (must match `name` in `wrangler.jsonc`) |
 | Build command | `npm ci && npm --prefix ../workbench ci && npm run build` |
-| Build output directory | `dist` |
-| Environment variable | `NODE_VERSION` = `22` (also pinned in `.node-version`) |
+| Deploy command | `npx wrangler deploy` |
+| Path (Advanced settings) | `docs` |
+| Variable | `NODE_VERSION` = `22` (also pinned in `.node-version`) |
 
-Then Custom domains, Set up a custom domain, `flint.innersparkmedia.com`. If innersparkmedia.com's DNS is on Cloudflare, it adds the record for you. If not, add a CNAME `flint` pointing at the project's `*.pages.dev` address.
+Then the Worker, Settings, Domains & Routes, Add, Custom domain, `flint.innersparkmedia.com`. This needs innersparkmedia.com's DNS on Cloudflare.
 
 Every push to `main` rebuilds and redeploys. `public/_headers` sets the security headers.
 

@@ -1,0 +1,10 @@
+// Cloudflare Workers static assets deploy for flint.innersparkmedia.com.
+// Workers Builds runs the build command, then `npx wrangler deploy` from this folder.
+{
+  "name": "flint-docs",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash"
+  }
+}
