@@ -685,6 +685,356 @@
     },
     {
       "mode": "light",
+      "label": "radio edge",
+      "fg": "component.radio.border",
+      "bg": "surface.default",
+      "ratio": 4.76,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "radio hover edge",
+      "fg": "component.radio.borderHover",
+      "bg": "surface.default",
+      "ratio": 7.58,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "radio checked fill",
+      "fg": "component.radio.checkedBg",
+      "bg": "surface.default",
+      "ratio": 7.82,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "radio mark",
+      "fg": "component.radio.checkedFg",
+      "bg": "component.radio.checkedBg",
+      "ratio": 7.82,
+      "threshold": 3,
+      "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "radio disabled edge",
+      "fg": "component.radio.disabled",
+      "bg": "component.radio.disabledBg",
+      "ratio": 4.34,
+      "threshold": 3,
+      "kind": "exempt",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "switch thumb on track",
+      "fg": "component.switch.thumb",
+      "bg": "component.switch.track",
+      "ratio": 4.76,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "switch thumb on checked track",
+      "fg": "component.switch.thumbChecked",
+      "bg": "component.switch.trackChecked",
+      "ratio": 7.82,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "switch track on surface",
+      "fg": "component.switch.track",
+      "bg": "surface.default",
+      "ratio": 4.76,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "switch checked track on surface",
+      "fg": "component.switch.trackChecked",
+      "bg": "surface.default",
+      "ratio": 7.82,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "switch disabled thumb on track",
+      "fg": "component.switch.thumb",
+      "bg": "component.switch.trackDisabled",
+      "ratio": 1.1,
+      "threshold": 3,
+      "kind": "exempt",
+      "pass": false
+    },
+    {
+      "mode": "light",
+      "label": "select text",
+      "fg": "component.select.fg",
+      "bg": "component.select.bg",
+      "ratio": 14.63,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "select placeholder",
+      "fg": "component.select.placeholder",
+      "bg": "component.select.bg",
+      "ratio": 10.35,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "select icon",
+      "fg": "component.select.icon",
+      "bg": "component.select.bg",
+      "ratio": 10.35,
+      "threshold": 3,
+      "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "select edge",
+      "fg": "component.select.border",
+      "bg": "component.select.bg",
+      "ratio": 4.76,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "select hover edge",
+      "fg": "component.select.borderHover",
+      "bg": "component.select.bg",
+      "ratio": 7.58,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "select focus edge",
+      "fg": "component.select.borderFocus",
+      "bg": "component.select.bg",
+      "ratio": 7.82,
+      "threshold": 3,
+      "kind": "focus",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "select error edge",
+      "fg": "component.select.borderError",
+      "bg": "component.select.bg",
+      "ratio": 4.83,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "chip neutral label",
+      "fg": "component.chip.neutral.fg",
+      "bg": "component.chip.neutral.bg",
+      "ratio": 13.35,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "chip neutral edge",
+      "fg": "component.chip.neutral.border",
+      "bg": "surface.default",
+      "ratio": 4.76,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "badge neutral label",
+      "fg": "component.badge.neutral.fg",
+      "bg": "component.badge.neutral.bg",
+      "ratio": 13.35,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "chip success label",
+      "fg": "component.chip.success.fg",
+      "bg": "component.chip.success.bg",
+      "ratio": 8.7,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "chip success edge",
+      "fg": "component.chip.success.border",
+      "bg": "surface.default",
+      "ratio": 7.13,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "badge success label",
+      "fg": "component.badge.success.fg",
+      "bg": "component.badge.success.bg",
+      "ratio": 8.7,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "chip warning label",
+      "fg": "component.chip.warning.fg",
+      "bg": "component.chip.warning.bg",
+      "ratio": 8.75,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "chip warning edge",
+      "fg": "component.chip.warning.border",
+      "bg": "surface.default",
+      "ratio": 7.09,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "badge warning label",
+      "fg": "component.badge.warning.fg",
+      "bg": "component.badge.warning.bg",
+      "ratio": 8.75,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "chip error label",
+      "fg": "component.chip.error.fg",
+      "bg": "component.chip.error.bg",
+      "ratio": 9.16,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "chip error edge",
+      "fg": "component.chip.error.border",
+      "bg": "surface.default",
+      "ratio": 8.31,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "badge error label",
+      "fg": "component.badge.error.fg",
+      "bg": "component.badge.error.bg",
+      "ratio": 9.16,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "chip info label",
+      "fg": "component.chip.info.fg",
+      "bg": "component.chip.info.bg",
+      "ratio": 10.33,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "chip info edge",
+      "fg": "component.chip.info.border",
+      "bg": "surface.default",
+      "ratio": 7.82,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "badge info label",
+      "fg": "component.badge.info.fg",
+      "bg": "component.badge.info.bg",
+      "ratio": 10.33,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "skip link label",
+      "fg": "component.skipLink.fg",
+      "bg": "component.skipLink.bg",
+      "ratio": 7.82,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "icon on default",
+      "fg": "component.icon.fg",
+      "bg": "surface.default",
+      "ratio": 14.63,
+      "threshold": 3,
+      "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "icon muted on default",
+      "fg": "component.icon.fgMuted",
+      "bg": "surface.default",
+      "ratio": 10.35,
+      "threshold": 3,
+      "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "light",
       "label": "focus ring on page",
       "fg": "component.focus.ring.color",
       "bg": "surface.page",
@@ -1379,6 +1729,356 @@
       "fg": "component.checkbox.checkedFg",
       "bg": "component.checkbox.checkedBg",
       "ratio": 10.49,
+      "threshold": 3,
+      "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "radio edge",
+      "fg": "component.radio.border",
+      "bg": "surface.default",
+      "ratio": 3.77,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "radio hover edge",
+      "fg": "component.radio.borderHover",
+      "bg": "surface.default",
+      "ratio": 6.84,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "radio checked fill",
+      "fg": "component.radio.checkedBg",
+      "bg": "surface.default",
+      "ratio": 9.59,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "radio mark",
+      "fg": "component.radio.checkedFg",
+      "bg": "component.radio.checkedBg",
+      "ratio": 10.49,
+      "threshold": 3,
+      "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "radio disabled edge",
+      "fg": "component.radio.disabled",
+      "bg": "component.radio.disabledBg",
+      "ratio": 4.4,
+      "threshold": 3,
+      "kind": "exempt",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "switch thumb on track",
+      "fg": "component.switch.thumb",
+      "bg": "component.switch.track",
+      "ratio": 4.59,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "switch thumb on checked track",
+      "fg": "component.switch.thumbChecked",
+      "bg": "component.switch.trackChecked",
+      "ratio": 10.49,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "switch track on surface",
+      "fg": "component.switch.track",
+      "bg": "surface.default",
+      "ratio": 3.77,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "switch checked track on surface",
+      "fg": "component.switch.trackChecked",
+      "bg": "surface.default",
+      "ratio": 9.59,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "switch disabled thumb on track",
+      "fg": "component.switch.thumb",
+      "bg": "component.switch.trackDisabled",
+      "ratio": 15.22,
+      "threshold": 3,
+      "kind": "exempt",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "select text",
+      "fg": "component.select.fg",
+      "bg": "component.select.bg",
+      "ratio": 11.21,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "select placeholder",
+      "fg": "component.select.placeholder",
+      "bg": "component.select.bg",
+      "ratio": 8.6,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "select icon",
+      "fg": "component.select.icon",
+      "bg": "component.select.bg",
+      "ratio": 8.6,
+      "threshold": 3,
+      "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "select edge",
+      "fg": "component.select.border",
+      "bg": "component.select.bg",
+      "ratio": 3.77,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "select hover edge",
+      "fg": "component.select.borderHover",
+      "bg": "component.select.bg",
+      "ratio": 6.84,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "select focus edge",
+      "fg": "component.select.borderFocus",
+      "bg": "component.select.bg",
+      "ratio": 6.8,
+      "threshold": 3,
+      "kind": "focus",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "select error edge",
+      "fg": "component.select.borderError",
+      "bg": "component.select.bg",
+      "ratio": 6.25,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "chip neutral label",
+      "fg": "component.chip.neutral.fg",
+      "bg": "component.chip.neutral.bg",
+      "ratio": 9.86,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "chip neutral edge",
+      "fg": "component.chip.neutral.border",
+      "bg": "surface.default",
+      "ratio": 3.77,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "badge neutral label",
+      "fg": "component.badge.neutral.fg",
+      "bg": "component.badge.neutral.bg",
+      "ratio": 9.86,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "chip success label",
+      "fg": "component.chip.success.fg",
+      "bg": "component.chip.success.bg",
+      "ratio": 7.52,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "chip success edge",
+      "fg": "component.chip.success.border",
+      "bg": "surface.default",
+      "ratio": 9.93,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "badge success label",
+      "fg": "component.badge.success.fg",
+      "bg": "component.badge.success.bg",
+      "ratio": 7.52,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "chip warning label",
+      "fg": "component.chip.warning.fg",
+      "bg": "component.chip.warning.bg",
+      "ratio": 7.28,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "chip warning edge",
+      "fg": "component.chip.warning.border",
+      "bg": "surface.default",
+      "ratio": 10.36,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "badge warning label",
+      "fg": "component.badge.warning.fg",
+      "bg": "component.badge.warning.bg",
+      "ratio": 7.28,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "chip error label",
+      "fg": "component.chip.error.fg",
+      "bg": "component.chip.error.bg",
+      "ratio": 8.2,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "chip error edge",
+      "fg": "component.chip.error.border",
+      "bg": "surface.default",
+      "ratio": 9.11,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "badge error label",
+      "fg": "component.badge.error.fg",
+      "bg": "component.badge.error.bg",
+      "ratio": 8.2,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "chip info label",
+      "fg": "component.chip.info.fg",
+      "bg": "component.chip.info.bg",
+      "ratio": 8.04,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "chip info edge",
+      "fg": "component.chip.info.border",
+      "bg": "surface.default",
+      "ratio": 9.59,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "badge info label",
+      "fg": "component.badge.info.fg",
+      "bg": "component.badge.info.bg",
+      "ratio": 8.04,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "skip link label",
+      "fg": "component.skipLink.fg",
+      "bg": "component.skipLink.bg",
+      "ratio": 10.49,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "icon on default",
+      "fg": "component.icon.fg",
+      "bg": "surface.default",
+      "ratio": 11.21,
+      "threshold": 3,
+      "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "icon muted on default",
+      "fg": "component.icon.fgMuted",
+      "bg": "surface.default",
+      "ratio": 8.6,
       "threshold": 3,
       "kind": "ui",
       "pass": true

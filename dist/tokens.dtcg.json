@@ -1782,7 +1782,7 @@
           },
           "border": {
             "$type": "color",
-            "$value": "{semantic.light.border.default}"
+            "$value": "{semantic.light.border.control}"
           }
         },
         "success": {
@@ -1796,7 +1796,7 @@
           },
           "border": {
             "$type": "color",
-            "$value": "{semantic.light.feedback.success.border}"
+            "$value": "{semantic.light.feedback.success.solid}"
           }
         },
         "warning": {
@@ -1810,7 +1810,7 @@
           },
           "border": {
             "$type": "color",
-            "$value": "{semantic.light.feedback.warning.border}"
+            "$value": "{semantic.light.feedback.warning.solid}"
           }
         },
         "error": {
@@ -1824,7 +1824,7 @@
           },
           "border": {
             "$type": "color",
-            "$value": "{semantic.light.feedback.error.border}"
+            "$value": "{semantic.light.feedback.error.solid}"
           }
         },
         "info": {
@@ -1838,7 +1838,7 @@
           },
           "border": {
             "$type": "color",
-            "$value": "{semantic.light.feedback.info.border}"
+            "$value": "{semantic.light.feedback.info.solid}"
           }
         }
       },
@@ -2230,7 +2230,7 @@
           },
           "border": {
             "$type": "color",
-            "$value": "{semantic.dark.border.default}"
+            "$value": "{semantic.dark.border.control}"
           }
         },
         "success": {
@@ -2244,7 +2244,7 @@
           },
           "border": {
             "$type": "color",
-            "$value": "{semantic.dark.feedback.success.border}"
+            "$value": "{semantic.dark.feedback.success.solid}"
           }
         },
         "warning": {
@@ -2258,7 +2258,7 @@
           },
           "border": {
             "$type": "color",
-            "$value": "{semantic.dark.feedback.warning.border}"
+            "$value": "{semantic.dark.feedback.warning.solid}"
           }
         },
         "error": {
@@ -2272,7 +2272,7 @@
           },
           "border": {
             "$type": "color",
-            "$value": "{semantic.dark.feedback.error.border}"
+            "$value": "{semantic.dark.feedback.error.solid}"
           }
         },
         "info": {
@@ -2286,7 +2286,7 @@
           },
           "border": {
             "$type": "color",
-            "$value": "{semantic.dark.feedback.info.border}"
+            "$value": "{semantic.dark.feedback.info.solid}"
           }
         }
       },
