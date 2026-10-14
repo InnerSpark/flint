@@ -119,16 +119,15 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
       MuiChip: {
         styleOverrides: {
           root: ({ ownerState }) => {
-            const f = intent(ownerState.color);
-            const base = { borderRadius: radius.pill, fontFamily: fontFamily.sans, fontWeight: fontWeight.semibold };
-            if (f) {
-              return ownerState.variant === 'outlined'
-                ? { ...base, color: f.text, borderColor: f.border, backgroundColor: 'transparent' }
-                : { ...base, color: f.text, backgroundColor: f.surface };
+            const named = k.chip[ownerState.color];
+            const t = named || k.chip.neutral;
+            const base = { borderRadius: k.chip.radius, fontFamily: fontFamily.sans, fontWeight: k.chip.fontWeight };
+            if (ownerState.variant === 'outlined') {
+              return named
+                ? { ...base, color: t.fg, borderColor: t.border, backgroundColor: 'transparent' }
+                : { ...base, color: t.fg, borderColor: t.border };
             }
-            return ownerState.variant === 'outlined'
-              ? { ...base, color: c.text.default, borderColor: c.border.default }
-              : { ...base, color: c.text.default, backgroundColor: c.surface.subtle };
+            return { ...base, color: t.fg, backgroundColor: t.bg };
           },
         },
       },
@@ -221,18 +220,20 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
       MuiSwitch: {
         styleOverrides: {
           switchBase: {
-            color: color.white,
-            '&.Mui-checked': { color: color.white, '& + .MuiSwitch-track': { backgroundColor: c.action.primary, opacity: 1 } },
-            '&.Mui-disabled + .MuiSwitch-track': { backgroundColor: c.action.disabledBg, opacity: 1 },
+            color: k.switch.thumb,
+            // Checked thumb must be onPrimary, not white: in dark mode action.primary is a
+            // light fill, so a white thumb lands at 1.80:1 against its own track (ASDS-45).
+            '&.Mui-checked': { color: k.switch.thumbChecked, '& + .MuiSwitch-track': { backgroundColor: k.switch.trackChecked, opacity: 1 } },
+            '&.Mui-disabled + .MuiSwitch-track': { backgroundColor: k.switch.trackDisabled, opacity: 1 },
           },
-          track: { backgroundColor: c.border.control, opacity: 1 },
+          track: { backgroundColor: k.switch.track, opacity: 1 },
         },
       },
-      MuiSelect: { styleOverrides: { icon: { color: c.text.muted } } },
+      MuiSelect: { styleOverrides: { icon: { color: k.select.icon } } },
       MuiAvatar: { styleOverrides: { root: { backgroundColor: c.surface.subtle, color: c.text.default, fontFamily: fontFamily.sans, fontWeight: fontWeight.semibold } } },
       MuiSnackbarContent: { styleOverrides: { root: { backgroundColor: c.surface.inverse, color: c.text.inverse, borderRadius: radius.sm, fontFamily: fontFamily.sans } } },
-      MuiCheckbox: { styleOverrides: { root: { color: c.border.control, '&.Mui-checked': { color: c.action.primary }, '&.Mui-disabled': { color: c.action.disabled } } } },
-      MuiRadio: { styleOverrides: { root: { color: c.border.control, '&.Mui-checked': { color: c.action.primary }, '&.Mui-disabled': { color: c.action.disabled } } } },
+      MuiCheckbox: { styleOverrides: { root: { color: k.checkbox.border, '&.Mui-checked': { color: k.checkbox.checkedBg }, '&.Mui-disabled': { color: k.checkbox.disabled } } } },
+      MuiRadio: { styleOverrides: { root: { color: k.radio.border, '&.Mui-checked': { color: k.radio.checkedBg }, '&.Mui-disabled': { color: k.radio.disabled } } } },
       // Link underlined by default (WCAG 1.4.1); app keeps only its selector exceptions local.
       MuiLink: { defaultProps: { underline: 'always' }, styleOverrides: { root: { color: c.text.link, textDecorationColor: 'currentColor', textUnderlineOffset: '0.15em' } } },
       MuiBackdrop: { styleOverrides: { root: { backgroundColor: c.overlayScrim } } },

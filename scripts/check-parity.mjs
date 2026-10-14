@@ -26,6 +26,10 @@ const expect = (platform, token, mode, actual, wanted) => {
 const leaves = (node, path = []) => Object.entries(node).flatMap(([k, v]) => (v && typeof v === 'object' ? leaves(v, [...path, k]) : [[[...path, k], v]]));
 const at = (obj, path) => path.reduce((o, k) => (o == null ? undefined : o[k]), obj);
 const asCss = (v) => (typeof v === 'number' ? `${v}px` : v);
+// Most numeric component tokens are lengths, but a few are plain numbers. Appending px to
+// these would compare against a value CSS never emits (ASDS-45).
+const UNITLESS = new Set(['fontWeight', 'lineHeight', 'opacity', 'zIndex']);
+const asCssLeaf = (path, v) => (typeof v === 'number' && UNITLESS.has(path[path.length - 1]) ? String(v) : asCss(v));
 
 // ---------- CSS: parse the blocks, resolve var() chains the way a browser would per mode ----------
 const blocks = (css) => {
@@ -64,7 +68,7 @@ for (const mode of MODES) {
     expect('css', `semantic.${path.join('.')}`, mode, css.get(cssVarForPath(['semantic', mode, ...path].join('.'))), value);
   }
   for (const [path, value] of leaves(tokens.component[mode])) {
-    expect('css', `component.${path.join('.')}`, mode, css.get(componentVar(path)), asCss(value));
+    expect('css', `component.${path.join('.')}`, mode, css.get(componentVar(path)), asCssLeaf(path, value));
   }
   // shadcn: each variable must be a var() to the mapped Flint variable, and land on its value
   for (const [name, path] of Object.entries(SHADCN_MAP)) {

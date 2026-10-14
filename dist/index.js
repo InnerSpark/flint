@@ -558,8 +558,106 @@ const tokens = {
         "size": 24,
         "radius": 4,
         "border": "#64748b",
+        "borderHover": "#475569",
         "checkedBg": "#1550a0",
-        "checkedFg": "#ffffff"
+        "checkedFg": "#ffffff",
+        "disabled": "#64748b",
+        "disabledBg": "#f1f5f9"
+      },
+      "radio": {
+        "size": 24,
+        "border": "#64748b",
+        "borderHover": "#475569",
+        "checkedBg": "#1550a0",
+        "checkedFg": "#ffffff",
+        "disabled": "#64748b",
+        "disabledBg": "#f1f5f9"
+      },
+      "switch": {
+        "track": "#64748b",
+        "trackChecked": "#1550a0",
+        "trackDisabled": "#f1f5f9",
+        "thumb": "#ffffff",
+        "thumbChecked": "#ffffff"
+      },
+      "select": {
+        "radius": 8,
+        "height": 40,
+        "bg": "#ffffff",
+        "fg": "#1e293b",
+        "placeholder": "#334155",
+        "icon": "#334155",
+        "border": "#64748b",
+        "borderHover": "#475569",
+        "borderFocus": "#1550a0",
+        "borderError": "#dc2626",
+        "menuRadius": 8
+      },
+      "chip": {
+        "radius": 9999,
+        "fontWeight": 600,
+        "neutral": {
+          "bg": "#f1f5f9",
+          "fg": "#1e293b",
+          "border": "#e2e8f0"
+        },
+        "success": {
+          "bg": "#f0fdf4",
+          "fg": "#14532d",
+          "border": "#bbf7d0"
+        },
+        "warning": {
+          "bg": "#fffbeb",
+          "fg": "#78350f",
+          "border": "#fde68a"
+        },
+        "error": {
+          "bg": "#fef2f2",
+          "fg": "#7f1d1d",
+          "border": "#fecaca"
+        },
+        "info": {
+          "bg": "#eff6ff",
+          "fg": "#0d3b6e",
+          "border": "#dbeafe"
+        }
+      },
+      "badge": {
+        "radius": 9999,
+        "fontWeight": 600,
+        "fontSize": 12,
+        "neutral": {
+          "bg": "#f1f5f9",
+          "fg": "#1e293b"
+        },
+        "success": {
+          "bg": "#f0fdf4",
+          "fg": "#14532d"
+        },
+        "warning": {
+          "bg": "#fffbeb",
+          "fg": "#78350f"
+        },
+        "error": {
+          "bg": "#fef2f2",
+          "fg": "#7f1d1d"
+        },
+        "info": {
+          "bg": "#eff6ff",
+          "fg": "#0d3b6e"
+        }
+      },
+      "skipLink": {
+        "bg": "#1550a0",
+        "fg": "#ffffff",
+        "radius": 8
+      },
+      "icon": {
+        "sm": 16,
+        "md": 20,
+        "lg": 24,
+        "fg": "#1e293b",
+        "fgMuted": "#334155"
       },
       "focus": {
         "ring": {
@@ -614,8 +712,106 @@ const tokens = {
         "size": 24,
         "radius": 4,
         "border": "#6e7681",
+        "borderHover": "#9aa4af",
         "checkedBg": "#93c5fd",
-        "checkedFg": "#0d1117"
+        "checkedFg": "#0d1117",
+        "disabled": "#828b95",
+        "disabledBg": "#21262d"
+      },
+      "radio": {
+        "size": 24,
+        "border": "#6e7681",
+        "borderHover": "#9aa4af",
+        "checkedBg": "#93c5fd",
+        "checkedFg": "#0d1117",
+        "disabled": "#828b95",
+        "disabledBg": "#21262d"
+      },
+      "switch": {
+        "track": "#6e7681",
+        "trackChecked": "#93c5fd",
+        "trackDisabled": "#21262d",
+        "thumb": "#ffffff",
+        "thumbChecked": "#0d1117"
+      },
+      "select": {
+        "radius": 8,
+        "height": 40,
+        "bg": "#161b22",
+        "fg": "#c9d1d9",
+        "placeholder": "#aeb8c2",
+        "icon": "#aeb8c2",
+        "border": "#6e7681",
+        "borderHover": "#9aa4af",
+        "borderFocus": "#60a5fa",
+        "borderError": "#f87171",
+        "menuRadius": 8
+      },
+      "chip": {
+        "radius": 9999,
+        "fontWeight": 600,
+        "neutral": {
+          "bg": "#21262d",
+          "fg": "#c9d1d9",
+          "border": "#6e7681"
+        },
+        "success": {
+          "bg": "#14532d",
+          "fg": "#bbf7d0",
+          "border": "#166534"
+        },
+        "warning": {
+          "bg": "#78350f",
+          "fg": "#fde68a",
+          "border": "#92400e"
+        },
+        "error": {
+          "bg": "#7f1d1d",
+          "fg": "#fee2e2",
+          "border": "#991b1b"
+        },
+        "info": {
+          "bg": "#0d2b45",
+          "fg": "#93c5fd",
+          "border": "#0d3b6e"
+        }
+      },
+      "badge": {
+        "radius": 9999,
+        "fontWeight": 600,
+        "fontSize": 12,
+        "neutral": {
+          "bg": "#21262d",
+          "fg": "#c9d1d9"
+        },
+        "success": {
+          "bg": "#14532d",
+          "fg": "#bbf7d0"
+        },
+        "warning": {
+          "bg": "#78350f",
+          "fg": "#fde68a"
+        },
+        "error": {
+          "bg": "#7f1d1d",
+          "fg": "#fee2e2"
+        },
+        "info": {
+          "bg": "#0d2b45",
+          "fg": "#93c5fd"
+        }
+      },
+      "skipLink": {
+        "bg": "#93c5fd",
+        "fg": "#0d1117",
+        "radius": 8
+      },
+      "icon": {
+        "sm": 16,
+        "md": 20,
+        "lg": 24,
+        "fg": "#c9d1d9",
+        "fgMuted": "#aeb8c2"
       },
       "focus": {
         "ring": {

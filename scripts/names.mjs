@@ -14,7 +14,7 @@ export const cssVarForPath = (path) => {
     return `--color-${parts.map(kebab).join('-')}`;
   }
   if (head === 'targetMin') return '--target-min';
-  const prefix = { radius: 'radius', control: 'control', space: 'space', iconSize: 'icon-size', fontSize: 'font-size' }[head];
+  const prefix = { radius: 'radius', control: 'control', space: 'space', iconSize: 'icon-size', fontSize: 'font-size', fontWeight: 'font-weight' }[head];
   if (!prefix) throw new Error(`No CSS variable for token path ${path}`);
   return `--${prefix}-${rest.map(kebab).join('-')}`;
 };

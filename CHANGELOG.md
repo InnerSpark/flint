@@ -4,6 +4,10 @@ Flint tokens follow semver, independent of the consuming apps.
 
 ## Unreleased
 
+- **Dark-mode switch fix.** A checked switch in dark mode was a white thumb on a light-blue track, 1.80:1. Since v1.9.0 `action.primary` in dark is a light fill, so the thumb has to be `action.onPrimary` (near-black), not white. Now 10.49:1. Light mode is unchanged, because there `onPrimary` is white already. This is the AS-199 class of bug, and it slipped past the literal-color scan because the thumb read `color.white`, which looks token-driven.
+- **Component tokens for every atom (ASDS-45).** The tier added in v1.13.0 covered `button`, `input`, `checkbox` and `focus`. It now covers the whole atom list: adds `radio`, `switch`, `select`, `chip`, `badge`, `skipLink` and `icon`, and fills in the states `input` and `checkbox` were missing (hover, disabled). 61 new tokens, every one a reference to an existing primitive or semantic token, so nothing new was invented. The MUI factory now reads the tier for Checkbox, Radio, Switch, Select and Chip instead of reaching into semantic directly; emitted output is byte-identical across light, dark, comfortable and compact, verified against a snapshot.
+- `names.mjs` learned `fontWeight`, which the component tier needs for chip and badge weights. `check-parity.mjs` no longer appends `px` to unitless component tokens, so `fontWeight` compares against what CSS actually emits.
+
 - **Workbench moves into the docs site.** Storybook is gone: its own interface failed accessibility checks Flint can't fix. `/workbench/` now renders Button, Checkbox and Input live as MUI, shadcn/ui and plain CSS in every state, with a density switch and the site's theme toggle. Forced hover and focus rows reuse each implementation's real CSS. The shadcn components and plain CSS live in `docs/src/workbench/`. `docs` verify now also checks workbench pages at both densities, that forced Hover rows differ from Default, and that every semantic and component token has a row.
 
 ## v1.13.0
