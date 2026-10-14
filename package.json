@@ -41,7 +41,11 @@
   "scripts": {
     "build": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs",
     "check": "node scripts/check-contrast.mjs && node scripts/check-parity.mjs",
-    "prepare": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs"
+    "prepare": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs",
+    "release:notes": "node scripts/next-version.mjs",
+    "release:prepare": "node scripts/release-prepare.mjs",
+    "preflight": "node scripts/preflight.mjs",
+    "changelog:latest": "node scripts/changelog-section.mjs"
   },
   "peerDependencies": {
     "@mui/material": ">=5"
