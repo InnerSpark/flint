@@ -3,6 +3,7 @@
 import MuiButton from '@mui/material/Button';
 import MuiCheckbox from '@mui/material/Checkbox';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import MuiLink from '@mui/material/Link';
 import { Button as ShadButton } from './ui/button';
 import { Checkbox as ShadCheckbox } from './ui/checkbox';
 import { Input as ShadInput } from './ui/input';
@@ -12,6 +13,7 @@ export const IMPLEMENTATIONS = ['MUI', 'shadcn', 'Plain CSS'];
 const BUTTON_STATES = [
   { label: 'Default', cls: '' },
   { label: 'Hover', cls: 'st-hover' },
+  { label: 'Pressed', cls: 'st-active' },
   { label: 'Focus', cls: 'st-focus', note: 'keyboard focus' },
   { label: 'Disabled', disabled: true },
   { label: 'Busy', busy: true, note: 'aria-busy' },
@@ -83,6 +85,22 @@ const checkbox = {
   },
 };
 
+const LINK_SHAD = 'text-[var(--link-fg)] underline decoration-from-font underline-offset-[0.15em] hover:decoration-[0.125em] rounded-[var(--radius-xs)] outline-none focus-visible:[outline:var(--focus-ring-width)_solid_var(--focus-ring-color)] focus-visible:[outline-offset:var(--focus-ring-offset)]';
+const link = {
+  states: [
+    { label: 'Default', cls: '' },
+    { label: 'Hover', cls: 'st-hover' },
+    { label: 'Focus', cls: 'st-focus', note: 'keyboard focus' },
+    { label: 'Live', cls: '', note: 'try it' },
+  ],
+  render(impl, s) {
+    const props = { href: '/components/link/', 'aria-label': `Review the route, ${impl}, ${s.label.toLowerCase()} state` };
+    if (impl === 'MUI') return <MuiLink {...props} className={s.cls}>Review the route</MuiLink>;
+    if (impl === 'shadcn') return <a {...props} className={`${LINK_SHAD} ${s.cls || ''}`}>Review the route</a>;
+    return <a {...props} className={`flint-link ${s.cls || ''}`}>Review the route</a>;
+  },
+};
+
 export const BENCHES = {
   'button/primary': button('primary'),
   'button/secondary': button('secondary'),
@@ -90,4 +108,5 @@ export const BENCHES = {
   'button/text': button('text'),
   'input/text': input,
   'checkbox/default': checkbox,
+  'link/inline': link,
 };

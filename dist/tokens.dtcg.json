@@ -308,6 +308,10 @@
       "900": {
         "$type": "color",
         "$value": "#7f1d1d"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#450a0a"
       }
     },
     "violet": {
@@ -1023,6 +1027,10 @@
           "$type": "color",
           "$value": "{color.blue.800}"
         },
+        "primaryPressed": {
+          "$type": "color",
+          "$value": "{color.blue.900}"
+        },
         "onPrimary": {
           "$type": "color",
           "$value": "{color.white}"
@@ -1042,6 +1050,10 @@
         "dangerHover": {
           "$type": "color",
           "$value": "{color.red.900}"
+        },
+        "dangerPressed": {
+          "$type": "color",
+          "$value": "{color.red.950}"
         },
         "onDanger": {
           "$type": "color",
@@ -1297,6 +1309,10 @@
           "$type": "color",
           "$value": "{color.blue.200}"
         },
+        "primaryPressed": {
+          "$type": "color",
+          "$value": "{color.blue.100}"
+        },
         "onPrimary": {
           "$type": "color",
           "$value": "{color.ink.900}"
@@ -1316,6 +1332,10 @@
         "dangerHover": {
           "$type": "color",
           "$value": "{color.red.200}"
+        },
+        "dangerPressed": {
+          "$type": "color",
+          "$value": "{color.red.100}"
         },
         "onDanger": {
           "$type": "color",
@@ -1512,6 +1532,12 @@
   },
   "component": {
     "light": {
+      "link": {
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.light.text.link}"
+        }
+      },
       "button": {
         "radius": {
           "$type": "dimension",
@@ -1529,6 +1555,10 @@
           "bgHover": {
             "$type": "color",
             "$value": "{semantic.light.action.primaryHover}"
+          },
+          "bgPressed": {
+            "$type": "color",
+            "$value": "{semantic.light.action.primaryPressed}"
           },
           "fg": {
             "$type": "color",
@@ -1561,6 +1591,10 @@
           "bgHover": {
             "$type": "color",
             "$value": "{semantic.light.action.dangerHover}"
+          },
+          "bgPressed": {
+            "$type": "color",
+            "$value": "{semantic.light.action.dangerPressed}"
           },
           "fg": {
             "$type": "color",
@@ -1960,6 +1994,12 @@
       }
     },
     "dark": {
+      "link": {
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.link}"
+        }
+      },
       "button": {
         "radius": {
           "$type": "dimension",
@@ -1977,6 +2017,10 @@
           "bgHover": {
             "$type": "color",
             "$value": "{semantic.dark.action.primaryHover}"
+          },
+          "bgPressed": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.primaryPressed}"
           },
           "fg": {
             "$type": "color",
@@ -2009,6 +2053,10 @@
           "bgHover": {
             "$type": "color",
             "$value": "{semantic.dark.action.dangerHover}"
+          },
+          "bgPressed": {
+            "$type": "color",
+            "$value": "{semantic.dark.action.dangerPressed}"
           },
           "fg": {
             "$type": "color",

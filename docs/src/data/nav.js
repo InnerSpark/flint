@@ -31,6 +31,7 @@ export const NAV = [
       ['Button', '/components/button/'],
       ['Checkbox', '/components/checkbox/'],
       ['Input', '/components/input/'],
+      ['Link', '/components/link/'],
       ['Radio', '/components/radio/'],
     ],
   },
@@ -41,6 +42,7 @@ export const NAV = [
       ['Button', '/workbench/button/'],
       ['Checkbox', '/workbench/checkbox/'],
       ['Input', '/workbench/input/'],
+      ['Link', '/workbench/link/'],
     ],
   },
   {

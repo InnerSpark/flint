@@ -505,6 +505,56 @@
     },
     {
       "mode": "light",
+      "label": "link label on page",
+      "fg": "component.link.fg",
+      "bg": "surface.page",
+      "ratio": 7.47,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "link label on default",
+      "fg": "component.link.fg",
+      "bg": "surface.default",
+      "ratio": 7.82,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "link label on subtle",
+      "fg": "component.link.fg",
+      "bg": "surface.subtle",
+      "ratio": 7.13,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "button primary label pressed",
+      "fg": "component.button.primary.fg",
+      "bg": "component.button.primary.bgPressed",
+      "ratio": 14.5,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "button danger label pressed",
+      "fg": "component.button.danger.fg",
+      "bg": "component.button.danger.bgPressed",
+      "ratio": 16.14,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
       "label": "button primary hover label",
       "fg": "component.button.primary.fg",
       "bg": "component.button.primary.bgHover",
@@ -1549,6 +1599,56 @@
       "fg": "component.button.primary.fg",
       "bg": "component.button.primary.bg",
       "ratio": 10.49,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "link label on page",
+      "fg": "component.link.fg",
+      "bg": "surface.page",
+      "ratio": 10.49,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "link label on default",
+      "fg": "component.link.fg",
+      "bg": "surface.default",
+      "ratio": 9.59,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "link label on subtle",
+      "fg": "component.link.fg",
+      "bg": "surface.subtle",
+      "ratio": 8.44,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "button primary label pressed",
+      "fg": "component.button.primary.fg",
+      "bg": "component.button.primary.bgPressed",
+      "ratio": 15.51,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "button danger label pressed",
+      "fg": "component.button.danger.fg",
+      "bg": "component.button.danger.bgPressed",
+      "ratio": 15.49,
       "threshold": 7,
       "kind": "text",
       "pass": true

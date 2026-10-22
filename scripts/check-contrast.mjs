@@ -86,6 +86,11 @@ const PAIRS = [
   ]),
   // component tier (ASDS-39): every label on its own fill, every control edge on its surface
   ["button primary label", "component.button.primary.fg", "component.button.primary.bg", AAA_TEXT, "text"],
+  ["link label on page", "component.link.fg", "surface.page", AAA_TEXT, "text"],
+  ["link label on default", "component.link.fg", "surface.default", AAA_TEXT, "text"],
+  ["link label on subtle", "component.link.fg", "surface.subtle", AAA_TEXT, "text"],
+  ["button primary label pressed", "component.button.primary.fg", "component.button.primary.bgPressed", AAA_TEXT, "text"],
+  ["button danger label pressed", "component.button.danger.fg", "component.button.danger.bgPressed", AAA_TEXT, "text"],
   ["button primary hover label", "component.button.primary.fg", "component.button.primary.bgHover", AAA_TEXT, "text"],
   ["button secondary label", "component.button.secondary.fg", "component.button.secondary.bg", AAA_TEXT, "text"],
   ["button secondary hover label", "component.button.secondary.fg", "component.button.secondary.bgHover", AAA_TEXT, "text"],

@@ -53,6 +53,7 @@ export const COMPONENTS = {
       ['Danger', 'Actions that destroy something. Always followed by a confirm step.'],
       ['Text', 'Low-emphasis actions in dense areas, like table rows and toolbars.'],
       ['Icon only', 'Any variant plus flint-btn--icon. Square, the button\'s height. Needs an aria-label.'],
+      ['Pressed', 'Primary and danger darken one more step while pressed (button.*.bgPressed). Secondary and text keep their hover look.'],
       ['Busy', 'aria-busy="true" while the action runs. Keep the label; a spinner shows next to it.'],
       ['Disabled', 'disabled, or aria-disabled="true" to keep it focusable so people can find out why.'],
     ],
@@ -150,6 +151,56 @@ import FormLabel from '@mui/material/FormLabel';
       'Don\'t put a radio group inside another control. Arrow keys belong to the group and will be swallowed.',
     ],
     target: 'The control is 24px (radio.size, which aliases targetMin), and the label extends the clickable area. On iOS, at least 44pt.',
+  },
+  link: {
+    name: 'Link',
+    lead: 'Links take people somewhere: another page, a section, a file. Flint links are always underlined, so they never rely on color alone.',
+    example: `<p>Your trip is saved. <a class="flint-link" href="#">Review the route</a> before you leave.</p>
+<div class="example-row">
+  <a class="flint-link flint-link--standalone" href="#">View all trips</a>
+  <a class="flint-link flint-link--standalone" href="https://example.com" target="_blank" rel="noopener">Campground rules<span class="flint-sr-only"> (opens in a new tab)</span></a>
+</div>`,
+    when: [
+      'Use a link to go somewhere. If it changes the URL or jumps to a section, it is a link.',
+      'Use a button to do something: save, delete, open a dialog.',
+      'Use a standalone link for a call to go elsewhere on its own line, like "View all trips".',
+    ],
+    variants: [
+      ['Inline', 'Inside a sentence. Takes the text size around it.'],
+      ['Standalone', 'flint-link--standalone. On its own line, 600 weight, at least 24px tall.'],
+      ['New tab', 'target="_blank" adds a decorative arrow. Say "(opens in a new tab)" in text with flint-sr-only.'],
+      ['Hover', 'The underline thickens. The color stays the same.'],
+    ],
+    guidance: [
+      ['Write link text that makes sense alone: "Review the route".', 'Use "click here" or "learn more". Screen reader users often list links out of context.'],
+      ['Keep the underline on every link, everywhere.', 'Remove the underline and rely on blue. Some people can\'t see the difference.'],
+      ['Open new tabs only when leaving would lose work, and say so in the link.', 'Open new tabs by default without warning.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: '<a class="flint-link" href="/trips/42">Review the route</a>\n\n<a class="flint-link flint-link--standalone" href="/trips">View all trips</a>\n\n<a class="flint-link" href="https://example.com" target="_blank" rel="noopener">\n  Campground rules<span class="flint-sr-only"> (opens in a new tab)</span>\n</a>', rules: [cssFor('flint-link'), cssFor('flint-sr-only')].join('\n') },
+      mui: `import Link from '@mui/material/Link';
+
+// The Flint theme sets underline="always" and the link color.
+<Link href="/trips/42">Review the route</Link>`,
+      shadcn: `// shadcn/ui has no Link component: style the anchor (or your router's Link) with the tokens.
+<a
+  href="/trips/42"
+  className="text-[var(--link-fg)] underline decoration-from-font underline-offset-[0.15em] hover:decoration-[0.125em] rounded-[var(--radius-xs)] focus-visible:[outline:var(--focus-ring-width)_solid_var(--focus-ring-color)] focus-visible:[outline-offset:var(--focus-ring-offset)]"
+>
+  Review the route
+</a>`,
+      swift: `Link("Review the route", destination: routeURL)
+  .foregroundStyle(Flint.Component.linkFg)
+  .underline()`,
+    },
+    keyboard: [['Tab', 'Moves focus to the link. A solid 2px ring shows where focus is.'], ['Enter', 'Follows the link. Space does not: that is a button.']],
+    screenReader: [
+      'The link text is its name. Make it say where it goes.',
+      'A link that opens a new tab says so in text. The arrow is hidden from screen readers.',
+      'Use a real <a href>. A <span> with a click handler is not reachable by keyboard and has no link role.',
+      'Same-page links move focus to the target heading, not just the scroll position.',
+    ],
+    target: 'Inline links follow the text size, which WCAG 2.5.8 exempts. Standalone links are at least 24px tall (targetMin).',
   },
   checkbox: {
     name: 'Checkbox',

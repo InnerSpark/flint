@@ -74,6 +74,7 @@
   --color-red-700: #b91c1c;
   --color-red-800: #991b1b;
   --color-red-900: #7f1d1d;
+  --color-red-950: #450a0a;
   --color-violet-50: #f5f3ff;
   --color-violet-100: #ede9fe;
   --color-violet-200: #ddd6fe;
@@ -233,11 +234,13 @@
   --color-text-on-code: #ffffff;
   --color-action-primary: #1550a0;
   --color-action-primary-hover: #0d3b6e;
+  --color-action-primary-pressed: #0d2b45;
   --color-action-on-primary: #ffffff;
   --color-action-secondary: #38bdf8;
   --color-action-focus-ring: #1550a0;
   --color-action-danger: #991b1b;
   --color-action-danger-hover: #7f1d1d;
+  --color-action-danger-pressed: #450a0a;
   --color-action-on-danger: #ffffff;
   --color-action-disabled: #64748b;
   --color-action-disabled-bg: #f1f5f9;
@@ -299,11 +302,13 @@
   --color-text-on-code: #ffffff;
   --color-action-primary: #93c5fd;
   --color-action-primary-hover: #bfdbfe;
+  --color-action-primary-pressed: #dbeafe;
   --color-action-on-primary: #0d1117;
   --color-action-secondary: #38bdf8;
   --color-action-focus-ring: #60a5fa;
   --color-action-danger: #fca5a5;
   --color-action-danger-hover: #fecaca;
+  --color-action-danger-pressed: #fee2e2;
   --color-action-on-danger: #0d1117;
   --color-action-disabled: #828b95;
   --color-action-disabled-bg: #21262d;
@@ -371,11 +376,13 @@
   --color-text-on-code: #ffffff;
   --color-action-primary: #1550a0;
   --color-action-primary-hover: #0d3b6e;
+  --color-action-primary-pressed: #0d2b45;
   --color-action-on-primary: #ffffff;
   --color-action-secondary: #38bdf8;
   --color-action-focus-ring: #1550a0;
   --color-action-danger: #991b1b;
   --color-action-danger-hover: #7f1d1d;
+  --color-action-danger-pressed: #450a0a;
   --color-action-on-danger: #ffffff;
   --color-action-disabled: #64748b;
   --color-action-disabled-bg: #f1f5f9;
@@ -441,10 +448,12 @@
 /* component tier: re-declared wherever a theme is set, so a nested data-theme="dark" section
    resolves these against its own colors instead of inheriting the page's */
 :root, [data-theme] {
+  --link-fg: var(--color-text-link);
   --button-radius: var(--radius-control);
   --button-height: var(--control-md);
   --button-primary-bg: var(--color-action-primary);
   --button-primary-bg-hover: var(--color-action-primary-hover);
+  --button-primary-bg-pressed: var(--color-action-primary-pressed);
   --button-primary-fg: var(--color-action-on-primary);
   --button-secondary-bg: var(--color-surface-default);
   --button-secondary-bg-hover: var(--color-surface-subtle);
@@ -452,6 +461,7 @@
   --button-secondary-border: var(--color-border-control);
   --button-danger-bg: var(--color-action-danger);
   --button-danger-bg-hover: var(--color-action-danger-hover);
+  --button-danger-bg-pressed: var(--color-action-danger-pressed);
   --button-danger-fg: var(--color-action-on-danger);
   --button-text-bg-hover: var(--color-surface-subtle);
   --button-text-fg: var(--color-text-link);

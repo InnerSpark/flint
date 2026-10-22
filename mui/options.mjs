@@ -235,7 +235,7 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
       MuiCheckbox: { styleOverrides: { root: { color: k.checkbox.border, '&.Mui-checked': { color: k.checkbox.checkedBg }, '&.Mui-disabled': { color: k.checkbox.disabled } } } },
       MuiRadio: { styleOverrides: { root: { color: k.radio.border, '&.Mui-checked': { color: k.radio.checkedBg }, '&.Mui-disabled': { color: k.radio.disabled } } } },
       // Link underlined by default (WCAG 1.4.1); app keeps only its selector exceptions local.
-      MuiLink: { defaultProps: { underline: 'always' }, styleOverrides: { root: { color: c.text.link, textDecorationColor: 'currentColor', textUnderlineOffset: '0.15em' } } },
+      MuiLink: { defaultProps: { underline: 'always' }, styleOverrides: { root: { color: c.text.link, textDecorationColor: 'currentColor', textUnderlineOffset: '0.15em', '&:hover': { textDecorationThickness: '0.125em' } } } },
       MuiBackdrop: { styleOverrides: { root: { backgroundColor: c.overlayScrim } } },
       MuiTab: { styleOverrides: { root: { textTransform: 'none', fontWeight: fontWeight.medium, fontFamily: fontFamily.sans } } },
     },

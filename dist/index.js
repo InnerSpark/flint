@@ -87,7 +87,8 @@ const tokens = {
       "600": "#dc2626",
       "700": "#b91c1c",
       "800": "#991b1b",
-      "900": "#7f1d1d"
+      "900": "#7f1d1d",
+      "950": "#450a0a"
     },
     "violet": {
       "50": "#f5f3ff",
@@ -355,11 +356,13 @@ const tokens = {
       "action": {
         "primary": "#1550a0",
         "primaryHover": "#0d3b6e",
+        "primaryPressed": "#0d2b45",
         "onPrimary": "#ffffff",
         "secondary": "#38bdf8",
         "focusRing": "#1550a0",
         "danger": "#991b1b",
         "dangerHover": "#7f1d1d",
+        "dangerPressed": "#450a0a",
         "onDanger": "#ffffff",
         "disabled": "#64748b",
         "disabledBg": "#f1f5f9"
@@ -443,11 +446,13 @@ const tokens = {
       "action": {
         "primary": "#93c5fd",
         "primaryHover": "#bfdbfe",
+        "primaryPressed": "#dbeafe",
         "onPrimary": "#0d1117",
         "secondary": "#38bdf8",
         "focusRing": "#60a5fa",
         "danger": "#fca5a5",
         "dangerHover": "#fecaca",
+        "dangerPressed": "#fee2e2",
         "onDanger": "#0d1117",
         "disabled": "#828b95",
         "disabledBg": "#21262d"
@@ -514,12 +519,16 @@ const tokens = {
   },
   "component": {
     "light": {
+      "link": {
+        "fg": "#1550a0"
+      },
       "button": {
         "radius": 8,
         "height": 40,
         "primary": {
           "bg": "#1550a0",
           "bgHover": "#0d3b6e",
+          "bgPressed": "#0d2b45",
           "fg": "#ffffff"
         },
         "secondary": {
@@ -531,6 +540,7 @@ const tokens = {
         "danger": {
           "bg": "#991b1b",
           "bgHover": "#7f1d1d",
+          "bgPressed": "#450a0a",
           "fg": "#ffffff"
         },
         "text": {
@@ -668,12 +678,16 @@ const tokens = {
       }
     },
     "dark": {
+      "link": {
+        "fg": "#93c5fd"
+      },
       "button": {
         "radius": 8,
         "height": 40,
         "primary": {
           "bg": "#93c5fd",
           "bgHover": "#bfdbfe",
+          "bgPressed": "#dbeafe",
           "fg": "#0d1117"
         },
         "secondary": {
@@ -685,6 +699,7 @@ const tokens = {
         "danger": {
           "bg": "#fca5a5",
           "bgHover": "#fecaca",
+          "bgPressed": "#fee2e2",
           "fg": "#0d1117"
         },
         "text": {

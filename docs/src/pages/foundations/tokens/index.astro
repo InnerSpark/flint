@@ -2,6 +2,9 @@
 // Token explorer (ASDS-50): follow any token down to the ladder, and see what uses it.
 // Every chain, value and name is computed here from Flint's build. Nothing is typed by hand.
 import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import Swatch from '../../../components/Swatch.astro';
+import { COMPONENTS } from '../../../data/components.js';
 import { source, resolved, leaves, at, refName, isColor, cssVarForPath, componentVar, camel, kebab, MODES } from '../../../lib/flint.js';
 import swiftSrc from '../../../../../dist/swift/Flint.swift?raw';
 import '../../../styles/explorer.css';
@@ -72,6 +75,11 @@ const groups = [['component', 'Component'], ['semantic', 'Semantic'], ['primitiv
   .map(([kind, label]) => ({ label, items: data.filter((d) => d.kind === kind) }));
 const short = (key) => key.replace(/^(component|semantic)\./, '');
 const initial = 'component.button.primary.bg';
+// Components with tokens but no docs page yet. Their tokens are listed here until the page ships;
+// a component page then lists its own (and this list drops it), so every token has a home.
+const pending = Object.keys(source.component).filter((k) => k !== 'focus' && !COMPONENTS[k]);
+const rowsFor = (name) => leaves(source.component[name]).map(([p, v]) => [[name, ...p], v]);
+const show = (v) => (isColor(v) ? null : typeof v === 'number' ? `${v}px` : String(v));
 ---
 <Docs
   title="Token explorer"
@@ -120,6 +128,37 @@ const initial = 'component.button.primary.bg';
       <ul class="used-by" id="result-usedby"></ul>
     </section>
   </div>
+
+  {pending.length > 0 && (
+    <section aria-labelledby="pending">
+      <h2 id="pending">Tokens for components without a page yet</h2>
+      <p>These components have tokens but no docs page. Each table moves to its component's page when that page ships.</p>
+      {pending.map((name) => (
+        <>
+          <h3 id={`pending-${name}`}>{name}</h3>
+          <TableWrap label={`${name} component tokens`}>
+            <table class="data">
+              <thead><tr><th scope="col">Token</th><th scope="col">CSS</th><th scope="col">Points at</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+              <tbody>
+                {rowsFor(name).map(([p, v]) => {
+                  const l = at(resolved.component.light, p), d = at(resolved.component.dark, p);
+                  return (
+                    <tr data-token={`component.${p.join('.')}`}>
+                      <th scope="row"><a href={`?token=component.${p.join('.')}`}><code>{p.join('.')}</code></a></th>
+                      <td><code>{componentVar(p)}</code></td>
+                      <td><code>{refName(v) || `${v}`}</code></td>
+                      <td>{isColor(l) ? <Swatch value={l} /> : <code>{show(l)}</code>}</td>
+                      <td>{isColor(d) ? <Swatch value={d} /> : <code>{show(d)}</code>}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </TableWrap>
+        </>
+      ))}
+    </section>
+  )}
 
   <script type="application/json" id="token-data" set:html={JSON.stringify(data)} />
   <script is:inline>
@@ -188,11 +227,14 @@ const initial = 'component.button.primary.bg';
       // Changing the select re-renders and keeps focus on the select.
       select.addEventListener('change', function () { go(select.value, false); });
       // "Used by" links switch tokens in place and move focus to the new result's heading.
-      used.addEventListener('click', function (e) {
-        var a = e.target.closest('a[data-token]');
+      // So do the token links in the "without a page yet" tables.
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[data-token], a[href^="?token="]');
         if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        var key = a.getAttribute('data-token') || new URLSearchParams(a.getAttribute('href')).get('token');
+        if (!byKey[key]) return;
         e.preventDefault();
-        if (go(a.getAttribute('data-token'), true)) title.focus();
+        if (go(key, true)) { title.focus({ preventScroll: true }); title.scrollIntoView({ block: 'start' }); }
       });
       window.addEventListener('popstate', function () {
         var k = new URLSearchParams(location.search).get('token');
