@@ -1,5 +1,7 @@
 # Flint Design System
 
+**Source-available, not open source.** The repository is public so our own apps, CI and Xcode can install it without managing access, and so the design decisions are open to read. It is not licensed for reuse: you may read it, you may not build with it. See [LICENSE](LICENSE). To ask about a license, mike@innersparkmedia.com.
+
 **Docs:** [flint.innersparkmedia.com](https://flint.innersparkmedia.com) (built from `docs/`). The workbench, every component live as MUI, shadcn/ui and plain CSS, is at `/workbench/`.
 
 The single source of truth for color, type, spacing, radius, size, motion, and elevation across AccessSpark, Inner Spark Media, and sister brands. Framework-agnostic tokens, plus a MUI theme factory, a shadcn/ui bridge and a Swift package. No shared component library in code yet (see ASDS-22); components live in the Figma library, and the workbench shows Flint versions of Button, Input and Checkbox for MUI, shadcn and plain CSS.
@@ -24,7 +26,7 @@ The build resolves every reference. CSS, JS, MUI, and Swift consumers always get
 
 The rule: Figma uses `/` and kebab-case, CSS uses `-` and kebab-case with a `--color-` prefix, JS keeps the camelCase path, and Swift joins the path in camelCase.
 
-## Install (private, git tag)
+## Install (git tag)
 
 ```bash
 npm install "github:InnerSpark/flint#semver:^1.13.0"
@@ -89,7 +91,7 @@ For a compact layout, use the object form: `createFlintTheme({ mode: 'light', de
 
 ### Swift / SwiftUI (iOS 16+, macOS 13+)
 
-Add the package in Xcode (File > Add Package Dependencies) with `https://github.com/InnerSpark/flint`, pinned to a version tag. The repo is private, so add your GitHub account under Xcode > Settings > Accounts first.
+Add the package in Xcode (File > Add Package Dependencies) with `https://github.com/InnerSpark/flint`, pinned to a version tag.
 
 ```swift
 import Flint
