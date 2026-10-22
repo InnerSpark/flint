@@ -74,9 +74,9 @@ export const COMPONENTS = {
     lead: 'Radio buttons pick exactly one option from a short list. Choosing one clears the others, and there is no way back to nothing chosen.',
     example: `<fieldset class="example-fieldset">
   <legend>Which site should we scan?</legend>
-  <label class="check-row"><input type="radio" name="scan-scope" class="flint-radio" checked /> Just this page</label>
-  <label class="check-row"><input type="radio" name="scan-scope" class="flint-radio" /> The whole site</label>
-  <label class="check-row"><input type="radio" name="scan-scope" class="flint-radio" disabled /> Pages behind sign-in (needs saved credentials)</label>
+  <label class="check-row"><input type="radio" name="scan-scope-__P__" class="flint-radio" checked /> Just this page</label>
+  <label class="check-row"><input type="radio" name="scan-scope-__P__" class="flint-radio" /> The whole site</label>
+  <label class="check-row"><input type="radio" name="scan-scope-__P__" class="flint-radio" disabled /> Pages behind sign-in (needs saved credentials)</label>
 </fieldset>`,
     when: [
       'Use radio buttons when exactly one option must be picked and people should see all the choices at once.',
