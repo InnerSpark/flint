@@ -4,7 +4,7 @@ export const WORKBENCH = {
     name: 'Button',
     lead: 'Four variants, every state, as MUI, shadcn/ui and plain CSS. All three read the button component tokens.',
     benches: [['primary', 'Primary', 'button/primary'], ['secondary', 'Secondary', 'button/secondary'], ['danger', 'Danger', 'button/danger'], ['text', 'Text', 'button/text']],
-    gap: 'The MUI theme does not apply the secondary and disabled button tokens yet, and its buttons are 36px tall instead of 40px (ASDS-44).',
+    gap: 'The MUI theme does not apply the secondary and disabled button tokens yet, and its buttons are 36px tall instead of 40px (ASDS-44). Busy: MUI\'s loading prop hides the label, and the shadcn Button has no busy state, so aria-busy changes nothing you can see.',
   },
   checkbox: {
     name: 'Checkbox',

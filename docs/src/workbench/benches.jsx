@@ -14,6 +14,7 @@ const BUTTON_STATES = [
   { label: 'Hover', cls: 'st-hover' },
   { label: 'Focus', cls: 'st-focus', note: 'keyboard focus' },
   { label: 'Disabled', disabled: true },
+  { label: 'Busy', busy: true, note: 'aria-busy' },
   { label: 'Live', cls: '', note: 'try it' },
 ];
 
@@ -28,9 +29,10 @@ const button = (variant) => ({
   states: BUTTON_STATES,
   render(impl, s) {
     const v = BUTTON[variant];
-    if (impl === 'MUI') return <MuiButton {...v.mui} disableElevation className={s.cls} disabled={s.disabled}>{v.label}</MuiButton>;
-    if (impl === 'shadcn') return <ShadButton variant={v.shad} className={s.cls} disabled={s.disabled}>{v.label}</ShadButton>;
-    return <button type="button" className={`flint-btn flint-btn--${v.plain} ${s.cls || ''}`} disabled={s.disabled}>{v.label}</button>;
+    const busy = s.busy ? { 'aria-busy': 'true', 'aria-disabled': 'true' } : {};
+    if (impl === 'MUI') return <MuiButton {...v.mui} disableElevation className={s.cls} disabled={s.disabled} loading={s.busy || undefined}>{v.label}</MuiButton>;
+    if (impl === 'shadcn') return <ShadButton variant={v.shad} className={s.cls} disabled={s.disabled} {...busy}>{v.label}</ShadButton>;
+    return <button type="button" className={`flint-btn flint-btn--${v.plain} ${s.cls || ''}`} disabled={s.disabled} {...busy}>{v.label}</button>;
   },
 });
 

@@ -21,6 +21,28 @@
 .flint-btn:disabled { background: var(--button-disabled-bg); color: var(--button-disabled-fg); border-color: transparent; cursor: not-allowed; }
 .flint-btn--secondary:disabled { border-color: var(--button-disabled-border); }
 .flint-btn--text:disabled { background: transparent; }
+/* aria-disabled: looks disabled but stays focusable, so keyboard and screen reader users can reach it
+   and hear why it's off. Prefer it when the reason sits next to the button. Block the click in code. */
+.flint-btn[aria-disabled="true"] { background: var(--button-disabled-bg); color: var(--button-disabled-fg); border-color: transparent; cursor: not-allowed; }
+.flint-btn--secondary[aria-disabled="true"] { border-color: var(--button-disabled-border); }
+.flint-btn--text[aria-disabled="true"] { background: transparent; }
+/* Icon-only: square, the height of the button. Needs an aria-label; the svg is aria-hidden. */
+.flint-btn svg { width: var(--icon-size-md); height: var(--icon-size-md); flex: none; }
+.flint-btn--icon { padding: 0; width: var(--button-height); }
+/* Busy: aria-busy="true" plus aria-disabled="true" while the action runs. The label stays (change it to
+   "Saving..." if that helps); the spinner is decorative. Under reduced motion it holds still. */
+.flint-btn[aria-busy="true"] { cursor: progress; }
+.flint-btn[aria-busy="true"]::before {
+  content: ""; width: 1em; height: 1em; flex: none; box-sizing: border-box;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
+  animation: flint-spin calc(var(--duration-slow) * 2.5) linear infinite;
+}
+@media (prefers-reduced-motion: reduce) { .flint-btn[aria-busy="true"]::before { animation: none; } }
+@keyframes flint-spin { to { transform: rotate(1turn); } }
+/* Windows high contrast: disabled reads as disabled, not as a live button. */
+@media (forced-colors: active) {
+  .flint-btn:disabled, .flint-btn[aria-disabled="true"] { color: GrayText; border-color: GrayText; }
+}
 
 .flint-input {
   box-sizing: border-box; width: 100%; height: var(--input-height); padding: 0 var(--space-12);

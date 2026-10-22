@@ -6,11 +6,23 @@ import shadInput from '../workbench/ui/input.jsx?raw';
 import shadCheckbox from '../workbench/ui/checkbox.jsx?raw';
 import shadRadio from '../workbench/ui/radio.jsx?raw';
 
-/** The components.css rules whose selector starts with the given class, comments dropped. */
-const cssFor = (cls) => (plainCss.match(/[^{}]+\{[^}]*\}/g) || [])
-  .map((block) => block.replace(/\/\*[\s\S]*?\*\//g, '').trim())
-  .filter((block) => block.startsWith(`.${cls}`))
-  .join('\n');
+/** Top-level blocks of components.css, comments dropped. @media and @keyframes stay whole. */
+const blocks = (() => {
+  const css = plainCss.replace(/\/\*[\s\S]*?\*\//g, '');
+  const out = [];
+  let depth = 0, start = 0;
+  for (let i = 0; i < css.length; i++) {
+    if (css[i] === '{') depth++;
+    else if (css[i] === '}' && --depth === 0) { out.push(css.slice(start, i + 1).trim()); start = i + 1; }
+  }
+  return out;
+})();
+/** The rules for one component class: its own rules, @media blocks that touch it, and the keyframes they use. */
+const cssFor = (cls) => {
+  const own = blocks.filter((b) => b.startsWith(`.${cls}`) || (b.startsWith('@media') && b.includes(`.${cls}`)));
+  const frames = blocks.filter((b) => b.startsWith('@keyframes') && own.some((o) => o.includes(b.split(/\s+/)[1])));
+  return [...own, ...frames].join('\n');
+};
 
 const errorIcon = '<svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 
@@ -26,6 +38,10 @@ export const COMPONENTS = {
 <div class="example-row">
   <button type="button" class="flint-btn flint-btn--danger">Delete trip</button>
   <button type="button" class="flint-btn flint-btn--primary" disabled>Save trip</button>
+</div>
+<div class="example-row">
+  <button type="button" class="flint-btn flint-btn--primary" aria-busy="true" aria-disabled="true">Saving trip</button>
+  <button type="button" class="flint-btn flint-btn--secondary flint-btn--icon" aria-label="Add stop"><svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 4v12M4 10h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
 </div>`,
     when: [
       'Use a button to do something: save, delete, open a dialog, start a flow.',
@@ -36,6 +52,9 @@ export const COMPONENTS = {
       ['Secondary', 'Every other action next to a primary one.'],
       ['Danger', 'Actions that destroy something. Always followed by a confirm step.'],
       ['Text', 'Low-emphasis actions in dense areas, like table rows and toolbars.'],
+      ['Icon only', 'Any variant plus flint-btn--icon. Square, the button\'s height. Needs an aria-label.'],
+      ['Busy', 'aria-busy="true" while the action runs. Keep the label; a spinner shows next to it.'],
+      ['Disabled', 'disabled, or aria-disabled="true" to keep it focusable so people can find out why.'],
     ],
     guidance: [
       ['One primary button per view. Everything else is secondary or text.', 'Line up two primary buttons and make people guess which one matters.'],
@@ -43,7 +62,7 @@ export const COMPONENTS = {
       ['When a button is disabled, say why next to it.', 'Disable a button with no explanation and leave people stuck.'],
     ],
     code: {
-      css: { label: 'HTML', code: '<button type="button" class="flint-btn flint-btn--primary">Save trip</button>\n<button type="button" class="flint-btn flint-btn--secondary">Add stop</button>\n<button type="button" class="flint-btn flint-btn--danger">Delete trip</button>\n<button type="button" class="flint-btn flint-btn--text">Skip for now</button>', rules: cssFor('flint-btn') },
+      css: { label: 'HTML', code: '<button type="button" class="flint-btn flint-btn--primary">Save trip</button>\n<button type="button" class="flint-btn flint-btn--secondary">Add stop</button>\n<button type="button" class="flint-btn flint-btn--danger">Delete trip</button>\n<button type="button" class="flint-btn flint-btn--text">Skip for now</button>\n\n<!-- Busy: keep it focusable, block the click in code -->\n<button type="button" class="flint-btn flint-btn--primary" aria-busy="true" aria-disabled="true">Saving trip</button>\n\n<!-- Icon only: name it, hide the icon -->\n<button type="button" class="flint-btn flint-btn--secondary flint-btn--icon" aria-label="Add stop">\n  <svg aria-hidden="true" focusable="false">...</svg>\n</button>', rules: cssFor('flint-btn') },
       mui: `import Button from '@mui/material/Button';
 
 <Button variant="contained">Save trip</Button>
@@ -65,6 +84,8 @@ export const COMPONENTS = {
       'The visible label is the accessible name. Don\'t override it with a different aria-label.',
       'An icon-only button needs an aria-label, and its icon is aria-hidden.',
       'A toggle button uses aria-pressed. A button that opens a menu uses aria-expanded.',
+      'A busy button sets aria-busy="true" and aria-disabled="true". Announce the result (saved, or the error) in a live region when it finishes.',
+      'aria-disabled keeps a button in the tab order so people can reach it and read why it is off. Block the click in your handler.',
       'Use a real <button>. A <div> with a click handler is not reachable by keyboard.',
     ],
     target: 'Buttons are 40px tall (control.md), above the 24px minimum. On iOS, at least 44pt.',
