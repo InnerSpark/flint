@@ -2,7 +2,11 @@
 import Docs from '../layouts/Docs.astro';
 import Swatch from '../components/Swatch.astro';
 import TableWrap from '../components/TableWrap.astro';
-import { resolved, source, contrast, leaves, refName, cssVarForPath, componentVar, camel, SHADCN_MAP } from '../lib/flint.js';
+import Illustration from '../components/Illustration.astro';
+import { PRINCIPLE_GROUPS } from '../data/principles.js';
+import { COMPONENTS } from '../data/components.js';
+import { resolved, source, contrast, leaves, refName, componentVar, camel, SHADCN_MAP } from '../lib/flint.js';
+import '../styles/home.css';
 
 // One real decision, traced from the ladder to every platform. All of it read from the build.
 const compPath = ['button', 'primary', 'bg'];
@@ -16,22 +20,61 @@ const shadcnName = Object.entries(SHADCN_MAP).find(([, p]) => p === semRef)?.[0]
 const semanticCount = leaves(resolved.semantic.light).length;
 const componentCount = leaves(resolved.component.light).length;
 const pairsPerMode = contrast.pairs.length / 2;
+const shippedComponents = Object.values(COMPONENTS).map((c) => c.name);
+
+const platforms = [
+  ['Web and CSS', '/get-started/web/', 'Variables and component classes for Astro, EJS and any static site. Dark mode and density are one attribute each.'],
+  ['MUI', '/get-started/mui/', 'A ready theme for React apps on MUI, in light and dark, comfortable and compact.'],
+  ['shadcn/ui', '/get-started/shadcn/', 'One import maps every shadcn variable onto Flint for Tailwind v4 projects.'],
+  ['iOS and SwiftUI', '/get-started/ios/', 'A Swift package with colors, type, space, motion and UIKit colors.'],
+  ['Figma', '/get-started/figma/', 'The Flint library mirrors the tokens. If they ever disagree, the repo wins.'],
+  ['Components', '/components/', `${shippedComponents.join(', ')}. Usage, style, code and accessibility for each.`],
+];
+const foundations = [
+  ['Color', '/foundations/color/', `${semanticCount} semantic colors per mode and the ladders they point at.`],
+  ['Typography', '/foundations/typography/', `${Object.keys(resolved.typography).length} type styles in Open Sans, nothing below 12px.`],
+  ['Spacing and size', '/foundations/spacing/', 'The spacing scale, radius, control heights and the 24px minimum target.'],
+  ['Contrast', '/foundations/contrast/', 'Every pairing the build measures, with its ratio.'],
+  ['Motion', '/foundations/motion/', 'Durations and easing as tokens, and what changes under reduced motion.'],
+  ['Token explorer', '/foundations/tokens/', 'Follow any token to the ladder, in light and dark, with its name on every platform.'],
+];
 ---
 <Docs home description="Flint is the design system behind AccessSpark and Inner Spark Media: one token source for CSS, MUI, shadcn/ui and SwiftUI.">
   <section class="hero" aria-labelledby="page-title">
-    <h1 id="page-title" tabindex="-1">Flint</h1>
-    <p class="lead">
-      The design system behind AccessSpark and Inner Spark Media. One token source drives CSS, MUI, shadcn/ui and SwiftUI,
-      and every build proves they agree and that the text clears 7:1.
-    </p>
-    <div class="hero-actions">
-      <a class="flint-btn flint-btn--primary" href="/get-started/">Get started</a>
-      <a class="flint-btn flint-btn--secondary" href="/foundations/color/">Browse foundations</a>
+    <div class="home-wrap hero-grid">
+      <div>
+        <p class="eyebrow">Flint design system</p>
+        <h1 id="page-title" tabindex="-1">Accessible by default, on every platform.</h1>
+        <p class="lead">
+          The design system behind AccessSpark and Inner Spark Media. One token source drives CSS, MUI, shadcn/ui and SwiftUI,
+          and every build proves they agree and that the text clears 7:1.
+        </p>
+        <div class="hero-actions">
+          <a class="flint-btn flint-btn--primary" href="/get-started/">Get started</a>
+          <a class="flint-btn flint-btn--secondary" href="/principles/">Read the principles</a>
+        </div>
+      </div>
+      <div class="hero-art"><Illustration name="tiers" /></div>
     </div>
+  </section>
 
-    <div class="flow">
+  <section class="band band-subtle" aria-labelledby="platforms">
+    <div class="home-wrap">
+      <p class="eyebrow">Get started</p>
+      <h2 id="platforms">Start with your platform</h2>
+      <ul class="cards">
+        {platforms.map(([t, href, d]) => (
+          <li class="card"><h3><a href={href}>{t}</a></h3><p>{d}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="flow-title">
+    <div class="home-wrap">
+      <p class="eyebrow">How it works</p>
       <h2 id="flow-title">One decision, every platform</h2>
-      <p>The primary button's fill, traced from the color ladder to the code each platform ships. Change one ladder step and all of it follows.</p>
+      <p class="band-lead">The primary button's fill, traced from the color ladder to the code each platform ships. Change one ladder step and all of it follows.</p>
       <ol class="flow-track" aria-labelledby="flow-title">
         <li class="flow-step">
           <p class="flow-tier">Primitive</p>
@@ -67,39 +110,63 @@ const pairsPerMode = contrast.pairs.length / 2;
           </ul>
         </li>
       </ol>
+      <p class="more"><a class="flint-link flint-link--standalone" href="/foundations/tokens/">Trace any token in the explorer <span aria-hidden="true">&rarr;</span></a></p>
     </div>
   </section>
 
-  <div class="home-body">
-    <h2 id="platforms">Start with your platform</h2>
-    <ul class="link-list">
-      <li><a href="/get-started/web/"><strong>Web and CSS</strong><span>Variables for Astro, EJS and any static site. Dark mode and density are one attribute each.</span></a></li>
-      <li><a href="/get-started/mui/"><strong>MUI</strong><span>A ready theme for React apps on MUI, in light and dark, comfortable and compact.</span></a></li>
-      <li><a href="/get-started/shadcn/"><strong>shadcn/ui</strong><span>One import maps every shadcn variable onto Flint for Tailwind v4 projects.</span></a></li>
-      <li><a href="/get-started/ios/"><strong>iOS and SwiftUI</strong><span>A Swift package with colors, type, space, motion and UIKit colors.</span></a></li>
-      <li><a href="/get-started/figma/"><strong>Figma</strong><span>The Flint library mirrors the tokens. If they ever disagree, the repo wins.</span></a></li>
-    </ul>
+  <section class="band band-subtle" aria-labelledby="principles">
+    <div class="home-wrap">
+      <p class="eyebrow">Principles</p>
+      <h2 id="principles">How Flint looks, behaves and talks</h2>
+      <ul class="cards cards-3">
+        {PRINCIPLE_GROUPS.map((g) => (
+          <li class="card card-art">
+            <Illustration name={g.illustration} />
+            <h3><a href={`/principles/#${g.id}`}>{g.title}</a></h3>
+            <p>{g.lead}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
-    <h2 id="checks">What every build checks</h2>
-    <p>A release cannot ship if any of these fail.</p>
-    <TableWrap label="Build checks">
-      <table class="data">
-        <thead><tr><th scope="col">Check</th><th scope="col">Covers</th><th scope="col">Bar</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">Contrast</th><td>{pairsPerMode} pairings in each mode, from body text to chart marks</td><td>7:1 for text, 3:1 for edges, focus rings and marks</td></tr>
-          <tr><th scope="row">Parity</th><td>{semanticCount} semantic and {componentCount} component tokens across CSS, MUI, shadcn and Swift</td><td>Every platform lands on the value tokens.json gives it</td></tr>
-          <tr><th scope="row">Usage</th><td>Control edges and density</td><td>No control drawn with a decorative border; density never shrinks a target</td></tr>
-          <tr><th scope="row">Pages</th><td>These docs and the workbench, light and dark</td><td>Zero axe violations, WCAG 2.2 A and AA</td></tr>
-        </tbody>
-      </table>
-    </TableWrap>
+  <section class="band" aria-labelledby="checks">
+    <div class="home-wrap">
+      <p class="eyebrow">Proof</p>
+      <h2 id="checks">What every build checks</h2>
+      <p class="band-lead">A release cannot ship if any of these fail.</p>
+      <TableWrap label="Build checks">
+        <table class="data">
+          <thead><tr><th scope="col">Check</th><th scope="col">Covers</th><th scope="col">Bar</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Contrast</th><td>{pairsPerMode} pairings in each mode, from body text to chart marks</td><td>7:1 for text, 3:1 for edges, focus rings and marks</td></tr>
+            <tr><th scope="row">Parity</th><td>{semanticCount} semantic and {componentCount} component tokens across CSS, MUI, shadcn and Swift</td><td>Every platform lands on the value tokens.json gives it</td></tr>
+            <tr><th scope="row">Components</th><td>Every rule in components.css</td><td>No color literals, no unknown variables, no stray px values</td></tr>
+            <tr><th scope="row">Usage</th><td>Control edges and density</td><td>No control drawn with a decorative border; density never shrinks a target</td></tr>
+            <tr><th scope="row">Pages</th><td>These docs and the workbench, light and dark</td><td>Zero axe violations, WCAG 2.2 A and AA</td></tr>
+          </tbody>
+        </table>
+      </TableWrap>
+    </div>
+  </section>
 
-    <h2 id="foundations">Foundations</h2>
-    <ul class="link-list">
-      <li><a href="/foundations/color/"><strong>Color</strong><span>{semanticCount} semantic colors per mode and the ladders they point at.</span></a></li>
-      <li><a href="/foundations/typography/"><strong>Typography</strong><span>{Object.keys(resolved.typography).length} type styles in Open Sans, nothing below 12px.</span></a></li>
-      <li><a href="/foundations/spacing/"><strong>Spacing and size</strong><span>The spacing scale, radius, control heights and the 24px minimum target.</span></a></li>
-      <li><a href="/foundations/contrast/"><strong>Contrast</strong><span>Every pairing the build measures, with its ratio.</span></a></li>
-    </ul>
-  </div>
+  <section class="band band-subtle" aria-labelledby="foundations">
+    <div class="home-wrap">
+      <p class="eyebrow">Foundations</p>
+      <h2 id="foundations">The decisions under every component</h2>
+      <ul class="cards">
+        {foundations.map(([t, href, d]) => (
+          <li class="card"><h3><a href={href}>{t}</a></h3><p>{d}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="cta-band" aria-labelledby="cta">
+    <div class="home-wrap">
+      <h2 id="cta">Build it once. Ship it everywhere.</h2>
+      <p>Install Flint by git tag and pick up every fix on the next update.</p>
+      <a class="flint-btn flint-btn--secondary" href="/get-started/">Get started</a>
+    </div>
+  </section>
 </Docs>

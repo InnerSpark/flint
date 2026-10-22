@@ -16,6 +16,11 @@ import { pkg } from '../lib/flint.js';
 const { title, lead, crumb, toc = [], tabs, wide = false, home = false, description } = Astro.props;
 const path = Astro.url.pathname;
 const isCurrent = (href) => path === href;
+// Top nav, as on the AccessSpark site. A section is current when the page sits inside it.
+const TOP = [['Get started', '/get-started/'], ['Principles', '/principles/'], ['Foundations', '/foundations/color/'], ['Components', '/components/'], ['Workbench', '/workbench/']];
+const section = (href) => '/' + href.split('/')[1] + '/';
+const topCurrent = (href) => (path === href ? 'page' : path.startsWith(section(href)) && section(href) !== '/' ? 'true' : undefined);
+const year = new Date().getFullYear();
 const pageTitle = home ? 'Flint Design System: one token source for web and iOS' : `${title} | Flint Design System by Inner Spark Media`;
 // Search snippets cut off near 160 characters: end on a whole word.
 const clamp = (s) => (s.length <= 158 ? s : s.slice(0, 155).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '') + '...');
@@ -73,14 +78,17 @@ const jsonLd = {
     <button class="header-button menu-button" type="button" aria-expanded="false" aria-controls="sidenav" id="menu-button">
       <Icon name="menu" /> Menu
     </button>
-    <a class="brand" href="/"><img src="/flint-icon.svg" alt="" width="28" height="28" />Flint <span>Design System</span></a>
+    <a class="brand" href="/"><img src="/flint-icon.svg" alt="" width="28" height="28" /><strong>Flint</strong> <span>Design System</span></a>
+    <nav class="top-nav" aria-label="Sections">
+      <ul>{TOP.map(([label, href]) => <li><a href={href} aria-current={topCurrent(href)}>{label}</a></li>)}</ul>
+    </nav>
     <div class="header-links">
-      <a class="hide-small" href="/workbench/">Workbench</a>
       <button class="header-button" type="button" id="theme-toggle" aria-pressed="false"><Icon name="moon" /><span class="theme-label">Dark mode</span></button>
+      <a class="flint-btn flint-btn--primary header-cta" href="/get-started/">Get started</a>
     </div>
   </header>
 
-  <div class="shell">
+  <div class={`shell ${home ? 'is-home' : ''}`}>
     <nav class="sidenav" id="sidenav" aria-label="Docs">
       {NAV.map((group) => (
         <>
@@ -122,12 +130,29 @@ const jsonLd = {
           )}
         </div>
       )}
-      <footer class="site-footer">
-        <p>Flint {pkg.version}. Built and audited by Inner Spark Media. Published accessibility target: WCAG 2.2 AA.</p>
-        <p>© 2026 Inner Spark Media, LLC. All rights reserved. <a href="https://github.com/InnerSpark/flint/blob/main/LICENSE">License</a>.</p>
-      </footer>
     </div>
   </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="brand" href="/"><img src="/flint-icon-inverse.svg" alt="" width="28" height="28" /><strong>Flint</strong> <span>Design System</span></a>
+        <p>The design system behind AccessSpark and Inner Spark Media. Accessible in the primitive, one source for every platform.</p>
+      </div>
+      <nav class="footer-cols" aria-label="Footer">
+        {NAV.filter((g) => g.title !== 'Workbench').map((g) => (
+          <div class="footer-col">
+            <p class="footer-heading">{g.title}</p>
+            <ul>{g.items.slice(0, 6).map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+          </div>
+        ))}
+      </nav>
+    </div>
+    <div class="footer-legal">
+      <p>Flint {pkg.version}. Built and audited by Inner Spark Media. Published accessibility target: WCAG 2.2 AA.</p>
+      <p>© {year} Inner Spark Media, LLC. All rights reserved. <a href="https://github.com/InnerSpark/flint/blob/main/LICENSE">License</a>.</p>
+    </div>
+  </footer>
 
   <script is:inline>
     (function () {

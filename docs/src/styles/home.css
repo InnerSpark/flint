@@ -1,0 +1,48 @@
+/* Home page, styled after the AccessSpark marketing site: a tinted hero, alternating section bands,
+   bordered cards and a navy call-to-action band. Flint variables only. */
+.home-wrap { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-48); }
+
+.eyebrow { margin: 0 0 var(--space-12); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-action-primary); }
+
+.hero { padding: var(--space-64) 0; background: radial-gradient(60% 120% at 80% 0%, var(--site-tint), transparent 60%), var(--color-surface-default); border-bottom: 1px solid var(--color-border-default); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: var(--space-64); align-items: center; }
+.hero h1 {
+  margin: 0; max-width: 16ch; color: var(--color-text-heading);
+  font-size: var(--type-display-xl-size); font-weight: var(--font-weight-extrabold); line-height: var(--type-display-xl-line-height); letter-spacing: -0.02em;
+}
+.hero .lead { max-width: 56ch; margin-top: var(--space-24); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-12); margin-top: var(--space-32); }
+.hero-actions a { text-decoration: none; }
+.hero-art { justify-self: end; width: 100%; max-width: 480px; }
+
+.band { padding: var(--space-64) 0; }
+.band-subtle { background: var(--color-surface-subtle); }
+.band h2 { margin: 0 0 var(--space-32); color: var(--color-text-heading); font-size: var(--type-heading-h1-size); font-weight: var(--font-weight-extrabold); line-height: var(--type-heading-h1-line-height); letter-spacing: -0.02em; }
+.band .band-lead { margin: calc(var(--space-24) * -1) 0 var(--space-32); max-width: 70ch; color: var(--color-text-default); }
+.band .more { margin: var(--space-24) 0 0; }
+
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-24); }
+.card { background: var(--color-surface-default); border: 1px solid var(--color-border-default); border-radius: var(--radius-card-lg); padding: var(--space-24); }
+.card h3 { margin: 0 0 var(--space-8); font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); }
+.card h3 a { color: var(--color-text-link); text-decoration: underline; text-decoration-thickness: from-font; text-underline-offset: 0.15em; }
+.card h3 a:hover { text-decoration-thickness: 0.125em; }
+.card p { margin: 0; font-size: var(--font-size-sm); color: var(--color-text-default); }
+.card-art .illo { margin-bottom: var(--space-16); border-radius: var(--radius-md); }
+
+.cta-band { padding: var(--space-64) 0; text-align: center; color: var(--site-band-fg);
+  background: radial-gradient(70% 140% at 85% -10%, color-mix(in srgb, var(--color-action-secondary) 16%, transparent), transparent 60%), var(--site-band-bg); }
+.cta-band h2 { margin: 0 0 var(--space-12); color: var(--site-band-fg); font-size: var(--type-heading-h1-size); font-weight: var(--font-weight-extrabold); letter-spacing: -0.02em; }
+.cta-band p { margin: 0 0 var(--space-32); color: var(--site-band-muted); }
+.cta-band a { text-decoration: none; }
+.cta-band :focus-visible { outline-color: var(--site-band-fg); }
+
+@media (max-width: 1200px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) {
+  .home-wrap { padding: 0 var(--space-16); }
+  .hero { padding: var(--space-48) 0; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); }
+  .hero-art { display: none; }
+  .hero h1 { font-size: var(--type-display-size); line-height: var(--type-display-line-height); }
+  .band, .cta-band { padding: var(--space-48) 0; }
+  .cards, .cards-3 { grid-template-columns: minmax(0, 1fr); }
+}
