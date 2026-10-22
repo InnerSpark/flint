@@ -16,6 +16,7 @@
   ],
   "files": [
     "tokens.json",
+    "css",
     "dist",
     "scripts",
     "mui"
@@ -34,6 +35,7 @@
     "./fonts.css": "./dist/fonts.css",
     "./tokens.dtcg.json": "./dist/tokens.dtcg.json",
     "./shadcn.css": "./dist/shadcn.css",
+    "./components.css": "./dist/components.css",
     "./contrast.json": "./dist/contrast.json",
     "./mui": {
       "types": "./mui/index.d.ts",
@@ -41,9 +43,9 @@
     }
   },
   "scripts": {
-    "build": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs",
-    "check": "node scripts/check-contrast.mjs && node scripts/check-parity.mjs",
-    "prepare": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs",
+    "build": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs",
+    "check": "node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs",
+    "prepare": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs",
     "release:notes": "node scripts/next-version.mjs",
     "release:prepare": "node scripts/release-prepare.mjs",
     "preflight": "node scripts/preflight.mjs",

@@ -4,6 +4,7 @@ Flint tokens follow semver, independent of the consuming apps.
 
 ## Unreleased
 
+- **`@innerspark/flint/components.css` (ASDS-58).** The plain CSS components (Button, Input, Checkbox, Radio) move from the docs workbench into the package: source in `css/components.css`, shipped as `dist/components.css`. The docs and workbench import the package file, so there is one copy. New `scripts/check-components.mjs` runs in `npm run build` and fails on a color literal, a variable `tokens.css` does not define, or a px value outside borders and glyph geometry. Additive.
 - **Principles page (ASDS-47, ASDS-48, ASDS-49).** New `/principles/`: how Flint looks, behaves and talks. Each principle links to where it is enforced. The page count comes from `docs/src/data/principles.js`, never typed by hand. Usage rules gain the color rules (one action color, red only for danger and error) and a Words section.
 - **Token explorer (ASDS-50).** New `/foundations/tokens/`: pick any component, semantic or primitive token to see its chain to the ladder in light and dark, its Figma, CSS, JS and Swift names, and what references it. All computed from the build. "Used by" links move focus to the new result heading.
 - **Illustrations (ASDS-56).** First spot illustrations (a hero and the three principle groups), drawn from the brand shard and spark. Colors are Flint variables mapped to facet roles in `docs/src/styles/illustration.css`, so they flip with dark mode. Decorative and `aria-hidden`. The spark twinkle respects reduced motion. Gap: the facet roles should move into `tokens.json`.

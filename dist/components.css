@@ -1,0 +1,62 @@
+/* GENERATED copy of css/components.css. Flint Design System. Edit the source, not this file. */
+/* Flint components (ASDS-58). Plain CSS classes on the component tokens, for any stack: Astro, EJS,
+   React. Load after tokens.css. Source of @innerspark/flint/components.css; the build copies it to
+   dist/ and scripts/check-components.mjs fails on a color literal, an unknown variable, or a px value
+   outside borders and glyph geometry. */
+.flint-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-8);
+  min-height: var(--button-height); padding: 0 var(--space-16);
+  border: 1px solid transparent; border-radius: var(--button-radius);
+  font: 700 var(--font-size-sm) / 1.2 var(--font-sans); cursor: pointer;
+}
+.flint-btn:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-btn--primary { background: var(--button-primary-bg); color: var(--button-primary-fg); }
+.flint-btn--primary:hover { background: var(--button-primary-bg-hover); }
+.flint-btn--secondary { background: var(--button-secondary-bg); color: var(--button-secondary-fg); border-color: var(--button-secondary-border); }
+.flint-btn--secondary:hover { background: var(--button-secondary-bg-hover); }
+.flint-btn--danger { background: var(--button-danger-bg); color: var(--button-danger-fg); }
+.flint-btn--danger:hover { background: var(--button-danger-bg-hover); }
+.flint-btn--text { background: transparent; color: var(--button-text-fg); }
+.flint-btn--text:hover { background: var(--button-text-bg-hover); }
+.flint-btn:disabled { background: var(--button-disabled-bg); color: var(--button-disabled-fg); border-color: transparent; cursor: not-allowed; }
+.flint-btn--secondary:disabled { border-color: var(--button-disabled-border); }
+.flint-btn--text:disabled { background: transparent; }
+
+.flint-input {
+  box-sizing: border-box; width: 100%; height: var(--input-height); padding: 0 var(--space-12);
+  border: 1px solid var(--input-border); border-radius: var(--input-radius);
+  background: var(--input-bg); color: var(--input-fg); font: 400 var(--font-size-md) / 1.5 var(--font-sans);
+}
+.flint-input::placeholder { color: var(--input-placeholder); opacity: 1; }
+.flint-input:hover { border-color: var(--input-border-hover); }
+.flint-input:focus-visible { border-color: var(--input-border-focus); outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-input[aria-invalid="true"] { border-color: var(--input-border-error); }
+.flint-input:disabled { background: var(--color-action-disabled-bg); color: var(--color-action-disabled); border-color: var(--color-border-disabled); }
+
+.flint-check {
+  appearance: none; display: inline-grid; place-content: center; margin: 0; cursor: pointer;
+  width: var(--checkbox-size); height: var(--checkbox-size);
+  border: 2px solid var(--checkbox-border); border-radius: var(--checkbox-radius); background: var(--input-bg);
+}
+.flint-check::after { content: ""; width: 12px; height: 6px; border: solid transparent; border-width: 0 0 3px 3px; transform: translateY(-2px) rotate(-45deg); }
+.flint-check:hover { border-color: var(--input-border-hover); }
+.flint-check:checked { background: var(--checkbox-checked-bg); border-color: var(--checkbox-checked-bg); }
+.flint-check:checked::after { border-color: var(--checkbox-checked-fg); }
+.flint-check:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-check:disabled { border-color: var(--color-border-disabled); background: var(--color-action-disabled-bg); cursor: not-allowed; }
+.flint-check:disabled:checked::after { border-color: var(--color-action-disabled); }
+
+/* Radio: same control tokens as the checkbox, but round and never multi-select. The dot is
+   drawn with a box-shadow inset so it scales with the box and needs no extra element. */
+.flint-radio {
+  appearance: none; display: inline-grid; place-content: center; margin: 0; cursor: pointer;
+  width: var(--radio-size); height: var(--radio-size);
+  border: 2px solid var(--radio-border); border-radius: 50%; background: var(--input-bg);
+}
+.flint-radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: transparent; }
+.flint-radio:hover { border-color: var(--radio-border-hover); }
+.flint-radio:checked { background: var(--radio-checked-bg); border-color: var(--radio-checked-bg); }
+.flint-radio:checked::after { background: var(--radio-checked-fg); }
+.flint-radio:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-radio:disabled { border-color: var(--radio-disabled); background: var(--radio-disabled-bg); cursor: not-allowed; }
+.flint-radio:disabled:checked::after { background: var(--radio-disabled); }

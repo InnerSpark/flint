@@ -7,6 +7,7 @@
  *   dist/index.d.ts   types
  *   dist/swift/Flint.swift  SwiftUI tokens (SwiftPM via Package.swift)
  *   dist/shadcn.css   shadcn/ui + Tailwind v4 bridge onto the Flint CSS variables (ASDS-40)
+ *   dist/components.css  plain CSS component classes, copied from css/components.css (ASDS-58)
  * No runtime dependencies; Node only.
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -590,4 +591,9 @@ private func dynamic(light: UInt32, lightOpacity: Double = 1, dark: UInt32, dark
 }
 `);
 
-console.log('Built dist/: tokens.json, tokens.css, tokens.media.css, fonts.css, shadcn.css, index.js, index.d.ts, tokens.dtcg.json, swift/Flint.swift');
+// Component classes (ASDS-58). Hand-written in css/components.css, shipped from dist/ like every other
+// output. scripts/check-components.mjs guards it after the build.
+writeFileSync(join(dist, 'components.css'), `/* GENERATED copy of css/components.css. Flint Design System. Edit the source, not this file. */
+${readFileSync(join(root, 'css', 'components.css'), 'utf8')}`);
+
+console.log('Built dist/: tokens.json, tokens.css, tokens.media.css, fonts.css, shadcn.css, components.css, index.js, index.d.ts, tokens.dtcg.json, swift/Flint.swift');

@@ -1,6 +1,6 @@
 /* Workbench pages only (imported by the Bench island). Tailwind without its preflight, so the docs
    pages keep their own base styles. Layer order puts MUI between base and Tailwind's utilities, the
-   same setup an app mixing MUI and Tailwind v4 uses. Plain CSS (plain.css, loaded by site.css) is
+   same setup an app mixing MUI and Tailwind v4 uses. Plain CSS (@innerspark/flint/components.css, loaded by site.css) is
    unlayered, so it sits above all of it, the way it would on a static site. */
 @layer theme, base, mui, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);

@@ -1,12 +1,12 @@
 // Component docs content. Live examples use the plain-CSS classes from the workbench; code tabs read
 // the workbench source directly, so the docs show the exact code the workbench tests.
-import plainCss from '../workbench/plain.css?raw';
+import plainCss from '../../../css/components.css?raw';
 import shadButton from '../workbench/ui/button.jsx?raw';
 import shadInput from '../workbench/ui/input.jsx?raw';
 import shadCheckbox from '../workbench/ui/checkbox.jsx?raw';
 import shadRadio from '../workbench/ui/radio.jsx?raw';
 
-/** The plain.css rules whose selector starts with the given class, comments dropped. */
+/** The components.css rules whose selector starts with the given class, comments dropped. */
 const cssFor = (cls) => (plainCss.match(/[^{}]+\{[^}]*\}/g) || [])
   .map((block) => block.replace(/\/\*[\s\S]*?\*\//g, '').trim())
   .filter((block) => block.startsWith(`.${cls}`))

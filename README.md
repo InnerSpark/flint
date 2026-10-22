@@ -4,7 +4,7 @@
 
 **Docs:** [flint.innersparkmedia.com](https://flint.innersparkmedia.com) (built from `docs/`). The workbench, every component live as MUI, shadcn/ui and plain CSS, is at `/workbench/`.
 
-The single source of truth for color, type, spacing, radius, size, motion, and elevation across AccessSpark, Inner Spark Media, and sister brands. Framework-agnostic tokens, plus a MUI theme factory, a shadcn/ui bridge and a Swift package. No shared component library in code yet (see ASDS-22); components live in the Figma library, and the workbench shows Flint versions of Button, Input and Checkbox for MUI, shadcn and plain CSS.
+The single source of truth for color, type, spacing, radius, size, motion, and elevation across AccessSpark, Inner Spark Media, and sister brands. Framework-agnostic tokens, plus a MUI theme factory, a shadcn/ui bridge and a Swift package. Components ship as plain CSS classes in `@innerspark/flint/components.css` (ASDS-57), with a React layer on Radix to follow. The workbench shows each one as MUI, shadcn and plain CSS.
 
 `tokens.json` is the source. The build emits CSS custom properties, typed JS exports, a resolved `tokens.json`, W3C DTCG, and SwiftUI tokens into `dist/`.
 
@@ -49,6 +49,20 @@ import '@innerspark/flint/tokens.css';
 Dark mode: set `data-theme="dark"` on a parent; every `--color-*` flips. For automatic dark with no toggle, import `@innerspark/flint/tokens.media.css` instead, which flips via `prefers-color-scheme`. Optional metric-matched fallback (no layout shift): `import '@innerspark/flint/fonts.css';` and add `'Open Sans Fallback'` to your stack.
 
 Motion and layering ship as tokens too: `var(--duration-base)` / `var(--ease-standard)` for transitions, `var(--z-modal)` etc. for stacking (also on the `motion` and `zIndex` JS exports). Respect `prefers-reduced-motion`: gate non-essential transitions on it.
+
+### Components (plain CSS)
+
+```js
+import '@innerspark/flint/tokens.css';
+import '@innerspark/flint/components.css';
+```
+
+```html
+<button class="flint-btn flint-btn--primary">Save changes</button>
+<label class="check-row"><input type="checkbox" class="flint-check" /> Email me updates</label>
+```
+
+Classes are `.flint-<component>` with `--<variant>` modifiers (`flint-btn--secondary`, `--danger`, `--text`). States come from native attributes (`:disabled`, `:checked`, `aria-invalid="true"`), never extra classes. Every value is a component token, so dark mode and density follow. Source: `css/components.css`.
 
 ### JS / TS
 
@@ -118,7 +132,7 @@ Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--r
 ## Build
 
 ```bash
-npm run build   # regenerates dist/ from tokens.json, then runs the contrast check and the parity test
+npm run build   # regenerates dist/ from tokens.json and css/, then runs the contrast, parity and component CSS checks
 ```
 
 `dist/` is committed so git-tag installs work without a build step; `prepare` also rebuilds on install.

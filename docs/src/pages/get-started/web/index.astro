@@ -2,7 +2,7 @@
 import Docs from '../../../layouts/Docs.astro';
 import Code from '../../../components/Code.astro';
 import Notice from '../../../components/Notice.astro';
-const toc = [{ id: 'import', text: 'Import the variables' }, { id: 'use', text: 'Use them' }, { id: 'dark', text: 'Dark mode' }, { id: 'density', text: 'Density' }, { id: 'fonts', text: 'Fonts' }];
+const toc = [{ id: 'import', text: 'Import the variables' }, { id: 'use', text: 'Use them' }, { id: 'components', text: 'Components' }, { id: 'dark', text: 'Dark mode' }, { id: 'density', text: 'Density' }, { id: 'fonts', text: 'Fonts' }];
 const importCode = `import '@innerspark/flint/tokens.css';`;
 const useCode = `.card {
   background: var(--color-surface-default);
@@ -34,6 +34,10 @@ const darkCode = `<!-- the whole page -->
 <!-- or one section -->
 <section data-theme="dark">...</section>
 <section data-theme="light">...</section>`;
+const componentsCode = `import '@innerspark/flint/tokens.css';
+import '@innerspark/flint/components.css';`;
+const componentHtml = `<button class="flint-btn flint-btn--primary">Save changes</button>
+<button class="flint-btn flint-btn--secondary">Cancel</button>`;
 const mediaCode = `import '@innerspark/flint/tokens.media.css';`;
 const densityCode = `<main data-density="compact">...</main>`;
 const fontCode = `import '@innerspark/flint/fonts.css';`;
@@ -45,6 +49,12 @@ const fontCode = `import '@innerspark/flint/fonts.css';`;
   <h2 id="use">Use them</h2>
   <p>Reach for semantic and component variables. Never a primitive like <code>--color-blue-700</code>, and never a raw hex.</p>
   <Code label="CSS" code={useCode} />
+
+  <h2 id="components">Components</h2>
+  <p>Flint's components ship as plain CSS classes. Load them after the variables.</p>
+  <Code label="JavaScript or your CSS entry" code={componentsCode} />
+  <p>Each class is <code>.flint-</code> plus the component, with <code>--</code> modifiers for variants. States come from native attributes like <code>disabled</code>, <code>checked</code> and <code>aria-invalid</code>, so there are no state classes to keep in sync. See each <a href="/components/">component page</a> for its markup.</p>
+  <Code label="HTML" code={componentHtml} />
 
   <h2 id="dark">Dark mode</h2>
   <p>Set <code>data-theme</code> on the page or on any section. Every color variable switches, component variables included, and a light section can sit inside a dark page.</p>

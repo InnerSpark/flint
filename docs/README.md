@@ -41,4 +41,4 @@ Every push to `main` rebuilds and redeploys. `public/_headers` sets the security
 
 ## Adding a component
 
-Add the plain CSS to `src/workbench/plain.css` and the shadcn version to `src/workbench/ui/`, then a bench in `src/workbench/benches.jsx` and `src/data/workbench.js`, and an entry in `src/data/components.js`. The pages, tabs and nav come from those entries.
+Add the plain CSS to `css/components.css` at the repo root (it ships as `@innerspark/flint/components.css`) and the shadcn version to `src/workbench/ui/`, then a bench in `src/workbench/benches.jsx` and `src/data/workbench.js`, and an entry in `src/data/components.js`. The pages, tabs and nav come from those entries.

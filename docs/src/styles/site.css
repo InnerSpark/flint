@@ -1,6 +1,6 @@
 /* Flint docs. Every value is a Flint variable: the site is the system's first consumer. */
 @import "../../../dist/tokens.css";
-@import "../workbench/plain.css";
+@import "../../../dist/components.css";
 
 /* Site roles, composed from semantic tokens. The header stays a dark band in both modes. */
 :root {

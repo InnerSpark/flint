@@ -1,4 +1,7 @@
-/* Plain CSS implementations: what the Astro and EJS sites write by hand. Component tokens only. */
+/* Flint components (ASDS-58). Plain CSS classes on the component tokens, for any stack: Astro, EJS,
+   React. Load after tokens.css. Source of @innerspark/flint/components.css; the build copies it to
+   dist/ and scripts/check-components.mjs fails on a color literal, an unknown variable, or a px value
+   outside borders and glyph geometry. */
 .flint-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--space-8);
   min-height: var(--button-height); padding: 0 var(--space-16);
