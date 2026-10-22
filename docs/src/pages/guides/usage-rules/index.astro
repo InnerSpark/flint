@@ -1,7 +1,7 @@
 ---
 import Docs from '../../../layouts/Docs.astro';
 import Guidance from '../../../components/Guidance.astro';
-const toc = [{ id: 'color', text: 'Color' }, { id: 'type', text: 'Type' }, { id: 'space', text: 'Space and size' }, { id: 'components', text: 'Components' }];
+const toc = [{ id: 'color', text: 'Color' }, { id: 'type', text: 'Type' }, { id: 'space', text: 'Space and size' }, { id: 'components', text: 'Components' }, { id: 'words', text: 'Words' }];
 ---
 <Docs title="Usage rules" crumb="Guides" lead="The short list. Every rule here exists because something shipped broken without it." toc={toc}>
   <h2 id="color">Color</h2>
@@ -12,6 +12,8 @@ const toc = [{ id: 'color', text: 'Color' }, { id: 'type', text: 'Type' }, { id:
     <li><strong>Muted text is for secondary information,</strong> never anything someone must read to finish a task.</li>
     <li><strong>Decorative borders are decorative.</strong> <code>border.default</code> and <code>border.strong</code> never form the only edge of a control. Controls use <code>border.control</code>.</li>
     <li><strong>Feedback families stay together.</strong> An error uses the error surface, border and text, never a mix.</li>
+    <li><strong>One action color.</strong> <code>action.primary</code> marks what you can do. Never use it to decorate.</li>
+    <li><strong>Red means danger or error.</strong> <code>action.danger</code> and <code>feedback.error</code> are the only reds. Never use red for emphasis or brand.</li>
     <li><strong>Never color alone.</strong> Status, selection and errors pair color with text, an icon, weight or a shape.</li>
   </ul>
   <Guidance doText="Show a selected nav item with the selected surface, selected text and a 3px bar." dontText="Show it with a tinted background only. Some people can't see the difference." />
@@ -37,5 +39,13 @@ const toc = [{ id: 'color', text: 'Color' }, { id: 'type', text: 'Type' }, { id:
     <li>Fields always have a visible label. Errors replace the helper text, and focus moves to the first field with an error.</li>
     <li>Dialogs and drawers trap focus, close on Esc and return focus to what opened them.</li>
     <li>Every interactive thing has every state: default, hover, focus, disabled, and selected or error where they apply.</li>
+  </ul>
+
+  <h2 id="words">Words</h2>
+  <ul>
+    <li><strong>Name the action.</strong> Buttons say what happens: "Save changes", not "OK" or "Submit".</li>
+    <li><strong>Plain words.</strong> Short sentences, common words, no jargon.</li>
+    <li><strong>Errors say what happened and how to fix it.</strong> One or two short sentences, no codes.</li>
+    <li><strong>Name what AI does.</strong> "Suggest alt text", never a sparkle icon or "Magic".</li>
   </ul>
 </Docs>

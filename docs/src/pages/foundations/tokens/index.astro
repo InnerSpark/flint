@@ -1,0 +1,206 @@
+---
+// Token explorer (ASDS-50): follow any token down to the ladder, and see what uses it.
+// Every chain, value and name is computed here from Flint's build. Nothing is typed by hand.
+import Docs from '../../../layouts/Docs.astro';
+import { source, resolved, leaves, at, refName, isColor, cssVarForPath, componentVar, camel, kebab, MODES } from '../../../lib/flint.js';
+import swiftSrc from '../../../../../dist/swift/Flint.swift?raw';
+import '../../../styles/explorer.css';
+
+const lookup = (name, mode) => {
+  const [h, ...r] = name.split('.');
+  if (h === 'semantic') return at(source.semantic[mode], r);
+  if (h === 'component') return at(source.component, r);
+  return at(source, [h, ...r]);
+};
+const kindOf = (key) => (key.startsWith('component.') ? 'component' : key.startsWith('semantic.') ? 'semantic' : 'primitive');
+const jsPath = (parts) => parts.map((k, i) => (i === 0 ? k : /^\d/.test(k) ? `[${k}]` : `.${k}`)).join('');
+const swiftHas = (n) => new RegExp(`\\b${n}\\b`).test(swiftSrc);
+const tryCss = (key) => { try { return cssVarForPath(key); } catch { return null; } };
+
+const T = {};
+const add = (key) => (T[key] ??= { key, kind: kindOf(key), chain: {}, value: {}, usedBy: {} });
+
+for (const [p] of leaves(source.component)) add(`component.${p.join('.')}`).path = p;
+for (const [p] of leaves(source.semantic.light)) add(`semantic.${p.join('.')}`).path = p;
+
+// Walk each component and semantic token to its literal value, once per mode.
+for (const t of Object.values(T)) {
+  for (const mode of MODES) {
+    let v = t.kind === 'component' ? at(source.component, t.path) : at(source.semantic[mode], t.path);
+    const steps = [t.key];
+    let r;
+    while ((r = refName(v))) {
+      const prev = steps[steps.length - 1];
+      const target = add(r);
+      (target.usedBy[prev] ??= new Set()).add(mode);
+      steps.push(r);
+      v = lookup(r, mode);
+    }
+    t.chain[mode] = steps;
+    t.value[mode] = t.kind === 'component' ? at(resolved.component[mode], t.path) : at(resolved.semantic[mode], t.path);
+  }
+}
+// Primitives: one value in both modes.
+for (const t of Object.values(T).filter((x) => x.kind === 'primitive')) {
+  const v = at(resolved, t.key.split('.')) ?? lookup(t.key, 'light');
+  for (const mode of MODES) { t.value[mode] = v; t.chain[mode] = [t.key]; }
+}
+
+const names = (t) => {
+  const parts = t.key.split('.');
+  if (t.kind === 'component') {
+    const sw = camel(...t.path);
+    return [['Figma', t.path.map(kebab).join('/')], ['CSS', componentVar(t.path)], ['JS', `component.light${jsPath(['', ...t.path]).slice(0)}`], ['Swift', swiftHas(sw) ? `Flint.Component.${sw}` : null]];
+  }
+  if (t.kind === 'semantic') {
+    const sw = camel(...t.path);
+    return [['Figma', t.path.map(kebab).join('/')], ['CSS', tryCss(t.key)], ['JS', `semantic.light${jsPath(['', ...t.path])}`], ['Swift', swiftHas(sw) ? `Flint.Colors.${sw}` : null]];
+  }
+  return [['CSS', tryCss(t.key)], ['JS', jsPath(parts)]];
+};
+
+const data = Object.values(T)
+  .map((t) => ({
+    key: t.key, kind: t.kind,
+    chain: t.chain, value: t.value,
+    color: MODES.some((m) => isColor(t.value[m])),
+    names: names(t).filter(([, n]) => n),
+    usedBy: Object.entries(t.usedBy).map(([k, modes]) => [k, [...modes]]).sort(([a], [b]) => a.localeCompare(b)),
+  }))
+  .sort((a, b) => a.key.localeCompare(b.key));
+const groups = [['component', 'Component'], ['semantic', 'Semantic'], ['primitive', 'Primitive']]
+  .map(([kind, label]) => ({ label, items: data.filter((d) => d.kind === kind) }));
+const short = (key) => key.replace(/^(component|semantic)\./, '');
+const initial = 'component.button.primary.bg';
+---
+<Docs
+  title="Token explorer"
+  crumb="Foundations"
+  lead="Pick any token to see what it points at, the value it lands on in light and dark, its name on every platform, and what else uses it."
+>
+  <div class="explorer">
+    <div class="field explorer-pick">
+      <label for="token-select">Token</label>
+      <select id="token-select" class="flint-input" aria-describedby="token-help">
+        {groups.map((g) => (
+          <optgroup label={`${g.label} (${g.items.length})`}>
+            {g.items.map((d) => <option value={d.key} selected={d.key === initial}>{short(d.key)}</option>)}
+          </optgroup>
+        ))}
+      </select>
+      <p class="helper" id="token-help">Component tokens point at semantic tokens, which point at the ladder. Primitives are the ladder.</p>
+    </div>
+
+    <noscript><p>The explorer needs JavaScript. The <a href="/guides/token-tiers/">Token tiers</a> guide explains the same chain without it.</p></noscript>
+
+    <p id="explorer-status" class="visually-hidden" role="status" aria-live="polite"></p>
+
+    <section class="explorer-result" aria-labelledby="result-title" hidden id="explorer-result">
+      <h2 id="result-title" tabindex="-1"></h2>
+      <p class="explorer-kind" id="result-kind"></p>
+
+      <h3>Light and dark</h3>
+      <div class="table-wrap" role="region" aria-label="Resolution in light and dark" tabindex="0">
+        <table class="data">
+          <thead><tr><th scope="col">Mode</th><th scope="col">Points at</th><th scope="col">Value</th></tr></thead>
+          <tbody id="result-modes"></tbody>
+        </table>
+      </div>
+
+      <h3>Every name</h3>
+      <div class="table-wrap" role="region" aria-label="Names by platform" tabindex="0">
+        <table class="data">
+          <thead><tr><th scope="col">Platform</th><th scope="col">Name</th></tr></thead>
+          <tbody id="result-names"></tbody>
+        </table>
+      </div>
+
+      <h3>Used by</h3>
+      <p id="result-usedby-empty" class="muted">Nothing references this token directly. It is used in code.</p>
+      <ul class="used-by" id="result-usedby"></ul>
+    </section>
+  </div>
+
+  <script type="application/json" id="token-data" set:html={JSON.stringify(data)} />
+  <script is:inline>
+    (function () {
+      var data = JSON.parse(document.getElementById('token-data').textContent);
+      var byKey = {};
+      data.forEach(function (d) { byKey[d.key] = d; });
+      var select = document.getElementById('token-select');
+      var status = document.getElementById('explorer-status');
+      var result = document.getElementById('explorer-result');
+      var title = document.getElementById('result-title');
+      var kind = document.getElementById('result-kind');
+      var modes = document.getElementById('result-modes');
+      var namesBody = document.getElementById('result-names');
+      var used = document.getElementById('result-usedby');
+      var usedEmpty = document.getElementById('result-usedby-empty');
+      var KIND = { component: 'Component token. Mode-free: it follows light and dark through the semantic token it points at.', semantic: 'Semantic token. Defined once per mode.', primitive: 'Primitive. A ladder step or raw scale value. Never used directly in UI.' };
+      var short = function (k) { return k.replace(/^(component|semantic)\./, ''); };
+      function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+      function render(key, quiet) {
+        var d = byKey[key];
+        if (!d) return false;
+        title.textContent = short(key);
+        kind.textContent = KIND[d.kind];
+        modes.textContent = '';
+        ['light', 'dark'].forEach(function (m) {
+          var tr = el('tr');
+          var th = el('th', null, m === 'light' ? 'Light' : 'Dark'); th.scope = 'row'; tr.appendChild(th);
+          var td = el('td'); var ol = el('ol', 'chain');
+          d.chain[m].slice(1).forEach(function (s) { var li = el('li'); li.appendChild(el('code', null, short(s))); ol.appendChild(li); });
+          if (!ol.childNodes.length) td.appendChild(el('span', 'muted', 'Itself (a raw value)')); else td.appendChild(ol);
+          tr.appendChild(td);
+          var tv = el('td'); var sw = el('span', 'swatch');
+          if (d.color) { var chip = el('span', 'swatch-chip'); chip.setAttribute('aria-hidden', 'true'); chip.style.background = d.value[m]; sw.appendChild(chip); }
+          sw.appendChild(el('code', null, String(d.value[m])));
+          tv.appendChild(sw); tr.appendChild(tv);
+          modes.appendChild(tr);
+        });
+        namesBody.textContent = '';
+        d.names.forEach(function (n) {
+          var tr = el('tr'); var th = el('th', null, n[0]); th.scope = 'row'; tr.appendChild(th);
+          var td = el('td'); td.appendChild(el('code', null, n[1])); tr.appendChild(td); namesBody.appendChild(tr);
+        });
+        used.textContent = '';
+        d.usedBy.forEach(function (u) {
+          var li = el('li'); var a = el('a', null, short(u[0]));
+          a.href = '?token=' + encodeURIComponent(u[0]); a.setAttribute('data-token', u[0]);
+          if (u[1].length === 1) a.appendChild(el('small', null, u[1][0] + ' only'));
+          li.appendChild(a); used.appendChild(li);
+        });
+        usedEmpty.hidden = d.usedBy.length > 0;
+        result.hidden = false;
+        if (!quiet) status.textContent = 'Showing ' + short(key) + '.';
+        return true;
+      }
+
+      function go(key, push) {
+        if (!render(key)) return false;
+        select.value = key;
+        var url = '?token=' + encodeURIComponent(key);
+        if (push) history.pushState({ token: key }, '', url); else history.replaceState({ token: key }, '', url);
+        return true;
+      }
+
+      // Changing the select re-renders and keeps focus on the select.
+      select.addEventListener('change', function () { go(select.value, false); });
+      // "Used by" links switch tokens in place and move focus to the new result's heading.
+      used.addEventListener('click', function (e) {
+        var a = e.target.closest('a[data-token]');
+        if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        if (go(a.getAttribute('data-token'), true)) title.focus();
+      });
+      window.addEventListener('popstate', function () {
+        var k = new URLSearchParams(location.search).get('token');
+        if (k && render(k)) select.value = k;
+      });
+
+      var start = new URLSearchParams(location.search).get('token');
+      if (start && byKey[start]) { render(start, true); select.value = start; } else render(select.value, true);
+    })();
+  </script>
+</Docs>

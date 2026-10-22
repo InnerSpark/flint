@@ -1,0 +1,48 @@
+/* Flint illustrations (ASDS-56). Every fill is a Flint variable, so art flips with light and dark.
+   The facet roles follow the brand mark: lit from the top-right, drawn from the blue ramp.
+   Light uses the mark's own steps; dark uses the inverse mark's steps. The spark is the one warm
+   accent (chart.2), and red never appears. Gap: these roles belong in tokens.json as an
+   illustration component group; until then they live here. */
+:root {
+  --illo-lit: var(--color-blue-400);
+  --illo-face: var(--color-blue-500);
+  --illo-shade: var(--color-blue-600);
+  --illo-mid: var(--color-blue-700);
+  --illo-deep: var(--color-blue-800);
+  --illo-spark: var(--color-chart-2);
+  --illo-ground: var(--color-surface-subtle);
+  --illo-card: var(--color-surface-default);
+  --illo-line: var(--color-border-strong);
+  --illo-ink: var(--color-text-muted);
+  --illo-action: var(--color-action-primary);
+  --illo-focus: var(--color-action-focus-ring);
+}
+[data-theme="dark"] {
+  --illo-lit: var(--color-blue-100);
+  --illo-face: var(--color-blue-400);
+  --illo-shade: var(--color-blue-300);
+  --illo-mid: var(--color-blue-500);
+  --illo-deep: var(--color-blue-600);
+}
+.illo { display: block; width: 100%; height: auto; }
+.illo .i-ground { fill: var(--illo-ground); }
+.illo .i-card { fill: var(--illo-card); stroke: var(--illo-line); stroke-width: 1.5; }
+.illo .i-line { fill: none; stroke: var(--illo-line); stroke-width: 2; stroke-linecap: round; }
+.illo .i-dash { fill: none; stroke: var(--illo-ink); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 2 5; opacity: 0.7; }
+.illo .i-ink { fill: var(--illo-ink); opacity: 0.55; }
+.illo .i-ink-stroke { fill: none; stroke: var(--illo-ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.illo .i-lit { fill: var(--illo-lit); }
+.illo .i-face { fill: var(--illo-face); }
+.illo .i-shade { fill: var(--illo-shade); }
+.illo .i-mid { fill: var(--illo-mid); }
+.illo .i-deep { fill: var(--illo-deep); }
+.illo .i-spark { fill: var(--illo-spark); }
+.illo .i-spark-stroke { fill: none; stroke: var(--illo-spark); stroke-width: 2; stroke-linecap: round; }
+.illo .i-action { fill: var(--illo-action); }
+.illo .i-focus { fill: none; stroke: var(--illo-focus); stroke-width: 2; }
+
+/* Gentle spark twinkle. Off under reduced motion (the site-wide rule also zeroes durations). */
+@media (prefers-reduced-motion: no-preference) {
+  .illo .i-twinkle { transform-box: fill-box; transform-origin: center; animation: illo-twinkle var(--duration-slow, 320ms) var(--ease-standard) 600ms 2 alternate both; }
+}
+@keyframes illo-twinkle { from { transform: scale(0.6); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }

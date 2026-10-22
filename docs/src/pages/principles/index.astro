@@ -1,0 +1,40 @@
+---
+import Docs from '../../layouts/Docs.astro';
+import Guidance from '../../components/Guidance.astro';
+import Illustration from '../../components/Illustration.astro';
+import { PRINCIPLE_GROUPS, PRINCIPLE_COUNT } from '../../data/principles.js';
+import '../../styles/principles.css';
+const toc = PRINCIPLE_GROUPS.map((g) => ({ id: g.id, text: g.title }));
+const words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen'];
+const say = (n) => words[n] ?? String(n);
+---
+<Docs
+  title="Principles"
+  crumb="Get started"
+  lead={`${say(PRINCIPLE_COUNT).replace(/^./, (c) => c.toUpperCase())} rules in ${say(PRINCIPLE_GROUPS.length)} groups. When a decision isn't covered by a token or a component, start here.`}
+  toc={toc}
+>
+  <div class="principles-hero"><Illustration name="hero" /></div>
+
+  {PRINCIPLE_GROUPS.map((g) => (
+    <section class="principle-group" aria-labelledby={g.id}>
+      <div class="principle-group-head">
+        <div>
+          <h2 id={g.id}>{g.title}</h2>
+          <p class="principle-group-lead">{g.lead}</p>
+        </div>
+        <div class="principle-illo"><Illustration name={g.illustration} /></div>
+      </div>
+      <ol class="principle-list">
+        {g.items.map((p) => (
+          <li class="principle">
+            <h3 id={p.id}>{p.title}</h3>
+            <p>{p.why}</p>
+            {p.do && <Guidance doText={p.do} dontText={p.dont} />}
+            <p class="principle-enforced">Where it's enforced: <a href={p.enforced[1]}>{p.enforced[0]}</a></p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  ))}
+</Docs>

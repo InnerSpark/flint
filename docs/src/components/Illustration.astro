@@ -1,0 +1,79 @@
+---
+// Flint spot illustrations (ASDS-56). Decorative: aria-hidden, no text in the art.
+// Colours come from styles/illustration.css, which maps Flint tokens to facet roles.
+import '../styles/illustration.css';
+const { name, class: cls = '' } = Astro.props;
+
+// The brand shard (from brand/flint-icon.svg, 64 grid), placed at x,y and scaled by s.
+const shard = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})">
+<polygon class="i-lit" points="33,7 55,25 32,28"/><polygon class="i-face" points="55,25 41,57 32,28"/>
+<polygon class="i-mid" points="41,57 21,55 32,28"/><polygon class="i-deep" points="21,55 11,23 32,28"/>
+<polygon class="i-shade" points="11,23 33,7 32,28"/></g>`;
+// The struck spark, centred on cx,cy.
+const spark = (cx, cy, s = 1) => `<g class="i-twinkle" transform="translate(${cx} ${cy}) scale(${s}) translate(-54 -11)">
+<path class="i-spark" d="M54 6 Q55 11 54 16 Q53 11 54 6 Z"/><path class="i-spark" d="M49 11 Q54 10 59 11 Q54 12 49 11 Z"/>
+<circle class="i-spark" cx="59" cy="18" r="1.4"/></g>`;
+
+const art = {
+  // How it looks: the content leads in a quiet frame, with one action.
+  looks: { box: '0 0 160 120', body: `
+<rect class="i-ground" width="160" height="120" rx="12"/>
+<rect class="i-card" x="20" y="18" width="120" height="84" rx="8"/>
+<rect class="i-ground" x="30" y="28" width="58" height="62" rx="4"/>
+${shard(37, 33, 0.7)}
+<rect class="i-ink" x="98" y="32" width="32" height="4" rx="2"/>
+<rect class="i-ink" x="98" y="42" width="24" height="4" rx="2"/>
+<rect class="i-ink" x="98" y="52" width="28" height="4" rx="2"/>
+<rect class="i-action" x="98" y="76" width="32" height="14" rx="7"/>
+${spark(140, 16, 1.6)}` },
+
+  // How it behaves: a key press moves focus, and the focus is plain to see.
+  behaves: { box: '0 0 160 120', body: `
+<rect class="i-ground" width="160" height="120" rx="12"/>
+<rect class="i-card" x="16" y="60" width="40" height="32" rx="6"/>
+<path class="i-ink-stroke" d="M26 76h14m-5-5l5 5l-5 5M44 70v12"/>
+<path class="i-dash" d="M58 76C78 76 78 50 92 50"/>
+<rect class="i-action" x="98" y="40" width="46" height="20" rx="6"/>
+<rect class="i-focus" x="93" y="35" width="56" height="30" rx="10"/>
+<rect class="i-card" x="98" y="74" width="46" height="12" rx="4"/>
+<rect class="i-card" x="98" y="92" width="46" height="12" rx="4"/>
+${shard(18, 12, 0.55)}
+${spark(58, 22, 1.2)}` },
+
+  // How it talks: short, plain words that name the action.
+  talks: { box: '0 0 160 120', body: `
+<rect class="i-ground" width="160" height="120" rx="12"/>
+<path class="i-card" d="M32 20h80a10 10 0 0 1 10 10v38a10 10 0 0 1-10 10h-62l-14 14v-14h-4a10 10 0 0 1-10-10v-38a10 10 0 0 1 10-10z"/>
+<rect class="i-ink" x="34" y="32" width="64" height="4" rx="2"/>
+<rect class="i-ink" x="34" y="42" width="44" height="4" rx="2"/>
+<rect class="i-action" x="34" y="56" width="42" height="12" rx="6"/>
+${shard(112, 64, 0.62)}
+${spark(140, 30, 1.6)}` },
+
+  // Hero: the shard is struck, the spark lights the three ways Flint shows up.
+  hero: { box: '0 0 640 160', body: `
+<rect class="i-ground" width="640" height="160" rx="16"/>
+${shard(24, 8, 2.2)}
+<path class="i-dash" d="M150 46C210 10 250 10 300 40"/>
+${spark(156, 34, 2.4)}
+<circle class="i-spark" cx="176" cy="24" r="2.5"/><circle class="i-spark" cx="194" cy="18" r="1.8"/>
+<g transform="translate(300 34)">
+  <rect class="i-card" width="92" height="92" rx="10"/>
+  <rect class="i-ink" x="14" y="16" width="48" height="5" rx="2.5"/><rect class="i-ink" x="14" y="28" width="34" height="5" rx="2.5"/>
+  <rect class="i-action" x="14" y="62" width="44" height="16" rx="8"/>
+</g>
+<g transform="translate(410 34)">
+  <rect class="i-card" width="92" height="92" rx="10"/>
+  <rect class="i-action" x="18" y="36" width="56" height="20" rx="6"/>
+  <rect class="i-focus" x="13" y="31" width="66" height="30" rx="10"/>
+</g>
+<g transform="translate(520 34)">
+  <rect class="i-card" width="92" height="92" rx="10"/>
+  <path class="i-ink-stroke" d="M22 26h48a8 8 0 0 1 8 8v18a8 8 0 0 1-8 8h-34l-10 10v-10h-4a8 8 0 0 1-8-8v-18a8 8 0 0 1 8-8z"/>
+  <rect class="i-ink" x="26" y="36" width="32" height="4" rx="2"/><rect class="i-ink" x="26" y="46" width="22" height="4" rx="2"/>
+</g>` },
+};
+const a = art[name];
+if (!a) throw new Error(`No illustration named ${name}`);
+---
+<svg class={`illo ${cls}`} viewBox={a.box} aria-hidden="true" focusable="false" set:html={a.body} />

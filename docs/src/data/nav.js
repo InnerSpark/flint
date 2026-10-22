@@ -3,6 +3,7 @@ export const NAV = [
     title: 'Get started',
     items: [
       ['Overview', '/get-started/'],
+      ['Principles', '/principles/'],
       ['Web and CSS', '/get-started/web/'],
       ['MUI', '/get-started/mui/'],
       ['shadcn/ui', '/get-started/shadcn/'],
@@ -20,6 +21,7 @@ export const NAV = [
       ['Motion', '/foundations/motion/'],
       ['Elevation', '/foundations/elevation/'],
       ['Data visualization', '/foundations/data-visualization/'],
+      ['Token explorer', '/foundations/tokens/'],
     ],
   },
   {
