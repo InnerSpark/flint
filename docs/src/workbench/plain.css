@@ -41,3 +41,18 @@
 .flint-check:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
 .flint-check:disabled { border-color: var(--color-border-disabled); background: var(--color-action-disabled-bg); cursor: not-allowed; }
 .flint-check:disabled:checked::after { border-color: var(--color-action-disabled); }
+
+/* Radio: same control tokens as the checkbox, but round and never multi-select. The dot is
+   drawn with a box-shadow inset so it scales with the box and needs no extra element. */
+.flint-radio {
+  appearance: none; display: inline-grid; place-content: center; margin: 0; cursor: pointer;
+  width: var(--radio-size); height: var(--radio-size);
+  border: 2px solid var(--radio-border); border-radius: 50%; background: var(--input-bg);
+}
+.flint-radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: transparent; }
+.flint-radio:hover { border-color: var(--radio-border-hover); }
+.flint-radio:checked { background: var(--radio-checked-bg); border-color: var(--radio-checked-bg); }
+.flint-radio:checked::after { background: var(--radio-checked-fg); }
+.flint-radio:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-radio:disabled { border-color: var(--radio-disabled); background: var(--radio-disabled-bg); cursor: not-allowed; }
+.flint-radio:disabled:checked::after { background: var(--radio-disabled); }

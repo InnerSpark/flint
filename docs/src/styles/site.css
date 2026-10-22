@@ -167,6 +167,10 @@ table.data th[scope="row"] { font-weight: 600; color: var(--color-text-heading);
 .field .helper { font-size: var(--font-size-xs); color: var(--color-text-muted); }
 .field .error { display: flex; gap: var(--space-4); align-items: center; font-size: var(--font-size-xs); font-weight: 600; color: var(--color-feedback-error-text); }
 .check-row { display: inline-flex; align-items: center; gap: var(--space-8); font-size: var(--font-size-sm); }
+/* radio group example: the fieldset and legend are part of what the component page teaches,
+   so the example shows them rather than a bare stack of labels */
+.example-fieldset { display: grid; gap: var(--gap-sm); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); padding: var(--inset-md); margin: 0; }
+.example-fieldset > legend { padding: 0 var(--space-4); font-weight: 600; font-size: var(--font-size-sm); color: var(--color-text-heading); }
 
 /* ---------- do / don't ---------- */
 .guidance { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); margin: var(--space-16) 0 var(--space-24); }

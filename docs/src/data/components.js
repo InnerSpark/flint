@@ -4,6 +4,7 @@ import plainCss from '../workbench/plain.css?raw';
 import shadButton from '../workbench/ui/button.jsx?raw';
 import shadInput from '../workbench/ui/input.jsx?raw';
 import shadCheckbox from '../workbench/ui/checkbox.jsx?raw';
+import shadRadio from '../workbench/ui/radio.jsx?raw';
 
 /** The plain.css rules whose selector starts with the given class, comments dropped. */
 const cssFor = (cls) => (plainCss.match(/[^{}]+\{[^}]*\}/g) || [])
@@ -67,6 +68,67 @@ export const COMPONENTS = {
       'Use a real <button>. A <div> with a click handler is not reachable by keyboard.',
     ],
     target: 'Buttons are 40px tall (control.md), above the 24px minimum. On iOS, at least 44pt.',
+  },
+  radio: {
+    name: 'Radio',
+    lead: 'Radio buttons pick exactly one option from a short list. Choosing one clears the others, and there is no way back to nothing chosen.',
+    example: `<fieldset class="example-fieldset">
+  <legend>Which site should we scan?</legend>
+  <label class="check-row"><input type="radio" name="scan-scope" class="flint-radio" checked /> Just this page</label>
+  <label class="check-row"><input type="radio" name="scan-scope" class="flint-radio" /> The whole site</label>
+  <label class="check-row"><input type="radio" name="scan-scope" class="flint-radio" disabled /> Pages behind sign-in (needs saved credentials)</label>
+</fieldset>`,
+    when: [
+      'Use radio buttons when exactly one option must be picked and people should see all the choices at once.',
+      'Use a select when the list is long, roughly seven options or more, or when the options are familiar enough not to need reading.',
+      'Use checkboxes when more than one answer is allowed.',
+    ],
+    variants: [
+      ['Unselected', 'The option is available but not chosen.'],
+      ['Selected', 'The chosen option. The fill and the dot both change, so the state is never color alone.'],
+      ['Disabled', 'The option can\'t be picked right now. Say why next to it, as the example does.'],
+    ],
+    guidance: [
+      ['Give every group a default. A pre-selected option means a form can\'t be submitted half-answered.', 'Leave every radio empty and let people submit nothing, which radio buttons can\'t undo.'],
+      ['Wrap the group in a fieldset with a legend that asks the question.', 'Float radios with no group label, which leaves a screen reader reading options with no question.'],
+      ['Keep the list short and the labels parallel, so they can be compared at a glance.', 'Mix lengths and grammar between options so people have to re-read each one.'],
+      ['Use one radio group per question.', 'Reuse a name across two questions, which silently links them.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: '<fieldset>\n  <legend>Which site should we scan?</legend>\n  <label><input type="radio" name="scan-scope" class="flint-radio" checked /> Just this page</label>\n  <label><input type="radio" name="scan-scope" class="flint-radio" /> The whole site</label>\n</fieldset>', rules: cssFor('flint-radio') },
+      mui: `import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
+<FormControl>
+  <FormLabel id="scan-scope">Which site should we scan?</FormLabel>
+  <RadioGroup aria-labelledby="scan-scope" name="scan-scope" defaultValue="page">
+    <FormControlLabel value="page" control={<Radio />} label="Just this page" />
+    <FormControlLabel value="site" control={<Radio />} label="The whole site" />
+  </RadioGroup>
+</FormControl>`,
+      shadcn: shadRadio,
+      swift: `Picker("Which site should we scan?", selection: $scope) {
+  Text("Just this page").tag(Scope.page)
+  Text("The whole site").tag(Scope.site)
+}
+.pickerStyle(.inline) // A Form section. On iOS this is the native one-of-many control.`,
+      muiGap: 'The MUI radio reads the radio tokens for its edge, checked fill and disabled color, but keeps MUI\'s own 20px control and its ripple, so it is smaller than the 24px the tokens ask for and smaller than the plain-CSS and shadcn versions (ASDS-44).',
+    },
+    keyboard: [
+      ['Tab', 'Moves focus into the group, landing on the selected option, or the first one when nothing is selected. A second Tab leaves the group.'],
+      ['Arrow keys', 'Moves between options and selects as it goes. This is why a group needs a sensible default.'],
+      ['Space', 'Selects the focused option when nothing in the group is selected yet.'],
+    ],
+    screenReader: [
+      'Use native inputs that share a name attribute. That is what makes them one group and gives the "2 of 3" count.',
+      'Wrap the group in a fieldset with a legend, or use role="radiogroup" with aria-labelledby, so the question is read before the options.',
+      'Tie each label to its input, so the label is the accessible name and clicking it selects the option.',
+      'Don\'t put a radio group inside another control. Arrow keys belong to the group and will be swallowed.',
+    ],
+    target: 'The control is 24px (radio.size, which aliases targetMin), and the label extends the clickable area. On iOS, at least 44pt.',
   },
   checkbox: {
     name: 'Checkbox',
