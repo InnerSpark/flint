@@ -99,7 +99,7 @@ for (const theme of ['light', 'dark']) {
           const def = rows[0], hov = rows.find((r) => r.cells[0].textContent.startsWith('Hover'));
           if (!hov) continue;
           for (const col of [2, 3]) {
-            const look = (row) => { const el = row.cells[col].querySelector('button, input, a'); const s = getComputedStyle(el); return s.backgroundColor + s.borderColor + s.textDecorationThickness; };
+            const look = (row) => { const el = row.cells[col].querySelector('button, input, select, a'); const s = getComputedStyle(el); return s.backgroundColor + s.borderColor + s.textDecorationThickness; };
             if (look(def) === look(hov)) out.push(`${table.getAttribute('aria-labelledby')} column ${col}`);
           }
         }

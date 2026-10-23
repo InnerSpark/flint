@@ -15,7 +15,7 @@ const toc = c.benches.map(([id, text]) => ({ id, text }));
 <Docs title={`${c.name} workbench`} crumb="Workbench" lead={c.lead} toc={toc.length > 1 ? toc : []} wide>
   <DensitySwitch />
   <p>Guidance and code: <a href={`/components/${name}/`}>{c.name} docs</a>.</p>
-  {c.gap && <Notice tone="warning" title="Known MUI gap">{c.gap}</Notice>}
+  {c.gap && <Notice tone="warning" title="Known gaps">{c.gap}</Notice>}
   {c.benches.map(([id, text, bench]) => (
     <>
       <h2 id={id}>{text}</h2>

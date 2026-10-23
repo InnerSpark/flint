@@ -11,6 +11,7 @@ import { Input as ShadInput } from './ui/input';
 import { RadioGroup, RadioGroupItem } from './ui/radio';
 import MuiRadio from '@mui/material/Radio';
 import MuiSwitch from '@mui/material/Switch';
+import NativeSelect from '@mui/material/NativeSelect';
 import { Switch as ShadSwitch } from './ui/switch';
 
 export const IMPLEMENTATIONS = ['MUI', 'shadcn', 'Plain CSS'];
@@ -184,6 +185,30 @@ const toggle = {
   },
 };
 
+const SELECT_SHAD = 'h-[var(--select-height)] w-full text-[length:var(--font-size-md)] appearance-none rounded-[var(--select-radius)] border border-[var(--select-border)] bg-[var(--select-bg)] px-3 text-[var(--select-fg)] hover:border-[var(--select-border-hover)] outline-none focus-visible:border-[var(--select-border-focus)] focus-visible:[outline:var(--focus-ring-width)_solid_var(--focus-ring-color)] focus-visible:[outline-offset:var(--focus-ring-offset)] aria-[invalid=true]:border-[var(--select-border-error)] disabled:cursor-not-allowed disabled:bg-[var(--color-action-disabled-bg)] disabled:text-[var(--color-action-disabled)]';
+const select = {
+  states: [
+    { label: 'Default', cls: '' },
+    { label: 'Hover', cls: 'st-hover' },
+    { label: 'Focus', cls: 'st-focus', focus: true, note: 'keyboard focus' },
+    { label: 'Placeholder', cls: '', empty: true },
+    { label: 'Error', cls: '', error: true, empty: true },
+    { label: 'Disabled', disabled: true },
+    { label: 'Live', cls: '', note: 'try it' },
+  ],
+  render(impl, s) {
+    const label = `Standard, ${impl}, ${s.label.toLowerCase()} state`;
+    const options = [s.empty ? <option key="e" value="">Choose a standard</option> : null, <option key="a">WCAG 2.2 AA</option>, <option key="b">Section 508</option>];
+    const common = { 'aria-label': label, 'aria-invalid': s.error ? 'true' : undefined, disabled: s.disabled, defaultValue: s.empty ? '' : undefined };
+    if (impl === 'MUI') {
+      return <NativeSelect input={<OutlinedInput />} fullWidth error={!!s.error} disabled={s.disabled} defaultValue={s.empty ? '' : undefined}
+        className={`${s.cls || ''} ${s.focus ? 'Mui-focused' : ''}`} inputProps={{ 'aria-label': label, 'aria-invalid': common['aria-invalid'], className: s.focus ? 'st-focus' : undefined }}>{options}</NativeSelect>;
+    }
+    if (impl === 'shadcn') return <select {...common} className={`${SELECT_SHAD} ${s.cls || ''}`}>{options}</select>;
+    return <select {...common} className={`flint-select ${s.cls || ''}`}>{options}</select>;
+  },
+};
+
 export const BENCHES = {
   'button/primary': button('primary'),
   'button/secondary': button('secondary'),
@@ -194,5 +219,6 @@ export const BENCHES = {
   'link/inline': link,
   'radio/default': radio,
   'switch/default': toggle,
+  'select/native': select,
   'field/default': field,
 };

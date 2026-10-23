@@ -24,6 +24,12 @@ export const WORKBENCH = {
     benches: [['radio', 'Radio', 'radio/default']],
     gap: 'The MUI radio draws a smaller control than Flint\'s 24px, and ignores aria-invalid, so the Error row looks like Unselected.',
   },
+  select: {
+    name: 'Select',
+    lead: 'Every state as MUI, shadcn/ui and plain CSS, all on the native select. All three read the select tokens: edge, icon, text and placeholder.',
+    benches: [['select', 'Native select', 'select/native']],
+    gap: 'MUI NativeSelect is underlined by default; pass input={<OutlinedInput />} for the outlined look, and a disabled one keeps the enabled edge. shadcn/ui\'s own Select is a Radix listbox, not a native select, so the shadcn column styles a native select with the same tokens and has no arrow of its own.',
+  },
   switch: {
     name: 'Switch',
     lead: 'Every state as MUI, shadcn/ui and plain CSS. All three read the switch tokens: track, checked track, thumb and checked thumb.',

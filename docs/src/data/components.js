@@ -203,6 +203,73 @@ import FormLabel from '@mui/material/FormLabel';
     ],
     target: 'Inline links follow the text size, which WCAG 2.5.8 exempts. Standalone links are at least 24px tall (targetMin).',
   },
+  select: {
+    name: 'Select',
+    lead: 'A select picks one answer from a list that is too long for radio buttons. Flint styles the native select, so the list itself is the platform\'s own: it works with every keyboard, screen reader and phone.',
+    example: `<div class="flint-field">
+  <label class="flint-field__label" for="standard-__P__">Standard</label>
+  <select id="standard-__P__" class="flint-select">
+    <option>WCAG 2.2 AA</option>
+    <option>WCAG 2.1 AA</option>
+    <option>Section 508</option>
+    <option>EN 301 549</option>
+  </select>
+</div>
+<div class="flint-field">
+  <label class="flint-field__label" for="region-__P__">Data region</label>
+  <select id="region-__P__" class="flint-select" aria-invalid="true" aria-describedby="region-error-__P__">
+    <option value="" selected>Choose a region</option>
+    <option>United States</option>
+    <option>European Union</option>
+  </select>
+  <span class="flint-field__error" id="region-error-__P__">${errorIcon}Choose where your reports are stored.</span>
+</div>`,
+    when: [
+      'Use a select for one answer from a list of about seven or more, or a list people already know, like countries.',
+      'Use radio buttons for a short list, so every option shows without opening anything.',
+      'Use a combobox with search (coming in the React layer) for very long lists.',
+    ],
+    variants: [
+      ['Default', 'Shows the chosen option. The arrow is drawn in select.icon.'],
+      ['Placeholder', 'An empty first option ("Choose a region") shows in the placeholder color until something is picked.'],
+      ['Error', 'aria-invalid="true" turns the edge red; the message replaces the helper, as in Field.'],
+      ['Disabled', 'Can\'t be changed right now. Say why nearby.'],
+    ],
+    guidance: [
+      ['Keep the native select. It works the same everywhere people already use it.', 'Rebuild it from divs. Custom listboxes break keyboards and screen readers unless built with great care.'],
+      ['Order options in a way people expect: alphabetical, by size, or most common first.', 'Leave them in database order.'],
+      ['Pick a sensible default when there is one.', 'Force an empty "Choose" step when almost everyone picks the same thing.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: '<label class="flint-field__label" for="standard">Standard</label>\n<select id="standard" class="flint-select">\n  <option>WCAG 2.2 AA</option>\n  <option>Section 508</option>\n</select>', rules: cssFor('flint-select') },
+      mui: `import TextField from '@mui/material/TextField';
+
+// The native list, like Flint: select + SelectProps={{ native: true }}.
+<TextField select label="Standard" SelectProps={{ native: true }}>
+  <option>WCAG 2.2 AA</option>
+  <option>Section 508</option>
+</TextField>`,
+      shadcn: `// shadcn/ui's Select is a Radix listbox. For a plain choice, a styled native select is simpler and
+// works the same on every platform:
+<select className="h-[var(--select-height)] w-full appearance-none rounded-[var(--select-radius)] border border-[var(--select-border)] bg-[var(--select-bg)] px-3 text-[var(--select-fg)]">
+  <option>WCAG 2.2 AA</option>
+  <option>Section 508</option>
+</select>`,
+      swift: `Picker("Standard", selection: $standard) {
+  ForEach(Standard.allCases) { Text($0.label).tag($0) }
+}
+.pickerStyle(.menu)
+.tint(Flint.Component.selectFg)`,
+      muiGap: 'The MUI select draws its own arrow in MUI\'s icon color unless the theme sets it (Flint\'s theme reads select.icon).',
+    },
+    keyboard: [['Tab', 'Moves focus to the select.'], ['Space, Enter or Alt+Down', 'Opens the list.'], ['Up and Down, or typing', 'Changes the choice.']],
+    screenReader: [
+      'Tie the label to the select with for and id.',
+      'An empty first option works as a placeholder; give it value="" so the select reads as unanswered.',
+      'Set aria-invalid="true" and point aria-describedby at the error message.',
+    ],
+    target: 'Selects are 40px tall (control.md), like inputs.',
+  },
   switch: {
     name: 'Switch',
     lead: 'A switch turns one setting on or off, and the change takes effect right away. There is no save button behind it.',

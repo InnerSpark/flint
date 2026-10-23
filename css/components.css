@@ -71,6 +71,27 @@
 .flint-field__error { display: flex; align-items: flex-start; gap: var(--space-4); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--field-error-fg); }
 .flint-field__error svg { width: var(--icon-size-sm); height: var(--icon-size-sm); flex: none; }
 
+/* Select (ASDS-66): a native select, styled to match the input. Native keeps the platform's own list,
+   which already works with keyboards, screen readers and phones. The arrow is drawn with two gradients
+   in select.icon, so it follows light and dark with no image. Forced-colors mode gets the native arrow. */
+.flint-select {
+  appearance: none; box-sizing: border-box; width: 100%; height: var(--select-height); margin: 0;
+  padding: 0 calc(var(--space-12) + 1.5em) 0 var(--space-12);
+  border: 1px solid var(--select-border); border-radius: var(--select-radius);
+  background-color: var(--select-bg); color: var(--select-fg); font: 400 var(--font-size-md) / 1.5 var(--font-sans); cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--select-icon) 50%), linear-gradient(135deg, var(--select-icon) 50%, transparent 50%);
+  background-position: calc(100% - 1.2em) 55%, calc(100% - 0.85em) 55%;
+  background-size: 0.35em 0.35em; background-repeat: no-repeat;
+}
+.flint-select:hover { border-color: var(--select-border-hover); }
+.flint-select:focus-visible { border-color: var(--select-border-focus); outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-select[aria-invalid="true"] { border-color: var(--select-border-error); }
+/* The empty "Choose..." option reads as a placeholder; real options keep the full text color. */
+.flint-select:has(option[value=""]:checked) { color: var(--select-placeholder); }
+.flint-select option { color: var(--select-fg); }
+.flint-select:disabled { background-color: var(--color-action-disabled-bg); color: var(--color-action-disabled); border-color: var(--color-border-disabled); cursor: not-allowed; }
+@media (forced-colors: active) { .flint-select { appearance: auto; background-image: none; } }
+
 /* Choice: a checkbox or radio with its label. The label wraps the input, so the whole row is the
    click target, at least 24px tall. */
 .flint-choice { display: inline-flex; align-items: center; gap: var(--space-8); min-height: var(--target-min); font-size: var(--font-size-sm); color: var(--color-text-default); cursor: pointer; }
