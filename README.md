@@ -59,10 +59,29 @@ import '@innerspark/flint/components.css';
 
 ```html
 <button class="flint-btn flint-btn--primary">Save changes</button>
-<label class="check-row"><input type="checkbox" class="flint-check" /> Email me updates</label>
+<label class="flint-choice"><input type="checkbox" class="flint-check" /> Email me updates</label>
 ```
 
 Classes are `.flint-<component>` with `--<variant>` modifiers (`flint-btn--secondary`, `--danger`, `--text`). States come from native attributes (`:disabled`, `:checked`, `aria-invalid="true"`), never extra classes. Every value is a component token, so dark mode and density follow. Source: `css/components.css`.
+
+Twenty components: Alert, Badge, Button, Checkbox, Chip, Dialog, Field, Icon, Input, Link, Menu, Radio, Select, Skip link, Switch, Tabs, Toast, Tooltip, plus the fieldset and choice helpers. Dialog uses the native `<dialog>`. Tabs, Menu, Tooltip and Toast need a little keyboard and focus behavior; on a stack without React, load it from `behaviors.js` (no dependencies, WAI-ARIA Authoring Practices patterns):
+
+```js
+import { initAll, showToast } from '@innerspark/flint/behaviors.js';
+initAll(); // dialogs return focus, tabs and menus get arrow keys and Esc, tooltips close on Esc
+showToast('#toasts', { title: 'Report saved' }); // into a role="status" region already in the page
+```
+
+### React
+
+```jsx
+import { Button, Field, Input, Dialog, DialogTrigger, DialogContent } from '@innerspark/flint/react';
+
+<Field label="Campsite name" error={error} required><Input /></Field>
+<Button busy={saving}>Save trip</Button>
+```
+
+`@innerspark/flint/react` renders the same classes, with Radix underneath Dialog, Tabs, Menu, Tooltip and Toast. React 19.2+, React DOM and the five `@radix-ui/react-*` packages are optional peer dependencies, so token-only installs never pull them in. `react/dist` is committed like `dist/`; its tooling lives in `react/package.json` (`npm run test:react` builds, renders every component and type-checks the declarations).
 
 ### JS / TS
 
@@ -132,7 +151,8 @@ Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--r
 ## Build
 
 ```bash
-npm run build   # regenerates dist/ from tokens.json and css/, then runs the contrast, parity and component CSS checks
+npm run build       # regenerates dist/ from tokens.json and css/, then runs the contrast, parity, component CSS and chart color checks
+npm run test:react  # builds react/dist, renders every React component, type-checks react/index.d.ts (needs npm ci --prefix react)
 ```
 
 `dist/` is committed so git-tag installs work without a build step; `prepare` also rebuilds on install.

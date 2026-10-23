@@ -283,6 +283,11 @@ textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); 
 .flint-dialog .flint-dialog__body > * { margin: 0; }
 .flint-dialog .flint-dialog__body > * + * { margin-top: var(--space-12); }
 .flint-dialog__footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-8); padding: 0 var(--space-24) var(--space-24); }
+/* --floating: positioned by a library (Radix, Floating UI) instead of the native <dialog>. Centered
+   over .flint-dialog-overlay, which draws the scrim. @innerspark/flint/react uses these. */
+.flint-dialog--floating { position: fixed; inset: 0; z-index: var(--z-modal); height: fit-content; margin: auto; display: flex; flex-direction: column; }
+.flint-dialog-overlay { position: fixed; inset: 0; z-index: var(--z-overlay); background: var(--color-overlay-scrim); }
+@media (prefers-reduced-motion: no-preference) { .flint-dialog--floating { animation: flint-dialog-in var(--duration-base) var(--ease-entrance); } }
 @media (prefers-reduced-motion: no-preference) { .flint-dialog[open] { animation: flint-dialog-in var(--duration-base) var(--ease-entrance); } }
 @keyframes flint-dialog-in { from { opacity: 0; transform: translateY(var(--space-8)); } }
 
@@ -300,6 +305,8 @@ textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); 
 /* The ring sits inside the tab, so the list's scroll edge never clips it. */
 .flint-tabs__tab:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: calc(var(--focus-ring-offset) * -1 - var(--focus-ring-width)); }
 .flint-tabs__panel { padding-block: var(--space-16); }
+/* Libraries that keep every panel mounted (so each tab's aria-controls resolves) mark the rest inactive. */
+.flint-tabs__panel[data-state="inactive"] { display: none; }
 .flint-tabs__panel:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); border-radius: var(--radius-xs); }
 @media (forced-colors: active) { .flint-tabs__tab[aria-selected="true"] { box-shadow: none; border-bottom: 4px solid CanvasText; } }
 
@@ -313,6 +320,8 @@ textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); 
   background: var(--menu-bg); color: var(--menu-fg); border: 1px solid var(--menu-border); border-radius: var(--menu-radius); box-shadow: var(--shadow-popover);
 }
 .flint-menu[hidden] { display: none; }
+/* --floating: a positioning library places the menu, so drop the CSS placement. */
+.flint-menu--floating { position: static; }
 .flint-menu > li { margin: 0; }
 .flint-menu__item {
   display: flex; align-items: center; gap: var(--space-8); width: 100%; min-height: var(--control-md); padding: 0 var(--space-12);
@@ -342,6 +351,8 @@ textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); 
 .flint-tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border: 5px solid transparent; border-top-color: var(--tooltip-bg); }
 .flint-tooltip-anchor:hover .flint-tooltip, .flint-tooltip-anchor:focus-within .flint-tooltip { visibility: visible; opacity: 1; }
 .flint-tooltip-anchor[data-dismissed] .flint-tooltip { visibility: hidden; opacity: 0; }
+/* --floating: a positioning library places it and decides when it shows. */
+.flint-tooltip--floating { position: static; transform: none; visibility: visible; opacity: 1; }
 @media (prefers-reduced-motion: no-preference) { .flint-tooltip { transition: opacity var(--duration-fast) var(--ease-standard), visibility var(--duration-fast); } }
 
 /* Toast (ASDS-84): a short message about something that just happened. Keep one
@@ -351,6 +362,7 @@ textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); 
 .flint-toast-region {
   position: fixed; inset-block-end: var(--space-16); inset-inline-end: var(--space-16); z-index: var(--z-toast);
   display: flex; flex-direction: column; gap: var(--space-8); width: min(24rem, calc(100vw - var(--space-32))); pointer-events: none;
+  margin: 0; padding: 0; list-style: none;
 }
 .flint-toast {
   pointer-events: auto; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; column-gap: var(--space-12);

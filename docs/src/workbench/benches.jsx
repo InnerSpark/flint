@@ -40,7 +40,9 @@ import { TooltipProvider, Tooltip as ShadTooltip, TooltipTrigger, TooltipContent
 import { ToastProvider, ToastViewport, Toast as ShadToast, ToastTitle, ToastDescription, ToastAction, ToastClose, TOAST } from './ui/toast';
 import { initDialogs, initTabs, initMenus, initTooltips, showToast } from '../../../js/behaviors.js';
 
-export const IMPLEMENTATIONS = ['MUI', 'shadcn', 'Plain CSS'];
+import * as FR from '../../../react/src/index.js';
+
+export const IMPLEMENTATIONS = ['MUI', 'shadcn', 'Plain CSS', 'Flint React'];
 
 const BUTTON_STATES = [
   { label: 'Default', cls: '' },
@@ -552,4 +554,67 @@ export const BENCHES = {
   'menu/default': menu,
   'tooltip/default': tooltip,
   'toast/default': toast,
+};
+
+// ---------- Flint React column (ASDS-69): the same states through @innerspark/flint/react ----------
+/** Forced rows: the wrappers put className on their outer element, so add the st-* class to the control. */
+function Forced({ cls, selector = 'input, button, select, a, [role="tab"]', children }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current?.querySelector(selector);
+    if (el && cls) cls.split(' ').filter(Boolean).forEach((c) => el.classList.add(c));
+  }, [cls, selector]);
+  return <span ref={ref} className="tb-plain">{children}</span>;
+}
+const NAME = (thing, s) => `${thing}, Flint React, ${s.label.toLowerCase()} state`;
+const V = { primary: 'Save trip', secondary: 'Add stop', danger: 'Delete trip', text: 'Skip for now' };
+const reactButton = (variant) => (s) => <Forced cls={s.cls}><FR.Button variant={variant} size={s.small ? 'sm' : undefined} disabled={s.disabled} busy={s.busy}>{V[variant]}</FR.Button></Forced>;
+const STATUS_TEXT = { neutral: 'Draft', success: 'Passed', warning: 'Needs review', error: 'Failed', info: 'New' };
+const TRIP_TABS = ['Route', 'Packing', 'Sites'];
+
+function ReactDialogLive() {
+  return <FR.Dialog>
+    <FR.DialogTrigger asChild><FR.Button variant="danger">Delete trip</FR.Button></FR.DialogTrigger>
+    <FR.DialogContent title="Delete this trip?" footer={<><FR.DialogClose asChild><FR.Button variant="secondary">Keep trip</FR.Button></FR.DialogClose><FR.DialogClose asChild><FR.Button variant="danger">Delete trip</FR.Button></FR.DialogClose></>}>
+      <p>The route and packing list go with it. You can't undo this.</p>
+    </FR.DialogContent>
+  </FR.Dialog>;
+}
+function ReactToastLive() {
+  const [open, setOpen] = useState(false);
+  return <FR.ToastProvider>
+    <FR.Button onClick={() => setOpen(true)}>Save report, Flint React</FR.Button>
+    <FR.Toast open={open} onOpenChange={setOpen} title="Report saved" description="Your VPAT draft is in Reports." />
+    <FR.ToastRegion />
+  </FR.ToastProvider>;
+}
+
+export const REACT = {
+  'button/primary': reactButton('primary'),
+  'button/secondary': reactButton('secondary'),
+  'button/danger': reactButton('danger'),
+  'button/text': reactButton('text'),
+  'input/text': (s) => <Forced cls={s.cls}><FR.Input placeholder="Campsite name" disabled={s.disabled} readOnly={s.readOnly} defaultValue={s.value} aria-invalid={s.error ? 'true' : undefined} aria-label={NAME('Campsite name', s)} /></Forced>,
+  'checkbox/default': (s) => <Forced cls={s.cls}><FR.Checkbox label="Bring the awning lights" defaultChecked={s.checked} indeterminate={s.mixed} disabled={s.disabled} aria-invalid={s.error ? 'true' : undefined} aria-label={NAME('Bring the awning lights', s)} /></Forced>,
+  'link/inline': (s) => <Forced cls={s.cls}><FR.Link href="/components/link/" aria-label={`Review the route, Flint React, ${s.label.toLowerCase()} state`}>Review the route</FR.Link></Forced>,
+  'radio/default': (s) => <Forced cls={s.cls}><FR.Radio label="Just this page" name={`fr-radio-${s.label}`} defaultChecked={s.checked} disabled={s.disabled} aria-invalid={s.error ? 'true' : undefined} aria-label={NAME('Just this page', s)} /></Forced>,
+  'switch/default': (s) => <Forced cls={s.cls}><FR.Switch label="Email me a weekly summary" defaultChecked={s.checked} disabled={s.disabled} aria-label={NAME('Email me a weekly summary', s)} /></Forced>,
+  'select/native': (s) => <Forced cls={s.cls}><FR.Select aria-label={NAME('Standard', s)} aria-invalid={s.error ? 'true' : undefined} disabled={s.disabled} defaultValue={s.empty ? '' : undefined}>{s.empty && <option value="">Choose a standard</option>}<option>WCAG 2.2 AA</option><option>Section 508</option></FR.Select></Forced>,
+  'badge/intents': (s) => <FR.Badge intent={s.intent}>{STATUS_TEXT[s.intent]}</FR.Badge>,
+  'chip/intents': (s) => <FR.Chip intent={s.intent} outlined={s.outlined} onRemove={s.remove ? () => {} : undefined} removeLabel={s.remove ? 'Remove WCAG 2.2 AA, Flint React' : undefined}>{s.remove ? 'WCAG 2.2 AA' : STATUS_TEXT[s.intent]}</FR.Chip>,
+  'alert/intents': (s) => <FR.Alert intent={s.intent} title={{ info: 'Scan scheduled', success: 'Report saved', warning: '12 checks need a person', error: 'We couldn\'t reach the site' }[s.intent]}>{{ info: 'We\'ll email you when the report is ready.', success: 'Your VPAT draft is in Reports.', warning: 'Review them before you export.', error: 'Check the address and try again.' }[s.intent]}</FR.Alert>,
+  'field/default': (s) => <FR.Field label="Start URL" required={s.required} helper={s.error ? undefined : 'The page the crawl starts from.'} error={s.error ? 'Enter a full address that starts with https://' : undefined} id={`fr-field-${s.label.replace(/\W/g, '').toLowerCase()}`}><FR.Input type="url" disabled={s.disabled} defaultValue={s.value} /></FR.Field>,
+  'skip-link/default': (s) => <span className="tb-skip"><Forced cls={s.cls}><FR.SkipLink href="#skip-link" aria-label={`Skip to content, Flint React, ${s.label.toLowerCase()} state`} /></Forced></span>,
+  'icon/sizes': (s) => <FR.Icon size={s.size} muted={s.muted} label={`Passed, Flint React, ${s.label.toLowerCase()}`}>{ICON_PATHS}</FR.Icon>,
+  'dialog/default': (s) => (s.label === 'Panel'
+    ? <div className="flint-dialog tb-inplace"><div className="flint-dialog__header"><p className="flint-dialog__title">Delete this trip?</p><FR.Button variant="text" iconOnly aria-label="Close">{X16}</FR.Button></div><div className="flint-dialog__body"><p>The route and packing list go with it.</p></div><div className="flint-dialog__footer"><FR.Button variant="secondary" size="sm">Keep trip</FR.Button><FR.Button variant="danger" size="sm">Delete trip</FR.Button></div></div>
+    : <ReactDialogLive />),
+  'tabs/default': (s) => <Forced cls={s.focus ? 'st-focus' : ''} selector='[role="tab"]'><div className="tb-plain-block"><FR.Tabs defaultValue="Route"><FR.TabList aria-label={`Trip details, Flint React, ${s.label}`}>{TRIP_TABS.map((t) => <FR.Tab key={t} value={t}>{t}</FR.Tab>)}</FR.TabList>{TRIP_TABS.map((t) => <FR.TabPanel key={t} value={t} className="sr-panel">{t} details</FR.TabPanel>)}</FR.Tabs></div></Forced>,
+  'menu/default': (s) => (s.label === 'Open'
+    ? <ul className="flint-menu tb-inplace" role="menu" aria-label="Trip actions, Flint React">{['Rename', 'Duplicate'].map((t) => <li key={t} role="none"><button type="button" role="menuitem" tabIndex={-1} className="flint-menu__item">{t}</button></li>)}<li role="separator" className="flint-menu__separator" /><li role="none"><button type="button" role="menuitem" tabIndex={-1} className="flint-menu__item flint-menu__item--danger">Delete trip</button></li></ul>
+    : <FR.Menu><FR.MenuTrigger asChild><FR.Button variant="secondary">Trip actions</FR.Button></FR.MenuTrigger><FR.MenuContent><FR.MenuItem>Rename</FR.MenuItem><FR.MenuItem>Duplicate</FR.MenuItem><FR.MenuSeparator /><FR.MenuItem danger>Delete trip</FR.MenuItem></FR.MenuContent></FR.Menu>),
+  'tooltip/default': (s) => <div className="tb-tip-room"><FR.TooltipProvider delayDuration={0}><FR.Tooltip content="PDF, about 2 MB" open={s.shown || undefined}><FR.Button variant="secondary" aria-label={`Export Flint React${s.shown ? ' (shown)' : ''}`}>Export</FR.Button></FR.Tooltip></FR.TooltipProvider></div>,
+  'toast/default': (s) => (s.label === 'Live'
+    ? <ReactToastLive />
+    : <div className="flint-toast tb-inplace"><p className="flint-toast__title">{s.action ? 'Trip archived' : 'Report saved'}</p><p className="flint-toast__body">{s.action ? 'Turkey Bend moved to Archive.' : 'Your VPAT draft is in Reports.'}</p>{s.action && <div className="flint-toast__actions"><button type="button" className="flint-toast__action">Undo</button></div>}<button type="button" className="flint-toast__close" aria-label={`Dismiss: ${s.action ? 'Trip archived' : 'Report saved'}, Flint React`}>{X16}</button></div>),
 };

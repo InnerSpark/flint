@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles';
 import { flintThemeOptions } from '../../../mui/options.mjs';
-import { BENCHES, IMPLEMENTATIONS } from './benches.jsx';
+import { BENCHES, IMPLEMENTATIONS, REACT } from './benches.jsx';
 import { forceStates } from './forceStates.js';
 import './workbench.css';
 
@@ -43,7 +43,7 @@ export default function Bench({ bench, labelledBy }) {
               {states.map((s) => (
                 <tr key={s.label}>
                   <td className="tb-state">{s.label}{s.note && <span>{s.note}</span>}</td>
-                  {IMPLEMENTATIONS.map((i) => <td key={i}><div className="tb-cell">{render(i, s)}</div></td>)}
+                  {IMPLEMENTATIONS.map((i) => <td key={i}><div className="tb-cell">{i === 'Flint React' ? REACT[bench](s) : render(i, s)}</div></td>)}
                 </tr>
               ))}
             </tbody>

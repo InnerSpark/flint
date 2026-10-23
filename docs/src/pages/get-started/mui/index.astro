@@ -36,7 +36,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
   <Code label="React" code={layerCode} />
 
   <h2 id="gaps">Known gaps</h2>
-  <Notice tone="warning" title="The MUI theme does not follow every component token yet">
-    <p>Outlined inputs use MUI's default edge (about 1.6:1, under the 3:1 minimum), the checkbox shows no focus ring, and outlined buttons and button heights differ from the Flint spec. Tracked as ASDS-44. The <a href="/workbench/">workbench</a> shows MUI next to shadcn and plain CSS so you can see the difference.</p>
+  <Notice tone="warning" title="What the MUI theme can't change">
+    <p>The theme now reads Flint's component tokens for buttons, inputs, checkboxes, radios, switches, icons, tabs and menu items (ASDS-44). What's left is MUI's own behavior: a round halo on checkbox and radio focus, a <code>loading</code> button that hides its label, a TextField label that floats inside the input, an Alert that is <code>role="alert"</code> by default, and a Snackbar that shows one message at a time. Each component's Code tab says how to work around it, and the <a href="/workbench/">workbench</a> shows MUI next to the other implementations.</p>
   </Notice>
 </Docs>

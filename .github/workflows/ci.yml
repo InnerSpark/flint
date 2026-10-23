@@ -35,6 +35,26 @@ jobs:
           fi
           echo "dist/ matches tokens.json"
 
+  react:
+    # @innerspark/flint/react (ASDS-69). react/dist is committed, like dist/, so git installs need no
+    # build step (and no esbuild, React or Radix). This job builds it, checks the committed copy is
+    # current, renders every component and type-checks the declarations against a sample app.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --prefix react
+      - name: Build, render and type-check
+        run: npm run test:react
+      - name: react/dist is in sync with react/src
+        run: |
+          if [ -n "$(git status --porcelain react/dist)" ]; then
+            echo "react/dist is stale. Run npm run build:react and commit the result."
+            exit 1
+          fi
+
   release-metadata:
     # Only on a tag: the tag, package.json and the CHANGELOG must agree.
     if: startsWith(github.ref, 'refs/tags/v')

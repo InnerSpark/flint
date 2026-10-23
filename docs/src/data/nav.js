@@ -5,6 +5,7 @@ export const NAV = [
       ['Overview', '/get-started/'],
       ['Principles', '/principles/'],
       ['Web and CSS', '/get-started/web/'],
+      ['React', '/get-started/react/'],
       ['MUI', '/get-started/mui/'],
       ['shadcn/ui', '/get-started/shadcn/'],
       ['iOS and SwiftUI', '/get-started/ios/'],

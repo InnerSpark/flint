@@ -9,6 +9,7 @@ import Swatch from '../../../components/Swatch.astro';
 import Result from '../../../components/Result.astro';
 import { COMPONENTS, TABS } from '../../../data/components.js';
 import { STATES } from '../../../data/componentStates.js';
+import { REACT_CODE } from '../../../data/reactCode.js';
 import { resolved, source, contrast, leaves, at, refName, componentVar, camel, isColor } from '../../../lib/flint.js';
 
 export function getStaticPaths() {
@@ -32,7 +33,7 @@ const pairLabels = [...new Set(pairs.map((p) => p.label))];
 const tocByTab = {
   usage: [{ id: 'example', text: 'Example' }, { id: 'when', text: 'When to use' }, { id: 'variants', text: 'Variants and states' }, { id: 'guidance', text: 'Guidance' }],
   style: [{ id: 'states', text: 'States in light and dark' }, { id: 'tokens', text: 'Component tokens' }, { id: 'contrast', text: 'Contrast' }],
-  code: [{ id: 'css', text: 'CSS' }, { id: 'mui', text: 'MUI' }, { id: 'shadcn', text: 'shadcn/ui' }, { id: 'swift', text: 'SwiftUI' }],
+  code: [{ id: 'css', text: 'CSS' }, ...(REACT_CODE[name] ? [{ id: 'react', text: 'Flint React' }] : []), { id: 'mui', text: 'MUI' }, { id: 'shadcn', text: 'shadcn/ui' }, { id: 'swift', text: 'SwiftUI' }],
   accessibility: [{ id: 'keyboard', text: 'Keyboard' }, { id: 'screen-readers', text: 'Screen readers' }, { id: 'contrast', text: 'Contrast' }, { id: 'target', text: 'Target size' }],
 };
 const tabLabel = TABS.find(([t]) => t === tab)[1];
@@ -124,6 +125,11 @@ const tabLabel = TABS.find(([t]) => t === tab)[1];
       <p>For Astro, EJS and plain HTML. These rules read only component tokens.</p>
       <Code label={c.code.css.label} code={c.code.css.code} />
       <Code label="CSS" code={c.code.css.rules} />
+      {REACT_CODE[name] && <>
+        <h2 id="react">Flint React</h2>
+        <p>From <code>@innerspark/flint/react</code>, which renders the classes above. See <a href="/get-started/react/">React</a>.</p>
+        <Code label="React" code={REACT_CODE[name]} />
+      </>}
       <h2 id="mui">MUI</h2>
       <Code label="React (MUI)" code={c.code.mui} />
       {c.code.muiGap && <Notice tone="warning" title="Known gap"><p>{c.code.muiGap}</p></Notice>}

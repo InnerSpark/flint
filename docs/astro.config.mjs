@@ -21,5 +21,11 @@ export default defineConfig({
   },
   // React for the workbench islands (MUI and shadcn render live); Tailwind only for the shadcn bench.
   integrations: [react()],
-  vite: { plugins: [tailwindcss()], server: { fs: { allow: [flintRoot] } } },
+  // The workbench's Flint React column imports ../react/src. dedupe makes React and Radix resolve from the
+  // docs install, so the page never loads a second React (hooks break) or needs react/node_modules.
+  vite: {
+    plugins: [tailwindcss()],
+    server: { fs: { allow: [flintRoot] } },
+    resolve: { dedupe: ['react', 'react-dom', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs', '@radix-ui/react-toast', '@radix-ui/react-tooltip'] },
+  },
 });

@@ -1,0 +1,81 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import Code from '../../../components/Code.astro';
+import Notice from '../../../components/Notice.astro';
+const toc = [{ id: 'install', text: 'Install' }, { id: 'use', text: 'Use the components' }, { id: 'overlays', text: 'Dialogs, menus and toasts' }, { id: 'how', text: 'How it is built' }];
+const installCode = `// Once, at the root of the app
+import '@innerspark/flint/tokens.css';
+import '@innerspark/flint/components.css';`;
+const peersCode = `npm install react react-dom \\
+  @radix-ui/react-dialog @radix-ui/react-dropdown-menu @radix-ui/react-tabs \\
+  @radix-ui/react-toast @radix-ui/react-tooltip`;
+const useCode = `import { Button, Field, Input, Checkbox, Alert } from '@innerspark/flint/react';
+
+export function TripForm({ error, saving }) {
+  return (
+    <form>
+      <Field label="Campsite name" helper="Shown on your trip card." error={error} required>
+        <Input />
+      </Field>
+      <Checkbox label="Bring the awning lights" />
+      {error && <Alert intent="error" title="We couldn't save the trip" role="alert">{error}</Alert>}
+      <Button type="submit" busy={saving}>Save trip</Button>
+    </form>
+  );
+}`;
+const overlayCode = `import { Dialog, DialogTrigger, DialogContent, DialogClose, Button,
+  Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator,
+  ToastProvider, ToastRegion, Toast } from '@innerspark/flint/react';
+
+<Dialog>
+  <DialogTrigger asChild><Button variant="danger">Delete trip</Button></DialogTrigger>
+  <DialogContent
+    title="Delete this trip?"
+    footer={<>
+      <DialogClose asChild><Button variant="secondary">Keep trip</Button></DialogClose>
+      <Button variant="danger" onClick={remove}>Delete trip</Button>
+    </>}
+  >
+    <p>The route and packing list go with it. You can't undo this.</p>
+  </DialogContent>
+</Dialog>
+
+<Menu>
+  <MenuTrigger asChild><Button variant="secondary">Trip actions</Button></MenuTrigger>
+  <MenuContent>
+    <MenuItem onSelect={rename}>Rename</MenuItem>
+    <MenuSeparator />
+    <MenuItem danger onSelect={remove}>Delete trip</MenuItem>
+  </MenuContent>
+</Menu>
+
+// Wrap the app once; the region is a polite live region.
+<ToastProvider>
+  <App />
+  <Toast open={saved} onOpenChange={setSaved} title="Report saved" description="Your VPAT draft is in Reports." />
+  <ToastRegion />
+</ToastProvider>`;
+---
+<Docs title="React" crumb="Get started" lead="@innerspark/flint/react: React components that render Flint's component classes. Radix handles the hard behavior: focus trapping, arrow keys, Esc and live regions." toc={toc}>
+  <h2 id="install">Install</h2>
+  <p>It ships inside <code>@innerspark/flint</code>. Load the tokens and the component CSS once:</p>
+  <Code label="React" code={installCode} />
+  <p>React 19.2 or later, React DOM and the Radix packages are optional peer dependencies, so apps that only use the tokens never install them. Add them in a React app:</p>
+  <Code label="Shell" code={peersCode} />
+
+  <h2 id="use">Use the components</h2>
+  <p>Every component renders the same classes as the plain CSS, so it looks and behaves the same in a React app, an Astro page or an EJS template. Props not listed pass through to the element underneath. <code>Field</code> wires its one control: id, label, <code>aria-describedby</code> for the helper and error, <code>aria-invalid</code> and <code>required</code>.</p>
+  <Code label="React" code={useCode} />
+
+  <h2 id="overlays">Dialogs, menus and toasts</h2>
+  <p>Dialog, Tabs, Menu, Tooltip and Toast are Radix underneath. The dialog traps focus and returns it to its trigger; menus and tabs follow the WAI-ARIA patterns; toasts never take focus, and one with an action never times out.</p>
+  <Code label="React" code={overlayCode} />
+
+  <h2 id="how">How it is built</h2>
+  <ul>
+    <li>No styles of its own. Change a token or a class in Flint and the React components follow.</li>
+    <li>One ESM file and hand-written types, tested on every push: each component is rendered and checked for its classes and ARIA, and the types are compiled against a sample app.</li>
+    <li>The <a href="/workbench/">workbench</a> has a Flint React column next to MUI, shadcn/ui and plain CSS. It runs axe in light, dark and compact, and keyboard checks on the overlays.</li>
+  </ul>
+  <Notice><p>React 19.2 and Node 22, matching AccessSpark. The build tooling lives in <code>react/</code> with its own <code>package.json</code>, so installing Flint from GitHub stays dependency-free.</p></Notice>
+</Docs>
