@@ -53,6 +53,36 @@ export const WORKBENCH = {
     lead: 'Every state as MUI, shadcn/ui and plain CSS. All three read the switch tokens: track, checked track, thumb and checked thumb.',
     benches: [['switch', 'Switch', 'switch/default']],
   },
+  dialog: {
+    name: 'Dialog',
+    lead: 'The panel in place, and a Live row that opens a real modal, as MUI, shadcn/ui and plain CSS. All three read the dialog tokens.',
+    benches: [['dialog', 'Dialog', 'dialog/default']],
+    gap: 'MUI\'s Dialog has no close button and doesn\'t read dialog.border. The plain CSS dialog is the native <dialog>: the browser traps focus and closes on Esc.',
+  },
+  tabs: {
+    name: 'Tabs',
+    lead: 'Live tabs as MUI, shadcn/ui and plain CSS. Use the arrow keys: all three follow the APG tabs pattern.',
+    benches: [['tabs', 'Tabs', 'tabs/default']],
+    gap: 'MUI renders no panels and sets no aria-controls unless you pass them. Styling now matches: the Flint theme gives MUI tabs the 4px bar, the heavier selected weight and the inset focus ring (ASDS-81).',
+  },
+  menu: {
+    name: 'Menu',
+    lead: 'The open menu in place, and a Live menu button, as MUI, shadcn/ui and plain CSS.',
+    benches: [['menu', 'Menu', 'menu/default']],
+    gap: 'MUI has no danger item style; the MUI column colors Delete with menu.itemFgDanger. The shadcn Open row is static markup with the same classes, since Radix only renders an open menu in a portal.',
+  },
+  tooltip: {
+    name: 'Tooltip',
+    lead: 'A tooltip held open, and a Live one, as MUI, shadcn/ui and plain CSS. Each describes its button (aria-describedby).',
+    benches: [['tooltip', 'Tooltip', 'tooltip/default']],
+    gap: 'MUI uses the tooltip as the button\'s name unless you pass describeChild, as this bench does.',
+  },
+  toast: {
+    name: 'Toast',
+    lead: 'A toast in place, with and without an action, and a Live row, as MUI, shadcn/ui and plain CSS. None takes focus.',
+    benches: [['toast', 'Toast', 'toast/default']],
+    gap: 'MUI\'s Snackbar shows one message at a time and has no title and detail. The shadcn rows in place are static markup with the toast classes.',
+  },
   icon: {
     name: 'Icon',
     lead: 'Each size and the muted color as MUI, shadcn/ui and plain CSS. All three read the icon tokens.',

@@ -1185,6 +1185,146 @@
     },
     {
       "mode": "light",
+      "label": "dialog text",
+      "fg": "component.dialog.fg",
+      "bg": "component.dialog.bg",
+      "ratio": 14.63,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "dialog title",
+      "fg": "component.dialog.titleFg",
+      "bg": "component.dialog.bg",
+      "ratio": 14.5,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "tabs label",
+      "fg": "component.tabs.fg",
+      "bg": "surface.default",
+      "ratio": 10.35,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "tabs label on hover",
+      "fg": "component.tabs.fgHover",
+      "bg": "component.tabs.bgHover",
+      "ratio": 13.23,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "tabs selected label",
+      "fg": "component.tabs.fgSelected",
+      "bg": "surface.default",
+      "ratio": 7.82,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "tabs indicator",
+      "fg": "component.tabs.indicator",
+      "bg": "surface.default",
+      "ratio": 7.82,
+      "threshold": 3,
+      "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "menu item",
+      "fg": "component.menu.fg",
+      "bg": "component.menu.bg",
+      "ratio": 14.63,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "menu item on hover",
+      "fg": "component.menu.fg",
+      "bg": "component.menu.itemBgHover",
+      "ratio": 13.35,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "menu danger item",
+      "fg": "component.menu.itemFgDanger",
+      "bg": "component.menu.bg",
+      "ratio": 10.02,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "menu danger item on hover",
+      "fg": "component.menu.itemFgDanger",
+      "bg": "component.menu.itemBgHover",
+      "ratio": 9.15,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "tooltip text",
+      "fg": "component.tooltip.fg",
+      "bg": "component.tooltip.bg",
+      "ratio": 14.5,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "toast text",
+      "fg": "component.toast.fg",
+      "bg": "component.toast.bg",
+      "ratio": 14.5,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "toast muted text",
+      "fg": "component.toast.fgMuted",
+      "bg": "component.toast.bg",
+      "ratio": 9.76,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "focus ring on toast",
+      "fg": "component.toast.focusRing",
+      "bg": "component.toast.bg",
+      "ratio": 14.5,
+      "threshold": 3,
+      "kind": "focus",
+      "pass": true
+    },
+    {
+      "mode": "light",
       "label": "focus ring on page",
       "fg": "component.focus.ring.color",
       "bg": "surface.page",
@@ -2381,6 +2521,146 @@
       "ratio": 8.6,
       "threshold": 3,
       "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "dialog text",
+      "fg": "component.dialog.fg",
+      "bg": "component.dialog.bg",
+      "ratio": 11.21,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "dialog title",
+      "fg": "component.dialog.titleFg",
+      "bg": "component.dialog.bg",
+      "ratio": 15.89,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "tabs label",
+      "fg": "component.tabs.fg",
+      "bg": "surface.default",
+      "ratio": 8.6,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "tabs label on hover",
+      "fg": "component.tabs.fgHover",
+      "bg": "component.tabs.bgHover",
+      "ratio": 13.98,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "tabs selected label",
+      "fg": "component.tabs.fgSelected",
+      "bg": "surface.default",
+      "ratio": 12.17,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "tabs indicator",
+      "fg": "component.tabs.indicator",
+      "bg": "surface.default",
+      "ratio": 9.59,
+      "threshold": 3,
+      "kind": "ui",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "menu item",
+      "fg": "component.menu.fg",
+      "bg": "component.menu.bg",
+      "ratio": 11.21,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "menu item on hover",
+      "fg": "component.menu.fg",
+      "bg": "component.menu.itemBgHover",
+      "ratio": 9.86,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "menu danger item",
+      "fg": "component.menu.itemFgDanger",
+      "bg": "component.menu.bg",
+      "ratio": 14.16,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "menu danger item on hover",
+      "fg": "component.menu.itemFgDanger",
+      "bg": "component.menu.itemBgHover",
+      "ratio": 12.46,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "tooltip text",
+      "fg": "component.tooltip.fg",
+      "bg": "component.tooltip.bg",
+      "ratio": 18.09,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "toast text",
+      "fg": "component.toast.fg",
+      "bg": "component.toast.bg",
+      "ratio": 18.09,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "toast muted text",
+      "fg": "component.toast.fgMuted",
+      "bg": "component.toast.bg",
+      "ratio": 9.9,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "focus ring on toast",
+      "fg": "component.toast.focusRing",
+      "bg": "component.toast.bg",
+      "ratio": 18.09,
+      "threshold": 3,
+      "kind": "focus",
       "pass": true
     },
     {

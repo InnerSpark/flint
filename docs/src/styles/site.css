@@ -35,7 +35,8 @@ img, svg { max-width: 100%; }
 /* In the base layer, as in an app: MUI and Tailwind (layered, on the workbench) can then color their own links. */
 @layer base { a { color: var(--color-text-link); text-underline-offset: 0.15em; } }
 a:hover { text-decoration-thickness: 2px; }
-:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+/* Base layer, like the link color: so MUI and Tailwind (layered, on the workbench) can set their own focus offsets. */
+@layer base { :focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); } }
 [tabindex="-1"]:focus { outline: none; }
 code, kbd { font-family: var(--font-mono); font-size: 0.9em; }
 :not(pre) > code { background: var(--color-surface-subtle); color: var(--color-text-heading); padding: 1px var(--space-4); border-radius: var(--radius-xs); overflow-wrap: anywhere; }
@@ -194,6 +195,13 @@ table.data th[scope="row"] { font-weight: 600; color: var(--color-text-heading);
 .state-in .flint-field { width: 100%; }
 .state-in .flint-alert { width: 100%; }
 .cr-name code { overflow-wrap: anywhere; }
+/* Popups shown in place inside previews: no positioning, always visible, no entrance animation. */
+:is(.state-in, .thumb-in) .flint-menu { position: static; }
+:is(.state-in, .thumb-in) .flint-tooltip-anchor { margin-top: var(--space-40); margin-inline-start: var(--space-48); }
+.thumb-in > :is(.flint-dialog, .flint-menu) { transform: scale(0.72); transform-origin: center; flex: none; }
+:is(.state-in, .thumb-in) .flint-tooltip { visibility: visible; opacity: 1; }
+:is(.state-in, .thumb-in) :is(.flint-toast, .flint-dialog) { width: 100%; animation: none; }
+:is(.state-in, .thumb-in) .flint-tabs__list { width: 100%; }
 .stage-shape { width: var(--space-48); height: var(--space-24); border-radius: var(--radius-sm); }
 .stage-ring-demo { width: 6rem; height: 2.25rem; }
 .stage-field:empty { min-height: var(--space-32); }
@@ -297,6 +305,11 @@ table.data th[scope="row"] { font-weight: 600; color: var(--color-text-heading);
 /* form field used by examples */
 .example-pane .flint-field { max-width: 320px; }
 /* The skip link example: the pane is the box it appears in, with room at the top for it. */
+/* Room for popups inside the example frame (it clips): the open menu below, the tooltip above. */
+.example-pane:has(.flint-menu-anchor) { min-height: 20rem; }
+.example-pane .tooltip-room { padding-top: var(--space-40); }
+/* The light and dark toast examples each have a region; keep them from landing on top of each other. */
+.example-pane[data-theme="dark"] .flint-toast-region { inset-inline-end: auto; inset-inline-start: var(--space-16); }
 .example-pane:has(> .flint-skip-link) { position: relative; padding-top: calc(var(--button-height) + var(--space-24)); }
 
 /* ---------- do / don't ---------- */

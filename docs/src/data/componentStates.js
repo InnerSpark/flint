@@ -15,6 +15,11 @@ const radio = (attrs = '', cls = '') => `<label class="flint-choice"><input type
 const sw = (attrs = '', cls = '') => `<label class="flint-choice"><input type="checkbox" role="switch" class="flint-switch ${cls}" ${attrs} /> Weekly summary</label>`;
 const select = (attrs = '', cls = '') => `<select class="flint-select ${cls}" aria-label="Standard" ${attrs}><option>WCAG 2.2 AA</option></select>`;
 
+const dialogPanel = `<div class="flint-dialog"><div class="flint-dialog__header"><p class="flint-dialog__title">Delete this trip?</p><button type="button" class="flint-btn flint-btn--text flint-btn--icon" aria-label="Close">${x}</button></div><div class="flint-dialog__body"><p>The route and packing list go with it.</p></div><div class="flint-dialog__footer"><button type="button" class="flint-btn flint-btn--secondary flint-btn--sm">Keep trip</button><button type="button" class="flint-btn flint-btn--danger flint-btn--sm">Delete trip</button></div></div>`;
+const tabsRow = (hover = -1, focus = -1) => `<div class="flint-tabs__list" role="tablist" aria-label="Trip">${['Route', 'Packing', 'Sites'].map((t, i) => `<button type="button" role="tab" class="flint-tabs__tab ${i === hover ? 'st-hover' : ''} ${i === focus ? 'st-focus' : ''}" aria-selected="${i === 0}">${t}</button>`).join('')}</div>`;
+const menuList = (cls = ['', '', '']) => `<ul class="flint-menu" role="menu" aria-label="Trip actions"><li role="none"><button type="button" role="menuitem" class="flint-menu__item ${cls[0]}">Rename</button></li><li role="none"><button type="button" role="menuitem" class="flint-menu__item ${cls[1]}">Duplicate</button></li><li role="separator" class="flint-menu__separator"></li><li role="none"><button type="button" role="menuitem" class="flint-menu__item flint-menu__item--danger ${cls[2]}">Delete trip</button></li></ul>`;
+const toast = (action, focus) => `<div class="flint-toast"><p class="flint-toast__title">${action ? 'Trip archived' : 'Report saved'}</p><p class="flint-toast__body">${action ? 'Turkey Bend moved to Archive.' : 'Your VPAT draft is in Reports.'}</p>${action ? `<div class="flint-toast__actions"><button type="button" class="flint-toast__action ${focus ? 'st-focus' : ''}">Undo</button></div>` : ''}<button type="button" class="flint-toast__close" aria-label="Dismiss">${x}</button></div>`;
+
 export const STATES = {
   button: [
     ['Default', 'button.*.bg, fg, border', buttons()],
@@ -83,6 +88,26 @@ export const STATES = {
     ['Success', 'feedback.success.*', `<div class="flint-alert flint-alert--success">${icon('M6.5 10.5l2.5 2.5 4.5-5')}<p class="flint-alert__title">Report saved</p><p class="flint-alert__body">It's in Reports.</p></div>`],
     ['Warning', 'feedback.warning.*', `<div class="flint-alert flint-alert--warning">${icon('M10 8v4')}<p class="flint-alert__title">12 checks need a person</p><p class="flint-alert__body">Review before export.</p></div>`],
     ['Error', 'feedback.error.*', `<div class="flint-alert flint-alert--error">${icon('M7 7l6 6M13 7l-6 6')}<p class="flint-alert__title">Couldn't reach the site</p><p class="flint-alert__body">Check the address.</p></div>`],
+  ],
+  dialog: [
+    ['Open', 'dialog.bg, border, titleFg, fg, radius', dialogPanel],
+  ],
+  tabs: [
+    ['Default', 'tabs.fg, fgSelected, indicator, border', tabsRow()],
+    ['Hover', 'tabs.fgHover, bgHover', tabsRow(1)],
+    ['Focus', 'focus.ring.*', tabsRow(-1, 0)],
+  ],
+  menu: [
+    ['Open', 'menu.bg, fg, border, itemFgDanger', menuList()],
+    ['Item hover', 'menu.itemBgHover', menuList(['', 'st-hover', ''])],
+    ['Item focus', 'menu.itemBgHover, focus.ring.*', menuList(['', '', 'st-focus'])],
+  ],
+  tooltip: [
+    ['Shown', 'tooltip.bg, fg, radius', '<span class="flint-tooltip-anchor"><button type="button" class="flint-btn flint-btn--secondary flint-btn--sm" aria-describedby="tip-__P__">Export</button><span class="flint-tooltip" role="tooltip" id="tip-__P__">PDF, about 2 MB</span></span>'],
+  ],
+  toast: [
+    ['Message', 'toast.bg, fg, fgMuted, radius', toast(false)],
+    ['With an action', 'toast.fg, focusRing', toast(true, true)],
   ],
   'skip-link': [
     ['Focused', 'skipLink.bg, fg, focus.ring.*', '<a class="flint-skip-link st-focus" href="#tokens">Skip to content</a>'],

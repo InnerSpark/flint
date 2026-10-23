@@ -18,6 +18,28 @@ import AlertTitle from '@mui/material/AlertTitle';
 import { Switch as ShadSwitch } from './ui/switch';
 import SvgIcon from '@mui/material/SvgIcon';
 
+import { useEffect, useRef, useState } from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Paper from '@mui/material/Paper';
+import MuiTabs from '@mui/material/Tabs';
+import MuiTab from '@mui/material/Tab';
+import MuiMenu from '@mui/material/Menu';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider';
+import MuiTooltip from '@mui/material/Tooltip';
+import Snackbar from '@mui/material/Snackbar';
+import SnackbarContent from '@mui/material/SnackbarContent';
+import { Dialog as ShadDialog, DialogTrigger, DialogContent as ShadDialogContent, DialogHeader, DialogTitle as ShadDialogTitle, DialogDescription, DialogFooter, DialogClose, DIALOG_PANEL } from './ui/dialog';
+import { Tabs as ShadTabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, MENU_CONTENT, MENU_ITEM } from './ui/dropdown-menu';
+import { TooltipProvider, Tooltip as ShadTooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
+import { ToastProvider, ToastViewport, Toast as ShadToast, ToastTitle, ToastDescription, ToastAction, ToastClose, TOAST } from './ui/toast';
+import { initDialogs, initTabs, initMenus, initTooltips, showToast } from '../../../js/behaviors.js';
+
 export const IMPLEMENTATIONS = ['MUI', 'shadcn', 'Plain CSS'];
 
 const BUTTON_STATES = [
@@ -349,6 +371,165 @@ const icon = {
   },
 };
 
+
+// ---------- Overlays (ASDS-80 to 84). Each bench has a Live row that really opens, and a row that
+// shows the popup in place so the three can be compared side by side.
+const X16 = <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>;
+/** Runs one of behaviors.js's init functions on this cell once it is in the page. */
+function Plain({ init, children, block }) {
+  const ref = useRef(null);
+  useEffect(() => { if (ref.current && init) init(ref.current); }, [init]);
+  return <div ref={ref} className={block ? 'tb-plain-block' : 'tb-plain'}>{children}</div>;
+}
+const uid = (impl, label) => `${impl}-${label}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+function MuiDialogLive() {
+  const [open, setOpen] = useState(false);
+  return <>
+    <MuiButton variant="contained" color="error" disableElevation onClick={() => setOpen(true)}>Delete trip</MuiButton>
+    <Dialog open={open} onClose={() => setOpen(false)} aria-labelledby="mui-dialog-title">
+      <DialogTitle id="mui-dialog-title">Delete this trip?</DialogTitle>
+      <DialogContent>The route and packing list go with it. You can't undo this.</DialogContent>
+      <DialogActions><MuiButton variant="outlined" onClick={() => setOpen(false)}>Keep trip</MuiButton><MuiButton variant="contained" color="error" disableElevation onClick={() => setOpen(false)}>Delete trip</MuiButton></DialogActions>
+    </Dialog>
+  </>;
+}
+const dialog = {
+  states: [{ label: 'Panel', note: 'open, shown in place' }, { label: 'Live', note: 'opens a modal' }],
+  render(impl, s) {
+    const id = uid(impl, 'dialog');
+    if (s.label === 'Panel') {
+      if (impl === 'MUI') return <Paper elevation={24} sx={{ width: '100%' }}><DialogTitle component="p">Delete this trip?</DialogTitle><DialogContent>The route and packing list go with it.</DialogContent><DialogActions><MuiButton variant="outlined" size="small">Keep trip</MuiButton><MuiButton variant="contained" color="error" size="small" disableElevation>Delete trip</MuiButton></DialogActions></Paper>;
+      if (impl === 'shadcn') return <div className={`${DIALOG_PANEL} w-full`}><p className="m-0 text-[length:var(--type-heading-h3-size)] font-bold text-[var(--dialog-title-fg)]">Delete this trip?</p><p className="m-0">The route and packing list go with it.</p><div className="flex flex-wrap justify-end gap-[var(--space-8)]"><ShadButton variant="secondary" size="sm">Keep trip</ShadButton><ShadButton variant="destructive" size="sm">Delete trip</ShadButton></div></div>;
+      return <div className="flint-dialog tb-inplace"><div className="flint-dialog__header"><p className="flint-dialog__title">Delete this trip?</p><button type="button" className="flint-btn flint-btn--text flint-btn--icon" aria-label="Close">{X16}</button></div><div className="flint-dialog__body"><p>The route and packing list go with it.</p></div><div className="flint-dialog__footer"><button type="button" className="flint-btn flint-btn--secondary flint-btn--sm">Keep trip</button><button type="button" className="flint-btn flint-btn--danger flint-btn--sm">Delete trip</button></div></div>;
+    }
+    if (impl === 'MUI') return <MuiDialogLive />;
+    if (impl === 'shadcn') {
+      return <ShadDialog>
+        <DialogTrigger asChild><ShadButton variant="destructive">Delete trip</ShadButton></DialogTrigger>
+        <ShadDialogContent>
+          <DialogHeader><ShadDialogTitle>Delete this trip?</ShadDialogTitle><DialogDescription>The route and packing list go with it. You can't undo this.</DialogDescription></DialogHeader>
+          <DialogFooter><DialogClose asChild><ShadButton variant="secondary">Keep trip</ShadButton></DialogClose><DialogClose asChild><ShadButton variant="destructive">Delete trip</ShadButton></DialogClose></DialogFooter>
+        </ShadDialogContent>
+      </ShadDialog>;
+    }
+    return <Plain init={initDialogs}>
+      <button type="button" className="flint-btn flint-btn--danger" data-flint-dialog-open={id}>Delete trip</button>
+      <dialog className="flint-dialog" id={id} aria-labelledby={`${id}-title`}>
+        <div className="flint-dialog__header"><h2 className="flint-dialog__title" id={`${id}-title`}>Delete this trip?</h2><button type="button" className="flint-btn flint-btn--text flint-btn--icon" data-flint-dialog-close aria-label="Close">{X16}</button></div>
+        <div className="flint-dialog__body"><p>The route and packing list go with it. You can't undo this.</p></div>
+        <div className="flint-dialog__footer"><button type="button" className="flint-btn flint-btn--secondary" data-flint-dialog-close>Keep trip</button><button type="button" className="flint-btn flint-btn--danger" data-flint-dialog-close>Delete trip</button></div>
+      </dialog>
+    </Plain>;
+  },
+};
+
+const TAB_NAMES = ['Route', 'Packing', 'Sites'];
+function MuiTabsLive({ focus }) {
+  const [v, setV] = useState(0);
+  return <div className="w-full"><MuiTabs value={v} onChange={(e, n) => setV(n)} aria-label="Trip details, MUI">{TAB_NAMES.map((t, i) => <MuiTab key={t} label={t} className={focus && i === 0 ? 'st-focus Mui-focusVisible' : ''} />)}</MuiTabs></div>;
+}
+const tabs = {
+  states: [{ label: 'Live', note: 'try the arrow keys' }, { label: 'Focus', focus: true, note: 'keyboard focus' }],
+  render(impl, s) {
+    const id = uid(impl, `tabs-${s.label}`);
+    if (impl === 'MUI') return <MuiTabsLive focus={s.focus} />;
+    if (impl === 'shadcn') {
+      return <ShadTabs defaultValue="Route" className="w-full"><TabsList aria-label={`Trip details, shadcn, ${s.label}`}>{TAB_NAMES.map((t, i) => <TabsTrigger key={t} value={t} className={s.focus && i === 0 ? 'st-focus' : ''}>{t}</TabsTrigger>)}</TabsList>{TAB_NAMES.map((t) => <TabsContent key={t} value={t} className="sr-panel">{t} details</TabsContent>)}</ShadTabs>;
+    }
+    return <Plain init={initTabs} block>
+      <div className="flint-tabs__list" role="tablist" aria-label={`Trip details, plain CSS, ${s.label}`}>
+        {TAB_NAMES.map((t, i) => <button key={t} type="button" role="tab" className={`flint-tabs__tab ${s.focus && i === 0 ? 'st-focus' : ''}`} id={`${id}-t${i}`} aria-selected={i === 0} aria-controls={`${id}-p${i}`} tabIndex={i === 0 ? 0 : -1}>{t}</button>)}
+      </div>
+      {TAB_NAMES.map((t, i) => <div key={t} className="flint-tabs__panel sr-panel" role="tabpanel" id={`${id}-p${i}`} aria-labelledby={`${id}-t${i}`} hidden={i !== 0}>{t} details</div>)}
+    </Plain>;
+  },
+};
+
+const MENU_ITEMS = ['Rename', 'Duplicate'];
+function MuiMenuLive() {
+  const [anchor, setAnchor] = useState(null);
+  const close = () => setAnchor(null);
+  return <>
+    <MuiButton variant="outlined" id="mui-menu-btn" aria-haspopup="menu" aria-expanded={!!anchor} aria-controls="mui-menu" onClick={(e) => setAnchor(e.currentTarget)}>Trip actions</MuiButton>
+    <MuiMenu id="mui-menu" anchorEl={anchor} open={!!anchor} onClose={close} slotProps={{ list: { 'aria-labelledby': 'mui-menu-btn' } }}>
+      {MENU_ITEMS.map((t) => <MenuItem key={t} onClick={close}>{t}</MenuItem>)}
+      <Divider />
+      <MenuItem onClick={close} sx={{ color: 'var(--menu-item-fg-danger)' }}>Delete trip</MenuItem>
+    </MuiMenu>
+  </>;
+}
+const menu = {
+  states: [{ label: 'Open', note: 'shown in place' }, { label: 'Live', note: 'try the arrow keys' }],
+  render(impl, s) {
+    const id = uid(impl, 'menu');
+    if (s.label === 'Open') {
+      if (impl === 'MUI') return <Paper elevation={4}><MenuList aria-label="Trip actions, MUI">{MENU_ITEMS.map((t) => <MenuItem key={t}>{t}</MenuItem>)}<Divider /><MenuItem sx={{ color: 'var(--menu-item-fg-danger)' }}>Delete trip</MenuItem></MenuList></Paper>;
+      if (impl === 'shadcn') return <div role="menu" aria-label="Trip actions, shadcn" className={MENU_CONTENT}>{MENU_ITEMS.map((t) => <div key={t} role="menuitem" tabIndex={-1} className={MENU_ITEM}>{t}</div>)}<div role="separator" className="my-[var(--space-4)] border-t border-[var(--menu-border)]" /><div role="menuitem" tabIndex={-1} className={`${MENU_ITEM} text-[var(--menu-item-fg-danger)]`}>Delete trip</div></div>;
+      return <ul className="flint-menu tb-inplace" role="menu" aria-label="Trip actions, plain CSS">{MENU_ITEMS.map((t) => <li key={t} role="none"><button type="button" role="menuitem" tabIndex={-1} className="flint-menu__item">{t}</button></li>)}<li role="separator" className="flint-menu__separator" /><li role="none"><button type="button" role="menuitem" tabIndex={-1} className="flint-menu__item flint-menu__item--danger">Delete trip</button></li></ul>;
+    }
+    if (impl === 'MUI') return <MuiMenuLive />;
+    if (impl === 'shadcn') {
+      return <DropdownMenu>
+        <DropdownMenuTrigger asChild><ShadButton variant="secondary">Trip actions</ShadButton></DropdownMenuTrigger>
+        <DropdownMenuContent>{MENU_ITEMS.map((t) => <DropdownMenuItem key={t}>{t}</DropdownMenuItem>)}<DropdownMenuSeparator /><DropdownMenuItem variant="destructive">Delete trip</DropdownMenuItem></DropdownMenuContent>
+      </DropdownMenu>;
+    }
+    return <Plain init={initMenus}>
+      <div className="flint-menu-anchor">
+        <button type="button" className="flint-btn flint-btn--secondary" id={`${id}-btn`} aria-haspopup="menu" aria-expanded="false" aria-controls={id}>Trip actions</button>
+        <ul className="flint-menu" role="menu" id={id} aria-labelledby={`${id}-btn`} hidden>{MENU_ITEMS.map((t) => <li key={t} role="none"><button type="button" role="menuitem" className="flint-menu__item">{t}</button></li>)}<li role="separator" className="flint-menu__separator" /><li role="none"><button type="button" role="menuitem" className="flint-menu__item flint-menu__item--danger">Delete trip</button></li></ul>
+      </div>
+    </Plain>;
+  },
+};
+
+const tooltip = {
+  states: [{ label: 'Shown', shown: true, note: 'held open' }, { label: 'Live', note: 'hover or Tab to it' }],
+  render(impl, s) {
+    const id = uid(impl, `tip-${s.label}`);
+    const label = `Export ${impl}${s.shown ? ' (shown)' : ''}`;
+    if (impl === 'MUI') return <div className="tb-tip-room"><MuiTooltip title="PDF, about 2 MB" describeChild arrow open={s.shown || undefined} placement="top" slotProps={{ popper: { disablePortal: true } }}><MuiButton variant="outlined" aria-label={label}>Export</MuiButton></MuiTooltip></div>;
+    if (impl === 'shadcn') return <div className="tb-tip-room"><TooltipProvider delayDuration={0}><ShadTooltip open={s.shown || undefined}><TooltipTrigger asChild><ShadButton variant="secondary" aria-label={label}>Export</ShadButton></TooltipTrigger><TooltipContent side="top">PDF, about 2 MB</TooltipContent></ShadTooltip></TooltipProvider></div>;
+    return <div className="tb-tip-room"><Plain init={initTooltips}><span className={`flint-tooltip-anchor ${s.shown ? 'tb-shown' : ''}`}><button type="button" className="flint-btn flint-btn--secondary" aria-label={label} aria-describedby={id}>Export</button><span className="flint-tooltip" role="tooltip" id={id}>PDF, about 2 MB</span></span></Plain></div>;
+  },
+};
+
+function MuiToastLive() {
+  const [open, setOpen] = useState(false);
+  return <>
+    <MuiButton variant="contained" disableElevation onClick={() => setOpen(true)}>Save report, MUI</MuiButton>
+    <Snackbar open={open} onClose={() => setOpen(false)} autoHideDuration={6000} message="Report saved" />
+  </>;
+}
+function ShadToastLive() {
+  const [open, setOpen] = useState(false);
+  return <ToastProvider>
+    <ShadButton onClick={() => setOpen(true)}>Save report, shadcn</ShadButton>
+    <ShadToast open={open} onOpenChange={setOpen}><ToastTitle>Report saved</ToastTitle><ToastDescription>Your VPAT draft is in Reports.</ToastDescription><ToastClose label="Dismiss: Report saved" /></ShadToast>
+    <ToastViewport />
+  </ToastProvider>;
+}
+function PlainToastLive() {
+  const region = useRef(null);
+  return <>
+    <button type="button" className="flint-btn flint-btn--primary" onClick={() => showToast(region.current, { title: 'Report saved', body: 'Your VPAT draft is in Reports.' })}>Save report, plain CSS</button>
+    <div ref={region} className="flint-toast-region" role="status" aria-live="polite" />
+  </>;
+}
+const toast = {
+  states: [{ label: 'Message', note: 'shown in place' }, { label: 'With an action', action: true, note: 'shown in place' }, { label: 'Live', note: 'press to show one' }],
+  render(impl, s) {
+    if (s.label === 'Live') return impl === 'MUI' ? <MuiToastLive /> : impl === 'shadcn' ? <ShadToastLive /> : <PlainToastLive />;
+    const [title, body] = s.action ? ['Trip archived', 'Turkey Bend moved to Archive.'] : ['Report saved', 'Your VPAT draft is in Reports.'];
+    if (impl === 'MUI') return <SnackbarContent message={title} action={s.action ? <MuiButton size="small" sx={{ color: 'inherit' }}>Undo</MuiButton> : undefined} />;
+    if (impl === 'shadcn') {
+      return <div className={`${TOAST} w-full`}><p className="m-0 pt-[var(--space-2)] font-bold">{title}</p><p className="col-start-1 m-0 text-[var(--toast-fg-muted)]">{body}</p>{s.action && <button type="button" className="col-start-1 min-h-[var(--target-min)] justify-self-start bg-transparent p-0 text-sm font-bold text-[var(--toast-fg)] underline">Undo</button>}<button type="button" aria-label={`Dismiss: ${title}, shadcn`} className="col-start-2 row-start-1 grid size-[var(--target-min)] place-content-center bg-transparent text-[var(--toast-fg)]">{X16}</button></div>;
+    }
+    return <div className="flint-toast tb-inplace"><p className="flint-toast__title">{title}</p><p className="flint-toast__body">{body}</p>{s.action && <div className="flint-toast__actions"><button type="button" className="flint-toast__action">Undo</button></div>}<button type="button" className="flint-toast__close" aria-label={`Dismiss: ${title}, plain CSS`}>{X16}</button></div>;
+  },
+};
+
 export const BENCHES = {
   'button/primary': button('primary'),
   'button/secondary': button('secondary'),
@@ -366,4 +547,9 @@ export const BENCHES = {
   'field/default': field,
   'skip-link/default': skipLink,
   'icon/sizes': icon,
+  'dialog/default': dialog,
+  'tabs/default': tabs,
+  'menu/default': menu,
+  'tooltip/default': tooltip,
+  'toast/default': toast,
 };

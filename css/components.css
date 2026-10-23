@@ -261,3 +261,115 @@ textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); 
 .flint-icon--sm { width: var(--icon-sm); height: var(--icon-sm); }
 .flint-icon--lg { width: var(--icon-lg); height: var(--icon-lg); }
 .flint-icon--muted { color: var(--icon-fg-muted); }
+
+/* Dialog (ASDS-80). Title, body and toast text rules carry two classes so a page's own heading and
+   paragraph margins (a .prose h2, say) can't leak in. Put the class on a native <dialog> and open it with showModal(). The browser traps
+   focus, closes on Esc and puts the rest of the page behind it; behaviors.js returns focus to the
+   button that opened it. Name it with aria-labelledby pointing at the title. Arrives with
+   --ease-entrance, never the overshoot. */
+.flint-dialog {
+  width: min(32rem, calc(100vw - var(--space-32))); max-height: calc(100dvh - var(--space-48));
+  padding: 0; border: 1px solid var(--dialog-border); border-radius: var(--dialog-radius);
+  background: var(--dialog-bg); color: var(--dialog-fg); box-shadow: var(--shadow-dialog);
+  font: 400 var(--font-size-md) / 1.5 var(--font-sans);
+}
+.flint-dialog[open] { display: flex; flex-direction: column; }
+.flint-dialog::backdrop { background: var(--color-overlay-scrim); }
+.flint-dialog__header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-16); padding: var(--space-24) var(--space-24) 0; }
+.flint-dialog .flint-dialog__title { margin: 0; font-size: var(--type-heading-h3-size); font-weight: var(--type-heading-h3-weight); line-height: var(--type-heading-h3-line-height); color: var(--dialog-title-fg); }
+.flint-dialog__header .flint-btn--icon { margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) 0 0; }
+.flint-dialog__body { padding: var(--space-16) var(--space-24); overflow-y: auto; }
+.flint-dialog .flint-dialog__body > * { margin: 0; }
+.flint-dialog .flint-dialog__body > * + * { margin-top: var(--space-12); }
+.flint-dialog__footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-8); padding: 0 var(--space-24) var(--space-24); }
+@media (prefers-reduced-motion: no-preference) { .flint-dialog[open] { animation: flint-dialog-in var(--duration-base) var(--ease-entrance); } }
+@keyframes flint-dialog-in { from { opacity: 0; transform: translateY(var(--space-8)); } }
+
+/* Tabs (ASDS-81): role="tablist" on the list, role="tab" buttons with aria-selected and aria-controls,
+   role="tabpanel" panels. Only the selected tab is in the Tab order; arrow keys move between tabs
+   (behaviors.js). The selected tab shows a bar and a heavier weight, so it never rests on color. */
+.flint-tabs__list { display: flex; gap: var(--space-4); border-bottom: 1px solid var(--tabs-border); overflow-x: auto; }
+.flint-tabs__tab {
+  appearance: none; position: relative; flex: none; min-height: var(--control-md); padding: 0 var(--space-16);
+  border: 0; border-radius: var(--radius-control) var(--radius-control) 0 0; background: none;
+  color: var(--tabs-fg); font: 600 var(--font-size-sm) / 1.2 var(--font-sans); white-space: nowrap; cursor: pointer;
+}
+.flint-tabs__tab:hover { color: var(--tabs-fg-hover); background: var(--tabs-bg-hover); }
+.flint-tabs__tab[aria-selected="true"] { color: var(--tabs-fg-selected); font-weight: 800; box-shadow: inset 0 calc(var(--space-4) * -1) 0 var(--tabs-indicator); }
+/* The ring sits inside the tab, so the list's scroll edge never clips it. */
+.flint-tabs__tab:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: calc(var(--focus-ring-offset) * -1 - var(--focus-ring-width)); }
+.flint-tabs__panel { padding-block: var(--space-16); }
+.flint-tabs__panel:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); border-radius: var(--radius-xs); }
+@media (forced-colors: active) { .flint-tabs__tab[aria-selected="true"] { box-shadow: none; border-bottom: 4px solid CanvasText; } }
+
+/* Menu (ASDS-82): a menu button. The trigger has aria-haspopup="menu" and aria-expanded; the list is
+   role="menu" with role="menuitem" buttons in role="none" list items. behaviors.js moves focus in on
+   open, handles the arrow keys, and closes on Esc, Tab or a click outside, returning focus. */
+.flint-menu-anchor { position: relative; display: inline-block; }
+.flint-menu {
+  position: absolute; top: calc(100% + var(--space-4)); inset-inline-start: 0; z-index: var(--z-dropdown);
+  min-width: 12rem; margin: 0; padding: var(--space-4); list-style: none;
+  background: var(--menu-bg); color: var(--menu-fg); border: 1px solid var(--menu-border); border-radius: var(--menu-radius); box-shadow: var(--shadow-popover);
+}
+.flint-menu[hidden] { display: none; }
+.flint-menu > li { margin: 0; }
+.flint-menu__item {
+  display: flex; align-items: center; gap: var(--space-8); width: 100%; min-height: var(--control-md); padding: 0 var(--space-12);
+  border: 0; border-radius: var(--radius-xs); background: none; color: inherit; font: 400 var(--font-size-sm) / 1.2 var(--font-sans); text-align: start; cursor: pointer;
+}
+.flint-menu__item svg { width: var(--icon-size-sm); height: var(--icon-size-sm); flex: none; }
+.flint-menu__item:hover, .flint-menu__item:focus-visible { background: var(--menu-item-bg-hover); }
+.flint-menu__item:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: calc(var(--focus-ring-width) * -1); }
+.flint-menu__item--danger { color: var(--menu-item-fg-danger); }
+.flint-menu__item[aria-disabled="true"] { color: var(--color-action-disabled); cursor: not-allowed; }
+.flint-menu__separator { margin: var(--space-4) 0; border-top: 1px solid var(--menu-border); }
+
+/* Tooltip (ASDS-83): extra text for a control that already has a name. Wrap the control and the
+   tooltip in .flint-tooltip-anchor and point aria-describedby at the tooltip. It shows on hover and
+   keyboard focus, stays while the pointer is over it, and Esc hides it (behaviors.js). Never put the
+   only name of an icon button in a tooltip. */
+.flint-tooltip-anchor { position: relative; display: inline-flex; }
+.flint-tooltip {
+  position: absolute; bottom: calc(100% + var(--space-8)); left: 50%; transform: translateX(-50%); z-index: var(--z-popover);
+  width: max-content; max-width: 16rem; padding: var(--space-4) var(--space-8);
+  border: 1px solid transparent; border-radius: var(--tooltip-radius); background: var(--tooltip-bg); color: var(--tooltip-fg);
+  font: 600 var(--font-size-xs) / 1.4 var(--font-sans); text-align: center;
+  visibility: hidden; opacity: 0;
+}
+/* A bridge over the gap, so moving the pointer from the control onto the tooltip keeps it open. */
+.flint-tooltip::before { content: ""; position: absolute; inset-inline: 0; top: 100%; height: 10px; }
+.flint-tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border: 5px solid transparent; border-top-color: var(--tooltip-bg); }
+.flint-tooltip-anchor:hover .flint-tooltip, .flint-tooltip-anchor:focus-within .flint-tooltip { visibility: visible; opacity: 1; }
+.flint-tooltip-anchor[data-dismissed] .flint-tooltip { visibility: hidden; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) { .flint-tooltip { transition: opacity var(--duration-fast) var(--ease-standard), visibility var(--duration-fast); } }
+
+/* Toast (ASDS-84): a short message about something that just happened. Keep one
+   .flint-toast-region (role="status", aria-live="polite") in the page from the start; add toasts to
+   it and screen readers announce them without moving focus. Never auto-dismiss a toast with an action.
+   Arrives with --ease-emphasis: a small thing arriving. */
+.flint-toast-region {
+  position: fixed; inset-block-end: var(--space-16); inset-inline-end: var(--space-16); z-index: var(--z-toast);
+  display: flex; flex-direction: column; gap: var(--space-8); width: min(24rem, calc(100vw - var(--space-32))); pointer-events: none;
+}
+.flint-toast {
+  pointer-events: auto; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; column-gap: var(--space-12);
+  padding: var(--space-12) var(--space-8) var(--space-12) var(--space-16);
+  border: 1px solid transparent; border-radius: var(--toast-radius); background: var(--toast-bg); color: var(--toast-fg);
+  box-shadow: var(--shadow-popover); font: 400 var(--font-size-sm) / 1.4 var(--font-sans);
+}
+.flint-toast > svg { grid-row: span 3; width: var(--icon-size-md); height: var(--icon-size-md); margin-top: var(--space-2); }
+.flint-toast .flint-toast__title { grid-column: 2; margin: 0; padding-top: var(--space-2); font-weight: 700; }
+.flint-toast .flint-toast__body { grid-column: 2; margin: 0; color: var(--toast-fg-muted); }
+.flint-toast__actions { grid-column: 2; display: flex; flex-wrap: wrap; gap: var(--space-12); }
+.flint-toast__action {
+  min-height: var(--target-min); padding: 0; border: 0; background: none; color: var(--toast-fg);
+  font: 700 var(--font-size-sm) / 1.2 var(--font-sans); text-decoration: underline; text-underline-offset: 0.15em; cursor: pointer;
+}
+.flint-toast__close {
+  grid-column: 3; grid-row: 1; display: grid; place-content: center; width: var(--target-min); height: var(--target-min);
+  padding: 0; border: 0; border-radius: var(--radius-xs); background: none; color: var(--toast-fg); cursor: pointer;
+}
+.flint-toast__close svg { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+.flint-toast :focus-visible { outline: var(--focus-ring-width) solid var(--toast-focus-ring); outline-offset: var(--focus-ring-offset); }
+@media (prefers-reduced-motion: no-preference) { .flint-toast { animation: flint-toast-in var(--duration-slow) var(--ease-emphasis); } }
+@keyframes flint-toast-in { from { opacity: 0; transform: translateY(var(--space-16)); } }

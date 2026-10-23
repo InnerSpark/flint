@@ -20,3 +20,11 @@
 .tb-stage .tb-skip { position: relative; display: block; width: 100%; min-height: calc(var(--button-height) + var(--space-16)); }
 .tb-stage td.tb-state { font-weight: 600; color: var(--color-text-heading); white-space: nowrap; width: 1%; }
 .tb-stage td.tb-state span { display: block; font-weight: 400; color: var(--color-text-muted); }
+
+/* Overlay benches: popups shown in place, and room for tooltips above their button. */
+.tb-stage .tb-plain { display: contents; }
+.tb-stage .tb-plain-block { width: 100%; }
+.tb-stage .tb-inplace { position: static; width: 100%; animation: none; }
+.tb-stage .tb-tip-room { padding-top: var(--space-48); }
+.tb-stage .tb-shown .flint-tooltip { visibility: visible; opacity: 1; }
+.tb-stage .sr-panel { padding: 0; }

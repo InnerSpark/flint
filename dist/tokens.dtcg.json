@@ -2027,6 +2027,116 @@
           "$value": "{semantic.light.text.muted}"
         }
       },
+      "dialog": {
+        "bg": {
+          "$type": "color",
+          "$value": "{semantic.light.surface.default}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.light.text.default}"
+        },
+        "titleFg": {
+          "$type": "color",
+          "$value": "{semantic.light.text.heading}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.light.border.default}"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.cardLg}"
+        }
+      },
+      "tabs": {
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.light.text.muted}"
+        },
+        "fgHover": {
+          "$type": "color",
+          "$value": "{semantic.light.text.heading}"
+        },
+        "fgSelected": {
+          "$type": "color",
+          "$value": "{semantic.light.selected.text}"
+        },
+        "indicator": {
+          "$type": "color",
+          "$value": "{semantic.light.action.primary}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.light.border.default}"
+        },
+        "bgHover": {
+          "$type": "color",
+          "$value": "{semantic.light.surface.subtle}"
+        }
+      },
+      "menu": {
+        "bg": {
+          "$type": "color",
+          "$value": "{semantic.light.surface.default}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.light.text.default}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.light.border.default}"
+        },
+        "itemBgHover": {
+          "$type": "color",
+          "$value": "{semantic.light.surface.subtle}"
+        },
+        "itemFgDanger": {
+          "$type": "color",
+          "$value": "{semantic.light.feedback.error.text}"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.sm}"
+        }
+      },
+      "tooltip": {
+        "bg": {
+          "$type": "color",
+          "$value": "{semantic.light.surface.inverse}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.light.text.inverse}"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.sm}"
+        }
+      },
+      "toast": {
+        "bg": {
+          "$type": "color",
+          "$value": "{semantic.light.surface.inverse}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.light.text.inverse}"
+        },
+        "fgMuted": {
+          "$type": "color",
+          "$value": "{semantic.light.text.inverseMuted}"
+        },
+        "focusRing": {
+          "$type": "color",
+          "$value": "{semantic.light.text.inverse}"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.md}"
+        }
+      },
       "focus": {
         "ring": {
           "color": {
@@ -2521,6 +2631,116 @@
         "fgMuted": {
           "$type": "color",
           "$value": "{semantic.dark.text.muted}"
+        }
+      },
+      "dialog": {
+        "bg": {
+          "$type": "color",
+          "$value": "{semantic.dark.surface.default}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.default}"
+        },
+        "titleFg": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.heading}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.dark.border.default}"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.cardLg}"
+        }
+      },
+      "tabs": {
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.muted}"
+        },
+        "fgHover": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.heading}"
+        },
+        "fgSelected": {
+          "$type": "color",
+          "$value": "{semantic.dark.selected.text}"
+        },
+        "indicator": {
+          "$type": "color",
+          "$value": "{semantic.dark.action.primary}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.dark.border.default}"
+        },
+        "bgHover": {
+          "$type": "color",
+          "$value": "{semantic.dark.surface.subtle}"
+        }
+      },
+      "menu": {
+        "bg": {
+          "$type": "color",
+          "$value": "{semantic.dark.surface.default}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.default}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.dark.border.default}"
+        },
+        "itemBgHover": {
+          "$type": "color",
+          "$value": "{semantic.dark.surface.subtle}"
+        },
+        "itemFgDanger": {
+          "$type": "color",
+          "$value": "{semantic.dark.feedback.error.text}"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.sm}"
+        }
+      },
+      "tooltip": {
+        "bg": {
+          "$type": "color",
+          "$value": "{semantic.dark.surface.inverse}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.inverse}"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.sm}"
+        }
+      },
+      "toast": {
+        "bg": {
+          "$type": "color",
+          "$value": "{semantic.dark.surface.inverse}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.inverse}"
+        },
+        "fgMuted": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.inverseMuted}"
+        },
+        "focusRing": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.inverse}"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "{radius.md}"
         }
       },
       "focus": {

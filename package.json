@@ -17,6 +17,7 @@
   "files": [
     "tokens.json",
     "css",
+    "js",
     "dist",
     "scripts",
     "mui"
@@ -36,6 +37,10 @@
     "./tokens.dtcg.json": "./dist/tokens.dtcg.json",
     "./shadcn.css": "./dist/shadcn.css",
     "./components.css": "./dist/components.css",
+    "./behaviors.js": {
+      "types": "./js/behaviors.d.ts",
+      "import": "./js/behaviors.js"
+    },
     "./contrast.json": "./dist/contrast.json",
     "./mui": {
       "types": "./mui/index.d.ts",

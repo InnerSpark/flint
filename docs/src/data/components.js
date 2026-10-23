@@ -6,6 +6,11 @@ import shadInput from '../workbench/ui/input.jsx?raw';
 import shadCheckbox from '../workbench/ui/checkbox.jsx?raw';
 import shadRadio from '../workbench/ui/radio.jsx?raw';
 import shadSwitch from '../workbench/ui/switch.jsx?raw';
+import shadDialog from '../workbench/ui/dialog.jsx?raw';
+import shadTabs from '../workbench/ui/tabs.jsx?raw';
+import shadMenu from '../workbench/ui/dropdown-menu.jsx?raw';
+import shadTooltip from '../workbench/ui/tooltip.jsx?raw';
+import shadToast from '../workbench/ui/toast.jsx?raw';
 
 /** Top-level blocks of components.css, comments dropped. @media and @keyframes stay whole. */
 const blocks = (() => {
@@ -346,6 +351,317 @@ Label("Last scanned 2 hours ago", systemImage: "clock")`,
       'In an icon-only button the name goes on the button, and the icon is aria-hidden.',
     ],
     target: 'Not interactive, so no target size. An icon-only button is still 40px, or 32px small (button.height, button.heightSm).',
+  },
+  dialog: {
+    name: 'Dialog',
+    lead: 'A dialog stops the page to ask one question or finish one small task. Everything behind it waits until it closes.',
+    example: `<button type="button" class="flint-btn flint-btn--danger" data-flint-dialog-open="delete-__P__">Delete trip</button>
+<dialog class="flint-dialog" id="delete-__P__" aria-labelledby="delete-title-__P__">
+  <div class="flint-dialog__header">
+    <h2 class="flint-dialog__title" id="delete-title-__P__">Delete this trip?</h2>
+    <button type="button" class="flint-btn flint-btn--text flint-btn--icon" data-flint-dialog-close aria-label="Close">${closeIcon}</button>
+  </div>
+  <div class="flint-dialog__body"><p>Turkey Bend, 3 stops, leaving Friday. The route and packing list go with it. You can't undo this.</p></div>
+  <div class="flint-dialog__footer">
+    <button type="button" class="flint-btn flint-btn--secondary" data-flint-dialog-close>Keep trip</button>
+    <button type="button" class="flint-btn flint-btn--danger" data-flint-dialog-close>Delete trip</button>
+  </div>
+</dialog>`,
+    when: [
+      'Use a dialog to confirm something that can\'t be undone, or for a short task that has to finish before going on.',
+      'Use the page itself for anything long, or anything people will want to compare with what is behind it.',
+      'Use a toast to say something already happened. A dialog asks; a toast tells.',
+    ],
+    variants: [
+      ['Header', 'flint-dialog__title is the dialog\'s name (aria-labelledby). A close button sits beside it.'],
+      ['Body', 'flint-dialog__body scrolls if the content is taller than the window.'],
+      ['Footer', 'flint-dialog__footer holds the actions, the main one last.'],
+    ],
+    guidance: [
+      ['Title it with the question: "Delete this trip?". Label buttons with what they do: "Delete trip", "Keep trip".', 'Ask "Are you sure?" with OK and Cancel. People have to read the whole thing to know what OK does.'],
+      ['Open it from something the person just did.', 'Open a dialog on page load. It hides the page before anyone knows why.'],
+      ['Let Esc and the close button always close it.', 'Trap people in a dialog until they pick an answer.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: `<button type="button" class="flint-btn flint-btn--danger" data-flint-dialog-open="delete-trip">Delete trip</button>
+
+<dialog class="flint-dialog" id="delete-trip" aria-labelledby="delete-trip-title">
+  <div class="flint-dialog__header">
+    <h2 class="flint-dialog__title" id="delete-trip-title">Delete this trip?</h2>
+    <button type="button" class="flint-btn flint-btn--text flint-btn--icon" data-flint-dialog-close aria-label="Close">
+      <svg aria-hidden="true" focusable="false">...</svg>
+    </button>
+  </div>
+  <div class="flint-dialog__body"><p>The route and packing list go with it. You can't undo this.</p></div>
+  <div class="flint-dialog__footer">
+    <button type="button" class="flint-btn flint-btn--secondary" data-flint-dialog-close>Keep trip</button>
+    <button type="button" class="flint-btn flint-btn--danger" data-flint-dialog-close>Delete trip</button>
+  </div>
+</dialog>
+
+<script type="module">
+  // showModal() traps focus and closes on Esc; initDialogs also returns focus to the opener.
+  import { initDialogs } from '@innerspark/flint/behaviors.js';
+  initDialogs();
+</script>`, rules: cssFor('flint-dialog') },
+      mui: `import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+
+<Dialog open={open} onClose={close} aria-labelledby="delete-trip-title">
+  <DialogTitle id="delete-trip-title">Delete this trip?</DialogTitle>
+  <DialogContent>The route and packing list go with it. You can't undo this.</DialogContent>
+  <DialogActions>
+    <Button variant="outlined" onClick={close}>Keep trip</Button>
+    <Button variant="contained" color="error" onClick={remove}>Delete trip</Button>
+  </DialogActions>
+</Dialog>`,
+      muiGap: 'MUI\'s Dialog has no close button of its own; add one in the title. Its paper reads the dialog shadow and radius from the Flint theme, but not dialog.border.',
+      shadcn: shadDialog,
+      swift: `.alert("Delete this trip?", isPresented: $confirming) {
+  Button("Delete trip", role: .destructive, action: deleteTrip)
+  Button("Keep trip", role: .cancel) {}
+} message: {
+  Text("The route and packing list go with it. You can't undo this.")
+}`,
+      swiftNote: 'On iOS, use the system alert or a sheet: they trap VoiceOver focus and support Escape on a keyboard for free.',
+    },
+    keyboard: [['Tab and Shift+Tab', 'Move between the controls in the dialog. Focus can\'t leave it.'], ['Esc', 'Closes the dialog. Focus goes back to the button that opened it.'], ['Enter or Space', 'Activates the focused button.']],
+    screenReader: [
+      'Opening it moves focus into the dialog, and the title is read as its name.',
+      'The page behind it is inert: screen readers can\'t wander out of the dialog.',
+      'When it closes, focus returns to the button that opened it, so people pick up where they were.',
+    ],
+    target: 'The close button and actions are buttons, 40px tall.',
+  },
+  tabs: {
+    name: 'Tabs',
+    lead: 'Tabs switch between views of the same thing without leaving the page. One panel shows at a time.',
+    example: `<div class="flint-tabs">
+  <div class="flint-tabs__list" role="tablist" aria-label="Trip details">
+    <button type="button" role="tab" class="flint-tabs__tab" id="t-route-__P__" aria-selected="true" aria-controls="p-route-__P__">Route</button>
+    <button type="button" role="tab" class="flint-tabs__tab" id="t-pack-__P__" aria-selected="false" aria-controls="p-pack-__P__" tabindex="-1">Packing</button>
+    <button type="button" role="tab" class="flint-tabs__tab" id="t-sites-__P__" aria-selected="false" aria-controls="p-sites-__P__" tabindex="-1">Campsites</button>
+  </div>
+  <div class="flint-tabs__panel" role="tabpanel" id="p-route-__P__" aria-labelledby="t-route-__P__" tabindex="0"><p>3 stops, 212 miles, leaving Friday at 7am.</p></div>
+  <div class="flint-tabs__panel" role="tabpanel" id="p-pack-__P__" aria-labelledby="t-pack-__P__" tabindex="0" hidden><p>14 of 20 items packed.</p></div>
+  <div class="flint-tabs__panel" role="tabpanel" id="p-sites-__P__" aria-labelledby="t-sites-__P__" tabindex="0" hidden><p>Turkey Bend, Pace Bend, Muleshoe Bend.</p></div>
+</div>`,
+    when: [
+      'Use tabs for two to six views of the same object: a trip\'s route, packing list and campsites.',
+      'Use separate pages, or links, when the views are different things or people need to share a link to each.',
+      'Don\'t use tabs for steps in a sequence. Use a step-by-step flow instead.',
+    ],
+    variants: [
+      ['Selected', 'aria-selected="true". A 4px bar and an extra-bold label, so it never rests on color alone.'],
+      ['Hover', 'The label darkens and a subtle fill appears.'],
+      ['Focus', 'The ring sits inside the tab, so the list\'s scroll edge never clips it.'],
+    ],
+    guidance: [
+      ['Keep labels to one or two words, and keep their order fixed.', 'Reorder tabs based on use. People learn where things are.'],
+      ['Show what the panel holds, so a person never has to visit every tab to find something.', 'Hide an error inside a tab people haven\'t opened. Flag it on the tab label, in words.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: `<div class="flint-tabs">
+  <div class="flint-tabs__list" role="tablist" aria-label="Trip details">
+    <button type="button" role="tab" class="flint-tabs__tab" id="tab-route" aria-selected="true" aria-controls="panel-route">Route</button>
+    <button type="button" role="tab" class="flint-tabs__tab" id="tab-packing" aria-selected="false" aria-controls="panel-packing" tabindex="-1">Packing</button>
+  </div>
+  <div class="flint-tabs__panel" role="tabpanel" id="panel-route" aria-labelledby="tab-route" tabindex="0">...</div>
+  <div class="flint-tabs__panel" role="tabpanel" id="panel-packing" aria-labelledby="tab-packing" tabindex="0" hidden>...</div>
+</div>
+
+<script type="module">
+  import { initTabs } from '@innerspark/flint/behaviors.js';
+  initTabs(); // arrow keys, Home and End, roving focus
+</script>`, rules: cssFor('flint-tabs') },
+      mui: `import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
+<Tabs value={tab} onChange={(e, v) => setTab(v)} aria-label="Trip details">
+  <Tab label="Route" id="tab-route" aria-controls="panel-route" />
+  <Tab label="Packing" id="tab-packing" aria-controls="panel-packing" />
+</Tabs>`,
+      muiGap: 'The Flint MUI theme gives tabs the 4px bar, 40px height, heavier selected weight and an inset focus ring. MUI renders no panels: add role="tabpanel" elements and pass id and aria-controls to each Tab yourself.',
+      shadcn: shadTabs,
+      swift: `Picker("Trip details", selection: $section) {
+  Text("Route").tag(Section.route)
+  Text("Packing").tag(Section.packing)
+}
+.pickerStyle(.segmented)`,
+      swiftNote: 'On iOS, a segmented control does this job inside a screen; a TabView is for app-level navigation.',
+    },
+    keyboard: [['Tab', 'Moves into the tab list (to the selected tab), then on into its panel.'], ['Left and Right', 'Move to the previous or next tab and show it. They wrap at the ends.'], ['Home and End', 'Jump to the first or last tab.']],
+    screenReader: [
+      'Read as "Route, tab, selected, 1 of 3". The list has a name, like "Trip details".',
+      'Each panel is named by its tab, so landing in it says where you are.',
+      'Only the selected tab is in the Tab order. The arrow keys reach the rest.',
+    ],
+    target: 'Tabs are 40px tall (control.md).',
+  },
+  menu: {
+    name: 'Menu',
+    lead: 'A menu button opens a short list of actions for one thing. Pick one, and the menu closes.',
+    example: `<div class="flint-menu-anchor">
+  <button type="button" class="flint-btn flint-btn--secondary" id="trip-btn-__P__" aria-haspopup="menu" aria-expanded="false" aria-controls="trip-menu-__P__">Trip actions</button>
+  <ul class="flint-menu" role="menu" id="trip-menu-__P__" aria-labelledby="trip-btn-__P__" hidden>
+    <li role="none"><button type="button" role="menuitem" class="flint-menu__item">Rename</button></li>
+    <li role="none"><button type="button" role="menuitem" class="flint-menu__item">Duplicate</button></li>
+    <li role="none"><button type="button" role="menuitem" class="flint-menu__item" aria-disabled="true">Share (needs sign-in)</button></li>
+    <li role="separator" class="flint-menu__separator"></li>
+    <li role="none"><button type="button" role="menuitem" class="flint-menu__item flint-menu__item--danger">Delete trip</button></li>
+  </ul>
+</div>`,
+    when: [
+      'Use a menu for three to seven actions on one thing, when they don\'t all fit as buttons.',
+      'Use buttons when there are one or two actions, or when the main action should be visible.',
+      'Use a select to choose a value for a form. A menu does something; a select picks something.',
+    ],
+    variants: [
+      ['Item', 'A button with role="menuitem". 40px tall.'],
+      ['Danger', 'flint-menu__item--danger. Red, and the label says what it destroys.'],
+      ['Disabled', 'aria-disabled="true". Still reachable, so people can read why it is off.'],
+      ['Separator', 'Groups related items.'],
+    ],
+    guidance: [
+      ['Label the button with what the menu acts on: "Trip actions".', 'Use a bare "..." icon with no name. Screen readers say "button".'],
+      ['Put the destructive action last, after a separator.', 'Put Delete first, where a slip of the finger lands.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: `<div class="flint-menu-anchor">
+  <button type="button" class="flint-btn flint-btn--secondary" id="trip-actions" aria-haspopup="menu" aria-expanded="false" aria-controls="trip-menu">Trip actions</button>
+  <ul class="flint-menu" role="menu" id="trip-menu" aria-labelledby="trip-actions" hidden>
+    <li role="none"><button type="button" role="menuitem" class="flint-menu__item">Rename</button></li>
+    <li role="separator" class="flint-menu__separator"></li>
+    <li role="none"><button type="button" role="menuitem" class="flint-menu__item flint-menu__item--danger">Delete trip</button></li>
+  </ul>
+</div>
+
+<script type="module">
+  import { initMenus } from '@innerspark/flint/behaviors.js';
+  initMenus(); // focus in, arrow keys, Esc returns focus, Tab and outside clicks close
+</script>`, rules: cssFor('flint-menu') },
+      mui: `import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
+<Button id="trip-actions" aria-haspopup="menu" aria-expanded={open} aria-controls="trip-menu" onClick={(e) => setAnchor(e.currentTarget)}>Trip actions</Button>
+<Menu id="trip-menu" anchorEl={anchor} open={open} onClose={close} slotProps={{ list: { 'aria-labelledby': 'trip-actions' } }}>
+  <MenuItem onClick={rename}>Rename</MenuItem>
+  <MenuItem onClick={remove} sx={{ color: 'var(--menu-item-fg-danger)' }}>Delete trip</MenuItem>
+</Menu>`,
+      muiGap: 'MUI has no danger item style: color it with menu.itemFgDanger as above. The Flint theme sets the 40px item height and hover fill.',
+      shadcn: shadMenu,
+      swift: `Menu("Trip actions") {
+  Button("Rename", action: rename)
+  Button("Duplicate", action: duplicate)
+  Divider()
+  Button("Delete trip", role: .destructive, action: deleteTrip)
+}`,
+    },
+    keyboard: [['Enter, Space or Down', 'Opens the menu and focuses the first item. Up opens it on the last.'], ['Up and Down', 'Move between items. They wrap.'], ['Home and End', 'Jump to the first or last item.'], ['Esc', 'Closes the menu. Focus returns to the button.'], ['Tab', 'Closes the menu and moves on.']],
+    screenReader: [
+      'The button is read as "Trip actions, menu button, collapsed", then "expanded" when open.',
+      'Items are read as "Rename, menu item, 1 of 4". A disabled item says "dimmed" or "unavailable".',
+      'The separator is skipped, but the grouping shows in the count.',
+    ],
+    target: 'Items are 40px tall (control.md).',
+  },
+  tooltip: {
+    name: 'Tooltip',
+    lead: 'A tooltip adds a short hint to a control that already has a name. It shows on hover and on keyboard focus.',
+    example: `<div class="example-row tooltip-room">
+  <span class="flint-tooltip-anchor">
+    <button type="button" class="flint-btn flint-btn--secondary" aria-describedby="tip-export-__P__">Export report</button>
+    <span class="flint-tooltip" role="tooltip" id="tip-export-__P__">PDF, about 2 MB</span>
+  </span>
+</div>`,
+    when: [
+      'Use a tooltip for a short extra detail: a file size, a keyboard shortcut, why something is off.',
+      'Don\'t put anything people need in a tooltip. Touch screens can\'t hover, and many people never find it.',
+      'Never make a tooltip the only name of an icon button. Give the button an aria-label.',
+    ],
+    variants: [['Shown', 'On hover and keyboard focus. It stays while the pointer is over it, and Esc hides it.']],
+    guidance: [
+      ['Keep it to a few words, with no links or buttons inside.', 'Put a paragraph or a link in a tooltip. Use a popover or the page.'],
+      ['Use it on things that already make sense without it.', 'Hide the only explanation of a control in a tooltip.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: `<span class="flint-tooltip-anchor">
+  <button type="button" class="flint-btn flint-btn--secondary" aria-describedby="tip-export">Export report</button>
+  <span class="flint-tooltip" role="tooltip" id="tip-export">PDF, about 2 MB</span>
+</span>
+
+<script type="module">
+  import { initTooltips } from '@innerspark/flint/behaviors.js';
+  initTooltips(); // Esc hides it without moving focus (WCAG 1.4.13)
+</script>`, rules: cssFor('flint-tooltip') },
+      mui: `import Tooltip from '@mui/material/Tooltip';
+
+<Tooltip title="PDF, about 2 MB" describeChild>
+  <Button variant="outlined">Export report</Button>
+</Tooltip>`,
+      muiGap: 'Pass describeChild: without it, MUI uses the tooltip as the button\'s name (aria-label) instead of a description.',
+      shadcn: shadTooltip,
+      swift: `Button("Export report", action: export)
+  .help("PDF, about 2 MB")`,
+      swiftNote: 'On iOS, .help shows on pointer hover (iPad) and is read by VoiceOver as a hint.',
+    },
+    keyboard: [['Tab', 'Focusing the control shows the tooltip.'], ['Esc', 'Hides the tooltip. Focus stays where it is.']],
+    screenReader: [
+      'The tooltip is the control\'s description (aria-describedby): read after its name, like "Export report, button, PDF, about 2 MB".',
+      'It is read whether or not it is showing, so the hint isn\'t lost to people who never hover.',
+    ],
+    target: 'The tooltip itself isn\'t a target. The control it describes keeps its own size.',
+  },
+  toast: {
+    name: 'Toast',
+    lead: 'A toast says something just happened, in a corner of the screen, without interrupting. It never takes focus.',
+    example: `<div class="example-row">
+  <button type="button" class="flint-btn flint-btn--primary" data-toast-demo="toasts-__P__">Save report</button>
+  <button type="button" class="flint-btn flint-btn--secondary" data-toast-demo="toasts-__P__" data-toast-undo>Archive trip</button>
+</div>
+<div class="flint-toast-region" id="toasts-__P__" role="status" aria-live="polite"></div>`,
+    when: [
+      'Use a toast to confirm something people just did: saved, archived, sent.',
+      'Use an alert on the page for anything people must read or act on. Toasts are easy to miss.',
+      'Use a dialog when the answer matters before going on.',
+    ],
+    variants: [
+      ['Message', 'A title, and an optional line of detail.'],
+      ['With an action', 'One action, like Undo. It stays until dismissed: a timer would take the action away.'],
+      ['Arrival', 'Slides up with --ease-emphasis. Under reduced motion it simply appears.'],
+    ],
+    guidance: [
+      ['Say what happened in a few words: "Report saved".', 'Use a toast for errors people need to fix. Put the error next to what caused it.'],
+      ['Keep the toast region in the page from the start.', 'Add the live region at the same time as the message. Many screen readers miss it.'],
+      ['Let people dismiss it, and pause the timer while they hover or focus it.', 'Make it vanish in two seconds. Slow readers never finish it.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: `<!-- Once, in the page shell: the region exists before any toast -->
+<div class="flint-toast-region" id="toasts" role="status" aria-live="polite"></div>
+
+<script type="module">
+  import { showToast } from '@innerspark/flint/behaviors.js';
+  showToast('#toasts', { title: 'Report saved', body: 'Your VPAT draft is in Reports.' });
+  showToast('#toasts', { title: 'Trip archived', action: { label: 'Undo', onClick: restore } }); // stays until dismissed
+</script>`, rules: cssFor('flint-toast') },
+      mui: `import Snackbar from '@mui/material/Snackbar';
+
+<Snackbar open={open} onClose={close} autoHideDuration={6000} message="Report saved" />`,
+      muiGap: 'MUI\'s Snackbar shows one message at a time and times out even with an action; pass autoHideDuration={null} when it has one.',
+      shadcn: shadToast,
+      swift: `// iOS has no toast. Post an announcement, and show a brief overlay if the change isn't visible.
+AccessibilityNotification.Announcement("Report saved").post()`,
+      swiftNote: 'On iOS, prefer showing the result in place. Use an announcement so VoiceOver users hear it.',
+    },
+    keyboard: [['Tab', 'Toasts never take focus. Their buttons join the Tab order where the region sits.'], ['Enter or Space', 'Activates Undo or Dismiss.']],
+    screenReader: [
+      'The region is a polite live region, so each toast is read once the screen reader finishes what it is saying.',
+      'Focus stays where it was. Nothing jumps.',
+      'The dismiss button is named with the toast, like "Dismiss: Report saved".',
+    ],
+    target: 'Undo and Dismiss are at least 24px (targetMin).',
   },
   badge: {
     name: 'Badge',

@@ -277,7 +277,21 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
       // Link underlined by default (WCAG 1.4.1); app keeps only its selector exceptions local.
       MuiLink: { defaultProps: { underline: 'always' }, styleOverrides: { root: { color: c.text.link, textDecorationColor: 'currentColor', textUnderlineOffset: '0.15em', '&:hover': { textDecorationThickness: '0.125em' } } } },
       MuiBackdrop: { styleOverrides: { root: { backgroundColor: c.overlayScrim } } },
-      MuiTab: { styleOverrides: { root: { textTransform: 'none', fontWeight: fontWeight.medium, fontFamily: fontFamily.sans } } },
+      // Tabs on the tabs tokens (ASDS-81): 40px tabs, a 4px bar, and the selected tab heavier as well as
+      // colored. MUI's scroller clips anything outside a tab, so the focus ring sits inside it.
+      MuiTabs: { styleOverrides: { root: { minHeight: k.button.height, borderBottom: `1px solid ${k.tabs.border}` }, indicator: { height: space[4], backgroundColor: k.tabs.indicator } } },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none', fontWeight: fontWeight.semibold, fontFamily: fontFamily.sans, fontSize: `${fontSize.sm}px`, minHeight: k.button.height, color: k.tabs.fg,
+            '&:hover': { color: k.tabs.fgHover, backgroundColor: k.tabs.bgHover },
+            '&.Mui-selected': { color: k.tabs.fgSelected, fontWeight: fontWeight.extrabold },
+            '&:focus-visible, &.Mui-focusVisible': { outline: ring, outlineOffset: `-${k.focus.ring.width + k.focus.ring.offset}px` },
+          },
+        },
+      },
+      // Menu items at control height with the menu tokens (ASDS-82).
+      MuiMenuItem: { styleOverrides: { root: { minHeight: k.button.height, fontSize: `${fontSize.sm}px`, color: k.menu.fg, '&:hover, &.Mui-focusVisible': { backgroundColor: k.menu.itemBgHover } } } },
     },
   };
 }

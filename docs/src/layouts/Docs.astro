@@ -245,6 +245,20 @@ const jsonLd = {
       });
     })();
   </script>
+  <script>
+    // Flint's own behaviors for the plain-CSS examples (dialog, tabs, menu, tooltip), plus the toast demo buttons.
+    import { initAll, showToast } from '../../../js/behaviors.js';
+    initAll();
+    document.addEventListener('click', (e) => {
+      const b = e.target instanceof Element && e.target.closest('[data-toast-demo]');
+      if (!b) return;
+      const region = document.getElementById(b.getAttribute('data-toast-demo'));
+      if (!region) return;
+      showToast(region, b.hasAttribute('data-toast-undo')
+        ? { title: 'Trip archived', body: 'Turkey Bend moved to Archive.', action: { label: 'Undo' } }
+        : { title: 'Report saved', body: 'Your VPAT draft is in Reports.' });
+    });
+  </script>
   <p id="copy-status" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
 </body>
 </html>

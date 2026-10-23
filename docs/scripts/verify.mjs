@@ -11,6 +11,7 @@
  *   - loading a URL with a #hash lands focus on that heading
  *   - an "On this page" link moves focus to its heading
  * Copy: a color chip copies its CSS variable and the live region announces it.
+ * Behavior: dialog, tabs, menu, tooltip and toast work by keyboard alone (focus in, keys, Esc, focus back).
  * Optional: --shots <dir> saves a screenshot of every page in both themes.
  * Needs a Chromium: CHROME_PATH, or Playwright's (npx playwright install chromium).
  */
@@ -198,6 +199,66 @@ for (const width of [375, 320]) {
   const want = ['header', 'main', 'sidenav', 'footer'];
   const idx = want.map((r) => order.indexOf(r));
   if (idx.some((n) => n < 0) || idx.some((n, i) => i > 0 && n < idx[i - 1])) problems.push(`order: Tab order on ${target} is ${order.join(' > ')}, want header > main > sidenav > footer`);
+  await ctx.close();
+}
+
+// Overlay behavior (behaviors.js on the plain CSS examples), driven by the keyboard alone.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1366, height: 900 } });
+  const page = await ctx.newPage();
+  const active = () => page.evaluate(() => { const a = document.activeElement; return a ? (a.id || a.textContent.trim().slice(0, 30)) : null; });
+  const fail = (m) => problems.push(`behavior: ${m}`);
+
+  // Dialog: opens with focus inside, Tab stays inside, Esc closes and focus returns to the opener.
+  await page.goto(`${base}/components/dialog/`);
+  const opener = page.locator('.example-pane[data-theme="light"] [data-flint-dialog-open]');
+  await opener.focus(); await page.keyboard.press('Enter'); await page.waitForTimeout(150);
+  if (!(await page.evaluate(() => !!document.activeElement.closest('dialog[open]')))) fail('dialog did not move focus inside when opened');
+  for (let i = 0; i < 5; i++) await page.keyboard.press('Tab');
+  if (!(await page.evaluate(() => !!document.activeElement.closest('dialog[open]')))) fail('Tab left the open dialog');
+  await page.keyboard.press('Escape'); await page.waitForTimeout(150);
+  if (await page.evaluate(() => !!document.querySelector('dialog[open]'))) fail('Esc did not close the dialog');
+  if (!(await page.evaluate(() => document.activeElement?.hasAttribute('data-flint-dialog-open')))) fail(`focus did not return to the dialog opener (on ${await active()})`);
+
+  // Tabs: Right moves and selects, End jumps, the panel follows.
+  await page.goto(`${base}/components/tabs/`);
+  await page.locator('.example-pane[data-theme="light"] [role="tab"]').first().focus();
+  await page.keyboard.press('ArrowRight');
+  const sel = await page.evaluate(() => [document.activeElement.textContent, document.activeElement.getAttribute('aria-selected'), document.getElementById(document.activeElement.getAttribute('aria-controls')).hidden]);
+  if (sel[0] !== 'Packing' || sel[1] !== 'true' || sel[2]) fail(`tabs: ArrowRight gave ${JSON.stringify(sel)}`);
+  await page.keyboard.press('End');
+  if ((await page.evaluate(() => document.activeElement.textContent)) !== 'Campsites') fail('tabs: End did not reach the last tab');
+
+  // Menu: Enter opens on the first item, Down moves, Esc closes and returns focus.
+  await page.goto(`${base}/components/menu/`);
+  const mb = page.locator('.example-pane[data-theme="light"] [aria-haspopup="menu"]');
+  await mb.focus(); await page.keyboard.press('Enter');
+  if ((await page.evaluate(() => document.activeElement.getAttribute('role'))) !== 'menuitem') fail('menu: opening did not focus an item');
+  await page.keyboard.press('ArrowDown');
+  if ((await page.evaluate(() => document.activeElement.textContent)) !== 'Duplicate') fail('menu: ArrowDown did not move to the next item');
+  await page.keyboard.press('ArrowDown');
+  if ((await page.evaluate(() => document.activeElement.textContent)) !== 'Delete trip') fail('menu: ArrowDown did not skip the disabled item');
+  await page.keyboard.press('Escape');
+  const after = await page.evaluate(() => [document.activeElement.getAttribute('aria-haspopup'), document.activeElement.getAttribute('aria-expanded')]);
+  if (after[0] !== 'menu' || after[1] !== 'false') fail(`menu: Esc gave focus ${JSON.stringify(after)}`);
+
+  // Tooltip: shows on focus, Esc hides it and focus stays on the button.
+  await page.goto(`${base}/components/tooltip/`);
+  const tb = page.locator('.example-pane[data-theme="light"] .flint-tooltip-anchor button');
+  await page.keyboard.press('Tab'); await tb.focus(); await page.waitForTimeout(200);
+  const vis = () => page.evaluate(() => getComputedStyle(document.activeElement.closest('.flint-tooltip-anchor').querySelector('.flint-tooltip')).visibility);
+  if ((await vis()) !== 'visible') fail('tooltip did not show on keyboard focus');
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  if ((await vis()) !== 'hidden') fail('tooltip: Esc did not hide it');
+  if (!(await page.evaluate(() => document.activeElement.matches('.flint-tooltip-anchor button')))) fail('tooltip: Esc moved focus');
+
+  // Toast: appears in the live region and focus stays on the button that caused it.
+  await page.goto(`${base}/components/toast/`);
+  const tt = page.locator('.example-pane[data-theme="light"] [data-toast-demo]').first();
+  await tt.focus(); await page.keyboard.press('Enter'); await page.waitForTimeout(200);
+  const t = await page.evaluate(() => [document.querySelector('.example-pane[data-theme="light"] .flint-toast-region .flint-toast__title')?.textContent, document.activeElement.hasAttribute('data-toast-demo')]);
+  if (t[0] !== 'Report saved') fail('toast did not appear in its region');
+  if (!t[1]) fail('toast moved focus');
   await ctx.close();
 }
 
