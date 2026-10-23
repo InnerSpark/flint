@@ -1,8 +1,11 @@
 ---
 import Docs from '../../../layouts/Docs.astro';
-import ColorChip from '../../../components/ColorChip.astro';
+import ColorCard from '../../../components/ColorCard.astro';
+import ColorRow from '../../../components/ColorRow.astro';
+import PaintStrip from '../../../components/PaintStrip.astro';
 import Guidance from '../../../components/Guidance.astro';
-import { resolved, source, leaves, at, refName, cssVarForPath, isColor, ratio } from '../../../lib/flint.js';
+import { resolved, leaves, at, isColor } from '../../../lib/flint.js';
+import { CORE, CORE_USE, specFor } from '../../../data/colorRoles.js';
 
 const rows = leaves(resolved.semantic.light).filter(([p]) => isColor(at(resolved.semantic.light, p)));
 const groups = [...new Set(rows.map(([p]) => p[0]))];
@@ -18,69 +21,29 @@ const about = {
   overlayScrim: 'The dimmed layer behind dialogs and drawers.',
 };
 const title = (g) => (g === 'overlayScrim' ? 'Overlay' : g[0].toUpperCase() + g.slice(1));
-
-// What each color is measured against: the token it is used with. Returns [fgPath, bgPath].
-const EXPLICIT = {
-  'surface.inverse': ['text.inverse', null], 'surface.code': ['text.onCode', null],
-  'text.inverse': [null, 'surface.inverse'], 'text.inverseMuted': [null, 'surface.inverse'], 'text.onCode': [null, 'surface.code'],
-  'action.disabledBg': ['action.disabled', null], 'action.disabled': [null, 'action.disabledBg'],
-  'accent.aaaSurface': ['accent.aaaText', null], 'accent.aaaText': [null, 'accent.aaaSurface'],
-  'accent.aaaSolid': ['accent.onAaa', null], 'accent.onAaa': [null, 'accent.aaaSolid'],
-};
-const pairFor = (p) => {
-  const k = p.at(-1), sib = (n) => [...p.slice(0, -1), n].join('.'), has = (q) => at(resolved.semantic.light, q.split('.')) !== undefined;
-  const key = p.join('.');
-  if (EXPLICIT[key]) return EXPLICIT[key];
-  if (/^on[A-Z]/.test(k)) return [null, sib(k[2].toLowerCase() + k.slice(3))];
-  if (k === 'solid' && has(sib('onSolid'))) return [sib('onSolid'), null];
-  if (k === 'surface' && p.length > 1 && has(sib('text'))) return [sib('text'), null];
-  if (p[0] === 'surface') return ['text.default', null];
-  if (has(sib('surface')) && k !== 'surface') return [null, sib('surface')];
-  return [null, 'surface.default'];
-};
-const semanticChip = (p) => {
-  const [fg, bg] = pairFor(p);
-  const other = fg || bg;
-  const val = (mode, q) => at(resolved.semantic[mode], q.split('.'));
-  const ratios = ['light', 'dark'].map((m) => {
-    const self = at(resolved.semantic[m], p), o = val(m, other);
-    return fg ? ratio(o, self) : ratio(self, o);
-  });
-  const ref = (m) => (refName(at(source.semantic[m], p)) || 'literal').replace(/^color\./, '');
-  return {
-    name: p.join('.'), token: `semantic.${p.join('.')}`, cssVar: cssVarForPath(['semantic', ...p].join('.')),
-    light: at(resolved.semantic.light, p), dark: at(resolved.semantic.dark, p),
-    refs: [ref('light'), ref('dark')], ratios, against: fg ? `with ${fg} on it` : `on ${bg}`,
-  };
-};
-
 const ramps = Object.entries(resolved.color).filter(([, v]) => typeof v === 'object');
-const toc = [...groups.map((g) => ({ id: g, text: title(g) })), { id: 'ladders', text: 'The ladders' }];
+const toc = [{ id: 'core', text: 'Core roles' }, ...groups.map((g) => ({ id: g, text: title(g) })), { id: 'ladders', text: 'The ladders' }];
 ---
 <Docs title="Color" crumb="Foundations" lead={`${rows.length} semantic colors in each mode, each one a reference to a step on the ladders below. Use semantic colors in UI. Never a ladder step, never a raw hex.`} toc={toc} wide>
   <Guidance doText="Use the semantic token for the role: text.muted for secondary text on any surface." dontText="Pick a gray from the ladder because it looks right. It won't follow dark mode or a future contrast fix." />
-  <p>Each chip shows light mode on the left and dark on the right, what each mode points at, and its contrast with the color it is used with, light then dark. Select a chip to copy its CSS variable.</p>
-  <p id="chip-hint" hidden>Copies the CSS variable.</p>
+  <p id="hint-var" hidden>Copies the CSS variable.</p>
+  <p id="hint-hex" hidden>Copies the hex value.</p>
+
+  <section aria-labelledby="core">
+    <h2 id="core">Core roles</h2>
+    <p>The ten colors most screens are built from, each shown doing its job in light and in dark. Contrast is measured against the color it meets in use. Select a name to copy its CSS variable, or a hex to copy the value.</p>
+    <ul class="cc-grid">{CORE.map((path) => <ColorCard spec={specFor(path.split('.'))} use={CORE_USE[path]} />)}</ul>
+  </section>
+
   {groups.map((g) => (
     <section aria-labelledby={g}>
       <h2 id={g}>{title(g)}</h2>
       <p>{about[g]}</p>
-      <ul class="chip-deck" aria-label={`${title(g)} colors`}>
-        {rows.filter(([p]) => p[0] === g).map(([p]) => <ColorChip {...semanticChip(p)} />)}
-      </ul>
+      <ul class="cr-list">{rows.filter(([p]) => p[0] === g).map(([p]) => <ColorRow spec={specFor(p)} />)}</ul>
     </section>
   ))}
 
   <h2 id="ladders">The ladders</h2>
-  <p>The primitive ramps every semantic color points at. Reference only. Contrast is against white.</p>
-  {ramps.map(([ramp, steps]) => (
-    <section aria-labelledby={`ladder-${ramp}`}>
-      <h3 id={`ladder-${ramp}`}>{ramp}</h3>
-      <ul class="chip-deck chip-deck--ramp" aria-label={`${ramp} ladder`}>
-        {Object.entries(steps).map(([step, hex]) => (
-          <ColorChip name={`${ramp}.${step}`} cssVar={cssVarForPath(`color.${ramp}.${step}`)} light={hex} ratios={[ratio(hex, '#ffffff')]} against="on white" />
-        ))}
-      </ul>
-    </section>
-  ))}
+  <p>The primitive ramps every semantic color points at. Reference only: build UI from the semantic colors above. Each band says whether the step is safe for text on white. Select a band to copy its CSS variable.</p>
+  <div class="ps-grid">{ramps.map(([ramp, steps]) => <PaintStrip ramp={ramp} steps={steps} />)}</div>
 </Docs>

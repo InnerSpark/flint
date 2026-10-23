@@ -1,0 +1,20 @@
+---
+// One semantic color in the reference list: name and pairing, then light and dark side by side,
+// each shown in use with its values underneath.
+import ColorStage from './ColorStage.astro';
+import ColorValues from './ColorValues.astro';
+const { spec } = Astro.props;
+---
+<li class="cr" data-token={`semantic.${spec.path}`}>
+  <div class="cr-name">
+    <h3><button type="button" class="token-copy" data-copy-text={`var(${spec.cssVar})`} aria-describedby="hint-var">{spec.path.split('.').map((part, i) => <>{i > 0 && <>.<wbr /></>}{part}</>)}</button></h3>
+    {spec.measured && <p>Measured {spec.measured}</p>}
+  </div>
+  {spec.modes.map((m) => (
+    <div class="cr-mode">
+      <p class="cr-mode-label">{m.mode === 'light' ? 'Light' : 'Dark'}</p>
+      <ColorStage spec={spec} mode={m.mode} size="sm" />
+      <p class="cr-values"><ColorValues m={m} /></p>
+    </div>
+  ))}
+</li>

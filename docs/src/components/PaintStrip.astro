@@ -1,0 +1,28 @@
+---
+// A primitive ramp as a paint strip: one band per step, labelled in whichever ink (white or
+// color.black) reads better, with the step's contrast on white. Each band copies its CSS variable.
+import { ratio, cssVarForPath, resolved } from '../lib/flint.js';
+const { ramp, steps } = Astro.props;
+const black = resolved.color.black, white = resolved.color.white;
+const bands = Object.entries(steps).map(([step, hex]) => {
+  const onWhite = ratio(hex, white);
+  const dark = ratio(black, hex) >= ratio(white, hex);
+  const inkRatio = dark ? ratio(black, hex) : ratio(white, hex);
+  if (inkRatio < 4.5) throw new Error(`Paint strip: no ink reaches 4.5:1 on ${ramp}.${step} (${hex})`);
+  const tag = onWhite >= 7 ? 'AAA text' : onWhite >= 4.5 ? 'AA text' : onWhite >= 3 ? 'UI only' : null;
+  return { step, hex, onWhite, ink: dark ? 'var(--color-black)' : 'var(--color-white)', tag, cssVar: cssVarForPath(`color.${ramp}.${step}`) };
+});
+---
+<section class="ps" aria-labelledby={`ramp-${ramp}`}>
+  <h3 id={`ramp-${ramp}`} class="ps-title">{ramp}</h3>
+  <ol class="ps-bands">
+    {bands.map((b) => (
+      <li>
+        <button type="button" class="ps-band" style={`background:var(${b.cssVar});color:${b.ink}`} data-copy-text={`var(${b.cssVar})`} aria-describedby="hint-var">
+          <span class="ps-step"><span class="flint-sr-only">{ramp} </span>{b.step}</span>
+          <span class="ps-meta"><span class="ps-hex">{b.hex}</span><span class="ps-tag"><span class="flint-sr-only">{b.onWhite.toFixed(1)} to 1 on white{b.tag ? ', ' : ''}</span>{b.tag}</span></span>
+        </button>
+      </li>
+    ))}
+  </ol>
+</section>

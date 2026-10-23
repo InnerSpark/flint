@@ -1,0 +1,10 @@
+---
+// The values for one mode: what it points at, the hex (copies), and its contrast with its pair.
+import { grade } from '../lib/flint.js';
+const { m } = Astro.props;
+const g = m.ratio == null ? null : grade(m.ratio);
+const tone = { AAA: 'aaa', AA: 'aa', '3:1': 'ui', 'Under 3:1': 'low' };
+---
+<span class="cv-ref">{m.ref}</span>
+<button type="button" class="cv-hex" data-copy-text={m.hex} aria-describedby="hint-hex">{m.hex}</button>
+{g && <span class="cv-contrast"><span class={`cv-grade cv-grade--${tone[g]}`}>{g}</span> {m.ratio.toFixed(1)}:1</span>}

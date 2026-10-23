@@ -1,0 +1,37 @@
+---
+// A semantic color shown in use, in one mode. The wrapper sets data-theme, so every color below is a
+// Flint variable resolved for that mode: no hex values here. Decorative: the words beside it carry it.
+import { varOf } from '../data/colorRoles.js';
+const { spec, mode, size = 'md' } = Astro.props;
+const { role, path } = spec;
+const c = (q) => `var(${varOf(q)})`;
+---
+<div class={`stage stage--${size}`} data-theme={mode} aria-hidden="true">
+  {role.kind === 'text' && (
+    <div class="stage-in" style={`background:${c(role.bg)};color:${c(path)}`}><span class="stage-aa">Aa</span><span class="stage-line">Trip saved</span></div>
+  )}
+  {role.kind === 'surface' && (
+    <div class="stage-in stage-in--page"><div class="stage-slab" style={`background:${c(path)};color:${c(role.fg)}`}><strong>Trip details</strong><span>3 stops</span></div></div>
+  )}
+  {role.kind === 'fill' && (
+    <div class="stage-in" style={`background:${c('surface.default')}`}><span class="stage-pill" style={`background:${c(path)};color:${c(role.fg)}`}>Save trip</span></div>
+  )}
+  {role.kind === 'border' && (
+    <div class="stage-in" style={`background:${c(role.bg)}`}><span class="stage-field" style={`border-color:${c(path)};color:${c('text.muted')}`}>Search trips</span></div>
+  )}
+  {role.kind === 'ring' && (
+    <div class="stage-in" style={`background:${c('surface.default')}`}><span class="stage-pill stage-pill--ring" style={`outline-color:${c(path)};color:${c('text.link')};border-color:${c('border.control')}`}>Add stop</span></div>
+  )}
+  {role.kind === 'mark' && (
+    <div class="stage-in stage-in--chart" style={`background:${c('surface.default')};border-color:${c('border.default')}`}>{[45, 80, 60, 95].map((h) => <span class="stage-bar" style={`height:${h}%;background:${c(path)}`}></span>)}</div>
+  )}
+  {role.kind === 'disabled' && (
+    <div class="stage-in" style={`background:${c('surface.default')}`}><button type="button" class="stage-pill" disabled tabindex="-1" style={`background:${c('action.disabledBg')};color:${c('action.disabled')};border:0;font:inherit;font-weight:700`}>Save trip</button></div>
+  )}
+  {role.kind === 'accent' && (
+    <div class="stage-in" style={`background:${c('surface.default')}`}>{[1, 2, 3].map(() => <span class="stage-dot" style={`background:${c(path)}`}></span>)}</div>
+  )}
+  {role.kind === 'scrim' && (
+    <div class="stage-in stage-in--page"><div class="stage-slab" style={`background:${c('surface.default')};color:${c('text.default')}`}><strong>Trip details</strong><span>3 stops</span></div><span class="stage-scrim" style={`background:${c(path)}`}></span></div>
+  )}
+</div>

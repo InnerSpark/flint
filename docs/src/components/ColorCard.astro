@@ -1,0 +1,18 @@
+---
+// A core color as a specimen card: the color in use in light and in dark, then its values.
+import ColorStage from './ColorStage.astro';
+import ColorValues from './ColorValues.astro';
+const { spec, use } = Astro.props;
+---
+<li class="cc" data-token={`semantic.${spec.path}`}>
+  <div class="cc-stages">
+    {spec.modes.map((m) => <figure class="cc-stage"><ColorStage spec={spec} mode={m.mode} size="lg" /><figcaption class="mode-tag" data-theme={m.mode}>{m.mode === 'light' ? 'Light' : 'Dark'}</figcaption></figure>)}
+  </div>
+  <div class="cc-body">
+    <h3 class="cc-name"><button type="button" class="token-copy" data-copy-text={`var(${spec.cssVar})`} aria-describedby="hint-var">{spec.path}</button></h3>
+    <p class="cc-use">{use}{spec.measured && <> Measured {spec.measured}.</>}</p>
+    <dl class="cc-values">
+      {spec.modes.map((m) => <div class="cc-row"><dt>{m.mode === 'light' ? 'Light' : 'Dark'}</dt><dd><ColorValues m={m} /></dd></div>)}
+    </dl>
+  </div>
+</li>
