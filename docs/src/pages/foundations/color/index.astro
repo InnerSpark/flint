@@ -1,11 +1,10 @@
 ---
 import Docs from '../../../layouts/Docs.astro';
-import Swatch from '../../../components/Swatch.astro';
-import TableWrap from '../../../components/TableWrap.astro';
+import ColorChip from '../../../components/ColorChip.astro';
 import Guidance from '../../../components/Guidance.astro';
-import { resolved, source, leaves, at, refName, cssVarForPath, isColor } from '../../../lib/flint.js';
+import { resolved, source, leaves, at, refName, cssVarForPath, isColor, ratio } from '../../../lib/flint.js';
 
-const rows = leaves(resolved.semantic.light);
+const rows = leaves(resolved.semantic.light).filter(([p]) => isColor(at(resolved.semantic.light, p)));
 const groups = [...new Set(rows.map(([p]) => p[0]))];
 const about = {
   surface: 'Backgrounds: the page, cards, tinted areas, inverse bands and code.',
@@ -18,48 +17,70 @@ const about = {
   chart: 'Data visualization marks. See Data visualization.',
   overlayScrim: 'The dimmed layer behind dialogs and drawers.',
 };
+const title = (g) => (g === 'overlayScrim' ? 'Overlay' : g[0].toUpperCase() + g.slice(1));
+
+// What each color is measured against: the token it is used with. Returns [fgPath, bgPath].
+const EXPLICIT = {
+  'surface.inverse': ['text.inverse', null], 'surface.code': ['text.onCode', null],
+  'text.inverse': [null, 'surface.inverse'], 'text.inverseMuted': [null, 'surface.inverse'], 'text.onCode': [null, 'surface.code'],
+  'action.disabledBg': ['action.disabled', null], 'action.disabled': [null, 'action.disabledBg'],
+  'accent.aaaSurface': ['accent.aaaText', null], 'accent.aaaText': [null, 'accent.aaaSurface'],
+  'accent.aaaSolid': ['accent.onAaa', null], 'accent.onAaa': [null, 'accent.aaaSolid'],
+};
+const pairFor = (p) => {
+  const k = p.at(-1), sib = (n) => [...p.slice(0, -1), n].join('.'), has = (q) => at(resolved.semantic.light, q.split('.')) !== undefined;
+  const key = p.join('.');
+  if (EXPLICIT[key]) return EXPLICIT[key];
+  if (/^on[A-Z]/.test(k)) return [null, sib(k[2].toLowerCase() + k.slice(3))];
+  if (k === 'solid' && has(sib('onSolid'))) return [sib('onSolid'), null];
+  if (k === 'surface' && p.length > 1 && has(sib('text'))) return [sib('text'), null];
+  if (p[0] === 'surface') return ['text.default', null];
+  if (has(sib('surface')) && k !== 'surface') return [null, sib('surface')];
+  return [null, 'surface.default'];
+};
+const semanticChip = (p) => {
+  const [fg, bg] = pairFor(p);
+  const other = fg || bg;
+  const val = (mode, q) => at(resolved.semantic[mode], q.split('.'));
+  const ratios = ['light', 'dark'].map((m) => {
+    const self = at(resolved.semantic[m], p), o = val(m, other);
+    return fg ? ratio(o, self) : ratio(self, o);
+  });
+  const ref = (m) => (refName(at(source.semantic[m], p)) || 'literal').replace(/^color\./, '');
+  return {
+    name: p.join('.'), token: `semantic.${p.join('.')}`, cssVar: cssVarForPath(['semantic', ...p].join('.')),
+    light: at(resolved.semantic.light, p), dark: at(resolved.semantic.dark, p),
+    refs: [ref('light'), ref('dark')], ratios, against: fg ? `with ${fg} on it` : `on ${bg}`,
+  };
+};
+
 const ramps = Object.entries(resolved.color).filter(([, v]) => typeof v === 'object');
-const toc = [...groups.map((g) => ({ id: g, text: g === 'overlayScrim' ? 'Overlay' : g[0].toUpperCase() + g.slice(1) })), { id: 'ladders', text: 'The ladders' }];
+const toc = [...groups.map((g) => ({ id: g, text: title(g) })), { id: 'ladders', text: 'The ladders' }];
 ---
 <Docs title="Color" crumb="Foundations" lead={`${rows.length} semantic colors in each mode, each one a reference to a step on the ladders below. Use semantic colors in UI. Never a ladder step, never a raw hex.`} toc={toc} wide>
   <Guidance doText="Use the semantic token for the role: text.muted for secondary text on any surface." dontText="Pick a gray from the ladder because it looks right. It won't follow dark mode or a future contrast fix." />
-  {groups.map((g) => {
-    const groupRows = rows.filter(([p]) => p[0] === g);
-    return (
-      <section aria-labelledby={g}>
-        <h2 id={g}>{g === 'overlayScrim' ? 'Overlay' : g[0].toUpperCase() + g.slice(1)}</h2>
-        <p>{about[g]}</p>
-        <TableWrap label={`${g} colors`}>
-          <table class="data">
-            <thead><tr><th scope="col">Token</th><th scope="col">CSS variable</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
-            <tbody>
-              {groupRows.map(([p]) => {
-                const light = at(resolved.semantic.light, p), dark = at(resolved.semantic.dark, p);
-                return (
-                  <tr data-token={`semantic.${p.join('.')}`}>
-                    <th scope="row"><code>{p.join('.')}</code></th>
-                    <td><code>{cssVarForPath(['semantic', ...p].join('.'))}</code></td>
-                    <td>{isColor(light) && <Swatch value={light} note={refName(at(source.semantic.light, p)) || 'literal value'} />}</td>
-                    <td>{isColor(dark) && <Swatch value={dark} note={refName(at(source.semantic.dark, p)) || 'literal value'} />}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </TableWrap>
-      </section>
-    );
-  })}
+  <p>Each chip shows light mode on the left and dark on the right, what each mode points at, and its contrast with the color it is used with, light then dark. Select a chip to copy its CSS variable.</p>
+  <p id="chip-hint" hidden>Copies the CSS variable.</p>
+  {groups.map((g) => (
+    <section aria-labelledby={g}>
+      <h2 id={g}>{title(g)}</h2>
+      <p>{about[g]}</p>
+      <ul class="chip-deck" aria-label={`${title(g)} colors`}>
+        {rows.filter(([p]) => p[0] === g).map(([p]) => <ColorChip {...semanticChip(p)} />)}
+      </ul>
+    </section>
+  ))}
 
   <h2 id="ladders">The ladders</h2>
-  <p>The primitive ramps every semantic color points at. Reference only.</p>
+  <p>The primitive ramps every semantic color points at. Reference only. Contrast is against white.</p>
   {ramps.map(([ramp, steps]) => (
-    <TableWrap label={`${ramp} ladder`}>
-      <table class="data">
-        <caption>{ramp}</caption>
-        <thead><tr><th scope="col">Step</th>{Object.keys(steps).map((s) => <th scope="col">{s}</th>)}</tr></thead>
-        <tbody><tr><th scope="row">Value</th>{Object.entries(steps).map(([, hex]) => <td><span class="swatch"><span class="swatch-chip" style={`background:${hex}`} aria-hidden="true"></span></span><br /><code>{hex}</code></td>)}</tr></tbody>
-      </table>
-    </TableWrap>
+    <section aria-labelledby={`ladder-${ramp}`}>
+      <h3 id={`ladder-${ramp}`}>{ramp}</h3>
+      <ul class="chip-deck chip-deck--ramp" aria-label={`${ramp} ladder`}>
+        {Object.entries(steps).map(([step, hex]) => (
+          <ColorChip name={`${ramp}.${step}`} cssVar={cssVarForPath(`color.${ramp}.${step}`)} light={hex} ratios={[ratio(hex, '#ffffff')]} against="on white" />
+        ))}
+      </ul>
+    </section>
   ))}
 </Docs>

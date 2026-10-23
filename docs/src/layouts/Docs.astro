@@ -227,14 +227,17 @@ const jsonLd = {
       document.querySelectorAll('input[data-indeterminate]').forEach(function (el) { el.indeterminate = true; });
 
       // Copy buttons on code blocks announce the result through a polite live region.
-      var status = document.getElementById('copy-status');
       document.addEventListener('click', function (e) {
-        var b = e.target.closest && e.target.closest('.copy-button');
-        if (!b) return;
-        var code = document.getElementById(b.getAttribute('data-copy'));
-        if (!code || !navigator.clipboard) return;
-        navigator.clipboard.writeText(code.innerText).then(function () {
-          status.textContent = 'Copied ' + b.getAttribute('data-label') + ' to the clipboard.';
+        var b = e.target.closest && e.target.closest('.copy-button, [data-copy-text]');
+        if (!b || !navigator.clipboard) return;
+        // Code blocks copy their code; color chips copy their CSS variable.
+        var text = b.getAttribute('data-copy-text');
+        var code = text == null && document.getElementById(b.getAttribute('data-copy'));
+        if (text == null && !code) return;
+        navigator.clipboard.writeText(text != null ? text : code.innerText).then(function () {
+          // Looked up here, not at load: the live region sits after this script in the page.
+          var status = document.getElementById('copy-status');
+          status.textContent = 'Copied ' + (text != null ? text : b.getAttribute('data-label')) + ' to the clipboard.';
           setTimeout(function () { status.textContent = ''; }, 4000);
         });
       });

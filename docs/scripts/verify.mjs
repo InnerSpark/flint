@@ -10,6 +10,7 @@
  *   - the skip link lands focus on the page heading and it stays there
  *   - loading a URL with a #hash lands focus on that heading
  *   - an "On this page" link moves focus to its heading
+ * Copy: a color chip copies its CSS variable and the live region announces it.
  * Optional: --shots <dir> saves a screenshot of every page in both themes.
  * Needs a Chromium: CHROME_PATH, or Playwright's (npx playwright install chromium).
  */
@@ -197,6 +198,23 @@ for (const width of [375, 320]) {
   const want = ['header', 'main', 'sidenav', 'footer'];
   const idx = want.map((r) => order.indexOf(r));
   if (idx.some((n) => n < 0) || idx.some((n, i) => i > 0 && n < idx[i - 1])) problems.push(`order: Tab order on ${target} is ${order.join(' > ')}, want header > main > sidenav > footer`);
+  await ctx.close();
+}
+
+// Copy announces: a color chip copies its CSS variable and the polite live region says so.
+{
+  const ctx = await browser.newContext({ permissions: ['clipboard-read', 'clipboard-write'] });
+  const page = await ctx.newPage();
+  await page.goto(`${base}/foundations/color/`);
+  const chip = page.locator('[data-copy-text]').first();
+  const want = await chip.getAttribute('data-copy-text');
+  await chip.focus();
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(300);
+  const said = await page.textContent('#copy-status');
+  const copied = await page.evaluate(() => navigator.clipboard.readText()).catch(() => null);
+  if (copied !== want) problems.push(`copy: color chip copied "${copied}", want "${want}"`);
+  if (!said || !said.includes(want)) problems.push(`copy: live region said "${said}" after copying ${want}`);
   await ctx.close();
 }
 
