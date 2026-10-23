@@ -2,8 +2,7 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
-## Unreleased
-
+## v1.14.0 (2026-10-23)
 - **Input (ASDS-62).** New `input.bgReadOnly` token (13.35:1 light, 9.86:1 dark for the text on it) and `.flint-input[readonly]`: tinted, in the tab order, full contrast. `textarea.flint-input` for multi-line (two lines tall, resizes vertically only), and `type="search"` drops the platform's rounded styling. The docs cover `type`, `inputmode` and `autocomplete` (WCAG 1.3.5), and the workbench gains a Read-only row.
 - **`text.inverseMuted` (ASDS-72).** Quieter text for navy bands and other inverse surfaces: gray.300 in light, gray.700 in dark, about 9.8:1 on `surface.inverse` in both. The docs footer uses it in place of a `color-mix`.
 - **Field (ASDS-61).** New `field.labelFg`, `field.helperFg` and `field.errorFg` component tokens (8.6:1 and up in both modes) and `.flint-field` in components.css: visible label, "(required)" in words, helper text, and an error that replaces the helper. Docs page with the focus-first-error pattern, and a workbench bench. The Input examples now use it, and the docs site's own `.field` styles are gone.
