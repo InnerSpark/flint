@@ -89,18 +89,6 @@ const jsonLd = {
   </header>
 
   <div class={`shell ${home ? 'is-home' : ''}`}>
-    <nav class="sidenav" id="sidenav" aria-label="Docs">
-      {NAV.map((group) => (
-        <>
-          <p class="nav-group" id={`nav-${group.title.toLowerCase().replace(/[^a-z]+/g, '-')}`}>{group.title}</p>
-          <ul aria-labelledby={`nav-${group.title.toLowerCase().replace(/[^a-z]+/g, '-')}`}>
-            {group.items.map(([label, href]) => (
-              <li><a href={href} aria-current={isCurrent(href) || (href !== '/components/' && href.startsWith('/components/') && path.startsWith(href)) ? 'page' : undefined}>{label}</a></li>
-            ))}
-          </ul>
-        </>
-      ))}
-    </nav>
 
     <div class="shell-main">
       {home ? (
@@ -131,6 +119,20 @@ const jsonLd = {
         </div>
       )}
     </div>
+    {/* The side nav comes after the content in the DOM, so keyboard and screen reader users reach the
+        page first: header, content, then the side nav. CSS grid still draws it on the left. */}
+    <nav class="sidenav" id="sidenav" aria-label="Docs">
+      {NAV.map((group) => (
+        <>
+          <p class="nav-group" id={`nav-${group.title.toLowerCase().replace(/[^a-z]+/g, '-')}`}>{group.title}</p>
+          <ul aria-labelledby={`nav-${group.title.toLowerCase().replace(/[^a-z]+/g, '-')}`}>
+            {group.items.map(([label, href]) => (
+              <li><a href={href} aria-current={isCurrent(href) || (href !== '/components/' && href.startsWith('/components/') && path.startsWith(href)) ? 'page' : undefined}>{label}</a></li>
+            ))}
+          </ul>
+        </>
+      ))}
+    </nav>
   </div>
 
   <footer class="site-footer">

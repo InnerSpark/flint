@@ -5,6 +5,7 @@
  *   - no Content-Security-Policy violations (scripts or styles the CSP did not allow)
  *   - workbench pages: islands hydrate, axe passes at compact density too, and forced Hover rows really differ
  *   - every semantic and component token from the build has a row (data-token) somewhere in the docs
+ * Reading order: on every page the side nav follows <main> in the DOM, and Tab goes header > main > side nav > footer.
  * Plus focus checks, sampled over 700ms because browsers reset focus late:
  *   - the skip link lands focus on the page heading and it stays there
  *   - loading a URL with a #hash lands focus on that heading
@@ -159,6 +160,43 @@ for (const width of [375, 320]) {
     const onLoad = await sampleFocus(fresh, 900);
     if (onLoad.slice(-10).some((x) => x !== id)) problems.push(`focus: loading #${id} did not end with focus on its heading (saw ${[...new Set(onLoad)].join(', ')})`);
   } else problems.push(`focus: ${target} has no "On this page" links to test`);
+  await ctx.close();
+}
+
+// Reading and Tab order: header, then the page content, then the side nav. The side nav sits after
+// <main> in the DOM (CSS draws it on the left), so keyboard and screen reader users reach content first.
+{
+  const { ctx, page } = await open('light');
+  for (const path of pages) {
+    await page.goto(base + path, { waitUntil: 'load' });
+    const ok = await page.evaluate(() => {
+      const main = document.querySelector('main'), nav = document.querySelector('.sidenav');
+      return !nav || !!(main.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING);
+    });
+    if (!ok) problems.push(`order: ${path} puts the side nav before <main> in the DOM`);
+  }
+  // Walk the Tab order on one content page and check the regions come in that order.
+  const target = pages.find((p) => p.startsWith('/components/button')) || pages[1];
+  await page.goto(base + target, { waitUntil: 'networkidle' });
+  const seen = [];
+  for (let i = 0; i < 200; i++) {
+    await page.keyboard.press('Tab');
+    const where = await page.evaluate(() => {
+      const el = document.activeElement;
+      if (!el || el === document.body) return 'body';
+      if (el.closest('.site-header')) return 'header';
+      if (el.closest('main')) return 'main';
+      if (el.closest('.sidenav')) return 'sidenav';
+      if (el.closest('.site-footer')) return 'footer';
+      return 'other';
+    });
+    if (seen[seen.length - 1] !== where) seen.push(where);
+    if (where === 'footer') break;
+  }
+  const order = seen.filter((r) => ['header', 'main', 'sidenav', 'footer'].includes(r));
+  const want = ['header', 'main', 'sidenav', 'footer'];
+  const idx = want.map((r) => order.indexOf(r));
+  if (idx.some((n) => n < 0) || idx.some((n, i) => i > 0 && n < idx[i - 1])) problems.push(`order: Tab order on ${target} is ${order.join(' > ')}, want header > main > sidenav > footer`);
   await ctx.close();
 }
 

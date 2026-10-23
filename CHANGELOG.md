@@ -2,6 +2,10 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## Unreleased
+
+- **Docs reading order.** The side nav now follows the page content in the DOM, so keyboard and screen reader users get header, content, then the side nav. CSS grid still draws it on the left. `verify.mjs` checks the DOM order on every page and walks the Tab order (header, main, side nav, footer) on a component page.
+
 ## v1.14.0 (2026-10-23)
 - **Input (ASDS-62).** New `input.bgReadOnly` token (13.35:1 light, 9.86:1 dark for the text on it) and `.flint-input[readonly]`: tinted, in the tab order, full contrast. `textarea.flint-input` for multi-line (two lines tall, resizes vertically only), and `type="search"` drops the platform's rounded styling. The docs cover `type`, `inputmode` and `autocomplete` (WCAG 1.3.5), and the workbench gains a Read-only row.
 - **`text.inverseMuted` (ASDS-72).** Quieter text for navy bands and other inverse surfaces: gray.300 in light, gray.700 in dark, about 9.8:1 on `surface.inverse` in both. The docs footer uses it in place of a `color-mix`.

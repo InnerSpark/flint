@@ -86,6 +86,11 @@ code, kbd { font-family: var(--font-mono); font-size: 0.9em; }
 /* ---------- shell ---------- */
 .shell { display: grid; grid-template-columns: var(--site-nav-w) minmax(0, 1fr); }
 .shell.is-home { grid-template-columns: minmax(0, 1fr); }
+/* DOM order is header, content, side nav (keyboard and screen readers get the page first).
+   The grid puts the side nav back in the left column. */
+.shell > .sidenav { grid-column: 1; grid-row: 1; }
+.shell > .shell-main { grid-column: 2; grid-row: 1; }
+.shell.is-home > .shell-main { grid-column: 1; }
 @media (min-width: 901px) { .shell.is-home .sidenav { display: none; } }
 .sidenav {
   position: sticky; top: var(--site-header-h); height: calc(100vh - var(--site-header-h)); overflow-y: auto;
@@ -278,6 +283,7 @@ table.data th[scope="row"] { font-weight: 600; color: var(--color-text-heading);
 @media (max-width: 900px) /* Flint breakpoint.lg */ {
   .menu-button { display: inline-flex; }
   .shell { grid-template-columns: minmax(0, 1fr); }
+  .shell > .shell-main { grid-column: 1; }
   .sidenav { position: fixed; inset: var(--site-header-h) auto 0 0; width: min(320px, 86vw); height: auto; z-index: var(--z-overlay); transform: translateX(-100%); visibility: hidden; box-shadow: var(--shadow-dialog); }
   .sidenav[data-open="true"] { transform: none; visibility: visible; }
   .page { padding-left: var(--space-16); padding-right: var(--space-16); }
