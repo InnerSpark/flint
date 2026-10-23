@@ -238,6 +238,8 @@ const jsonLd = {
           // Looked up here, not at load: the live region sits after this script in the page.
           var status = document.getElementById('copy-status');
           status.textContent = 'Copied ' + (text != null ? text : b.getAttribute('data-label')) + ' to the clipboard.';
+          // Color copy targets also say "Copied" where you clicked, for a moment.
+          if (text != null) { b.setAttribute('data-copied', ''); setTimeout(function () { b.removeAttribute('data-copied'); }, 1500); }
           setTimeout(function () { status.textContent = ''; }, 4000);
         });
       });

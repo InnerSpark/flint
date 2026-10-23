@@ -8,6 +8,7 @@ import TableWrap from '../../../components/TableWrap.astro';
 import Swatch from '../../../components/Swatch.astro';
 import Result from '../../../components/Result.astro';
 import { COMPONENTS, TABS } from '../../../data/components.js';
+import { STATES } from '../../../data/componentStates.js';
 import { resolved, source, contrast, leaves, at, refName, componentVar, camel, isColor } from '../../../lib/flint.js';
 
 export function getStaticPaths() {
@@ -30,7 +31,7 @@ const pairLabels = [...new Set(pairs.map((p) => p.label))];
 
 const tocByTab = {
   usage: [{ id: 'example', text: 'Example' }, { id: 'when', text: 'When to use' }, { id: 'variants', text: 'Variants and states' }, { id: 'guidance', text: 'Guidance' }],
-  style: [{ id: 'tokens', text: 'Component tokens' }, { id: 'contrast', text: 'Contrast' }],
+  style: [{ id: 'states', text: 'States in light and dark' }, { id: 'tokens', text: 'Component tokens' }, { id: 'contrast', text: 'Contrast' }],
   code: [{ id: 'css', text: 'CSS' }, { id: 'mui', text: 'MUI' }, { id: 'shadcn', text: 'shadcn/ui' }, { id: 'swift', text: 'SwiftUI' }],
   accessibility: [{ id: 'keyboard', text: 'Keyboard' }, { id: 'screen-readers', text: 'Screen readers' }, { id: 'contrast', text: 'Contrast' }, { id: 'target', text: 'Target size' }],
 };
@@ -57,6 +58,23 @@ const tabLabel = TABS.find(([t]) => t === tab)[1];
 
   {tab === 'style' && (
     <>
+      <h2 id="states">States in light and dark</h2>
+      <p>The real {c.name.toLowerCase()}, from components.css, in each state. Each mode sits on its own background, so you judge it where it will be used. The tokens each state changes are listed beside it.</p>
+      <ul class="cr-list state-list">
+        {(STATES[name] || []).map(([label, reads, html], i) => (
+          <li class="cr">
+            <div class="cr-name"><h3>{label}</h3><p>Reads <code>{reads}</code></p></div>
+            {['light', 'dark'].map((mode) => (
+              <div class="cr-mode">
+                <p class="cr-mode-label">{mode === 'light' ? 'Light' : 'Dark'}</p>
+                <div class="stage state-stage" data-theme={mode} inert aria-hidden="true">
+                  <div class="stage-in state-in" set:html={html.replaceAll('__P__', `${i}-${mode}`)} />
+                </div>
+              </div>
+            ))}
+          </li>
+        ))}
+      </ul>
       <h2 id="tokens">Component tokens</h2>
       {ownTokens.length ? (
         <p>Every value {c.name.toLowerCase()} uses, on every platform. Colors point at semantic tokens, so they follow light and dark on their own. The focus ring is shared by every component.</p>
@@ -143,3 +161,8 @@ const tabLabel = TABS.find(([t]) => t === tab)[1];
     </>
   )}
 </Docs>
+<script>
+  // Hover, pressed and focus rows use the workbench's forced-state classes.
+  import { forceStates } from '../../../workbench/forceStates.js';
+  forceStates();
+</script>

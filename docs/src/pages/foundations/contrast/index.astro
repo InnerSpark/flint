@@ -1,37 +1,62 @@
 ---
 import Docs from '../../../layouts/Docs.astro';
-import TableWrap from '../../../components/TableWrap.astro';
 import Result from '../../../components/Result.astro';
-import { contrast, MODES } from '../../../lib/flint.js';
-const toc = MODES.map((m) => ({ id: m, text: m === 'light' ? 'Light' : 'Dark' }));
-const n = contrast.pairs.length / 2;
+import { contrast, cssVarForPath, componentVar } from '../../../lib/flint.js';
+
+// Every pairing the build measures, once, with light and dark side by side. Each mode shows the two
+// colors together on its own background, using Flint variables under data-theme.
+const varFor = (path) => (path.startsWith('component.') ? componentVar(path.split('.').slice(1)) : cssVarForPath(`semantic.${path}`));
+const labels = [...new Set(contrast.pairs.map((p) => p.label))];
+const pairs = labels.map((label) => ({
+  label,
+  light: contrast.pairs.find((p) => p.label === label && p.mode === 'light'),
+  dark: contrast.pairs.find((p) => p.label === label && p.mode === 'dark'),
+}));
+const KINDS = [
+  ['text', 'Text', `Text and icons on the surfaces they sit on. Flint's bar is ${contrast.textBar}:1 (AAA).`],
+  ['control', 'Control edges', `The edges that show where a control is: inputs, checkboxes, switches. ${contrast.nonTextBar}:1.`],
+  ['focus', 'Focus rings', `The ring that shows where keyboard focus is, on every surface it can land on. ${contrast.nonTextBar}:1.`],
+  ['ui', 'Other UI', `Fills and marks that carry meaning without text: buttons on the page, chart marks. ${contrast.nonTextBar}:1.`],
+  ['decorative', 'Decorative', 'Dividers and card edges. Measured, but advisory: WCAG does not require them to contrast.'],
+  ['exempt', 'Disabled', 'Disabled labels. Measured, but advisory: WCAG exempts inactive controls.'],
+].filter(([k]) => pairs.some((p) => p.light.kind === k));
 const passed = contrast.pairs.filter((p) => p.pass).length;
+const toc = KINDS.map(([k, t]) => ({ id: k, text: t }));
 ---
-<Docs title="Contrast" crumb="Foundations" lead={`The build measures ${n} pairings in each mode and fails if a required one drops below its bar. This page is that report, read from contrast.json.`} toc={toc} wide>
+<Docs title="Contrast" crumb="Foundations" lead={`The build measures ${labels.length} pairings in each mode and fails if a required one drops below its bar. This page is that report, read from contrast.json.`} toc={toc} wide>
   <p>
     Text clears <strong>{contrast.textBar}:1</strong> (WCAG AAA) as Flint's internal bar. Control edges, focus rings and chart marks clear <strong>{contrast.nonTextBar}:1</strong>.
-    Decorative borders and disabled text are measured but advisory: WCAG exempts them. Flint's published claim stays WCAG 2.2 AA. {passed} of {contrast.pairs.length} checks pass outright; the rest are advisory.
+    Decorative borders and disabled text are measured but advisory. Flint's published claim stays WCAG 2.2 AA. {passed} of {contrast.pairs.length} checks pass outright; the rest are advisory.
   </p>
-  {MODES.map((m) => (
-    <section aria-labelledby={m}>
-      <h2 id={m}>{m === 'light' ? 'Light' : 'Dark'}</h2>
-      <TableWrap label={`${m} mode contrast`}>
-        <table class="data">
-          <thead><tr><th scope="col">Pairing</th><th scope="col">Foreground</th><th scope="col">Background</th><th scope="col">Ratio</th><th scope="col">Needs</th><th scope="col">Result</th></tr></thead>
-          <tbody>
-            {contrast.pairs.filter((p) => p.mode === m).map((p) => (
-              <tr>
-                <th scope="row">{p.label}</th>
-                <td><code>{p.fg}</code></td>
-                <td><code>{p.bg}</code></td>
-                <td class="nowrap"><strong>{p.ratio.toFixed(2)}:1</strong></td>
-                <td class="nowrap">{p.threshold}:1</td>
-                <td><Result pair={p} /></td>
-              </tr>
+  {KINDS.map(([kind, title, about]) => (
+    <section aria-labelledby={kind}>
+      <h2 id={kind}>{title}</h2>
+      <p>{about}</p>
+      <ul class="cr-list">
+        {pairs.filter((p) => p.light.kind === kind).map((p) => (
+          <li class="cr">
+            <div class="cr-name">
+              <h3>{p.label}</h3>
+              <p><code>{p.light.fg}</code> on <code>{p.light.bg}</code>. Needs {p.light.threshold}:1.</p>
+            </div>
+            {[p.light, p.dark].map((m) => (
+              <div class="cr-mode">
+                <p class="cr-mode-label">{m.mode === 'light' ? 'Light' : 'Dark'}</p>
+                <div class="stage stage--sm" data-theme={m.mode} aria-hidden="true">
+                  <div class="stage-in" style={`background:var(${varFor(m.bg)})`}>
+                    {kind === 'text' && <><span class="stage-aa" style={`color:var(${varFor(m.fg)})`}>Aa</span><span class="stage-line" style={`color:var(${varFor(m.fg)})`}>Trip saved</span></>}
+                    {kind === 'exempt' && <button type="button" class="stage-pill" disabled tabindex="-1" style={`background:transparent;border:0;font:inherit;font-weight:700;color:var(${varFor(m.fg)})`}>Save trip</button>}
+                    {kind === 'focus' && <span class="stage-pill stage-pill--ring stage-ring-demo" style={`outline-color:var(${varFor(m.fg)});border-color:var(--color-border-control)`}></span>}
+                    {(kind === 'control' || kind === 'decorative') && <span class="stage-field" style={`border-color:var(${varFor(m.fg)})`}></span>}
+                    {kind === 'ui' && <span class="stage-shape" style={`background:var(${varFor(m.fg)})`}></span>}
+                  </div>
+                </div>
+                <p class="cr-values"><span class="cv-contrast"><strong>{m.ratio.toFixed(2)}:1</strong></span> <Result pair={m} /></p>
+              </div>
             ))}
-          </tbody>
-        </table>
-      </TableWrap>
+          </li>
+        ))}
+      </ul>
     </section>
   ))}
 </Docs>
