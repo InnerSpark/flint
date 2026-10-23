@@ -3,7 +3,7 @@ import Docs from '../../layouts/Docs.astro';
 import TableWrap from '../../components/TableWrap.astro';
 import Icon from '../../components/Icon.astro';
 import { COMPONENTS } from '../../data/components.js';
-// The component list from FIGMA_LIBRARY_GUIDELINES.md, section 5.
+// The component list from FIGMA_LIBRARY_GUIDELINES.md, section 5, plus Icon (an atom in ASDS-1).
 const LIBRARY = [
   ['Actions', ['Button', 'Split button']],
   ['Forms', ['Form field', 'Input', 'Select', 'Checkbox', 'Radio', 'Toggle']],
@@ -11,6 +11,7 @@ const LIBRARY = [
   ['Navigation', ['Tab', 'Pagination', 'Skip link', 'Menu item']],
   ['Containers', ['Dialog', 'Drawer', 'Empty state', 'Tooltip']],
   ['Data', ['Table cell', 'Progress']],
+  ['Graphics', ['Icon']],
 ];
 const documented = Object.entries(COMPONENTS).map(([slug, c]) => [c.name, slug]);
 const all = LIBRARY.flatMap(([, l]) => l);

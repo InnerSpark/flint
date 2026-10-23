@@ -21,9 +21,11 @@ const base = `/components/${name}/`;
 const tabs = TABS.map(([t, label]) => ({ label, href: t === 'usage' ? base : `${base}${t}/` }));
 
 // Some components (Alert) have no tier of their own and read semantic tokens directly.
-const ownTokens = source.component[name] ? leaves(source.component[name]) : [];
-const tokenRows = [...ownTokens.map(([p, v]) => [[name, ...p], v]), ...leaves(source.component.focus).map(([p, v]) => [['focus', ...p], v])];
-const pairs = contrast.pairs.filter((p) => p.label.startsWith(name) || p.label.startsWith('focus ring'));
+// A page can name its token group and contrast-pair prefix when they differ from the slug (skip-link).
+const group = c.tokens || name;
+const ownTokens = source.component[group] ? leaves(source.component[group]) : [];
+const tokenRows = [...ownTokens.map(([p, v]) => [[group, ...p], v]), ...leaves(source.component.focus).map(([p, v]) => [['focus', ...p], v])];
+const pairs = contrast.pairs.filter((p) => p.label.startsWith(c.pairs || name) || p.label.startsWith('focus ring'));
 const pairLabels = [...new Set(pairs.map((p) => p.label))];
 
 const tocByTab = {
@@ -106,13 +108,13 @@ const tabLabel = TABS.find(([t]) => t === tab)[1];
       <Code label="CSS" code={c.code.css.rules} />
       <h2 id="mui">MUI</h2>
       <Code label="React (MUI)" code={c.code.mui} />
-      <Notice tone="warning" title="Known gap"><p>{c.code.muiGap}</p></Notice>
+      {c.code.muiGap && <Notice tone="warning" title="Known gap"><p>{c.code.muiGap}</p></Notice>}
       <h2 id="shadcn">shadcn/ui</h2>
-      <p>The Flint version of the shadcn component. Same API as upstream; every value reads a Flint token.</p>
+      <p>{c.code.shadcnNote || 'The Flint version of the shadcn component. Same API as upstream; every value reads a Flint token.'}</p>
       <Code label={`components/ui/${name}.jsx`} code={c.code.shadcn} />
       <h2 id="swift">SwiftUI</h2>
       <Code label="SwiftUI" code={c.code.swift} />
-      <Notice><p>A ready-made SwiftUI {c.name.toLowerCase()} is moving into the Flint package (ASDS-38). Until then, build it from the component tokens as above.</p></Notice>
+      <Notice><p>{c.code.swiftNote || `A ready-made SwiftUI ${c.name.toLowerCase()} is moving into the Flint package (ASDS-38). Until then, build it from the component tokens as above.`}</p></Notice>
     </>
   )}
 

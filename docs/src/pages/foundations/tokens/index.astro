@@ -77,7 +77,8 @@ const short = (key) => key.replace(/^(component|semantic)\./, '');
 const initial = 'component.button.primary.bg';
 // Components with tokens but no docs page yet. Their tokens are listed here until the page ships;
 // a component page then lists its own (and this list drops it), so every token has a home.
-const pending = Object.keys(source.component).filter((k) => k !== 'focus' && !COMPONENTS[k]);
+const documentedGroups = Object.entries(COMPONENTS).map(([slug, c]) => c.tokens || slug);
+const pending = Object.keys(source.component).filter((k) => k !== 'focus' && !documentedGroups.includes(k));
 const rowsFor = (name) => leaves(source.component[name]).map(([p, v]) => [[name, ...p], v]);
 const show = (v) => (isColor(v) ? null : typeof v === 'number' ? `${v}px` : String(v));
 ---

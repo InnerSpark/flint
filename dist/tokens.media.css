@@ -381,6 +381,7 @@
   --link-fg: var(--color-text-link);
   --button-radius: var(--radius-control);
   --button-height: var(--control-md);
+  --button-height-sm: var(--control-sm);
   --button-primary-bg: var(--color-action-primary);
   --button-primary-bg-hover: var(--color-action-primary-hover);
   --button-primary-bg-pressed: var(--color-action-primary-pressed);

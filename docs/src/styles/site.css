@@ -32,7 +32,8 @@ body {
   font: var(--type-body-md-weight) var(--type-body-md-size) / var(--type-body-md-line-height) var(--font-sans);
 }
 img, svg { max-width: 100%; }
-a { color: var(--color-text-link); text-underline-offset: 0.15em; }
+/* In the base layer, as in an app: MUI and Tailwind (layered, on the workbench) can then color their own links. */
+@layer base { a { color: var(--color-text-link); text-underline-offset: 0.15em; } }
 a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
 [tabindex="-1"]:focus { outline: none; }
@@ -42,14 +43,7 @@ code, kbd { font-family: var(--font-mono); font-size: 0.9em; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
-/* ---------- skip link ---------- */
-.skip-link {
-  position: absolute; left: var(--space-16); top: var(--space-8); z-index: var(--z-toast);
-  transform: translateY(-200%);
-  background: var(--color-surface-default); color: var(--color-text-link);
-  padding: var(--space-8) var(--space-16); border-radius: var(--radius-control); font-weight: 700;
-}
-.skip-link:focus { transform: none; }
+/* ---------- skip link: the site uses Flint's .flint-skip-link (components.css) ---------- */
 
 /* ---------- header ---------- */
 .site-header {
@@ -197,6 +191,8 @@ table.data th[scope="row"] { font-weight: 600; color: var(--color-text-heading);
 
 /* form field used by examples */
 .example-pane .flint-field { max-width: 320px; }
+/* The skip link example: the pane is the box it appears in, with room at the top for it. */
+.example-pane:has(> .flint-skip-link) { position: relative; padding-top: calc(var(--button-height) + var(--space-24)); }
 
 /* ---------- do / don't ---------- */
 .guidance { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); margin: var(--space-16) 0 var(--space-24); }

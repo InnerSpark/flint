@@ -1,4 +1,4 @@
-// shadcn/ui Button, restyled to Flint. Same API as upstream (variant, asChild); every color,
+// shadcn/ui Button, restyled to Flint. Same API as upstream (variant, size, asChild); every color,
 // size and focus value reads a Flint component token instead of shadcn's defaults.
 // Changed from upstream: no opacity-50 disabled state (disabled has its own tokens), and the
 // focus ring is Flint's solid 2px ring instead of a 50% transparent ring.
@@ -16,14 +16,18 @@ const buttonVariants = cva(
         destructive: 'bg-[var(--button-danger-bg)] text-[var(--button-danger-fg)] hover:bg-[var(--button-danger-bg-hover)] active:bg-[var(--button-danger-bg-pressed)]',
         ghost: 'bg-transparent text-[var(--button-text-fg)] hover:bg-[var(--button-text-bg-hover)] disabled:bg-transparent',
       },
+      size: {
+        default: '',
+        sm: 'min-h-[var(--button-height-sm)] px-3',
+      },
     },
-    defaultVariants: { variant: 'default' },
+    defaultVariants: { variant: 'default', size: 'default' },
   },
 );
 
-export function Button({ className, variant, asChild = false, ...props }) {
+export function Button({ className, variant, size, asChild = false, ...props }) {
   const Comp = asChild ? Slot : 'button';
-  return <Comp data-slot="button" className={cn(buttonVariants({ variant }), className)} {...props} />;
+  return <Comp data-slot="button" className={cn(buttonVariants({ variant, size }), className)} {...props} />;
 }
 
 export { buttonVariants };

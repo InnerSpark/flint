@@ -527,6 +527,7 @@ const tokens = {
       "button": {
         "radius": 8,
         "height": 40,
+        "heightSm": 32,
         "primary": {
           "bg": "#1550a0",
           "bgHover": "#0d3b6e",
@@ -695,6 +696,7 @@ const tokens = {
       "button": {
         "radius": 8,
         "height": 40,
+        "heightSm": 32,
         "primary": {
           "bg": "#93c5fd",
           "bgHover": "#bfdbfe",

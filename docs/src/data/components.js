@@ -34,6 +34,10 @@ const warningIcon = svg('<path d="M10 2.5l8 14.5H2z" fill="none" stroke="current
 const alertErrorIcon = svg('<circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>');
 const closeIcon = '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 
+const ico = (cls, attrs, d) => `<svg class="${cls}" viewBox="0 0 20 20" ${attrs}>${d}</svg>`;
+const CHECK = '<circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.5 10.5l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+const CLOCK = '<circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 6v4l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+
 export const COMPONENTS = {
   button: {
     name: 'Button',
@@ -49,6 +53,7 @@ export const COMPONENTS = {
 </div>
 <div class="example-row">
   <button type="button" class="flint-btn flint-btn--primary" aria-busy="true" aria-disabled="true">Saving trip</button>
+  <button type="button" class="flint-btn flint-btn--secondary flint-btn--sm">Edit stop</button>
   <button type="button" class="flint-btn flint-btn--secondary flint-btn--icon" aria-label="Add stop"><svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 4v12M4 10h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
 </div>`,
     when: [
@@ -61,6 +66,7 @@ export const COMPONENTS = {
       ['Danger', 'Actions that destroy something. Always followed by a confirm step.'],
       ['Text', 'Low-emphasis actions in dense areas, like table rows and toolbars.'],
       ['Icon only', 'Any variant plus flint-btn--icon. Square, the button\'s height. Needs an aria-label.'],
+      ['Small', 'Any variant plus flint-btn--sm. 32px tall (button.heightSm) for toolbars and table rows. Combines with flint-btn--icon.'],
       ['Pressed', 'Primary and danger darken one more step while pressed (button.*.bgPressed). Secondary and text keep their hover look.'],
       ['Busy', 'aria-busy="true" while the action runs. Keep the label; a spinner shows next to it.'],
       ['Disabled', 'disabled, or aria-disabled="true" to keep it focusable so people can find out why.'],
@@ -71,7 +77,7 @@ export const COMPONENTS = {
       ['When a button is disabled, say why next to it.', 'Disable a button with no explanation and leave people stuck.'],
     ],
     code: {
-      css: { label: 'HTML', code: '<button type="button" class="flint-btn flint-btn--primary">Save trip</button>\n<button type="button" class="flint-btn flint-btn--secondary">Add stop</button>\n<button type="button" class="flint-btn flint-btn--danger">Delete trip</button>\n<button type="button" class="flint-btn flint-btn--text">Skip for now</button>\n\n<!-- Busy: keep it focusable, block the click in code -->\n<button type="button" class="flint-btn flint-btn--primary" aria-busy="true" aria-disabled="true">Saving trip</button>\n\n<!-- Icon only: name it, hide the icon -->\n<button type="button" class="flint-btn flint-btn--secondary flint-btn--icon" aria-label="Add stop">\n  <svg aria-hidden="true" focusable="false">...</svg>\n</button>', rules: cssFor('flint-btn') },
+      css: { label: 'HTML', code: '<button type="button" class="flint-btn flint-btn--primary">Save trip</button>\n<button type="button" class="flint-btn flint-btn--secondary">Add stop</button>\n<button type="button" class="flint-btn flint-btn--danger">Delete trip</button>\n<button type="button" class="flint-btn flint-btn--text">Skip for now</button>\n\n<!-- Small: toolbars and table rows -->\n<button type="button" class="flint-btn flint-btn--secondary flint-btn--sm">Edit stop</button>\n\n<!-- Busy: keep it focusable, block the click in code -->\n<button type="button" class="flint-btn flint-btn--primary" aria-busy="true" aria-disabled="true">Saving trip</button>\n\n<!-- Icon only: name it, hide the icon -->\n<button type="button" class="flint-btn flint-btn--secondary flint-btn--icon" aria-label="Add stop">\n  <svg aria-hidden="true" focusable="false">...</svg>\n</button>', rules: cssFor('flint-btn') },
       mui: `import Button from '@mui/material/Button';
 
 <Button variant="contained">Save trip</Button>
@@ -97,7 +103,7 @@ export const COMPONENTS = {
       'aria-disabled keeps a button in the tab order so people can reach it and read why it is off. Block the click in your handler.',
       'Use a real <button>. A <div> with a click handler is not reachable by keyboard.',
     ],
-    target: 'Buttons are 40px tall (control.md), above the 24px minimum. On iOS, at least 44pt.',
+    target: 'Buttons are 40px tall (control.md), or 32px small (control.sm), both above the 24px minimum. On iOS, at least 44pt.',
   },
   radio: {
     name: 'Radio',
@@ -209,6 +215,138 @@ import FormLabel from '@mui/material/FormLabel';
       'Same-page links move focus to the target heading, not just the scroll position.',
     ],
     target: 'Inline links follow the text size, which WCAG 2.5.8 exempts. Standalone links are at least 24px tall (targetMin).',
+  },
+  'skip-link': {
+    name: 'Skip link',
+    tokens: 'skipLink',
+    pairs: 'skip link',
+    lead: 'A skip link lets keyboard users jump past the header and navigation to the main content. It is the first stop on Tab, and stays hidden until it gets focus.',
+    example: `<a class="flint-skip-link" href="#example">Skip to content</a>
+<p>Tab into this box and the skip link appears at its top corner. Press Enter and focus moves to the Example heading. On a real page it is the first Tab stop.</p>`,
+    when: [
+      'Put one skip link first in <body> on every page with a repeated header or navigation.',
+      'Point it at the main heading (the h1). A heading has a name, so screen readers announce where people landed.',
+      'Add a second one only for a big repeated block, like "Skip to results". Two at most.',
+    ],
+    variants: [
+      ['Hidden', 'Clipped out of view until it gets focus. Screen readers can still reach it.'],
+      ['Focused', 'Appears over the top corner on the primary fill (skipLink.bg), with the focus ring.'],
+    ],
+    guidance: [
+      ['Say where it goes: "Skip to content".', 'Write "Skip" alone. People should know where they will land.'],
+      ['Move focus to the heading in script, then let the reader stop there.', 'Rely on the browser\'s fragment jump. It can scroll without moving focus, so the next Tab starts back at the top.'],
+      ['Hide it only until it has focus.', 'Hide it with display: none or visibility: hidden. Then nobody can reach it.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: `<body>
+  <a class="flint-skip-link" href="#page-title">Skip to content</a>
+  <header>...</header>
+  <main>
+    <h1 id="page-title" tabindex="-1">Trips</h1>
+    ...
+  </main>
+  <script>
+    // Move focus to the heading, not just the scroll position.
+    // The browser's own jump can leave focus on <body>.
+    document.querySelector('.flint-skip-link').addEventListener('click', (e) => {
+      const target = document.getElementById(e.currentTarget.hash.slice(1));
+      if (!target) return;
+      e.preventDefault();
+      target.focus();
+      history.pushState(null, '', e.currentTarget.hash);
+    });
+  </script>
+</body>`, rules: cssFor('flint-skip-link') },
+      mui: `// MUI has no skip link. Use the plain CSS class on an anchor, first in the app shell.
+<a className="flint-skip-link" href="#page-title" onClick={focusTarget}>Skip to content</a>`,
+      muiGap: 'MUI has no skip link component. Load Flint\'s components.css and use the class above.',
+      shadcnNote: 'shadcn/ui has no skip link. This is a plain anchor on the skip link tokens; pair it with the focus script from the CSS tab.',
+      shadcn: `<a
+  href="#page-title"
+  className="absolute left-4 top-2 z-[var(--z-toast)] inline-flex min-h-[var(--button-height)] items-center rounded-[var(--skip-link-radius)] border border-transparent bg-[var(--skip-link-bg)] px-4 text-sm font-bold text-[var(--skip-link-fg)] underline whitespace-nowrap [clip-path:inset(50%)] focus:[clip-path:none] focus:[outline:var(--focus-ring-width)_solid_var(--focus-ring-color)] focus:[outline-offset:var(--focus-ring-offset)]"
+>
+  Skip to content
+</a>`,
+      swift: `// iOS has no skip link. VoiceOver users jump by heading with the rotor,
+// so mark each screen's title as a header.
+Text("Trips")
+  .font(.largeTitle.bold())
+  .accessibilityAddTraits(.isHeader)`,
+      swiftNote: 'On iOS, headings do the skip link\'s job. On macOS web views, the web skip link applies.',
+    },
+    keyboard: [
+      ['Tab', 'From the top of the page, the first Tab shows the skip link and focuses it.'],
+      ['Enter', 'Follows it. Focus moves to the main heading, and the next Tab continues from there.'],
+    ],
+    screenReader: [
+      'Read as "Skip to content, link". The link text is its name.',
+      'Focus lands on the heading, so its name is announced. Reading stops there; people decide what to read next.',
+      'The target heading needs tabindex="-1" so it can take focus without joining the Tab order.',
+    ],
+    target: 'Focused, it is 40px tall (button.height), above the 24px minimum.',
+  },
+  icon: {
+    name: 'Icon',
+    lead: 'Icons help people scan. Flint draws them at three sizes in the text color, and never lets an icon carry meaning without a name.',
+    example: `<div class="example-row">
+  ${ico('flint-icon flint-icon--sm', 'role="img" aria-label="Passed, small"', CHECK)}
+  ${ico('flint-icon', 'role="img" aria-label="Passed, medium"', CHECK)}
+  ${ico('flint-icon flint-icon--lg', 'role="img" aria-label="Passed, large"', CHECK)}
+</div>
+<p class="example-row">${ico('flint-icon flint-icon--muted', 'aria-hidden="true" focusable="false"', CLOCK)} Last scanned 2 hours ago</p>`,
+    when: [
+      'Use an icon next to a label to help people scan: a list, a toolbar, a status column.',
+      'Use an icon alone only when it is common and named: close, search, menu.',
+      'Use words when the meaning is not obvious. An icon nobody recognizes slows everyone down.',
+    ],
+    variants: [
+      ['Small', 'flint-icon--sm, 16px (icon.sm). Next to 12 to 14px text.'],
+      ['Medium', '20px (icon.md), the default. Next to 16px text.'],
+      ['Large', 'flint-icon--lg, 24px (icon.lg). Headers and empty states.'],
+      ['Muted', 'flint-icon--muted (icon.fgMuted). Supporting detail like timestamps. Still above 3:1.'],
+    ],
+    guidance: [
+      ['Pair an icon with a word, or name it with role="img" and aria-label.', 'Leave a lone icon unnamed. A screen reader says nothing, or reads a file name.'],
+      ['Draw in currentColor so the icon follows text color, dark mode and forced colors.', 'Bake a color into the svg. It disappears in dark mode or a Windows contrast theme.'],
+      ['Name an icon-only button on the button, and hide its icon.', 'Name the svg inside a button and leave the button itself unnamed.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: `<!-- Decorative: the words next to it say the same thing -->
+<svg class="flint-icon flint-icon--muted" viewBox="0 0 20 20" aria-hidden="true" focusable="false">...</svg>
+Last scanned 2 hours ago
+
+<!-- Means something on its own -->
+<svg class="flint-icon" viewBox="0 0 20 20" role="img" aria-label="Passed">...</svg>`, rules: cssFor('flint-icon') },
+      mui: `import SvgIcon from '@mui/material/SvgIcon';
+
+// Set size and color from the icon tokens. titleAccess names it (role="img").
+<SvgIcon titleAccess="Passed" sx={{ fontSize: 'var(--icon-md)', color: 'var(--icon-fg)' }}>
+  <path d="..." />
+</SvgIcon>`,
+      muiGap: 'The MUI theme does not map SvgIcon sizes to the icon tokens: small, medium and large draw 20, 24 and 35px instead of 16, 20 and 24px (ASDS-44). Set fontSize from the tokens as above.',
+      shadcnNote: 'shadcn/ui draws icons with lucide-react. Size and color them from the icon tokens.',
+      shadcn: `import { CircleCheck, Clock } from 'lucide-react';
+
+// Decorative, next to words
+<Clock aria-hidden="true" className="size-[var(--icon-md)] text-[var(--icon-fg-muted)]" />
+
+// Means something on its own
+<CircleCheck role="img" aria-label="Passed" className="size-[var(--icon-md)] text-[var(--icon-fg)]" />`,
+      swift: `Image(systemName: "checkmark.circle")
+  .font(.system(size: Flint.Component.iconMd))
+  .foregroundStyle(Flint.Component.iconFg)
+  .accessibilityLabel("Passed")
+
+// Decorative, next to words: Label hides the image from VoiceOver.
+Label("Last scanned 2 hours ago", systemImage: "clock")`,
+    },
+    keyboard: [['None', 'Icons are not interactive. A clickable icon is a button: use flint-btn--icon.']],
+    screenReader: [
+      'A decorative icon has aria-hidden="true", so it is skipped.',
+      'An icon on its own has role="img" and an aria-label that says what it means ("Passed"), not what it shows ("green check").',
+      'In an icon-only button the name goes on the button, and the icon is aria-hidden.',
+    ],
+    target: 'Not interactive, so no target size. An icon-only button is still 40px, or 32px small (button.height, button.heightSm).',
   },
   badge: {
     name: 'Badge',

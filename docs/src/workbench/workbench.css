@@ -16,5 +16,7 @@
 
 .tb-stage td .tb-cell { display: flex; align-items: center; gap: var(--space-12); min-width: 180px; }
 .tb-stage label.tb-cell { cursor: pointer; }
+/* Skip link cells: a positioned box the link appears in, tall enough to hold it. */
+.tb-stage .tb-skip { position: relative; display: block; width: 100%; min-height: calc(var(--button-height) + var(--space-16)); }
 .tb-stage td.tb-state { font-weight: 600; color: var(--color-text-heading); white-space: nowrap; width: 1%; }
 .tb-stage td.tb-state span { display: block; font-weight: 400; color: var(--color-text-muted); }

@@ -81,7 +81,7 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
           }
         `,
       },
-      MuiButton: { styleOverrides: { root: { textTransform: 'none', borderRadius: k.button.radius } } },
+      MuiButton: { styleOverrides: { root: { textTransform: 'none', borderRadius: k.button.radius }, sizeSmall: { minHeight: k.button.heightSm } } },
       // Canonical Paper: kills MUI's dark elevation overlay and maps the elevation
       // prop onto the shadow tokens (mode-aware). Covers Menu/Popover/Dialog/Drawer,
       // which are all Paper-based, so floating surfaces stop hand-rolling shadows.

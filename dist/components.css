@@ -33,6 +33,9 @@
 /* Icon-only: square, the height of the button. Needs an aria-label; the svg is aria-hidden. */
 .flint-btn svg { width: var(--icon-size-md); height: var(--icon-size-md); flex: none; }
 .flint-btn--icon { padding: 0; width: var(--button-height); }
+/* Small: control.sm (32px), still above the 24px target minimum. For dense toolbars and table rows. */
+.flint-btn--sm { min-height: var(--button-height-sm); padding: 0 var(--space-12); }
+.flint-btn--sm.flint-btn--icon { width: var(--button-height-sm); padding: 0; }
 /* Busy: aria-busy="true" plus aria-disabled="true" while the action runs. The label stays (change it to
    "Saving..." if that helps); the spinner is decorative. Under reduced motion it holds still. */
 .flint-btn[aria-busy="true"] { cursor: progress; }
@@ -236,3 +239,25 @@ textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); 
 .flint-radio:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
 .flint-radio:disabled { border-color: var(--radio-disabled); background: var(--radio-disabled-bg); cursor: not-allowed; }
 .flint-radio:disabled:checked::after { background: var(--radio-disabled); }
+
+/* Skip link (ASDS-73): the first thing in <body>. Hidden until focused, then it sits over the top
+   corner. Point it at the main heading (tabindex="-1") and move focus there in script: a bare
+   fragment jump can leave focus on <body>. The transparent border draws its edge in forced colors.
+   :focus-visible sits beside :focus only so the workbench can force the focus row. */
+.flint-skip-link {
+  position: absolute; inset-inline-start: var(--space-16); top: var(--space-8); z-index: var(--z-toast);
+  display: inline-flex; align-items: center; min-height: var(--button-height); padding: 0 var(--space-16);
+  border: 1px solid transparent; border-radius: var(--skip-link-radius);
+  background: var(--skip-link-bg); color: var(--skip-link-fg);
+  font: 700 var(--font-size-sm) / 1.2 var(--font-sans); text-decoration: underline; white-space: nowrap;
+  clip-path: inset(50%);
+}
+.flint-skip-link:focus, .flint-skip-link:focus-visible { clip-path: none; outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+
+/* Icon (ASDS-74): size and color for an svg on its own. Inside a button, badge, chip, alert or field
+   error the component sizes the icon, so leave this class off there. Decorative: aria-hidden="true".
+   Means something on its own: role="img" plus aria-label. Draw with currentColor so forced colors works. */
+.flint-icon { width: var(--icon-md); height: var(--icon-md); flex: none; vertical-align: middle; color: var(--icon-fg); }
+.flint-icon--sm { width: var(--icon-sm); height: var(--icon-sm); }
+.flint-icon--lg { width: var(--icon-lg); height: var(--icon-lg); }
+.flint-icon--muted { color: var(--icon-fg-muted); }

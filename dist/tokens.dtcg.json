@@ -1555,6 +1555,10 @@
           "$type": "dimension",
           "$value": "{control.md}"
         },
+        "heightSm": {
+          "$type": "dimension",
+          "$value": "{control.sm}"
+        },
         "primary": {
           "bg": {
             "$type": "color",
@@ -2046,6 +2050,10 @@
         "height": {
           "$type": "dimension",
           "$value": "{control.md}"
+        },
+        "heightSm": {
+          "$type": "dimension",
+          "$value": "{control.sm}"
         },
         "primary": {
           "bg": {

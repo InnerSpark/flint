@@ -318,6 +318,7 @@ public enum Flint {
     public static let linkFg = dynamic(light: 0x1550a0, dark: 0x93c5fd)
     public static let buttonRadius: CGFloat = 8
     public static let buttonHeight: CGFloat = 40
+    public static let buttonHeightSm: CGFloat = 32
     public static let buttonPrimaryBg = dynamic(light: 0x1550a0, dark: 0x93c5fd)
     public static let buttonPrimaryBgHover = dynamic(light: 0x0d3b6e, dark: 0xbfdbfe)
     public static let buttonPrimaryBgPressed = dynamic(light: 0x0d2b45, dark: 0xdbeafe)

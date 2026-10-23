@@ -54,6 +54,18 @@ export const WORKBENCH = {
     benches: [['switch', 'Switch', 'switch/default']],
     gap: 'The MUI switch is a 34x14 track with a 20px thumb that overhangs it, smaller than Flint\'s 48x24, and its disabled, on thumb stays tinted blue.',
   },
+  icon: {
+    name: 'Icon',
+    lead: 'Each size and the muted color as MUI, shadcn/ui and plain CSS. All three read the icon tokens.',
+    benches: [['icon', 'Icon', 'icon/sizes']],
+    gap: 'The MUI theme does not map SvgIcon sizes to the icon tokens, so small, medium and large draw 20, 24 and 35px instead of 16, 20 and 24px (ASDS-44); the MUI column sets fontSize from the tokens to match.',
+  },
+  'skip-link': {
+    name: 'Skip link',
+    lead: 'Hidden and focused, as MUI, shadcn/ui and plain CSS. All three read the skip link tokens. Tab into the Live row to see it appear.',
+    benches: [['skip-link', 'Skip link', 'skip-link/default']],
+    gap: 'MUI and shadcn/ui have no skip link. The MUI column is MUI Link styled with the tokens through sx; the shadcn column is an anchor with Tailwind classes.',
+  },
   link: {
     name: 'Link',
     lead: 'Every state as MUI, shadcn/ui and plain CSS. All three read link.fg, stay underlined, and thicken the underline on hover.',

@@ -16,6 +16,7 @@ import MuiChip from '@mui/material/Chip';
 import MuiAlert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { Switch as ShadSwitch } from './ui/switch';
+import SvgIcon from '@mui/material/SvgIcon';
 
 export const IMPLEMENTATIONS = ['MUI', 'shadcn', 'Plain CSS'];
 
@@ -26,6 +27,7 @@ const BUTTON_STATES = [
   { label: 'Focus', cls: 'st-focus', note: 'keyboard focus' },
   { label: 'Disabled', disabled: true },
   { label: 'Busy', busy: true, note: 'aria-busy' },
+  { label: 'Small', small: true, note: 'button.heightSm' },
   { label: 'Live', cls: '', note: 'try it' },
 ];
 
@@ -41,9 +43,9 @@ const button = (variant) => ({
   render(impl, s) {
     const v = BUTTON[variant];
     const busy = s.busy ? { 'aria-busy': 'true', 'aria-disabled': 'true' } : {};
-    if (impl === 'MUI') return <MuiButton {...v.mui} disableElevation className={s.cls} disabled={s.disabled} loading={s.busy || undefined}>{v.label}</MuiButton>;
-    if (impl === 'shadcn') return <ShadButton variant={v.shad} className={s.cls} disabled={s.disabled} {...busy}>{v.label}</ShadButton>;
-    return <button type="button" className={`flint-btn flint-btn--${v.plain} ${s.cls || ''}`} disabled={s.disabled} {...busy}>{v.label}</button>;
+    if (impl === 'MUI') return <MuiButton {...v.mui} size={s.small ? 'small' : undefined} disableElevation className={s.cls} disabled={s.disabled} loading={s.busy || undefined}>{v.label}</MuiButton>;
+    if (impl === 'shadcn') return <ShadButton variant={v.shad} size={s.small ? 'sm' : undefined} className={s.cls} disabled={s.disabled} {...busy}>{v.label}</ShadButton>;
+    return <button type="button" className={`flint-btn flint-btn--${v.plain} ${s.small ? 'flint-btn--sm' : ''} ${s.cls || ''}`} disabled={s.disabled} {...busy}>{v.label}</button>;
   },
 });
 
@@ -294,6 +296,59 @@ const alert = {
   },
 };
 
+// Skip link: hidden until focused. Each cell is a positioned box so the link appears inside it.
+const SKIP_SHAD = 'absolute left-4 top-2 z-[var(--z-toast)] inline-flex min-h-[var(--button-height)] items-center rounded-[var(--skip-link-radius)] border border-transparent bg-[var(--skip-link-bg)] px-4 text-sm font-bold text-[var(--skip-link-fg)] underline whitespace-nowrap [clip-path:inset(50%)] focus:[clip-path:none] focus-visible:[clip-path:none] focus-visible:[outline:var(--focus-ring-width)_solid_var(--focus-ring-color)] focus-visible:[outline-offset:var(--focus-ring-offset)]';
+const SKIP_MUI = {
+  position: 'absolute', left: 'var(--space-16)', top: 'var(--space-8)', zIndex: 'var(--z-toast)',
+  display: 'inline-flex', alignItems: 'center', minHeight: 'var(--button-height)', px: 'var(--space-16)',
+  border: '1px solid transparent', borderRadius: 'var(--skip-link-radius)',
+  bgcolor: 'var(--skip-link-bg)', color: 'var(--skip-link-fg)', fontWeight: 700, fontSize: 'var(--font-size-sm)', whiteSpace: 'nowrap',
+  clipPath: 'inset(50%)',
+  '&:focus, &:focus-visible': { clipPath: 'none', outline: 'var(--focus-ring-width) solid var(--focus-ring-color)', outlineOffset: 'var(--focus-ring-offset)' },
+};
+const skipLink = {
+  states: [
+    { label: 'Hidden', cls: '', note: 'until focused' },
+    { label: 'Focus', cls: 'st-focus', note: 'keyboard focus' },
+    { label: 'Live', cls: '', note: 'Tab into it' },
+  ],
+  render(impl, s) {
+    const props = { href: '#skip-link', 'aria-label': `Skip to content, ${impl}, ${s.label.toLowerCase()} state` };
+    let el;
+    if (impl === 'MUI') el = <MuiLink {...props} className={s.cls} underline="always" sx={SKIP_MUI}>Skip to content</MuiLink>;
+    else if (impl === 'shadcn') el = <a {...props} className={`${SKIP_SHAD} ${s.cls || ''}`}>Skip to content</a>;
+    else el = <a {...props} className={`flint-skip-link ${s.cls || ''}`}>Skip to content</a>;
+    return <span className="tb-skip">{el}</span>;
+  },
+};
+
+// Icon: the same check-in-a-circle in each size. Each is named, since there is no text beside it.
+const ICON_PATHS = <><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M6.5 10.5l2.5 2.5 4.5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></>;
+const ICON_SIZE = { sm: 'var(--icon-sm)', md: 'var(--icon-md)', lg: 'var(--icon-lg)' };
+const TW_ICON = {
+  sm: 'size-[var(--icon-sm)] text-[var(--icon-fg)]',
+  md: 'size-[var(--icon-md)] text-[var(--icon-fg)]',
+  lg: 'size-[var(--icon-lg)] text-[var(--icon-fg)]',
+  muted: 'size-[var(--icon-md)] text-[var(--icon-fg-muted)]',
+};
+const icon = {
+  states: [
+    { label: 'Small', size: 'sm', note: 'icon.sm' },
+    { label: 'Medium', size: 'md', note: 'icon.md' },
+    { label: 'Large', size: 'lg', note: 'icon.lg' },
+    { label: 'Muted', size: 'md', muted: true, note: 'icon.fgMuted' },
+  ],
+  render(impl, s) {
+    const name = `Passed, ${impl}, ${s.label.toLowerCase()}`;
+    if (impl === 'MUI') {
+      return <SvgIcon viewBox="0 0 20 20" titleAccess={name} sx={{ fontSize: ICON_SIZE[s.size], color: s.muted ? 'var(--icon-fg-muted)' : 'var(--icon-fg)' }}>{ICON_PATHS}</SvgIcon>;
+    }
+    if (impl === 'shadcn') return <svg viewBox="0 0 20 20" role="img" aria-label={name} className={TW_ICON[s.muted ? 'muted' : s.size]}>{ICON_PATHS}</svg>;
+    const cls = `flint-icon ${s.size === 'md' ? '' : `flint-icon--${s.size}`} ${s.muted ? 'flint-icon--muted' : ''}`;
+    return <svg viewBox="0 0 20 20" role="img" aria-label={name} className={cls}>{ICON_PATHS}</svg>;
+  },
+};
+
 export const BENCHES = {
   'button/primary': button('primary'),
   'button/secondary': button('secondary'),
@@ -309,4 +364,6 @@ export const BENCHES = {
   'chip/intents': chip,
   'alert/intents': alert,
   'field/default': field,
+  'skip-link/default': skipLink,
+  'icon/sizes': icon,
 };
