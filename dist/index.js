@@ -351,6 +351,7 @@ const tokens = {
         "placeholder": "#334155",
         "link": "#1550a0",
         "inverse": "#ffffff",
+        "inverseMuted": "#cbd5e1",
         "onCode": "#ffffff"
       },
       "action": {
@@ -441,6 +442,7 @@ const tokens = {
         "placeholder": "#aeb8c2",
         "link": "#93c5fd",
         "inverse": "#0d1117",
+        "inverseMuted": "#334155",
         "onCode": "#ffffff"
       },
       "action": {
@@ -562,6 +564,7 @@ const tokens = {
         "radius": 8,
         "height": 40,
         "bg": "#ffffff",
+        "bgReadOnly": "#f1f5f9",
         "fg": "#1e293b",
         "placeholder": "#334155",
         "border": "#64748b",
@@ -726,6 +729,7 @@ const tokens = {
         "radius": 8,
         "height": 40,
         "bg": "#161b22",
+        "bgReadOnly": "#21262d",
         "fg": "#c9d1d9",
         "placeholder": "#aeb8c2",
         "border": "#6e7681",

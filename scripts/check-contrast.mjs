@@ -86,6 +86,8 @@ const PAIRS = [
   ]),
   // component tier (ASDS-39): every label on its own fill, every control edge on its surface
   ["button primary label", "component.button.primary.fg", "component.button.primary.bg", AAA_TEXT, "text"],
+  ["muted text on inverse", "text.inverseMuted", "surface.inverse", AAA_TEXT, "text"],
+  ["input text read-only", "component.input.fg", "component.input.bgReadOnly", AAA_TEXT, "text"],
   ["field label on default", "component.field.labelFg", "surface.default", AAA_TEXT, "text"],
   ["field label on page", "component.field.labelFg", "surface.page", AAA_TEXT, "text"],
   ["field helper on default", "component.field.helperFg", "surface.default", AAA_TEXT, "text"],

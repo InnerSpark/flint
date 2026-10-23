@@ -11,7 +11,7 @@
   --site-header-h: var(--space-64);
   --site-band-bg: var(--color-surface-inverse);
   --site-band-fg: var(--color-text-inverse);
-  --site-band-muted: color-mix(in srgb, var(--color-text-inverse) 80%, var(--color-surface-inverse));
+  --site-band-muted: var(--color-text-inverse-muted);
   --site-band-rule: color-mix(in srgb, var(--color-text-inverse) 16%, var(--color-surface-inverse));
   --site-tint: var(--color-selected-surface);
   --site-nav-w: 256px;

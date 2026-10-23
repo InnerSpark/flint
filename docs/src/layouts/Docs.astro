@@ -143,7 +143,7 @@ const jsonLd = {
         {NAV.filter((g) => g.title !== 'Workbench').map((g) => (
           <div class="footer-col">
             <p class="footer-heading">{g.title}</p>
-            <ul>{g.items.slice(0, 6).map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+            <ul>{g.items.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
           </div>
         ))}
       </nav>

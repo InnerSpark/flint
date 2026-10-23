@@ -16,7 +16,7 @@ export const WORKBENCH = {
     name: 'Field',
     lead: 'Label, helper, required and error around an input, as MUI, shadcn/ui and plain CSS. All three read the field tokens.',
     benches: [['field', 'Field', 'field/default']],
-    gap: 'MUI TextField marks required with an asterisk only, and floats the label inside the input instead of above it.',
+    gap: 'MUI TextField marks required with an asterisk only, floats the label inside the input instead of above it, and draws a disabled field with the same edge as an enabled one.',
   },
   link: {
     name: 'Link',
@@ -27,6 +27,6 @@ export const WORKBENCH = {
     name: 'Input',
     lead: 'Every state as MUI, shadcn/ui and plain CSS. All three read the input tokens, and error follows aria-invalid in each.',
     benches: [['text-input', 'Text input', 'input/text']],
-    gap: 'The MUI input edge stays at MUI\'s default, about 1.6:1 (under 3:1), and its placeholder is dimmer than Flint\'s (ASDS-44).',
+    gap: 'The MUI input edge stays at MUI\'s default, about 1.6:1 (under 3:1), and its placeholder is dimmer than Flint\'s (ASDS-44). Read-only: MUI and shadcn look the same as an editable input; only plain CSS tints it (input.bgReadOnly).',
   },
 };

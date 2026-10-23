@@ -47,6 +47,7 @@ const input = {
     { label: 'Filled', cls: '', value: 'Turkey Bend' },
     { label: 'Error', cls: '', error: true, value: 'Turky Bend' },
     { label: 'Disabled', disabled: true },
+    { label: 'Read-only', readOnly: true, value: 'Turkey Bend' },
     { label: 'Live', cls: '', note: 'try it' },
   ],
   render(impl, s) {
@@ -54,10 +55,10 @@ const input = {
     const invalid = s.error ? 'true' : undefined;
     if (impl === 'MUI') {
       // MUI draws focus from its Mui-focused class, so the forced Focus row sets it.
-      return <OutlinedInput placeholder="Campsite name" disabled={s.disabled} defaultValue={s.value} error={!!s.error} fullWidth
+      return <OutlinedInput placeholder="Campsite name" disabled={s.disabled} defaultValue={s.value} error={!!s.error} fullWidth readOnly={s.readOnly}
         className={`${s.cls || ''} ${s.focus ? 'Mui-focused' : ''}`} inputProps={{ 'aria-label': label, 'aria-invalid': invalid, className: s.focus ? 'st-focus' : undefined }} />;
     }
-    const common = { placeholder: 'Campsite name', disabled: s.disabled, defaultValue: s.value, 'aria-label': label, 'aria-invalid': invalid };
+    const common = { placeholder: 'Campsite name', disabled: s.disabled, readOnly: s.readOnly, defaultValue: s.value, 'aria-label': label, 'aria-invalid': invalid };
     if (impl === 'shadcn') return <ShadInput {...common} className={s.cls} />;
     return <input type="text" {...common} className={`flint-input ${s.cls || ''}`} />;
   },

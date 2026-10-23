@@ -337,9 +337,18 @@ import FormControlLabel from '@mui/material/FormControlLabel';
   <label class="flint-field__label" for="nights-__P__">Nights</label>
   <input id="nights-__P__" class="flint-input" type="text" value="zero" aria-invalid="true" aria-describedby="nights-error-__P__" />
   <span class="flint-field__error" id="nights-error-__P__">${errorIcon}Enter a number from 1 to 14.</span>
+</div>
+<div class="flint-field">
+  <label class="flint-field__label" for="trip-id-__P__">Trip ID</label>
+  <input id="trip-id-__P__" class="flint-input" type="text" value="TRP-2042" readonly />
+</div>
+<div class="flint-field">
+  <label class="flint-field__label" for="notes-__P__">Notes for the campground</label>
+  <textarea id="notes-__P__" class="flint-input" rows="3"></textarea>
 </div>`,
     when: [
       'Use an input for short, free text: names, numbers, codes.',
+      'Use the same class on a textarea when the answer may run past one line.',
       'Use a select or radio buttons when the answer comes from a short, known list.',
     ],
     variants: [
@@ -347,6 +356,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
       ['Filled', 'Holds a value.'],
       ['Error', 'The value has a problem. The edge turns red and the message replaces the helper text.'],
       ['Disabled', 'Can\'t be edited right now.'],
+      ['Read-only', 'readonly: the value can be read, selected and copied, but not changed. Stays in the tab order, at full contrast, on a tinted fill (input.bgReadOnly).'],
+      ['Multi-line', 'textarea.flint-input: two lines tall to start, people can drag it taller.'],
+      ['Types', 'Use the real type (email, url, tel, password, search, number) so phones show the right keyboard and browsers can fill it in.'],
     ],
     guidance: [
       ['Keep a visible label above every input.', 'Use placeholder text as the label. It disappears when people start typing.'],
@@ -354,7 +366,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
       ['On submit, move focus to the first field with an error.', 'Show errors only at the top of the page, far from the fields.'],
     ],
     code: {
-      css: { label: 'HTML', code: '<label for="nights">Nights</label>\n<input id="nights" class="flint-input" type="text"\n  aria-invalid="true" aria-describedby="nights-error" />\n<span id="nights-error">Enter a number from 1 to 14.</span>', rules: cssFor('flint-input') },
+      css: { label: 'HTML', code: '<label for="nights">Nights</label>\n<input id="nights" class="flint-input" type="text" inputmode="numeric"\n  aria-invalid="true" aria-describedby="nights-error" />\n<span id="nights-error">Enter a number from 1 to 14.</span>\n\n<!-- Let the browser fill it in: the right type and autocomplete -->\n<input id="email" class="flint-input" type="email" autocomplete="email" />\n<input id="pw" class="flint-input" type="password" autocomplete="current-password" />\n\n<!-- Read-only and multi-line -->\n<input id="trip-id" class="flint-input" type="text" value="TRP-2042" readonly />\n<textarea id="notes" class="flint-input" rows="3"></textarea>', rules: cssFor('flint-input') },
       mui: `import TextField from '@mui/material/TextField';
 
 <TextField label="Nights" error helperText="Enter a number from 1 to 14." />`,
@@ -372,6 +384,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
       'Tie the label to the input with for and id.',
       'Point aria-describedby at the helper text, and at the error message when there is one.',
       'Set aria-invalid="true" on an input with an error.',
+      'Set autocomplete on anything about the person (name, email, address, one-time code). WCAG 1.3.5 asks for it, and it saves typing.',
+      'Use readonly, not disabled, for a value people need to read or copy. Disabled inputs are skipped by Tab and often too faint to read.',
       'On submit with errors, move focus to the first errored field. Announce a summary with role="alert".',
     ],
     target: 'Inputs are 40px tall (control.md). On iOS, at least 44pt.',

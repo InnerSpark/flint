@@ -81,6 +81,14 @@
 .flint-input:focus-visible { border-color: var(--input-border-focus); outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
 .flint-input[aria-invalid="true"] { border-color: var(--input-border-error); }
 .flint-input:disabled { background: var(--color-action-disabled-bg); color: var(--color-action-disabled); border-color: var(--color-border-disabled); }
+/* Read-only: the value can be read, selected and copied, but not changed. It stays in the tab order
+   and keeps full-contrast text, unlike disabled; the tinted fill says "not editable". */
+.flint-input[readonly] { background: var(--input-bg-read-only); }
+.flint-input[readonly]:hover { border-color: var(--input-border); }
+/* Multi-line: same class on a textarea. Grows by dragging, never sideways. */
+textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); padding-block: var(--space-8); resize: vertical; }
+/* Search: drop the platform's rounded search styling so it matches the other inputs. */
+.flint-input[type="search"] { appearance: none; }
 
 .flint-check {
   appearance: none; display: inline-grid; place-content: center; margin: 0; cursor: pointer;

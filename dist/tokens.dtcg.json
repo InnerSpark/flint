@@ -1013,6 +1013,10 @@
           "$type": "color",
           "$value": "{color.white}"
         },
+        "inverseMuted": {
+          "$type": "color",
+          "$value": "{color.gray.300}"
+        },
         "onCode": {
           "$type": "color",
           "$value": "{color.white}"
@@ -1294,6 +1298,10 @@
         "inverse": {
           "$type": "color",
           "$value": "{color.ink.900}"
+        },
+        "inverseMuted": {
+          "$type": "color",
+          "$value": "{color.gray.700}"
         },
         "onCode": {
           "$type": "color",
@@ -1652,6 +1660,10 @@
         "bg": {
           "$type": "color",
           "$value": "{semantic.light.surface.default}"
+        },
+        "bgReadOnly": {
+          "$type": "color",
+          "$value": "{semantic.light.surface.subtle}"
         },
         "fg": {
           "$type": "color",
@@ -2128,6 +2140,10 @@
         "bg": {
           "$type": "color",
           "$value": "{semantic.dark.surface.default}"
+        },
+        "bgReadOnly": {
+          "$type": "color",
+          "$value": "{semantic.dark.surface.subtle}"
         },
         "fg": {
           "$type": "color",

@@ -24,6 +24,7 @@ public enum Flint {
     public static let textPlaceholder = dynamic(light: 0x334155, dark: 0xaeb8c2)
     public static let textLink = dynamic(light: 0x1550a0, dark: 0x93c5fd)
     public static let textInverse = dynamic(light: 0xffffff, dark: 0x0d1117)
+    public static let textInverseMuted = dynamic(light: 0xcbd5e1, dark: 0x334155)
     public static let textOnCode = dynamic(light: 0xffffff, dark: 0xffffff)
     public static let actionPrimary = dynamic(light: 0x1550a0, dark: 0x93c5fd)
     public static let actionPrimaryHover = dynamic(light: 0x0d3b6e, dark: 0xbfdbfe)
@@ -94,6 +95,7 @@ public enum Flint {
     public static let textPlaceholder = dynamicPlatform(light: 0x334155, dark: 0xaeb8c2)
     public static let textLink = dynamicPlatform(light: 0x1550a0, dark: 0x93c5fd)
     public static let textInverse = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let textInverseMuted = dynamicPlatform(light: 0xcbd5e1, dark: 0x334155)
     public static let textOnCode = dynamicPlatform(light: 0xffffff, dark: 0xffffff)
     public static let actionPrimary = dynamicPlatform(light: 0x1550a0, dark: 0x93c5fd)
     public static let actionPrimaryHover = dynamicPlatform(light: 0x0d3b6e, dark: 0xbfdbfe)
@@ -162,6 +164,7 @@ public enum Flint {
     public static let textPlaceholder = dynamicPlatform(light: 0x334155, dark: 0xaeb8c2)
     public static let textLink = dynamicPlatform(light: 0x1550a0, dark: 0x93c5fd)
     public static let textInverse = dynamicPlatform(light: 0xffffff, dark: 0x0d1117)
+    public static let textInverseMuted = dynamicPlatform(light: 0xcbd5e1, dark: 0x334155)
     public static let textOnCode = dynamicPlatform(light: 0xffffff, dark: 0xffffff)
     public static let actionPrimary = dynamicPlatform(light: 0x1550a0, dark: 0x93c5fd)
     public static let actionPrimaryHover = dynamicPlatform(light: 0x0d3b6e, dark: 0xbfdbfe)
@@ -338,6 +341,7 @@ public enum Flint {
     public static let inputRadius: CGFloat = 8
     public static let inputHeight: CGFloat = 40
     public static let inputBg = dynamic(light: 0xffffff, dark: 0x161b22)
+    public static let inputBgReadOnly = dynamic(light: 0xf1f5f9, dark: 0x21262d)
     public static let inputFg = dynamic(light: 0x1e293b, dark: 0xc9d1d9)
     public static let inputPlaceholder = dynamic(light: 0x334155, dark: 0xaeb8c2)
     public static let inputBorder = dynamic(light: 0x64748b, dark: 0x6e7681)

@@ -505,6 +505,26 @@
     },
     {
       "mode": "light",
+      "label": "muted text on inverse",
+      "fg": "text.inverseMuted",
+      "bg": "surface.inverse",
+      "ratio": 9.76,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "input text read-only",
+      "fg": "component.input.fg",
+      "bg": "component.input.bgReadOnly",
+      "ratio": 13.35,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
       "label": "field label on default",
       "fg": "component.field.labelFg",
       "bg": "surface.default",
@@ -1659,6 +1679,26 @@
       "fg": "component.button.primary.fg",
       "bg": "component.button.primary.bg",
       "ratio": 10.49,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "muted text on inverse",
+      "fg": "text.inverseMuted",
+      "bg": "surface.inverse",
+      "ratio": 9.9,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "input text read-only",
+      "fg": "component.input.fg",
+      "bg": "component.input.bgReadOnly",
+      "ratio": 9.86,
       "threshold": 7,
       "kind": "text",
       "pass": true

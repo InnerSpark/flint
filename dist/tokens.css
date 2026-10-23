@@ -231,6 +231,7 @@
   --color-text-placeholder: #334155;
   --color-text-link: #1550a0;
   --color-text-inverse: #ffffff;
+  --color-text-inverse-muted: #cbd5e1;
   --color-text-on-code: #ffffff;
   --color-action-primary: #1550a0;
   --color-action-primary-hover: #0d3b6e;
@@ -299,6 +300,7 @@
   --color-text-placeholder: #aeb8c2;
   --color-text-link: #93c5fd;
   --color-text-inverse: #0d1117;
+  --color-text-inverse-muted: #334155;
   --color-text-on-code: #ffffff;
   --color-action-primary: #93c5fd;
   --color-action-primary-hover: #bfdbfe;
@@ -373,6 +375,7 @@
   --color-text-placeholder: #334155;
   --color-text-link: #1550a0;
   --color-text-inverse: #ffffff;
+  --color-text-inverse-muted: #cbd5e1;
   --color-text-on-code: #ffffff;
   --color-action-primary: #1550a0;
   --color-action-primary-hover: #0d3b6e;
@@ -474,6 +477,7 @@
   --input-radius: var(--radius-control);
   --input-height: var(--control-md);
   --input-bg: var(--color-surface-default);
+  --input-bg-read-only: var(--color-surface-subtle);
   --input-fg: var(--color-text-default);
   --input-placeholder: var(--color-text-placeholder);
   --input-border: var(--color-border-control);
