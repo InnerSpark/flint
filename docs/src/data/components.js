@@ -27,6 +27,13 @@ const cssFor = (cls) => {
 
 const errorIcon = '<svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 
+const svg = (d) => `<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false">${d}</svg>`;
+const infoIcon = svg('<circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 9v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="6.2" r="1.2" fill="currentColor"/>');
+const successIcon = svg('<circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.5 10.5l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>');
+const warningIcon = svg('<path d="M10 2.5l8 14.5H2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 8v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="14.6" r="1.1" fill="currentColor"/>');
+const alertErrorIcon = svg('<circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>');
+const closeIcon = '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
 export const COMPONENTS = {
   button: {
     name: 'Button',
@@ -202,6 +209,177 @@ import FormLabel from '@mui/material/FormLabel';
       'Same-page links move focus to the target heading, not just the scroll position.',
     ],
     target: 'Inline links follow the text size, which WCAG 2.5.8 exempts. Standalone links are at least 24px tall (targetMin).',
+  },
+  badge: {
+    name: 'Badge',
+    lead: 'A badge is a short, static label for a status: Passed, Needs review, Failed. It is not clickable. If people can act on it, use a chip.',
+    example: `<div class="example-row">
+  <span class="flint-badge">Draft</span>
+  <span class="flint-badge flint-badge--success">Passed</span>
+  <span class="flint-badge flint-badge--warning">Needs review</span>
+  <span class="flint-badge flint-badge--error">Failed</span>
+  <span class="flint-badge flint-badge--info">New</span>
+</div>`,
+    when: [
+      'Use a badge to label the status of a row, a card or a check.',
+      'Use a chip when people can remove it or filter by it.',
+      'Use an alert when the status needs a sentence of explanation.',
+    ],
+    variants: [
+      ['Neutral', 'No judgement: Draft, Archived, a count.'],
+      ['Success, warning, error, info', 'The feedback families. Each label stays above 7:1 on its fill.'],
+    ],
+    guidance: [
+      ['Say the status in words: "Failed".', 'Use a red dot with no text. Color alone tells some people nothing.'],
+      ['Keep it to one or two words.', 'Put a sentence in a badge. Use an alert.'],
+      ['Use red only for something that failed or went wrong.', 'Use the error intent to make something stand out.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: '<span class="flint-badge flint-badge--success">Passed</span>\n<span class="flint-badge flint-badge--error">Failed</span>', rules: cssFor('flint-badge') },
+      mui: `import Chip from '@mui/material/Chip';
+
+// MUI has no static badge with text; a small Chip is the closest. MUI's Badge is a dot or count on an icon.
+<Chip size="small" color="success" label="Passed" />`,
+      shadcn: `// shadcn/ui Badge, on Flint's badge tokens:
+<span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-[var(--badge-success-bg)] text-[var(--badge-success-fg)]">
+  Passed
+</span>`,
+      swift: `Text("Passed")
+  .font(.caption.weight(.semibold))
+  .foregroundStyle(Flint.Component.badgeSuccessFg)
+  .padding(.horizontal, Flint.Space.s8)
+  .padding(.vertical, Flint.Space.s2)
+  .background(Flint.Component.badgeSuccessBg, in: Capsule())`,
+    },
+    keyboard: [['None', 'Badges are not interactive and take no focus.']],
+    screenReader: [
+      'The badge text is read as part of its row or card. Make sure it reads well there: "Contrast, Failed".',
+      'If the badge is only an icon or a number, add visually hidden text that says what it means.',
+    ],
+    target: 'Not interactive, so no target size. The text is 12px (badge.fontSize), the smallest Flint allows.',
+  },
+  chip: {
+    name: 'Chip',
+    lead: 'A chip is a compact label people can act on: an applied filter they can remove, or a tag. Each chip\'s remove button is its own 24px target.',
+    example: `<div class="example-row">
+  <span class="flint-chip">WCAG 2.2 AA<button type="button" class="flint-chip__remove" aria-label="Remove WCAG 2.2 AA">${closeIcon}</button></span>
+  <span class="flint-chip flint-chip--error">Failed only<button type="button" class="flint-chip__remove" aria-label="Remove Failed only">${closeIcon}</button></span>
+</div>
+<div class="example-row">
+  <span class="flint-chip flint-chip--outlined">Mobile</span>
+  <span class="flint-chip flint-chip--outlined flint-chip--success">Passing</span>
+  <span class="flint-chip flint-chip--info">Beta</span>
+</div>`,
+    when: [
+      'Use chips for filters people have applied and can take off one at a time.',
+      'Use a badge for a status that people can\'t change.',
+      'Use checkboxes when people pick filters from a list in the first place.',
+    ],
+    variants: [
+      ['Filled', 'The default: a tinted fill from chip.*.bg.'],
+      ['Outlined', 'flint-chip--outlined: no fill, so the edge (chip.*.border, 3:1 and up) shows where it is.'],
+      ['Removable', 'A flint-chip__remove button at the end, named after the chip: "Remove WCAG 2.2 AA".'],
+    ],
+    guidance: [
+      ['Name each remove button after its chip.', 'Give every remove button the same "Remove" or "x" name. A screen reader user can\'t tell them apart.'],
+      ['After a chip is removed, move focus to the next chip, or to the filter control if none are left.', 'Let focus fall back to the top of the page.'],
+      ['Keep chip labels short and parallel.', 'Mix sentences and single words in one row.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: '<span class="flint-chip">\n  WCAG 2.2 AA\n  <button type="button" class="flint-chip__remove" aria-label="Remove WCAG 2.2 AA">\n    <svg aria-hidden="true">...</svg>\n  </button>\n</span>\n<span class="flint-chip flint-chip--outlined">Mobile</span>', rules: cssFor('flint-chip') },
+      mui: `import Chip from '@mui/material/Chip';
+
+<Chip label="WCAG 2.2 AA" onDelete={remove} />
+<Chip label="Mobile" variant="outlined" />`,
+      shadcn: `// shadcn/ui has no chip; a Badge with a button, on Flint's chip tokens:
+<span className="inline-flex items-center gap-1 rounded-full min-h-[var(--control-sm)] pl-3 pr-1 text-sm font-semibold bg-[var(--chip-neutral-bg)] text-[var(--chip-neutral-fg)]">
+  WCAG 2.2 AA
+  <button type="button" aria-label="Remove WCAG 2.2 AA" className="grid size-6 place-content-center rounded-full">
+    <XIcon aria-hidden="true" className="size-4" />
+  </button>
+</span>`,
+      swift: `HStack(spacing: Flint.Space.s4) {
+  Text("WCAG 2.2 AA")
+  Button { remove() } label: { Image(systemName: "xmark") }
+    .accessibilityLabel("Remove WCAG 2.2 AA")
+}
+.padding(.leading, Flint.Space.s12)
+.frame(minHeight: Flint.Target.touch)
+.background(Flint.Component.chipNeutralBg, in: Capsule())`,
+      muiGap: 'MUI names every delete icon the same way, so a list of chips reads as several identical buttons. Pass a label to each delete icon.',
+    },
+    keyboard: [['Tab', 'Moves to each remove button.'], ['Enter or Space', 'Removes that chip.']],
+    screenReader: [
+      'Each remove button is named after its chip: "Remove WCAG 2.2 AA".',
+      'When a chip goes away, move focus to the next chip, and announce the change if results update.',
+      'A chip without a remove button is just text, and takes no focus.',
+    ],
+    target: 'Chips are 32px tall (control.sm). The remove button is 24px (targetMin).',
+  },
+  alert: {
+    name: 'Alert',
+    lead: 'An alert tells people something about the page or a task they just did: it worked, it needs a look, or it failed. Icon and words, in one feedback color family.',
+    example: `<div class="flint-alert">${infoIcon}<p class="flint-alert__title">Scan scheduled</p><p class="flint-alert__body">We'll email you when the report is ready, usually in a few minutes.</p></div>
+<div class="flint-alert flint-alert--success">${successIcon}<p class="flint-alert__title">Report saved</p><p class="flint-alert__body">Your VPAT draft is in Reports.</p></div>
+<div class="flint-alert flint-alert--warning">${warningIcon}<p class="flint-alert__title">12 checks need a person</p><p class="flint-alert__body">Automated tests can't judge these. <a href="#">Review them</a> before you export.</p></div>
+<div class="flint-alert flint-alert--error">${alertErrorIcon}<p class="flint-alert__title">We couldn't reach the site</p><p class="flint-alert__body">Check the address, or allow AccessSpark through your firewall.</p></div>`,
+    when: [
+      'Use an alert for a message about the whole page or the last thing people did.',
+      'Use a field error for a problem with one field.',
+      'Use a badge for a one-word status on a row or card.',
+    ],
+    variants: [
+      ['Info', 'Default. Something people should know.'],
+      ['Success', 'It worked.'],
+      ['Warning', 'It worked, but something needs a look.'],
+      ['Error', 'It failed. Say how to fix it.'],
+    ],
+    guidance: [
+      ['Lead with the result, then what to do: "We couldn\'t reach the site. Check the address."', 'Lead with a code: "Error 504".'],
+      ['Keep the icon and the words. The icon is aria-hidden; the words carry the meaning.', 'Rely on the color of the box to say success or failure.'],
+      ['Put the alert near the thing it is about.', 'Stack alerts at the top of a long page, far from the cause.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: `<div class="flint-alert flint-alert--error">
+  <svg aria-hidden="true">...</svg>
+  <p class="flint-alert__title">We couldn't reach the site</p>
+  <p class="flint-alert__body">Check the address, or allow AccessSpark through your firewall.</p>
+</div>
+
+<!-- Added after load? Put it in a live region that is already on the page -->
+<div role="status"><!-- success, info, warning go here --></div>
+<div role="alert"><!-- errors go here --></div>`, rules: cssFor('flint-alert') },
+      mui: `import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+
+<Alert severity="error">
+  <AlertTitle>We couldn't reach the site</AlertTitle>
+  Check the address, or allow AccessSpark through your firewall.
+</Alert>`,
+      shadcn: `// shadcn/ui Alert, on Flint's feedback tokens:
+<div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 rounded-[var(--radius-md)] border border-[var(--color-feedback-error-border)] border-l-4 border-l-[var(--color-feedback-error-solid)] bg-[var(--color-feedback-error-surface)] p-4 text-sm text-[var(--color-feedback-error-text)]">
+  <CircleXIcon aria-hidden="true" className="row-span-2 size-5" />
+  <p className="font-bold">We couldn't reach the site</p>
+  <p>Check the address, or allow AccessSpark through your firewall.</p>
+</div>`,
+      swift: `Label {
+  VStack(alignment: .leading) {
+    Text("We couldn't reach the site").bold()
+    Text("Check the address, or allow AccessSpark through your firewall.")
+  }
+} icon: { Image(systemName: "xmark.circle") }
+.foregroundStyle(Flint.Colors.feedbackErrorText)
+.padding(Flint.Space.s16)
+.background(Flint.Colors.feedbackErrorSurface, in: RoundedRectangle(cornerRadius: 12))`,
+      muiGap: 'MUI Alert sets role="alert" on every alert, so a static info message is announced as urgent. Pass role="status" (or none) for anything that isn\'t an error.',
+    },
+    keyboard: [['None', 'Alerts take no focus. Links or buttons inside them are reached with Tab as usual.']],
+    screenReader: [
+      'Static alerts that are on the page from the start are plain markup. They are read in order with everything else.',
+      'An alert added after load goes in a live region that already exists: role="status" for info and success, role="alert" for errors.',
+      'Don\'t move focus to an alert unless people have to act on it before anything else.',
+    ],
+    target: 'Not interactive. Links inside follow the Link rules.',
   },
   select: {
     name: 'Select',

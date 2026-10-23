@@ -37,7 +37,7 @@ for (const [selector, body] of rules(css)) {
     const prop = decl.split(':')[0].trim();
     if (/#[0-9a-f]{3,8}\b|\b(rgb|hsl)a?\(/i.test(decl)) problems.push(`${sel}: color literal in "${decl}"`);
     for (const [, v] of decl.matchAll(/var\((--[a-z0-9-]+)/g)) if (!defined.has(v)) problems.push(`${sel}: ${v} is not defined in tokens.css`);
-    if (/\b\d+(\.\d+)?px\b/.test(decl) && !glyph && !/^border(-width)?$/.test(prop)) problems.push(`${sel}: px literal in "${decl}" (use a token)`);
+    if (/\b\d+(\.\d+)?px\b/.test(decl) && !glyph && !/^border(-(top|right|bottom|left|block|inline)(-(start|end))?)?(-width)?$/.test(prop)) problems.push(`${sel}: px literal in "${decl}" (use a token)`);
   }
 }
 if (problems.length) {

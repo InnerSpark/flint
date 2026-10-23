@@ -20,7 +20,9 @@ const c = COMPONENTS[name];
 const base = `/components/${name}/`;
 const tabs = TABS.map(([t, label]) => ({ label, href: t === 'usage' ? base : `${base}${t}/` }));
 
-const tokenRows = [...leaves(source.component[name]).map(([p, v]) => [[name, ...p], v]), ...leaves(source.component.focus).map(([p, v]) => [['focus', ...p], v])];
+// Some components (Alert) have no tier of their own and read semantic tokens directly.
+const ownTokens = source.component[name] ? leaves(source.component[name]) : [];
+const tokenRows = [...ownTokens.map(([p, v]) => [[name, ...p], v]), ...leaves(source.component.focus).map(([p, v]) => [['focus', ...p], v])];
 const pairs = contrast.pairs.filter((p) => p.label.startsWith(name) || p.label.startsWith('focus ring'));
 const pairLabels = [...new Set(pairs.map((p) => p.label))];
 
@@ -54,7 +56,11 @@ const tabLabel = TABS.find(([t]) => t === tab)[1];
   {tab === 'style' && (
     <>
       <h2 id="tokens">Component tokens</h2>
-      <p>Every value {c.name.toLowerCase()} uses, on every platform. Colors point at semantic tokens, so they follow light and dark on their own. The focus ring is shared by every component.</p>
+      {ownTokens.length ? (
+        <p>Every value {c.name.toLowerCase()} uses, on every platform. Colors point at semantic tokens, so they follow light and dark on their own. The focus ring is shared by every component.</p>
+      ) : (
+        <p>{c.name} has no component tokens of its own. It reads the semantic feedback families directly (surface, border, solid and text for info, success, warning and error); see <a href="/foundations/color/">Color</a>. The focus ring below is shared by every component.</p>
+      )}
       <TableWrap label={`${c.name} component tokens`}>
         <table class="data">
           <thead><tr><th scope="col">Token</th><th scope="col">CSS</th><th scope="col">Swift</th><th scope="col">Points at</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>

@@ -93,6 +93,60 @@
 .flint-select:disabled { background-color: var(--color-action-disabled-bg); color: var(--color-action-disabled); border-color: var(--color-border-disabled); cursor: not-allowed; }
 @media (forced-colors: active) { .flint-select { appearance: auto; background-image: none; } }
 
+/* Badge (ASDS-67): a short, static status label. Not interactive. Intents set the fill and text; the
+   words carry the meaning, so color is never the only cue. */
+.flint-badge {
+  --_bg: var(--badge-neutral-bg); --_fg: var(--badge-neutral-fg);
+  display: inline-flex; align-items: center; gap: var(--space-4); padding: var(--space-2) var(--space-8);
+  border-radius: var(--badge-radius); background: var(--_bg); color: var(--_fg);
+  font: var(--badge-font-weight) var(--badge-font-size) / 1.4 var(--font-sans); white-space: nowrap;
+}
+.flint-badge--success { --_bg: var(--badge-success-bg); --_fg: var(--badge-success-fg); }
+.flint-badge--warning { --_bg: var(--badge-warning-bg); --_fg: var(--badge-warning-fg); }
+.flint-badge--error { --_bg: var(--badge-error-bg); --_fg: var(--badge-error-fg); }
+.flint-badge--info { --_bg: var(--badge-info-bg); --_fg: var(--badge-info-fg); }
+.flint-badge svg { width: var(--icon-size-sm); height: var(--icon-size-sm); flex: none; }
+
+/* Chip (ASDS-67): a label people can act on, usually a filter they can remove. Filled by default;
+   --outlined drops the fill, so its edge (chip.*.border, 3:1 and up) is what makes it visible.
+   The remove button is its own 24px target with its own name ("Remove WCAG 2.2"). */
+.flint-chip {
+  --_bg: var(--chip-neutral-bg); --_fg: var(--chip-neutral-fg); --_edge: var(--chip-neutral-border);
+  display: inline-flex; align-items: center; gap: var(--space-4); min-height: var(--control-sm);
+  padding: 0 var(--space-12); border: 1px solid transparent; border-radius: var(--chip-radius);
+  background: var(--_bg); color: var(--_fg); font: var(--chip-font-weight) var(--font-size-sm) / 1.2 var(--font-sans); white-space: nowrap;
+}
+.flint-chip--success { --_bg: var(--chip-success-bg); --_fg: var(--chip-success-fg); --_edge: var(--chip-success-border); }
+.flint-chip--warning { --_bg: var(--chip-warning-bg); --_fg: var(--chip-warning-fg); --_edge: var(--chip-warning-border); }
+.flint-chip--error { --_bg: var(--chip-error-bg); --_fg: var(--chip-error-fg); --_edge: var(--chip-error-border); }
+.flint-chip--info { --_bg: var(--chip-info-bg); --_fg: var(--chip-info-fg); --_edge: var(--chip-info-border); }
+.flint-chip--outlined { background: transparent; border-color: var(--_edge); }
+.flint-chip:has(.flint-chip__remove) { padding-right: var(--space-4); }
+.flint-chip__remove {
+  display: inline-grid; place-content: center; width: var(--target-min); height: var(--target-min); margin: 0; padding: 0;
+  border: 0; border-radius: var(--radius-pill); background: transparent; color: inherit; cursor: pointer;
+}
+.flint-chip__remove:hover { background: color-mix(in srgb, currentColor 14%, transparent); }
+.flint-chip__remove:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: 0; }
+.flint-chip__remove svg { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+
+/* Alert (ASDS-68): a message about the page or a task. Icon plus words, in one feedback family
+   (surface, border, text) so the parts never mix. Static alerts are plain markup; an alert added
+   after load goes in a live region: role="alert" for errors, role="status" for everything else. */
+.flint-alert {
+  --_surface: var(--color-feedback-info-surface); --_border: var(--color-feedback-info-border); --_text: var(--color-feedback-info-text); --_solid: var(--color-feedback-info-solid);
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-4) var(--space-12); align-items: start;
+  padding: var(--space-16); border: 1px solid var(--_border); border-left: 4px solid var(--_solid); border-radius: var(--radius-md);
+  background: var(--_surface); color: var(--_text); font-size: var(--font-size-sm);
+}
+.flint-alert--success { --_surface: var(--color-feedback-success-surface); --_border: var(--color-feedback-success-border); --_text: var(--color-feedback-success-text); --_solid: var(--color-feedback-success-solid); }
+.flint-alert--warning { --_surface: var(--color-feedback-warning-surface); --_border: var(--color-feedback-warning-border); --_text: var(--color-feedback-warning-text); --_solid: var(--color-feedback-warning-solid); }
+.flint-alert--error { --_surface: var(--color-feedback-error-surface); --_border: var(--color-feedback-error-border); --_text: var(--color-feedback-error-text); --_solid: var(--color-feedback-error-solid); }
+.flint-alert > svg { grid-row: span 2; width: var(--icon-size-md); height: var(--icon-size-md); margin-top: 0.1em; }
+.flint-alert__title { margin: 0; font-weight: var(--font-weight-bold); }
+.flint-alert__body { margin: 0; grid-column: 2; }
+.flint-alert a { color: inherit; }
+
 /* Choice: a checkbox or radio with its label. The label wraps the input, so the whole row is the
    click target, at least 24px tall. */
 .flint-choice { display: inline-flex; align-items: center; gap: var(--space-8); min-height: var(--target-min); font-size: var(--font-size-sm); color: var(--color-text-default); cursor: pointer; }

@@ -12,6 +12,9 @@ import { RadioGroup, RadioGroupItem } from './ui/radio';
 import MuiRadio from '@mui/material/Radio';
 import MuiSwitch from '@mui/material/Switch';
 import NativeSelect from '@mui/material/NativeSelect';
+import MuiChip from '@mui/material/Chip';
+import MuiAlert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import { Switch as ShadSwitch } from './ui/switch';
 
 export const IMPLEMENTATIONS = ['MUI', 'shadcn', 'Plain CSS'];
@@ -209,6 +212,88 @@ const select = {
   },
 };
 
+const INTENTS = ['neutral', 'success', 'warning', 'error', 'info'];
+const MUI_COLOR = { neutral: 'default', success: 'success', warning: 'warning', error: 'error', info: 'info' };
+const cap = (t) => t[0].toUpperCase() + t.slice(1);
+const STATUS = { neutral: 'Draft', success: 'Passed', warning: 'Needs review', error: 'Failed', info: 'New' };
+// Tailwind only generates classes it can read in full, so every intent's classes are spelled out.
+const TW_BADGE = {
+  neutral: 'bg-[var(--badge-neutral-bg)] text-[var(--badge-neutral-fg)]',
+  success: 'bg-[var(--badge-success-bg)] text-[var(--badge-success-fg)]',
+  warning: 'bg-[var(--badge-warning-bg)] text-[var(--badge-warning-fg)]',
+  error: 'bg-[var(--badge-error-bg)] text-[var(--badge-error-fg)]',
+  info: 'bg-[var(--badge-info-bg)] text-[var(--badge-info-fg)]',
+};
+const TW_CHIP = {
+  neutral: ['text-[var(--chip-neutral-fg)]', 'bg-[var(--chip-neutral-bg)]', 'border-[var(--chip-neutral-border)]'],
+  success: ['text-[var(--chip-success-fg)]', 'bg-[var(--chip-success-bg)]', 'border-[var(--chip-success-border)]'],
+  warning: ['text-[var(--chip-warning-fg)]', 'bg-[var(--chip-warning-bg)]', 'border-[var(--chip-warning-border)]'],
+  error: ['text-[var(--chip-error-fg)]', 'bg-[var(--chip-error-bg)]', 'border-[var(--chip-error-border)]'],
+  info: ['text-[var(--chip-info-fg)]', 'bg-[var(--chip-info-bg)]', 'border-[var(--chip-info-border)]'],
+};
+const TW_ALERT = {
+  info: 'border-[var(--color-feedback-info-border)] border-l-[var(--color-feedback-info-solid)] bg-[var(--color-feedback-info-surface)] text-[var(--color-feedback-info-text)]',
+  success: 'border-[var(--color-feedback-success-border)] border-l-[var(--color-feedback-success-solid)] bg-[var(--color-feedback-success-surface)] text-[var(--color-feedback-success-text)]',
+  warning: 'border-[var(--color-feedback-warning-border)] border-l-[var(--color-feedback-warning-solid)] bg-[var(--color-feedback-warning-surface)] text-[var(--color-feedback-warning-text)]',
+  error: 'border-[var(--color-feedback-error-border)] border-l-[var(--color-feedback-error-solid)] bg-[var(--color-feedback-error-surface)] text-[var(--color-feedback-error-text)]',
+};
+
+const badge = {
+  states: INTENTS.map((t) => ({ label: cap(t), intent: t })),
+  render(impl, s) {
+    const t = s.intent;
+    if (impl === 'MUI') return <MuiChip size="small" color={MUI_COLOR[t]} label={STATUS[t]} />;
+    if (impl === 'shadcn') return <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${TW_BADGE[t]}`}>{STATUS[t]}</span>;
+    return <span className={`flint-badge ${t === 'neutral' ? '' : `flint-badge--${t}`}`}>{STATUS[t]}</span>;
+  },
+};
+
+const X = <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" width="16" height="16"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>;
+const chip = {
+  states: [
+    ...INTENTS.map((t) => ({ label: cap(t), intent: t })),
+    { label: 'Outlined', intent: 'neutral', outlined: true },
+    { label: 'Outlined, error', intent: 'error', outlined: true },
+    { label: 'Removable', intent: 'neutral', remove: true },
+  ],
+  render(impl, s) {
+    const t = s.intent;
+    const text = s.remove ? 'WCAG 2.2 AA' : STATUS[t];
+    const removeLabel = `Remove ${text}, ${impl}`;
+    if (impl === 'MUI') return <MuiChip color={MUI_COLOR[t]} variant={s.outlined ? 'outlined' : 'filled'} label={text} onDelete={s.remove ? () => {} : undefined} />;
+    if (impl === 'shadcn') {
+      return <span className={`inline-flex items-center gap-1 rounded-full min-h-[var(--control-sm)] ${s.remove ? 'pl-3 pr-1' : 'px-3'} text-sm font-semibold border ${TW_CHIP[t][0]} ${s.outlined ? `bg-transparent ${TW_CHIP[t][2]}` : `${TW_CHIP[t][1]} border-transparent`}`}>
+        {text}{s.remove && <button type="button" aria-label={removeLabel} className="grid size-6 place-content-center rounded-full hover:bg-black/10 focus-visible:[outline:var(--focus-ring-width)_solid_var(--focus-ring-color)]">{X}</button>}
+      </span>;
+    }
+    return <span className={`flint-chip ${t === 'neutral' ? '' : `flint-chip--${t}`} ${s.outlined ? 'flint-chip--outlined' : ''}`}>
+      {text}{s.remove && <button type="button" className="flint-chip__remove" aria-label={removeLabel}>{X}</button>}
+    </span>;
+  },
+};
+
+const ALERT = {
+  info: ['Scan scheduled', 'We\'ll email you when the report is ready.'],
+  success: ['Report saved', 'Your VPAT draft is in Reports.'],
+  warning: ['12 checks need a person', 'Review them before you export.'],
+  error: ['We couldn\'t reach the site', 'Check the address and try again.'],
+};
+const alertIcon = { info: 'M10 9v5', success: 'M6.5 10.5l2.5 2.5 4.5-5', warning: 'M10 8v4', error: 'M7 7l6 6M13 7l-6 6' };
+const alert = {
+  states: Object.keys(ALERT).map((t) => ({ label: cap(t), intent: t })),
+  render(impl, s) {
+    const t = s.intent;
+    const [title, body] = ALERT[t];
+    if (impl === 'MUI') return <MuiAlert severity={t} role="status"><AlertTitle>{title}</AlertTitle>{body}</MuiAlert>;
+    const icon = <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" width="20" height="20"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" /><path d={alertIcon[t]} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>;
+    if (impl === 'shadcn') {
+      return <div className={`grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 rounded-[var(--radius-md)] border border-l-4 p-4 text-sm ${TW_ALERT[t]}`}>
+        <span className="row-span-2">{icon}</span><p className="m-0 font-bold">{title}</p><p className="m-0">{body}</p></div>;
+    }
+    return <div className={`flint-alert ${t === 'info' ? '' : `flint-alert--${t}`}`}>{icon}<p className="flint-alert__title">{title}</p><p className="flint-alert__body">{body}</p></div>;
+  },
+};
+
 export const BENCHES = {
   'button/primary': button('primary'),
   'button/secondary': button('secondary'),
@@ -220,5 +305,8 @@ export const BENCHES = {
   'radio/default': radio,
   'switch/default': toggle,
   'select/native': select,
+  'badge/intents': badge,
+  'chip/intents': chip,
+  'alert/intents': alert,
   'field/default': field,
 };

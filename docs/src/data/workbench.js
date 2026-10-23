@@ -1,5 +1,23 @@
 // Workbench pages: which benches each component page shows, in order. Keys match benches.jsx.
 export const WORKBENCH = {
+  alert: {
+    name: 'Alert',
+    lead: 'Each intent as MUI, shadcn/ui and plain CSS. All three read one feedback family per alert: surface, border, solid edge and text.',
+    benches: [['alert', 'Alert', 'alert/intents']],
+    gap: 'MUI Alert sets role="alert" on every alert, so a static info message is announced as urgent; the MUI column passes role="status" to avoid that.',
+  },
+  badge: {
+    name: 'Badge',
+    lead: 'Each intent as MUI, shadcn/ui and plain CSS. All three read the badge tokens.',
+    benches: [['badge', 'Badge', 'badge/intents']],
+    gap: 'MUI has no static text badge; a small Chip stands in. MUI\'s Badge is a dot or count on an icon.',
+  },
+  chip: {
+    name: 'Chip',
+    lead: 'Each intent, outlined and removable, as MUI, shadcn/ui and plain CSS. All three read the chip tokens.',
+    benches: [['chip', 'Chip', 'chip/intents']],
+    gap: 'MUI gives every delete icon the same name, so several removable chips read as identical buttons. shadcn/ui has no chip; the shadcn column is a Badge with a button.',
+  },
   button: {
     name: 'Button',
     lead: 'Four variants, every state, as MUI, shadcn/ui and plain CSS. All three read the button component tokens.',

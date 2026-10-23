@@ -28,8 +28,11 @@ export const NAV = [
     title: 'Components',
     items: [
       ['Overview', '/components/'],
+      ['Alert', '/components/alert/'],
+      ['Badge', '/components/badge/'],
       ['Button', '/components/button/'],
       ['Checkbox', '/components/checkbox/'],
+      ['Chip', '/components/chip/'],
       ['Field', '/components/field/'],
       ['Input', '/components/input/'],
       ['Link', '/components/link/'],
@@ -42,8 +45,11 @@ export const NAV = [
     title: 'Workbench',
     items: [
       ['Overview', '/workbench/'],
+      ['Alert', '/workbench/alert/'],
+      ['Badge', '/workbench/badge/'],
       ['Button', '/workbench/button/'],
       ['Checkbox', '/workbench/checkbox/'],
+      ['Chip', '/workbench/chip/'],
       ['Field', '/workbench/field/'],
       ['Input', '/workbench/input/'],
       ['Link', '/workbench/link/'],
