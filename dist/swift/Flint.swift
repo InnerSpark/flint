@@ -332,6 +332,9 @@ public enum Flint {
     public static let buttonDisabledBg = dynamic(light: 0xf1f5f9, dark: 0x21262d)
     public static let buttonDisabledFg = dynamic(light: 0x64748b, dark: 0x828b95)
     public static let buttonDisabledBorder = dynamic(light: 0xe2e8f0, dark: 0x545d68)
+    public static let fieldLabelFg = dynamic(light: 0x0d2b45, dark: 0xf0f6fc)
+    public static let fieldHelperFg = dynamic(light: 0x334155, dark: 0xaeb8c2)
+    public static let fieldErrorFg = dynamic(light: 0x7f1d1d, dark: 0xfee2e2)
     public static let inputRadius: CGFloat = 8
     public static let inputHeight: CGFloat = 40
     public static let inputBg = dynamic(light: 0xffffff, dark: 0x161b22)

@@ -191,10 +191,7 @@ table.data th[scope="row"] { font-weight: 600; color: var(--color-text-heading);
 .example-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-12); }
 
 /* form field used by examples */
-.field { display: grid; gap: var(--space-4); max-width: 320px; }
-.field label { font-weight: 600; font-size: var(--font-size-sm); color: var(--color-text-heading); }
-.field .helper { font-size: var(--font-size-xs); color: var(--color-text-muted); }
-.field .error { display: flex; gap: var(--space-4); align-items: center; font-size: var(--font-size-xs); font-weight: 600; color: var(--color-feedback-error-text); }
+.example-pane .flint-field { max-width: 320px; }
 .check-row { display: inline-flex; align-items: center; gap: var(--space-8); font-size: var(--font-size-sm); }
 /* radio group example: the fieldset and legend are part of what the component page teaches,
    so the example shows them rather than a bare stack of labels */

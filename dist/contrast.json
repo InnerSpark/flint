@@ -505,6 +505,66 @@
     },
     {
       "mode": "light",
+      "label": "field label on default",
+      "fg": "component.field.labelFg",
+      "bg": "surface.default",
+      "ratio": 14.5,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "field label on page",
+      "fg": "component.field.labelFg",
+      "bg": "surface.page",
+      "ratio": 13.86,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "field helper on default",
+      "fg": "component.field.helperFg",
+      "bg": "surface.default",
+      "ratio": 10.35,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "field helper on page",
+      "fg": "component.field.helperFg",
+      "bg": "surface.page",
+      "ratio": 9.9,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "field error on default",
+      "fg": "component.field.errorFg",
+      "bg": "surface.default",
+      "ratio": 10.02,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "field error on page",
+      "fg": "component.field.errorFg",
+      "bg": "surface.page",
+      "ratio": 9.58,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "light",
       "label": "link label on page",
       "fg": "component.link.fg",
       "bg": "surface.page",
@@ -1599,6 +1659,66 @@
       "fg": "component.button.primary.fg",
       "bg": "component.button.primary.bg",
       "ratio": 10.49,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "field label on default",
+      "fg": "component.field.labelFg",
+      "bg": "surface.default",
+      "ratio": 15.89,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "field label on page",
+      "fg": "component.field.labelFg",
+      "bg": "surface.page",
+      "ratio": 17.39,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "field helper on default",
+      "fg": "component.field.helperFg",
+      "bg": "surface.default",
+      "ratio": 8.6,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "field helper on page",
+      "fg": "component.field.helperFg",
+      "bg": "surface.page",
+      "ratio": 9.4,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "field error on default",
+      "fg": "component.field.errorFg",
+      "bg": "surface.default",
+      "ratio": 14.16,
+      "threshold": 7,
+      "kind": "text",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "field error on page",
+      "fg": "component.field.errorFg",
+      "bg": "surface.page",
+      "ratio": 15.49,
       "threshold": 7,
       "kind": "text",
       "pass": true

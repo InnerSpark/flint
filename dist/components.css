@@ -61,6 +61,17 @@
 /* Visually hidden, still read by screen readers. */
 .flint-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 
+/* Field: the label, helper and error around any control (ASDS-61). The label is always visible and
+   tied to the control with for/id. aria-describedby points at the helper, or at the error when there
+   is one: the error replaces the helper in the markup, so a screen reader never reads both. Required
+   is said in words, never by color or an asterisk alone. */
+.flint-field { display: grid; gap: var(--space-4); }
+.flint-field__label { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--field-label-fg); }
+.flint-field__required { font-weight: var(--font-weight-regular); color: var(--field-helper-fg); }
+.flint-field__helper { font-size: var(--font-size-xs); color: var(--field-helper-fg); }
+.flint-field__error { display: flex; align-items: flex-start; gap: var(--space-4); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--field-error-fg); }
+.flint-field__error svg { width: var(--icon-size-sm); height: var(--icon-size-sm); flex: none; }
+
 .flint-input {
   box-sizing: border-box; width: 100%; height: var(--input-height); padding: 0 var(--space-12);
   border: 1px solid var(--input-border); border-radius: var(--input-radius);

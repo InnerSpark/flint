@@ -553,6 +553,11 @@ const tokens = {
           "border": "#e2e8f0"
         }
       },
+      "field": {
+        "labelFg": "#0d2b45",
+        "helperFg": "#334155",
+        "errorFg": "#7f1d1d"
+      },
       "input": {
         "radius": 8,
         "height": 40,
@@ -711,6 +716,11 @@ const tokens = {
           "fg": "#828b95",
           "border": "#545d68"
         }
+      },
+      "field": {
+        "labelFg": "#f0f6fc",
+        "helperFg": "#aeb8c2",
+        "errorFg": "#fee2e2"
       },
       "input": {
         "radius": 8,

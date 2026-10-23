@@ -12,6 +12,12 @@ export const WORKBENCH = {
     benches: [['checkbox', 'Checkbox', 'checkbox/default']],
     gap: 'The MUI checkbox shows no focus ring on keyboard focus and draws an 18px box instead of 24px (ASDS-44).',
   },
+  field: {
+    name: 'Field',
+    lead: 'Label, helper, required and error around an input, as MUI, shadcn/ui and plain CSS. All three read the field tokens.',
+    benches: [['field', 'Field', 'field/default']],
+    gap: 'MUI TextField marks required with an asterisk only, and floats the label inside the input instead of above it.',
+  },
   link: {
     name: 'Link',
     lead: 'Every state as MUI, shadcn/ui and plain CSS. All three read link.fg, stay underlined, and thicken the underline on hover.',

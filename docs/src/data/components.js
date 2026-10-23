@@ -242,18 +242,101 @@ import FormControlLabel from '@mui/material/FormControlLabel';
     ],
     target: 'The box is 24px (checkbox.size, the minimum target), and the label extends the clickable area.',
   },
+  field: {
+    name: 'Field',
+    lead: 'A field wraps one control with everything people need to use it: a visible label, optional helper text, and an error message that says how to fix the problem.',
+    example: `<div class="flint-field">
+  <label class="flint-field__label" for="site-__P__">Site name <span class="flint-field__required">(required)</span></label>
+  <input id="site-__P__" class="flint-input" type="text" required aria-describedby="site-help-__P__" />
+  <span class="flint-field__helper" id="site-help-__P__">Shown on your report cover.</span>
+</div>
+<div class="flint-field">
+  <label class="flint-field__label" for="url-__P__">Start URL <span class="flint-field__required">(required)</span></label>
+  <input id="url-__P__" class="flint-input" type="url" value="example" required aria-invalid="true" aria-describedby="url-error-__P__" />
+  <span class="flint-field__error" id="url-error-__P__">${errorIcon}Enter a full address that starts with https://</span>
+</div>`,
+    when: [
+      'Use a field around every input, select and textarea. Checkbox and radio groups use a fieldset and legend instead.',
+      'Add helper text when people need a hint before they type: a format, a limit, where the value shows up.',
+      'Show the error after people leave the field or submit, not on every keystroke.',
+    ],
+    variants: [
+      ['Default', 'Label and control. The label sits above, always visible.'],
+      ['With helper', 'flint-field__helper below the control, wired with aria-describedby.'],
+      ['Required', 'flint-field__required says "(required)" in the label, plus the required attribute. If most fields are required, mark the optional ones instead.'],
+      ['Error', 'flint-field__error replaces the helper. The control gets aria-invalid="true", and aria-describedby points at the error.'],
+    ],
+    guidance: [
+      ['Say what is wrong and how to fix it: "Enter a full address that starts with https://".', 'Write "Invalid input" or "Error". People have to guess what to change.'],
+      ['Replace the helper with the error, so there is one message under the control.', 'Stack the helper and the error, and make people read both.'],
+      ['Say "(required)" in words.', 'Mark required fields with a red asterisk alone. Color and symbols get missed.'],
+      ['On submit, move focus to the first field with an error.', 'Leave focus on the submit button and show errors somewhere above it.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: `<div class="flint-field">
+  <label class="flint-field__label" for="url">Start URL <span class="flint-field__required">(required)</span></label>
+  <input id="url" class="flint-input" type="url" required aria-describedby="url-help" />
+  <span class="flint-field__helper" id="url-help">The page the crawl starts from.</span>
+</div>
+
+<!-- With an error: swap the helper for the error, and point aria-describedby at it -->
+<div class="flint-field">
+  <label class="flint-field__label" for="url">Start URL <span class="flint-field__required">(required)</span></label>
+  <input id="url" class="flint-input" type="url" required aria-invalid="true" aria-describedby="url-error" />
+  <span class="flint-field__error" id="url-error"><svg aria-hidden="true">...</svg>Enter a full address that starts with https://</span>
+</div>
+
+<script>
+  // On submit, focus the first field with an error so screen readers read it right away.
+  form.addEventListener('submit', (e) => {
+    const bad = form.querySelector('[aria-invalid="true"]');
+    if (bad) { e.preventDefault(); bad.focus(); }
+  });
+</script>`, rules: cssFor('flint-field') },
+      mui: `import TextField from '@mui/material/TextField';
+
+<TextField label="Start URL" required error helperText="Enter a full address that starts with https://" />`,
+      shadcn: `// shadcn/ui: Label, Input and a message paragraph, tied together with ids.
+<div className="grid gap-1">
+  <Label htmlFor="url">Start URL <span className="font-normal text-[var(--field-helper-fg)]">(required)</span></Label>
+  <Input id="url" type="url" required aria-invalid aria-describedby="url-error" />
+  <p id="url-error" className="text-xs font-semibold text-[var(--field-error-fg)]">Enter a full address that starts with https://</p>
+</div>`,
+      swift: `VStack(alignment: .leading, spacing: Flint.Space.s4) {
+  Text("Start URL (required)")
+    .flintText(Flint.Typography.labelDefault)
+    .foregroundStyle(Flint.Component.fieldLabelFg)
+  TextField("", text: $url)
+    .accessibilityLabel("Start URL, required")
+    .accessibilityHint(error ?? "The page the crawl starts from.")
+  Text(error ?? "The page the crawl starts from.")
+    .flintText(Flint.Typography.labelHelper)
+    .foregroundStyle(error == nil ? Flint.Component.fieldHelperFg : Flint.Component.fieldErrorFg)
+}`,
+      muiGap: 'MUI TextField marks required with an asterisk only. Add "(required)" to the label text, or set the asterisk aria-hidden and say it in words.',
+    },
+    keyboard: [['Tab', 'Moves focus to the control. Clicking the label does the same.'], ['Submit with errors', 'Focus moves to the first field with an error.']],
+    screenReader: [
+      'The label is tied to the control with for and id, so it is read on focus.',
+      'aria-describedby points at the helper, or at the error when there is one. Only one message is read.',
+      'aria-invalid="true" marks the control as invalid. Remove it when the value is fixed.',
+      'The error icon is aria-hidden. The words carry the meaning.',
+      'If you show a summary of errors at the top, give it role="alert" and link each item to its field.',
+    ],
+    target: 'The field follows its control: inputs are 40px tall (control.md). The label is also a click target for the control.',
+  },
   input: {
     name: 'Input',
     lead: 'Inputs take a short line of text. In Flint, an input always lives in a form field with a visible label, optional helper text and an error message.',
-    example: `<div class="field">
-  <label for="campsite-__P__">Campsite name</label>
+    example: `<div class="flint-field">
+  <label class="flint-field__label" for="campsite-__P__">Campsite name</label>
   <input id="campsite-__P__" class="flint-input" type="text" placeholder="Turkey Bend" aria-describedby="campsite-help-__P__" />
-  <span class="helper" id="campsite-help-__P__">Shown on your trip card.</span>
+  <span class="flint-field__helper" id="campsite-help-__P__">Shown on your trip card.</span>
 </div>
-<div class="field">
-  <label for="nights-__P__">Nights</label>
+<div class="flint-field">
+  <label class="flint-field__label" for="nights-__P__">Nights</label>
   <input id="nights-__P__" class="flint-input" type="text" value="zero" aria-invalid="true" aria-describedby="nights-error-__P__" />
-  <span class="error" id="nights-error-__P__">${errorIcon}Enter a number from 1 to 14.</span>
+  <span class="flint-field__error" id="nights-error-__P__">${errorIcon}Enter a number from 1 to 14.</span>
 </div>`,
     when: [
       'Use an input for short, free text: names, numbers, codes.',

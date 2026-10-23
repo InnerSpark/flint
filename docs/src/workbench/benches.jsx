@@ -3,6 +3,7 @@
 import MuiButton from '@mui/material/Button';
 import MuiCheckbox from '@mui/material/Checkbox';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import TextField from '@mui/material/TextField';
 import MuiLink from '@mui/material/Link';
 import { Button as ShadButton } from './ui/button';
 import { Checkbox as ShadCheckbox } from './ui/checkbox';
@@ -101,6 +102,29 @@ const link = {
   },
 };
 
+const field = {
+  states: [
+    { label: 'With helper', cls: '' },
+    { label: 'Required', cls: '', required: true },
+    { label: 'Error', cls: '', required: true, error: true, value: 'example' },
+    { label: 'Disabled', disabled: true },
+  ],
+  render(impl, s) {
+    const id = `fld-${impl.replace(/\W/g, '')}-${s.label.replace(/\W/g, '').toLowerCase()}`;
+    const msg = s.error ? 'Enter a full address that starts with https://' : 'The page the crawl starts from.';
+    const msgId = `${id}-msg`;
+    if (impl === 'MUI') return <TextField id={id} label="Start URL" size="small" required={s.required} error={!!s.error} disabled={s.disabled} defaultValue={s.value} helperText={msg} fullWidth />;
+    const req = s.required ? <span className={impl === 'shadcn' ? 'font-normal text-[var(--field-helper-fg)]' : 'flint-field__required'}> (required)</span> : null;
+    const common = { id, type: 'url', required: s.required, disabled: s.disabled, defaultValue: s.value, 'aria-invalid': s.error ? 'true' : undefined, 'aria-describedby': msgId };
+    if (impl === 'shadcn') {
+      return <div className="grid gap-1"><label htmlFor={id} className="text-sm font-semibold text-[var(--field-label-fg)]">Start URL{req}</label>
+        <ShadInput {...common} /><p id={msgId} className={s.error ? 'text-xs font-semibold text-[var(--field-error-fg)]' : 'text-xs text-[var(--field-helper-fg)]'}>{msg}</p></div>;
+    }
+    return <div className="flint-field"><label className="flint-field__label" htmlFor={id}>Start URL{req}</label>
+      <input className="flint-input" {...common} /><span id={msgId} className={s.error ? 'flint-field__error' : 'flint-field__helper'}>{msg}</span></div>;
+  },
+};
+
 export const BENCHES = {
   'button/primary': button('primary'),
   'button/secondary': button('secondary'),
@@ -109,4 +133,5 @@ export const BENCHES = {
   'input/text': input,
   'checkbox/default': checkbox,
   'link/inline': link,
+  'field/default': field,
 };

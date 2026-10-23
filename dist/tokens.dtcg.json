@@ -1626,6 +1626,20 @@
           }
         }
       },
+      "field": {
+        "labelFg": {
+          "$type": "color",
+          "$value": "{semantic.light.text.heading}"
+        },
+        "helperFg": {
+          "$type": "color",
+          "$value": "{semantic.light.text.muted}"
+        },
+        "errorFg": {
+          "$type": "color",
+          "$value": "{semantic.light.feedback.error.text}"
+        }
+      },
       "input": {
         "radius": {
           "$type": "dimension",
@@ -2086,6 +2100,20 @@
             "$type": "color",
             "$value": "{semantic.dark.border.disabled}"
           }
+        }
+      },
+      "field": {
+        "labelFg": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.heading}"
+        },
+        "helperFg": {
+          "$type": "color",
+          "$value": "{semantic.dark.text.muted}"
+        },
+        "errorFg": {
+          "$type": "color",
+          "$value": "{semantic.dark.feedback.error.text}"
         }
       },
       "input": {

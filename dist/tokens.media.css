@@ -396,6 +396,9 @@
   --button-disabled-bg: var(--color-action-disabled-bg);
   --button-disabled-fg: var(--color-action-disabled);
   --button-disabled-border: var(--color-border-disabled);
+  --field-label-fg: var(--color-text-heading);
+  --field-helper-fg: var(--color-text-muted);
+  --field-error-fg: var(--color-feedback-error-text);
   --input-radius: var(--radius-control);
   --input-height: var(--control-md);
   --input-bg: var(--color-surface-default);
