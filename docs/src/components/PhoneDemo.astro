@@ -1,0 +1,112 @@
+---
+// Web phone preview for the Swift package (ASDS-85). An HTML stand-in drawn from the same tokens,
+// with the iOS settings that change how a Flint screen looks: appearance, Dynamic Type, Reduce
+// Motion, plus a caption bar that shows what VoiceOver says for the focused control.
+import '../styles/phone.css';
+
+// Dynamic Type steps, scaled from the body size at each setting (Large is the default, 17pt).
+const sizes = [
+  ['Extra small', 0.82], ['Small', 0.88], ['Medium', 0.94], ['Large (default)', 1], ['Extra large', 1.12],
+  ['Extra extra large', 1.24], ['Extra extra extra large', 1.35],
+  ['Accessibility medium', 1.65], ['Accessibility large', 1.94], ['Accessibility extra large', 2.35],
+];
+const def = 3;
+---
+<div class="pd" data-phone-demo data-sizes={JSON.stringify(sizes)}>
+  <div class="pd-settings">
+    <h3 class="pd-settings-title" id="pd-settings-title">iOS settings</h3>
+    <fieldset class="flint-fieldset">
+      <legend class="flint-fieldset__legend">Appearance</legend>
+      <label class="flint-choice"><input type="radio" class="flint-radio" name="pd-appearance" value="light" checked /> Light</label>
+      <label class="flint-choice"><input type="radio" class="flint-radio" name="pd-appearance" value="dark" /> Dark</label>
+    </fieldset>
+    <div class="pd-size">
+      <label class="flint-field__label" for="pd-size">Text size</label>
+      <input id="pd-size" type="range" min="0" max={sizes.length - 1} step="1" value={def} aria-valuetext={sizes[def][0]} aria-describedby="pd-size-out" />
+      <output id="pd-size-out" for="pd-size" class="pd-size-out">{sizes[def][0]}</output>
+    </div>
+    <label class="flint-choice"><input type="checkbox" role="switch" class="flint-switch" data-pd="motion" /> Reduce Motion</label>
+    <label class="flint-choice"><input type="checkbox" role="switch" class="flint-switch" data-pd="captions" checked /> VoiceOver captions</label>
+    <p class="pd-note">Captions show what VoiceOver says when you tab to a control in the phone.</p>
+  </div>
+
+  <figure class="pd-device">
+    <div class="pd-frame">
+      <div class="pd-screen" data-theme="light" style={`--dt:${sizes[def][1]}`} role="group" aria-label="iPhone preview: Trips">
+        <div class="pd-status" aria-hidden="true">
+          <span>9:41</span>
+          <span class="pd-island"></span>
+          <svg viewBox="0 0 44 12" class="pd-status-icons"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="1" width="3" height="11" rx="1"/><rect x="23" y="1.5" width="18" height="9" rx="2.5" fill="none" stroke="currentColor"/><rect x="25" y="3.5" width="12" height="5" rx="1"/><rect x="42" y="4.5" width="1.5" height="3" rx="0.7"/></svg>
+        </div>
+        <div class="pd-body">
+          <h4 class="pd-title">Trips</h4>
+          <section class="pd-card" aria-labelledby="pd-card-title">
+            <h5 class="pd-card-title" id="pd-card-title">Awning lights</h5>
+            <p class="pd-muted">Warm white strip along the awning.</p>
+            <label class="pd-row"><span>Lights</span><input type="checkbox" role="switch" class="flint-switch" /></label>
+          </section>
+          <div class="flint-alert pd-alert">
+            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 9v5M10 6.2v.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <div class="flint-alert__body">Rain after 6 PM. Pack the awning.</div>
+          </div>
+          <div class="pd-field">
+            <label class="pd-label" for="pd-trip">Trip name</label>
+            <input id="pd-trip" class="flint-input" type="text" placeholder="Big Bend, March" autocomplete="off" />
+          </div>
+          <button type="button" class="flint-btn flint-btn--primary pd-start">Start trip</button>
+          <p class="pd-done" role="status"></p>
+        </div>
+        <span class="pd-home" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="pd-caption" aria-hidden="true" data-on="true"><span class="pd-caption-label">VoiceOver</span><span class="pd-caption-text">Tab into the phone to hear a control.</span></div>
+    <figcaption class="pd-figcaption"><strong>Web preview.</strong> Drawn in HTML from the same tokens as the Swift package, with 44pt touch targets. Real SwiftUI can differ slightly.</figcaption>
+  </figure>
+</div>
+
+<script>
+  // What VoiceOver on iOS says for a control: name, trait, value, then the hint.
+  function speak(el) {
+    const name = el.labels?.[0]?.textContent.trim() || el.getAttribute('aria-label') || el.textContent.trim();
+    if (el.getAttribute('role') === 'switch') return `${name}, switch button, ${el.checked ? 'on' : 'off'}. Double-tap to toggle setting.`;
+    if (el.tagName === 'INPUT') return `${name}, text field${el.value ? `, ${el.value}` : ''}. Double-tap to edit.`;
+    if (el.tagName === 'BUTTON') return `${name}, button.`;
+    return name;
+  }
+  for (const root of document.querySelectorAll('[data-phone-demo]')) {
+    const screen = root.querySelector('.pd-screen');
+    const caption = root.querySelector('.pd-caption');
+    const captionText = root.querySelector('.pd-caption-text');
+    const sizes = JSON.parse(root.dataset.sizes);
+    const size = root.querySelector('#pd-size');
+    const out = root.querySelector('#pd-size-out');
+    const done = root.querySelector('.pd-done');
+
+    // Start in the page's own appearance.
+    const pageDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const setTheme = (t) => screen.setAttribute('data-theme', t);
+    if (pageDark) { root.querySelector('input[value="dark"]').checked = true; setTheme('dark'); }
+    root.querySelectorAll('input[name="pd-appearance"]').forEach((r) => r.addEventListener('change', () => setTheme(r.value)));
+
+    size.addEventListener('input', () => {
+      const [label, scale] = sizes[size.value];
+      screen.style.setProperty('--dt', scale);
+      out.textContent = label;
+      size.setAttribute('aria-valuetext', label);
+    });
+    root.querySelector('[data-pd="motion"]').addEventListener('change', (e) => screen.toggleAttribute('data-reduce-motion', e.target.checked));
+    root.querySelector('[data-pd="captions"]').addEventListener('change', (e) => { caption.dataset.on = String(e.target.checked); });
+
+    const say = (el) => { captionText.textContent = speak(el); };
+    screen.addEventListener('focusin', (e) => say(e.target));
+    screen.addEventListener('change', (e) => { if (e.target === document.activeElement) say(e.target); });
+
+    root.querySelector('.pd-start').addEventListener('click', () => {
+      const name = root.querySelector('#pd-trip').value.trim();
+      done.textContent = '';
+      const msg = name ? `${name} started` : 'Trip started';
+      // Cleared then set on the next frame, so a repeat press is announced again.
+      requestAnimationFrame(() => { done.textContent = msg; captionText.textContent = msg; });
+    });
+  }
+</script>

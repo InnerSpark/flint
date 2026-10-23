@@ -3,7 +3,8 @@ import Docs from '../../../layouts/Docs.astro';
 import Code from '../../../components/Code.astro';
 import TableWrap from '../../../components/TableWrap.astro';
 import Notice from '../../../components/Notice.astro';
-const toc = [{ id: 'add', text: 'Add the package' }, { id: 'use', text: 'Use it' }, { id: 'reference', text: 'What is in the package' }, { id: 'uikit', text: 'UIKit colors' }];
+import PhoneDemo from '../../../components/PhoneDemo.astro';
+const toc = [{ id: 'try', text: 'Try it' }, { id: 'add', text: 'Add the package' }, { id: 'use', text: 'Use it' }, { id: 'reference', text: 'What is in the package' }, { id: 'uikit', text: 'UIKit colors' }];
 const useCode = `import SwiftUI
 import Flint
 
@@ -18,11 +19,98 @@ struct TripCard: View {
                   in: RoundedRectangle(cornerRadius: Flint.Radius.card))
   }
 }`;
+const screenCode = `import SwiftUI
+import UIKit
+import Flint
+
+struct TripsScreen: View {
+  @State private var lightsOn = false
+  @State private var tripName = ""
+  @State private var started = false
+  @Environment(\\.accessibilityReduceMotion) private var reduceMotion
+
+  var body: some View {
+    NavigationStack {
+      ScrollView {
+        VStack(alignment: .leading, spacing: Flint.Space.s16) {
+          VStack(alignment: .leading, spacing: Flint.Space.s8) {
+            Text("Awning lights")
+              .flintText(Flint.Typography.headingH3)
+              .foregroundStyle(Flint.Colors.textHeading)
+              .accessibilityAddTraits(.isHeader)
+            Text("Warm white strip along the awning.")
+              .flintText(Flint.Typography.bodySm)
+              .foregroundStyle(Flint.Colors.textMuted)
+            Toggle("Lights", isOn: $lightsOn)
+              .flintText(Flint.Typography.bodyMd)
+              .tint(Flint.Colors.actionPrimary)
+              .frame(minHeight: Flint.Target.touch)
+          }
+          .padding(Flint.Space.s16)
+          .background(Flint.Colors.surfaceDefault,
+                      in: RoundedRectangle(cornerRadius: Flint.Radius.card))
+          .overlay(RoundedRectangle(cornerRadius: Flint.Radius.card)
+                     .stroke(Flint.Colors.borderDefault))
+
+          Label("Rain after 6 PM. Pack the awning.", systemImage: "info.circle")
+            .flintText(Flint.Typography.bodySm)
+            .foregroundStyle(Flint.Colors.feedbackInfoText)
+            .padding(Flint.Space.s12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Flint.Colors.feedbackInfoSurface,
+                        in: RoundedRectangle(cornerRadius: Flint.Radius.control))
+
+          VStack(alignment: .leading, spacing: Flint.Space.s8) {
+            Text("Trip name")
+              .flintText(Flint.Typography.labelDefault)
+              .accessibilityHidden(true) // the field below carries the name
+            TextField("Trip name", text: $tripName, prompt: Text("Big Bend, March"))
+              .flintText(Flint.Typography.bodyMd)
+              .padding(.horizontal, Flint.Space.s12)
+              .frame(minHeight: Flint.Target.touch)
+              .overlay(RoundedRectangle(cornerRadius: Flint.Radius.control)
+                         .stroke(Flint.Colors.borderControl))
+          }
+
+          Button {
+            withAnimation(Flint.Motion.animation(.emphasis, reduceMotion: reduceMotion)) {
+              started = true
+            }
+            UIAccessibility.post(notification: .announcement, argument: "Trip started")
+          } label: {
+            Text("Start trip")
+              .flintText(Flint.Typography.labelButton)
+              .frame(maxWidth: .infinity, minHeight: Flint.Target.touch)
+          }
+          .foregroundStyle(Flint.Component.buttonPrimaryFg)
+          .background(Flint.Component.buttonPrimaryBg,
+                      in: RoundedRectangle(cornerRadius: Flint.Component.buttonRadius))
+
+          if started {
+            Text("Trip started")
+              .flintText(Flint.Typography.labelDefault)
+              .foregroundStyle(Flint.Colors.feedbackSuccessText)
+              .frame(maxWidth: .infinity)
+              .transition(.scale.combined(with: .opacity))
+          }
+        }
+        .padding(Flint.Space.s16)
+      }
+      .background(Flint.Colors.surfacePage)
+      .navigationTitle("Trips")
+    }
+  }
+}`;
 const uikitCode = `let bar = UINavigationBarAppearance()
 bar.backgroundColor = Flint.UIColors.surfacePage
 bar.titleTextAttributes = [.foregroundColor: Flint.UIColors.textHeading]`;
 ---
 <Docs illo="phone" title="iOS and SwiftUI" crumb="Get started" lead="A Swift package for iOS 16 and macOS 13 or later, built from the same tokens as the web." toc={toc}>
+  <h2 id="try">Try it</h2>
+  <p>A Flint screen on a phone. Switch appearance, drag the text size up to the accessibility sizes, turn on Reduce Motion, and tab through the screen to read what VoiceOver says.</p>
+  <PhoneDemo />
+  <Code label="SwiftUI for this screen" code={screenCode} />
+
   <h2 id="add">Add the package</h2>
   <ol>
     <li>In Xcode, open File, then Add Package Dependencies.</li>

@@ -4,6 +4,7 @@ Flint tokens follow semver, independent of the consuming apps.
 
 ## Unreleased
 
+- **Web phone preview on the iOS page (ASDS-85).** "Try it" puts a Flint screen on an iPhone drawn in HTML from the same tokens, with 44pt touch targets. Settings beside it switch Light and Dark, step Dynamic Type from Extra small to Accessibility extra large (the screen reflows and scrolls, nothing clips), turn on Reduce Motion, and show a VoiceOver caption bar that reads the focused control the way iOS does ("Lights, switch button, off"). The SwiftUI for the same screen sits underneath, using only `Flint.*` tokens and standard controls. Labeled as a web preview: real SwiftUI can differ slightly.
 - **Illustration page and empty states (ASDS-56).** New Foundations page, `/foundations/illustration/`: the rules (decorative only, no words in the art, tokens only, one warm accent, under 4 KB, calm motion), the color roles in light and dark read straight from `illustration.css`, every illustration shown in both modes with its size, and the empty-state pattern (art, heading, one line, one action). Three new empty-state illustrations: no results, error (no red) and success. The docs build fails if an illustration goes over 4 KB or contains text or an image. Illustration art moved to `docs/src/data/illustrations.js`, and the color roles now resolve per `data-theme` panel, so light and dark can sit side by side.
 
 ## v1.15.0 (2026-10-23)
