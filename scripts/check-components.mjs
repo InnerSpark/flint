@@ -13,8 +13,24 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const css = readFileSync(join(root, 'css/components.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 const defined = new Set([...readFileSync(join(root, 'dist/tokens.css'), 'utf8').matchAll(/(--[a-z0-9-]+)\s*:/g)].map((m) => m[1]));
 
+// Split into rules, stepping into @media blocks so nested rules are checked by their own selector.
+function rules(text) {
+  const out = [];
+  let depth = 0, start = 0, head = '';
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === '{') { if (depth === 0) { head = text.slice(start, i).trim(); start = i + 1; } depth++; }
+    else if (text[i] === '}' && --depth === 0) {
+      const body = text.slice(start, i);
+      if (head.startsWith('@media')) out.push(...rules(body));
+      else if (!head.startsWith('@keyframes')) out.push([head, body]);
+      start = i + 1;
+    }
+  }
+  return out;
+}
+
 const problems = [];
-for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+for (const [selector, body] of rules(css)) {
   const sel = selector.trim();
   const glyph = /::(after|before)/.test(sel) || sel === '.flint-sr-only';
   for (const decl of body.split(';').map((d) => d.trim()).filter(Boolean)) {

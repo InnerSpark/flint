@@ -225,6 +225,8 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
             // light fill, so a white thumb lands at 1.80:1 against its own track (ASDS-45).
             '&.Mui-checked': { color: k.switch.thumbChecked, '& + .MuiSwitch-track': { backgroundColor: k.switch.trackChecked, opacity: 1 } },
             '&.Mui-disabled + .MuiSwitch-track': { backgroundColor: k.switch.trackDisabled, opacity: 1 },
+            // Disabled thumb stays visible on the disabled track, so its position still reads.
+            '&.Mui-disabled': { color: k.switch.thumbDisabled },
           },
           track: { backgroundColor: k.switch.track, opacity: 1 },
         },

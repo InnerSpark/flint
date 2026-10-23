@@ -34,6 +34,7 @@ export const NAV = [
       ['Input', '/components/input/'],
       ['Link', '/components/link/'],
       ['Radio', '/components/radio/'],
+      ['Switch', '/components/switch/'],
     ],
   },
   {
@@ -46,6 +47,7 @@ export const NAV = [
       ['Input', '/workbench/input/'],
       ['Link', '/workbench/link/'],
       ['Radio', '/workbench/radio/'],
+      ['Switch', '/workbench/switch/'],
     ],
   },
   {

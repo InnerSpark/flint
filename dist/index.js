@@ -598,7 +598,8 @@ const tokens = {
         "trackChecked": "#1550a0",
         "trackDisabled": "#f1f5f9",
         "thumb": "#ffffff",
-        "thumbChecked": "#ffffff"
+        "thumbChecked": "#ffffff",
+        "thumbDisabled": "#64748b"
       },
       "select": {
         "radius": 8,
@@ -765,7 +766,8 @@ const tokens = {
         "trackChecked": "#93c5fd",
         "trackDisabled": "#21262d",
         "thumb": "#ffffff",
-        "thumbChecked": "#0d1117"
+        "thumbChecked": "#0d1117",
+        "thumbDisabled": "#828b95"
       },
       "select": {
         "radius": 8,

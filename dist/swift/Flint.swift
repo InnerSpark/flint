@@ -370,6 +370,7 @@ public enum Flint {
     public static let switchTrackDisabled = dynamic(light: 0xf1f5f9, dark: 0x21262d)
     public static let switchThumb = dynamic(light: 0xffffff, dark: 0xffffff)
     public static let switchThumbChecked = dynamic(light: 0xffffff, dark: 0x0d1117)
+    public static let switchThumbDisabled = dynamic(light: 0x64748b, dark: 0x828b95)
     public static let selectRadius: CGFloat = 8
     public static let selectHeight: CGFloat = 40
     public static let selectBg = dynamic(light: 0xffffff, dark: 0x161b22)

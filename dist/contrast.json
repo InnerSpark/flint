@@ -926,12 +926,12 @@
     {
       "mode": "light",
       "label": "switch disabled thumb on track",
-      "fg": "component.switch.thumb",
+      "fg": "component.switch.thumbDisabled",
       "bg": "component.switch.trackDisabled",
-      "ratio": 1.1,
+      "ratio": 4.34,
       "threshold": 3,
       "kind": "exempt",
-      "pass": false
+      "pass": true
     },
     {
       "mode": "light",
@@ -2126,9 +2126,9 @@
     {
       "mode": "dark",
       "label": "switch disabled thumb on track",
-      "fg": "component.switch.thumb",
+      "fg": "component.switch.thumbDisabled",
       "bg": "component.switch.trackDisabled",
-      "ratio": 15.22,
+      "ratio": 4.4,
       "threshold": 3,
       "kind": "exempt",
       "pass": true

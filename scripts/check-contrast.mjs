@@ -130,7 +130,7 @@ const PAIRS = [
   ["switch thumb on checked track", "component.switch.thumbChecked", "component.switch.trackChecked", 3.0, "control"],
   ["switch track on surface", "component.switch.track", "surface.default", 3.0, "control"],
   ["switch checked track on surface", "component.switch.trackChecked", "surface.default", 3.0, "control"],
-  ["switch disabled thumb on track", "component.switch.thumb", "component.switch.trackDisabled", 3.0, "exempt"],
+  ["switch disabled thumb on track", "component.switch.thumbDisabled", "component.switch.trackDisabled", 3.0, "exempt"],
   ["select text", "component.select.fg", "component.select.bg", AAA_TEXT, "text"],
   ["select placeholder", "component.select.placeholder", "component.select.bg", AAA_TEXT, "text"],
   ["select icon", "component.select.icon", "component.select.bg", 3.0, "ui"],

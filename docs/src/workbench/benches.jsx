@@ -10,6 +10,8 @@ import { Checkbox as ShadCheckbox } from './ui/checkbox';
 import { Input as ShadInput } from './ui/input';
 import { RadioGroup, RadioGroupItem } from './ui/radio';
 import MuiRadio from '@mui/material/Radio';
+import MuiSwitch from '@mui/material/Switch';
+import { Switch as ShadSwitch } from './ui/switch';
 
 export const IMPLEMENTATIONS = ['MUI', 'shadcn', 'Plain CSS'];
 
@@ -161,6 +163,27 @@ const radio = {
   },
 };
 
+const toggle = {
+  states: [
+    { label: 'Off', cls: '' },
+    { label: 'On', cls: '', checked: true },
+    { label: 'Focus', cls: 'st-focus', focus: true, note: 'keyboard focus' },
+    { label: 'Disabled', disabled: true },
+    { label: 'Disabled, on', disabled: true, checked: true },
+    { label: 'Live', cls: '', note: 'try it' },
+  ],
+  render(impl, s) {
+    const name = `Email me a weekly summary, ${impl}, ${s.label.toLowerCase()} state`;
+    const text = <span>Email me a weekly summary</span>;
+    if (impl === 'MUI') {
+      return <label className="tb-cell"><MuiSwitch defaultChecked={s.checked} disabled={s.disabled} className={s.cls}
+        slotProps={{ input: { role: 'switch', 'aria-label': name, className: s.focus ? 'st-focus' : undefined } }} classes={s.focus ? { switchBase: 'Mui-focusVisible' } : undefined} />{text}</label>;
+    }
+    if (impl === 'shadcn') return <label className="tb-cell"><ShadSwitch defaultChecked={s.checked} disabled={s.disabled} className={s.cls} aria-label={name} />{text}</label>;
+    return <label className="tb-cell"><input type="checkbox" role="switch" className={`flint-switch ${s.cls || ''}`} defaultChecked={s.checked} disabled={s.disabled} aria-label={name} />{text}</label>;
+  },
+};
+
 export const BENCHES = {
   'button/primary': button('primary'),
   'button/secondary': button('secondary'),
@@ -170,5 +193,6 @@ export const BENCHES = {
   'checkbox/default': checkbox,
   'link/inline': link,
   'radio/default': radio,
+  'switch/default': toggle,
   'field/default': field,
 };

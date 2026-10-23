@@ -24,6 +24,12 @@ export const WORKBENCH = {
     benches: [['radio', 'Radio', 'radio/default']],
     gap: 'The MUI radio draws a smaller control than Flint\'s 24px, and ignores aria-invalid, so the Error row looks like Unselected.',
   },
+  switch: {
+    name: 'Switch',
+    lead: 'Every state as MUI, shadcn/ui and plain CSS. All three read the switch tokens: track, checked track, thumb and checked thumb.',
+    benches: [['switch', 'Switch', 'switch/default']],
+    gap: 'The MUI switch is a 34x14 track with a 20px thumb that overhangs it, smaller than Flint\'s 48x24, and its disabled, on thumb stays tinted blue.',
+  },
   link: {
     name: 'Link',
     lead: 'Every state as MUI, shadcn/ui and plain CSS. All three read link.fg, stay underlined, and thicken the underline on hover.',

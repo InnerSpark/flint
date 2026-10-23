@@ -1782,6 +1782,10 @@
         "thumbChecked": {
           "$type": "color",
           "$value": "{semantic.light.action.onPrimary}"
+        },
+        "thumbDisabled": {
+          "$type": "color",
+          "$value": "{semantic.light.action.disabled}"
         }
       },
       "select": {
@@ -2270,6 +2274,10 @@
         "thumbChecked": {
           "$type": "color",
           "$value": "{semantic.dark.action.onPrimary}"
+        },
+        "thumbDisabled": {
+          "$type": "color",
+          "$value": "{semantic.dark.action.disabled}"
         }
       },
       "select": {

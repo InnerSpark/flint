@@ -5,6 +5,7 @@ import shadButton from '../workbench/ui/button.jsx?raw';
 import shadInput from '../workbench/ui/input.jsx?raw';
 import shadCheckbox from '../workbench/ui/checkbox.jsx?raw';
 import shadRadio from '../workbench/ui/radio.jsx?raw';
+import shadSwitch from '../workbench/ui/switch.jsx?raw';
 
 /** Top-level blocks of components.css, comments dropped. @media and @keyframes stay whole. */
 const blocks = (() => {
@@ -201,6 +202,48 @@ import FormLabel from '@mui/material/FormLabel';
       'Same-page links move focus to the target heading, not just the scroll position.',
     ],
     target: 'Inline links follow the text size, which WCAG 2.5.8 exempts. Standalone links are at least 24px tall (targetMin).',
+  },
+  switch: {
+    name: 'Switch',
+    lead: 'A switch turns one setting on or off, and the change takes effect right away. There is no save button behind it.',
+    example: `<div class="flint-fieldset">
+  <label class="flint-choice"><input type="checkbox" role="switch" class="flint-switch" checked /> Show passing checks in reports</label>
+  <label class="flint-choice"><input type="checkbox" role="switch" class="flint-switch" /> Email me a weekly summary</label>
+  <label class="flint-choice"><input type="checkbox" role="switch" class="flint-switch" disabled /> Scan pages behind sign-in (needs saved credentials)</label>
+</div>`,
+    when: [
+      'Use a switch for a setting that applies the moment it changes: a preference, a feature flag, a notification.',
+      'Use a checkbox when the choice only counts after people submit a form.',
+      'Use radio buttons when there are more than two options, or when "off" needs its own name.',
+    ],
+    variants: [
+      ['Off', 'The thumb sits on the left on the neutral track.'],
+      ['On', 'The thumb moves right and the track fills. Position and fill both change, so it is never color alone.'],
+      ['Disabled', 'The setting can\'t be changed right now. Say why next to it.'],
+    ],
+    guidance: [
+      ['Label the setting: "Email me a weekly summary".', 'Label the state: "On" or "Enabled". The switch already shows the state.'],
+      ['Apply the change right away, and show the result if it takes a moment.', 'Put a switch in a form that needs a Save button. Use a checkbox there.'],
+      ['Keep the label the same in both states.', 'Swap the label text when it toggles. People lose track of what they changed.'],
+    ],
+    code: {
+      css: { label: 'HTML', code: '<label class="flint-choice">\n  <input type="checkbox" role="switch" class="flint-switch" checked />\n  Show passing checks in reports\n</label>', rules: cssFor('flint-switch') },
+      mui: `import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+<FormControlLabel control={<Switch defaultChecked />} label="Show passing checks in reports" />`,
+      shadcn: shadSwitch,
+      swift: `Toggle("Show passing checks in reports", isOn: $showPassing)
+  .tint(Flint.Component.switchTrackChecked)`,
+      muiGap: 'The MUI switch is a 34x14 track with a 20px thumb that overhangs it, smaller than Flint\'s 48x24.',
+    },
+    keyboard: [['Tab', 'Moves focus to the switch.'], ['Space', 'Turns it on or off.']],
+    screenReader: [
+      'role="switch" on a native checkbox: screen readers say "switch, on" or "switch, off".',
+      'The label names the setting and stays the same in both states.',
+      'If the change takes a moment or can fail, announce the result in a live region.',
+    ],
+    target: 'The track is 48 by 24px (targetMin tall), and the label makes the whole row clickable.',
   },
   checkbox: {
     name: 'Checkbox',

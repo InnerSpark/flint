@@ -433,6 +433,7 @@
   --switch-track-disabled: var(--color-action-disabled-bg);
   --switch-thumb: var(--color-white);
   --switch-thumb-checked: var(--color-action-on-primary);
+  --switch-thumb-disabled: var(--color-action-disabled);
   --select-radius: var(--radius-control);
   --select-height: var(--control-md);
   --select-bg: var(--color-surface-default);
