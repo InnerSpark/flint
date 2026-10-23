@@ -3,6 +3,8 @@ import Docs from '../../../layouts/Docs.astro';
 import TableWrap from '../../../components/TableWrap.astro';
 import Code from '../../../components/Code.astro';
 import { source, refName } from '../../../lib/flint.js';
+import TokenFlow from '../../../components/TokenFlow.astro';
+import '../../../styles/specimens.css';
 const toc = [{ id: 'tiers', text: 'The three tiers' }, { id: 'references', text: 'References' }, { id: 'names', text: 'One token, every name' }, { id: 'changing', text: 'Adding or changing a token' }];
 const refCode = `"semantic": {
   "light": { "text": { "link": "${source.semantic.light.text.link}" } },
@@ -14,6 +16,7 @@ const refCode = `"semantic": {
 ---
 <Docs title="Token tiers" crumb="Guides" lead="Flint has three tiers. Each points at the one below it, so a change at the bottom flows everywhere above it, and nothing above can drift." toc={toc}>
   <h2 id="tiers">The three tiers</h2>
+  <TokenFlow />
   <TableWrap label="Token tiers">
     <table class="data">
       <thead><tr><th scope="col">Tier</th><th scope="col">Example</th><th scope="col">Use it for</th></tr></thead>

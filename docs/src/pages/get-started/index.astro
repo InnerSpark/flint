@@ -3,18 +3,25 @@ import Docs from '../../layouts/Docs.astro';
 import Code from '../../components/Code.astro';
 import TableWrap from '../../components/TableWrap.astro';
 import { pkg } from '../../lib/flint.js';
+import TokenFlow from '../../components/TokenFlow.astro';
+import '../../styles/specimens.css';
 const install = `npm install "github:InnerSpark/flint#semver:^${pkg.version}"`;
-const toc = [{ id: 'install', text: 'Install' }, { id: 'pick', text: 'Pick your platform' }, { id: 'what-you-get', text: 'What you get' }];
+const toc = [{ id: 'install', text: 'Install' }, { id: 'how', text: 'How one token travels' }, { id: 'pick', text: 'Pick your platform' }, { id: 'what-you-get', text: 'What you get' }];
 ---
-<Docs title="Get started" lead="Install the package once, then use the output that fits your stack. Every output carries the same values." toc={toc}>
+<Docs illo="start" title="Get started" lead="Install the package once, then use the output that fits your stack. Every output carries the same values." toc={toc}>
   <h2 id="install">Install</h2>
   <p>Flint is a private package on GitHub. Install it with a semver range so <code>npm update</code> picks up new minor and patch releases and never jumps a major.</p>
   <Code label="Terminal" code={install} />
   <p>iOS apps add the same repository as a Swift package instead. See <a href="/get-started/ios/">iOS and SwiftUI</a>.</p>
 
+  <h2 id="how">How one token travels</h2>
+  <p>Every platform reads the same source. Here is the primary button's fill, followed all the way down and back out.</p>
+  <TokenFlow />
+
   <h2 id="pick">Pick your platform</h2>
   <ul class="link-list">
     <li><a href="/get-started/web/"><strong>Web and CSS</strong><span>Plain CSS variables. Astro, EJS, static sites, anything with a stylesheet.</span></a></li>
+    <li><a href="/get-started/react/"><strong>React</strong><span>Flint's own React components, on Radix for dialogs, menus and toasts.</span></a></li>
     <li><a href="/get-started/mui/"><strong>MUI</strong><span>React apps on Material UI. One theme factory, light and dark.</span></a></li>
     <li><a href="/get-started/shadcn/"><strong>shadcn/ui</strong><span>React apps on Tailwind v4 and shadcn/ui.</span></a></li>
     <li><a href="/get-started/ios/"><strong>iOS and SwiftUI</strong><span>Native apps on iOS 16 or macOS 13 and later.</span></a></li>
@@ -29,6 +36,9 @@ const toc = [{ id: 'install', text: 'Install' }, { id: 'pick', text: 'Pick your 
         <tr><th scope="row"><code>@innerspark/flint/tokens.css</code></th><td>Every token as a CSS variable. Dark mode with <code>data-theme="dark"</code>.</td></tr>
         <tr><th scope="row"><code>@innerspark/flint/tokens.media.css</code></th><td>The same, with dark mode following the system setting.</td></tr>
         <tr><th scope="row"><code>@innerspark/flint</code></th><td>Typed JS exports of every resolved value.</td></tr>
+        <tr><th scope="row"><code>@innerspark/flint/components.css</code></th><td>The component classes: buttons through toasts, for any stack.</td></tr>
+        <tr><th scope="row"><code>@innerspark/flint/behaviors.js</code></th><td>Keyboard and focus behavior for dialogs, tabs, menus, tooltips and toasts, without React.</td></tr>
+        <tr><th scope="row"><code>@innerspark/flint/react</code></th><td>React components on the same classes, with Radix underneath.</td></tr>
         <tr><th scope="row"><code>@innerspark/flint/mui</code></th><td>The MUI theme factory, <code>createFlintTheme</code>.</td></tr>
         <tr><th scope="row"><code>@innerspark/flint/shadcn.css</code></th><td>The bridge from shadcn/ui variables to Flint.</td></tr>
         <tr><th scope="row"><code>@innerspark/flint/tokens.json</code></th><td>Resolved values as JSON, for tools like Style Dictionary.</td></tr>

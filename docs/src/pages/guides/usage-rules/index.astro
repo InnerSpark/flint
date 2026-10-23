@@ -3,7 +3,7 @@ import Docs from '../../../layouts/Docs.astro';
 import Guidance from '../../../components/Guidance.astro';
 const toc = [{ id: 'color', text: 'Color' }, { id: 'type', text: 'Type' }, { id: 'space', text: 'Space and size' }, { id: 'components', text: 'Components' }, { id: 'words', text: 'Words' }];
 ---
-<Docs title="Usage rules" crumb="Guides" lead="The short list. Every rule here exists because something shipped broken without it." toc={toc}>
+<Docs illo="rules" title="Usage rules" crumb="Guides" lead="The short list. Every rule here exists because something shipped broken without it." toc={toc}>
   <h2 id="color">Color</h2>
   <ul>
     <li><strong>Use semantic tokens, never ladder steps,</strong> and never a raw hex.</li>

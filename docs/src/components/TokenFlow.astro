@@ -1,0 +1,45 @@
+---
+// A concept diagram (ASDS-78 follow-up): one real token, from the primitive ramp, through the semantic
+// role, to the component decision, then out to every platform. Built from the token source, so it can't
+// drift. Real text in reading order; the arrows and swatches are decorative.
+import { source, refName, componentVar, camel, cssVarForPath } from '../lib/flint.js';
+const comp = ['button', 'primary', 'bg'];
+const semantic = refName(source.component.button.primary.bg); // semantic.action.primary
+const semPath = semantic.replace(/^semantic\./, '').split('.');
+const prim = (mode) => refName(semPath.reduce((o, k) => o[k], source.semantic[mode])); // color.blue.700
+const light = prim('light'), dark = prim('dark');
+const swatch = (p) => `var(${cssVarForPath(p)})`;
+const outs = [
+  ['CSS', `var(${componentVar(comp)})`, 'components.css, Astro, EJS'],
+  ['Flint React', '<Button variant="primary">', 'renders .flint-btn--primary'],
+  ['MUI', 'createFlintTheme()', 'MuiButton containedPrimary'],
+  ['shadcn/ui', '--primary', 'shadcn.css points it at the role'],
+  ['SwiftUI', `Flint.Component.${camel(...comp)}`, 'light and dark in one color'],
+];
+---
+<figure class="flow" aria-labelledby="flow-caption">
+  <ol class="flow-chain">
+    <li class="flow-node">
+      <span class="flow-tier">Primitive</span>
+      <span class="flow-pair">
+        <span><span class="flow-swatch" style={`background:${swatch(light)}`} aria-hidden="true"></span><code>{light.replace(/^color\./, '')}</code> <span class="flow-mode">light</span></span>
+        <span><span class="flow-swatch" style={`background:${swatch(dark)}`} aria-hidden="true"></span><code>{dark.replace(/^color\./, '')}</code> <span class="flow-mode">dark</span></span>
+      </span>
+      <span class="flow-note">A step on a ramp. Never used in UI.</span>
+    </li>
+    <li class="flow-node">
+      <span class="flow-tier">Semantic</span>
+      <code>{semPath.join('.')}</code>
+      <span class="flow-note">The role. Picks a different step for light and dark.</span>
+    </li>
+    <li class="flow-node">
+      <span class="flow-tier">Component</span>
+      <code>{comp.join('.')}</code>
+      <span class="flow-note">The decision a component makes, shared by every platform.</span>
+    </li>
+  </ol>
+  <ul class="flow-out" aria-label="Where it lands">
+    {outs.map(([name, code, note]) => <li><strong>{name}</strong><code>{code}</code><span>{note}</span></li>)}
+  </ul>
+  <figcaption id="flow-caption">One token, every platform: change <code>{light.replace(/^color\./, '')}</code> and every primary button follows, in CSS, React, MUI, shadcn/ui and SwiftUI.</figcaption>
+</figure>

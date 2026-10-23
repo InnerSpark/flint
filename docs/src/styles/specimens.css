@@ -122,3 +122,26 @@
 .thumb-name a:focus-visible { outline: none; }
 .thumb:hover .thumb-name a { text-decoration: underline; text-underline-offset: 0.15em; }
 .thumb-lead { margin: 0 var(--space-16) var(--space-16); font-size: var(--font-size-sm); color: var(--color-text-muted); }
+
+/* TokenFlow: one token from ramp to platforms. Arrows are drawn with borders, so they stay decorative. */
+.flow { margin: 0 0 var(--space-32); padding: var(--space-24); background: var(--color-surface-default); border: 1px solid var(--color-border-default); border-radius: var(--radius-card-lg); box-shadow: var(--shadow-card); }
+.flow-chain { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-32); }
+.flow-node { position: relative; margin: 0; display: grid; gap: var(--space-8); align-content: start; padding: var(--space-16); border-radius: var(--radius-card); background: var(--color-surface-subtle); border: 1px solid var(--color-border-default); }
+.flow-node + .flow-node::before { content: ""; position: absolute; top: 50%; inset-inline-start: calc(var(--space-32) * -1 + var(--space-4)); width: calc(var(--space-24)); border-top: 2px solid var(--color-border-control); }
+.flow-node + .flow-node::after { content: ""; position: absolute; top: calc(50% - 5px); inset-inline-start: calc(var(--space-8) * -1 - 2px); border: 5px solid transparent; border-inline-start-color: var(--color-border-control); }
+.flow-tier { font-size: var(--font-size-xs); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-action-primary); }
+.flow-node > code, .flow-pair code { font-size: var(--font-size-sm); font-weight: 700; color: var(--color-text-heading); background: none; padding: 0; }
+.flow-pair { display: grid; gap: var(--space-4); }
+.flow-pair > span { display: flex; align-items: center; gap: var(--space-8); }
+.flow-swatch { width: var(--space-16); height: var(--space-16); border-radius: var(--radius-xs); box-shadow: inset 0 0 0 1px var(--color-border-strong); flex: none; }
+.flow-mode, .flow-note { font-size: var(--font-size-xs); color: var(--color-text-muted); }
+.flow-out { list-style: none; margin: var(--space-24) 0 0; padding: var(--space-24) 0 0; border-top: 2px dashed var(--color-border-strong); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); gap: var(--space-12); }
+.flow-out li { margin: 0; display: grid; gap: var(--space-4); align-content: start; padding: var(--space-12); border-radius: var(--radius-card); border: 1px solid var(--color-border-default); font-size: var(--font-size-xs); color: var(--color-text-muted); }
+.flow-out strong { font-size: var(--font-size-sm); color: var(--color-text-heading); }
+.flow-out code { font-size: var(--font-size-xs); overflow-wrap: anywhere; }
+.flow figcaption { margin-top: var(--space-16); font-size: var(--font-size-sm); color: var(--color-text-default); }
+@media (max-width: 720px) {
+  .flow-chain { grid-template-columns: 1fr; gap: var(--space-24); }
+  .flow-node + .flow-node::before { top: calc(var(--space-24) * -1 + 2px); inset-inline-start: 50%; width: 0; height: var(--space-16); border-top: 0; border-inline-start: 2px solid var(--color-border-control); }
+  .flow-node + .flow-node::after { top: calc(var(--space-8) * -1 - 4px); inset-inline-start: calc(50% - 4px); border-inline-start-color: transparent; border-top-color: var(--color-border-control); }
+}

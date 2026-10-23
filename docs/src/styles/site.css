@@ -118,6 +118,10 @@ code, kbd { font-family: var(--font-mono); font-size: 0.9em; }
 .page.wide.no-toc { grid-template-columns: minmax(0, 1fr); }
 .page-main { min-width: 0; }
 .page-head { margin-bottom: var(--space-32); }
+/* A spot illustration beside the lead on Get started and Guides pages. Decorative, so it goes on small screens. */
+.page-head.has-illo { display: grid; grid-template-columns: minmax(0, 1fr) 11rem; gap: var(--space-32); align-items: end; }
+.page-illo { width: 11rem; }
+@media (max-width: 720px) { .page-head.has-illo { grid-template-columns: 1fr; } .page-illo { display: none; } }
 .crumb { margin: 0 0 var(--space-12); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-action-primary); }
 .page-head h1 {
   margin: 0; color: var(--color-text-heading);
