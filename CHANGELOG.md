@@ -2,6 +2,10 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## Unreleased
+
+- **Illustration page and empty states (ASDS-56).** New Foundations page, `/foundations/illustration/`: the rules (decorative only, no words in the art, tokens only, one warm accent, under 4 KB, calm motion), the color roles in light and dark read straight from `illustration.css`, every illustration shown in both modes with its size, and the empty-state pattern (art, heading, one line, one action). Three new empty-state illustrations: no results, error (no red) and success. The docs build fails if an illustration goes over 4 KB or contains text or an image. Illustration art moved to `docs/src/data/illustrations.js`, and the color roles now resolve per `data-theme` panel, so light and dark can sit side by side.
+
 ## v1.15.0 (2026-10-23)
 - **Docs: concept diagram and spot illustrations (ASDS-56).** A "How one token travels" diagram follows `button.primary.bg` from primitive (light and dark steps) to semantic to component, then out to CSS, Flint React, MUI, shadcn/ui and SwiftUI. It sits on Get started and Token tiers, stacks vertically on phones, and works in both modes. Ten new decorative spot illustrations sit beside the lead on the Get started and Guides pages; they hide under 720px so text comes first.
 
