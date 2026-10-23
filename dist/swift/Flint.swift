@@ -352,6 +352,7 @@ public enum Flint {
     public static let checkboxRadius: CGFloat = 4
     public static let checkboxBorder = dynamic(light: 0x64748b, dark: 0x6e7681)
     public static let checkboxBorderHover = dynamic(light: 0x475569, dark: 0x9aa4af)
+    public static let checkboxBorderError = dynamic(light: 0xdc2626, dark: 0xf87171)
     public static let checkboxCheckedBg = dynamic(light: 0x1550a0, dark: 0x93c5fd)
     public static let checkboxCheckedFg = dynamic(light: 0xffffff, dark: 0x0d1117)
     public static let checkboxDisabled = dynamic(light: 0x64748b, dark: 0x828b95)
@@ -359,6 +360,7 @@ public enum Flint {
     public static let radioSize: CGFloat = 24
     public static let radioBorder = dynamic(light: 0x64748b, dark: 0x6e7681)
     public static let radioBorderHover = dynamic(light: 0x475569, dark: 0x9aa4af)
+    public static let radioBorderError = dynamic(light: 0xdc2626, dark: 0xf87171)
     public static let radioCheckedBg = dynamic(light: 0x1550a0, dark: 0x93c5fd)
     public static let radioCheckedFg = dynamic(light: 0xffffff, dark: 0x0d1117)
     public static let radioDisabled = dynamic(light: 0x64748b, dark: 0x828b95)

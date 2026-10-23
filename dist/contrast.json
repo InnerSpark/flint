@@ -795,6 +795,26 @@
     },
     {
       "mode": "light",
+      "label": "checkbox error edge",
+      "fg": "component.checkbox.borderError",
+      "bg": "surface.default",
+      "ratio": 4.83,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "label": "radio error edge",
+      "fg": "component.radio.borderError",
+      "bg": "surface.default",
+      "ratio": 4.83,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "light",
       "label": "checkbox checked fill",
       "fg": "component.checkbox.checkedBg",
       "bg": "surface.default",
@@ -1969,6 +1989,26 @@
       "fg": "component.checkbox.border",
       "bg": "surface.default",
       "ratio": 3.77,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "checkbox error edge",
+      "fg": "component.checkbox.borderError",
+      "bg": "surface.default",
+      "ratio": 6.25,
+      "threshold": 3,
+      "kind": "control",
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "label": "radio error edge",
+      "fg": "component.radio.borderError",
+      "bg": "surface.default",
+      "ratio": 6.25,
       "threshold": 3,
       "kind": "control",
       "pass": true

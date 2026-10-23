@@ -94,11 +94,11 @@ export const COMPONENTS = {
   radio: {
     name: 'Radio',
     lead: 'Radio buttons pick exactly one option from a short list. Choosing one clears the others, and there is no way back to nothing chosen.',
-    example: `<fieldset class="example-fieldset">
-  <legend>Which site should we scan?</legend>
-  <label class="check-row"><input type="radio" name="scan-scope-__P__" class="flint-radio" checked /> Just this page</label>
-  <label class="check-row"><input type="radio" name="scan-scope-__P__" class="flint-radio" /> The whole site</label>
-  <label class="check-row"><input type="radio" name="scan-scope-__P__" class="flint-radio" disabled /> Pages behind sign-in (needs saved credentials)</label>
+    example: `<fieldset class="flint-fieldset">
+  <legend class="flint-fieldset__legend">Which site should we scan?</legend>
+  <label class="flint-choice"><input type="radio" name="scan-scope-__P__" class="flint-radio" checked /> Just this page</label>
+  <label class="flint-choice"><input type="radio" name="scan-scope-__P__" class="flint-radio" /> The whole site</label>
+  <label class="flint-choice"><input type="radio" name="scan-scope-__P__" class="flint-radio" disabled /> Pages behind sign-in (needs saved credentials)</label>
 </fieldset>`,
     when: [
       'Use radio buttons when exactly one option must be picked and people should see all the choices at once.',
@@ -117,7 +117,7 @@ export const COMPONENTS = {
       ['Use one radio group per question.', 'Reuse a name across two questions, which silently links them.'],
     ],
     code: {
-      css: { label: 'HTML', code: '<fieldset>\n  <legend>Which site should we scan?</legend>\n  <label><input type="radio" name="scan-scope" class="flint-radio" checked /> Just this page</label>\n  <label><input type="radio" name="scan-scope" class="flint-radio" /> The whole site</label>\n</fieldset>', rules: cssFor('flint-radio') },
+      css: { label: 'HTML', code: '<fieldset class="flint-fieldset">\n  <legend class="flint-fieldset__legend">Which site should we scan?</legend>\n  <label class="flint-choice"><input type="radio" name="scan-scope" class="flint-radio" checked /> Just this page</label>\n  <label class="flint-choice"><input type="radio" name="scan-scope" class="flint-radio" /> The whole site</label>\n</fieldset>', rules: [cssFor('flint-radio'), cssFor('flint-choice'), cssFor('flint-fieldset')].join('\n') },
       mui: `import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -205,9 +205,18 @@ import FormLabel from '@mui/material/FormLabel';
   checkbox: {
     name: 'Checkbox',
     lead: 'Checkboxes let people pick any number of options from a list, or turn one option on before they submit.',
-    example: `<label class="check-row"><input type="checkbox" class="flint-check" checked /> Bring the awning lights</label>
-<label class="check-row"><input type="checkbox" class="flint-check" /> Pack the Starlink</label>
-<label class="check-row"><input type="checkbox" class="flint-check" disabled /> Fill the propane (done at the shop)</label>`,
+    example: `<fieldset class="flint-fieldset">
+  <legend class="flint-fieldset__legend">Packing list</legend>
+  <label class="flint-choice"><input type="checkbox" class="flint-check" data-indeterminate /> All camp gear (some packed)</label>
+  <label class="flint-choice"><input type="checkbox" class="flint-check" checked /> Bring the awning lights</label>
+  <label class="flint-choice"><input type="checkbox" class="flint-check" /> Pack the Starlink</label>
+  <label class="flint-choice"><input type="checkbox" class="flint-check" disabled /> Fill the propane (done at the shop)</label>
+</fieldset>
+<fieldset class="flint-fieldset" aria-describedby="rules-error-__P__">
+  <legend class="flint-fieldset__legend">Campground rules</legend>
+  <label class="flint-choice"><input type="checkbox" class="flint-check" aria-invalid="true" /> I read the quiet hours and fire rules</label>
+  <span class="flint-field__error" id="rules-error-__P__">${errorIcon}Check this box to book the site.</span>
+</fieldset>`,
     when: [
       'Use checkboxes when people can pick several options, or none.',
       'Use radio buttons when exactly one option must be picked.',
@@ -217,6 +226,8 @@ import FormLabel from '@mui/material/FormLabel';
       ['Unchecked', 'The option is off.'],
       ['Checked', 'The option is on. The fill and the mark both change, so the state is not color alone.'],
       ['Disabled', 'The option can\'t be changed right now. Say why nearby.'],
+      ['Indeterminate', 'Some, not all, of the options under it are on. A bar instead of a tick. Set it in script: el.indeterminate = true.'],
+      ['Error', 'aria-invalid="true" turns the edge red, and a message under the group says how to fix it.'],
     ],
     guidance: [
       ['Make the whole label clickable, not just the box.', 'Leave a 16px box as the only target.'],
@@ -224,7 +235,7 @@ import FormLabel from '@mui/material/FormLabel';
       ['Write labels as positive statements: "Bring the awning lights".', 'Use negatives like "Don\'t skip the lights", which make the checked state confusing.'],
     ],
     code: {
-      css: { label: 'HTML', code: '<fieldset>\n  <legend>Packing list</legend>\n  <label><input type="checkbox" class="flint-check" checked /> Bring the awning lights</label>\n  <label><input type="checkbox" class="flint-check" /> Pack the Starlink</label>\n</fieldset>', rules: cssFor('flint-check') },
+      css: { label: 'HTML', code: '<fieldset class="flint-fieldset">\n  <legend class="flint-fieldset__legend">Packing list</legend>\n  <label class="flint-choice"><input type="checkbox" class="flint-check" id="all-gear" /> All camp gear</label>\n  <label class="flint-choice"><input type="checkbox" class="flint-check" checked /> Bring the awning lights</label>\n  <label class="flint-choice"><input type="checkbox" class="flint-check" /> Pack the Starlink</label>\n</fieldset>\n\n<script>\n  // Some, not all, are checked: show the parent as mixed. There is no HTML attribute for this.\n  document.getElementById(\'all-gear\').indeterminate = true;\n</script>\n\n<!-- Error on a required checkbox: say it in words, tie it to the group -->\n<fieldset class="flint-fieldset" aria-describedby="rules-error">\n  <legend class="flint-fieldset__legend">Campground rules</legend>\n  <label class="flint-choice"><input type="checkbox" class="flint-check" aria-invalid="true" /> I read the quiet hours and fire rules</label>\n  <span class="flint-field__error" id="rules-error">Check this box to book the site.</span>\n</fieldset>', rules: [cssFor('flint-check'), cssFor('flint-choice'), cssFor('flint-fieldset')].join('\n') },
       mui: `import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
@@ -239,6 +250,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
       'Use a native checkbox, or role="checkbox" with aria-checked if you must build one.',
       'Tie the label to the input, so a screen reader reads it and a click on it toggles the box.',
       'Wrap a group in a fieldset with a legend, so the question is read before the options.',
+      'An indeterminate checkbox is announced as "mixed". Clicking it should check every option under it.',
+      'For a group error, point aria-describedby on the fieldset at the message, so it is read with the question.',
     ],
     target: 'The box is 24px (checkbox.size, the minimum target), and the label extends the clickable area.',
   },

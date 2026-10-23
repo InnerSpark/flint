@@ -71,6 +71,15 @@
 .flint-field__error { display: flex; align-items: flex-start; gap: var(--space-4); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--field-error-fg); }
 .flint-field__error svg { width: var(--icon-size-sm); height: var(--icon-size-sm); flex: none; }
 
+/* Choice: a checkbox or radio with its label. The label wraps the input, so the whole row is the
+   click target, at least 24px tall. */
+.flint-choice { display: inline-flex; align-items: center; gap: var(--space-8); min-height: var(--target-min); font-size: var(--font-size-sm); color: var(--color-text-default); cursor: pointer; }
+.flint-choice:has(:disabled) { cursor: not-allowed; }
+/* Group: checkboxes or radios that answer one question. The legend asks it; a group error goes in a
+   .flint-field__error inside the fieldset, tied to it with aria-describedby on the fieldset. */
+.flint-fieldset { display: grid; gap: var(--gap-sm); min-width: 0; margin: 0; padding: 0; border: 0; }
+.flint-fieldset__legend { padding: 0; margin-bottom: var(--space-4); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--field-label-fg); }
+
 .flint-input {
   box-sizing: border-box; width: 100%; height: var(--input-height); padding: 0 var(--space-12);
   border: 1px solid var(--input-border); border-radius: var(--input-radius);
@@ -96,12 +105,16 @@ textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); 
   border: 2px solid var(--checkbox-border); border-radius: var(--checkbox-radius); background: var(--input-bg);
 }
 .flint-check::after { content: ""; width: 12px; height: 6px; border: solid transparent; border-width: 0 0 3px 3px; transform: translateY(-2px) rotate(-45deg); }
-.flint-check:hover { border-color: var(--input-border-hover); }
-.flint-check:checked { background: var(--checkbox-checked-bg); border-color: var(--checkbox-checked-bg); }
+.flint-check:hover { border-color: var(--checkbox-border-hover); }
+.flint-check:checked, .flint-check:indeterminate { background: var(--checkbox-checked-bg); border-color: var(--checkbox-checked-bg); }
 .flint-check:checked::after { border-color: var(--checkbox-checked-fg); }
+/* Indeterminate ("some of these"): set in script with el.indeterminate = true; there is no HTML
+   attribute. A bar instead of a tick, and screen readers announce it as mixed. */
+.flint-check:indeterminate::after { width: 12px; height: 0; border-width: 0 0 3px 0; border-color: var(--checkbox-checked-fg); transform: none; }
+.flint-check[aria-invalid="true"] { border-color: var(--checkbox-border-error); }
 .flint-check:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
-.flint-check:disabled { border-color: var(--color-border-disabled); background: var(--color-action-disabled-bg); cursor: not-allowed; }
-.flint-check:disabled:checked::after { border-color: var(--color-action-disabled); }
+.flint-check:disabled { border-color: var(--color-border-disabled); background: var(--checkbox-disabled-bg); cursor: not-allowed; }
+.flint-check:disabled:checked::after, .flint-check:disabled:indeterminate::after { border-color: var(--checkbox-disabled); }
 
 /* Radio: same control tokens as the checkbox, but round and never multi-select. The dot is
    drawn with a box-shadow inset so it scales with the box and needs no extra element. */
@@ -114,6 +127,7 @@ textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); 
 .flint-radio:hover { border-color: var(--radio-border-hover); }
 .flint-radio:checked { background: var(--radio-checked-bg); border-color: var(--radio-checked-bg); }
 .flint-radio:checked::after { background: var(--radio-checked-fg); }
+.flint-radio[aria-invalid="true"] { border-color: var(--radio-border-error); }
 .flint-radio:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
 .flint-radio:disabled { border-color: var(--radio-disabled); background: var(--radio-disabled-bg); cursor: not-allowed; }
 .flint-radio:disabled:checked::after { background: var(--radio-disabled); }

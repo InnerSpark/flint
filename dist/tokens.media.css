@@ -415,6 +415,7 @@
   --checkbox-radius: var(--radius-xs);
   --checkbox-border: var(--color-border-control);
   --checkbox-border-hover: var(--color-border-control-hover);
+  --checkbox-border-error: var(--color-border-error);
   --checkbox-checked-bg: var(--color-action-primary);
   --checkbox-checked-fg: var(--color-action-on-primary);
   --checkbox-disabled: var(--color-action-disabled);
@@ -422,6 +423,7 @@
   --radio-size: var(--target-min);
   --radio-border: var(--color-border-control);
   --radio-border-hover: var(--color-border-control-hover);
+  --radio-border-error: var(--color-border-error);
   --radio-checked-bg: var(--color-action-primary);
   --radio-checked-fg: var(--color-action-on-primary);
   --radio-disabled: var(--color-action-disabled);

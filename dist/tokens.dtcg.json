@@ -1707,6 +1707,10 @@
           "$type": "color",
           "$value": "{semantic.light.border.controlHover}"
         },
+        "borderError": {
+          "$type": "color",
+          "$value": "{semantic.light.border.error}"
+        },
         "checkedBg": {
           "$type": "color",
           "$value": "{semantic.light.action.primary}"
@@ -1736,6 +1740,10 @@
         "borderHover": {
           "$type": "color",
           "$value": "{semantic.light.border.controlHover}"
+        },
+        "borderError": {
+          "$type": "color",
+          "$value": "{semantic.light.border.error}"
         },
         "checkedBg": {
           "$type": "color",
@@ -2187,6 +2195,10 @@
           "$type": "color",
           "$value": "{semantic.dark.border.controlHover}"
         },
+        "borderError": {
+          "$type": "color",
+          "$value": "{semantic.dark.border.error}"
+        },
         "checkedBg": {
           "$type": "color",
           "$value": "{semantic.dark.action.primary}"
@@ -2216,6 +2228,10 @@
         "borderHover": {
           "$type": "color",
           "$value": "{semantic.dark.border.controlHover}"
+        },
+        "borderError": {
+          "$type": "color",
+          "$value": "{semantic.dark.border.error}"
         },
         "checkedBg": {
           "$type": "color",

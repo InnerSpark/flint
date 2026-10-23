@@ -115,6 +115,8 @@ const PAIRS = [
   ["input focus edge", "component.input.borderFocus", "component.input.bg", 3.0, "focus"],
   ["input error edge", "component.input.borderError", "component.input.bg", 3.0, "control"],
   ["checkbox edge", "component.checkbox.border", "surface.default", 3.0, "control"],
+  ["checkbox error edge", "component.checkbox.borderError", "surface.default", 3.0, "control"],
+  ["radio error edge", "component.radio.borderError", "surface.default", 3.0, "control"],
   ["checkbox checked fill", "component.checkbox.checkedBg", "surface.default", 3.0, "control"],
   ["checkbox check mark", "component.checkbox.checkedFg", "component.checkbox.checkedBg", 3.0, "ui"],
   ["radio edge", "component.radio.border", "surface.default", 3.0, "control"],

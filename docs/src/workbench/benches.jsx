@@ -8,6 +8,8 @@ import MuiLink from '@mui/material/Link';
 import { Button as ShadButton } from './ui/button';
 import { Checkbox as ShadCheckbox } from './ui/checkbox';
 import { Input as ShadInput } from './ui/input';
+import { RadioGroup, RadioGroupItem } from './ui/radio';
+import MuiRadio from '@mui/material/Radio';
 
 export const IMPLEMENTATIONS = ['MUI', 'shadcn', 'Plain CSS'];
 
@@ -70,20 +72,24 @@ const checkbox = {
     { label: 'Checked', cls: '', checked: true },
     { label: 'Hover', cls: 'st-hover' },
     { label: 'Focus', cls: 'st-focus', focus: true, note: 'keyboard focus' },
+    { label: 'Indeterminate', mixed: true, note: 'some checked' },
+    { label: 'Error', error: true, note: 'aria-invalid' },
     { label: 'Disabled', disabled: true },
     { label: 'Disabled, checked', disabled: true, checked: true },
     { label: 'Live', cls: '', note: 'try it' },
   ],
   render(impl, s) {
+    const invalid = s.error ? 'true' : undefined;
     const name = `Bring the awning lights, ${impl}, ${s.label.toLowerCase()} state`;
     const text = <span>Bring the awning lights</span>;
     if (impl === 'MUI') {
       // MUI shows keyboard focus with its Mui-focusVisible class on the root.
-      return <label className="tb-cell"><MuiCheckbox defaultChecked={s.checked} disabled={s.disabled} className={`${s.cls || ''} ${s.focus ? 'Mui-focusVisible' : ''}`}
-        inputProps={{ 'aria-label': name, className: s.focus ? 'st-focus' : undefined }} />{text}</label>;
+      return <label className="tb-cell"><MuiCheckbox defaultChecked={s.checked} indeterminate={!!s.mixed} disabled={s.disabled} className={`${s.cls || ''} ${s.focus ? 'Mui-focusVisible' : ''}`}
+        inputProps={{ 'aria-label': name, 'aria-invalid': invalid, className: s.focus ? 'st-focus' : undefined }} />{text}</label>;
     }
-    if (impl === 'shadcn') return <label className="tb-cell"><ShadCheckbox defaultChecked={s.checked} disabled={s.disabled} className={s.cls} aria-label={name} />{text}</label>;
-    return <label className="tb-cell"><input type="checkbox" className={`flint-check ${s.cls || ''}`} defaultChecked={s.checked} disabled={s.disabled} aria-label={name} />{text}</label>;
+    if (impl === 'shadcn') return <label className="tb-cell"><ShadCheckbox defaultChecked={s.mixed ? 'indeterminate' : s.checked} disabled={s.disabled} className={s.cls} aria-label={name} aria-invalid={invalid} />{text}</label>;
+    return <label className="tb-cell"><input type="checkbox" className={`flint-check ${s.cls || ''}`} defaultChecked={s.checked} disabled={s.disabled} aria-label={name} aria-invalid={invalid}
+      ref={(el) => { if (el) el.indeterminate = !!s.mixed; }} />{text}</label>;
   },
 };
 
@@ -126,6 +132,35 @@ const field = {
   },
 };
 
+const radio = {
+  states: [
+    { label: 'Unselected', cls: '' },
+    { label: 'Selected', cls: '', checked: true },
+    { label: 'Hover', cls: 'st-hover' },
+    { label: 'Focus', cls: 'st-focus', focus: true, note: 'keyboard focus' },
+    { label: 'Error', error: true, note: 'aria-invalid' },
+    { label: 'Disabled', disabled: true },
+    { label: 'Disabled, selected', disabled: true, checked: true },
+    { label: 'Live', cls: '', note: 'try it' },
+  ],
+  render(impl, s) {
+    const key = `${impl}-${s.label}`.replace(/\W+/g, '-').toLowerCase();
+    const name = `Just this page, ${impl}, ${s.label.toLowerCase()} state`;
+    const invalid = s.error ? 'true' : undefined;
+    const text = <span>Just this page</span>;
+    if (impl === 'MUI') {
+      return <label className="tb-cell"><MuiRadio name={key} value="page" defaultChecked={s.checked} disabled={s.disabled} className={`${s.cls || ''} ${s.focus ? 'Mui-focusVisible' : ''}`}
+        inputProps={{ 'aria-label': name, 'aria-invalid': invalid, className: s.focus ? 'st-focus' : undefined }} />{text}</label>;
+    }
+    if (impl === 'shadcn') {
+      return <RadioGroup name={key} defaultValue={s.checked ? 'page' : undefined} aria-label={`Scan scope, ${impl}, ${s.label.toLowerCase()} state`}>
+        <label className="tb-cell"><RadioGroupItem value="page" disabled={s.disabled} className={s.cls} aria-label={name} aria-invalid={invalid} />{text}</label>
+      </RadioGroup>;
+    }
+    return <label className="tb-cell"><input type="radio" name={key} className={`flint-radio ${s.cls || ''}`} defaultChecked={s.checked} disabled={s.disabled} aria-label={name} aria-invalid={invalid} />{text}</label>;
+  },
+};
+
 export const BENCHES = {
   'button/primary': button('primary'),
   'button/secondary': button('secondary'),
@@ -134,5 +169,6 @@ export const BENCHES = {
   'input/text': input,
   'checkbox/default': checkbox,
   'link/inline': link,
+  'radio/default': radio,
   'field/default': field,
 };

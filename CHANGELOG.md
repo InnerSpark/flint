@@ -4,6 +4,7 @@ Flint tokens follow semver, independent of the consuming apps.
 
 ## Unreleased
 
+- **Checkbox (ASDS-63) and Radio (ASDS-64).** New `checkbox.borderError` and `radio.borderError` (4.83:1 light, 6.25:1 dark) and `aria-invalid` styles for both. Checkbox gains an indeterminate state (a bar, announced as mixed), and its hover and disabled styles now read the checkbox tokens instead of the input and semantic ones. New `.flint-choice` (a label row, at least 24px tall) and `.flint-fieldset` / `.flint-fieldset__legend` for groups, replacing the docs site's own `.check-row` and `.example-fieldset`. The shadcn checkbox draws the indeterminate bar and the error edge. Radio gets a workbench bench, which adds `@radix-ui/react-radio-group` to the docs dependencies (run `npm ci` in docs/).
 - **Docs reading order.** The side nav now follows the page content in the DOM, so keyboard and screen reader users get header, content, then the side nav. CSS grid still draws it on the left. `verify.mjs` checks the DOM order on every page and walks the Tab order (header, main, side nav, footer) on a component page.
 
 ## v1.14.0 (2026-10-23)

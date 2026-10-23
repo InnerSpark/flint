@@ -223,6 +223,9 @@ const jsonLd = {
         }
       }
 
+      // Examples mark a checkbox as indeterminate with data-indeterminate (there is no HTML attribute for it).
+      document.querySelectorAll('input[data-indeterminate]').forEach(function (el) { el.indeterminate = true; });
+
       // Copy buttons on code blocks announce the result through a polite live region.
       var status = document.getElementById('copy-status');
       document.addEventListener('click', function (e) {

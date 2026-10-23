@@ -10,13 +10,19 @@ export const WORKBENCH = {
     name: 'Checkbox',
     lead: 'Every state as MUI, shadcn/ui and plain CSS. All three read the checkbox tokens: 24px box, edge, checked fill and mark.',
     benches: [['checkbox', 'Checkbox', 'checkbox/default']],
-    gap: 'The MUI checkbox shows no focus ring on keyboard focus and draws an 18px box instead of 24px (ASDS-44).',
+    gap: 'The MUI checkbox shows no focus ring on keyboard focus and draws an 18px box instead of 24px (ASDS-44). It also ignores aria-invalid, so the Error row looks like Unchecked.',
   },
   field: {
     name: 'Field',
     lead: 'Label, helper, required and error around an input, as MUI, shadcn/ui and plain CSS. All three read the field tokens.',
     benches: [['field', 'Field', 'field/default']],
     gap: 'MUI TextField marks required with an asterisk only, floats the label inside the input instead of above it, and draws a disabled field with the same edge as an enabled one.',
+  },
+  radio: {
+    name: 'Radio',
+    lead: 'Every state as MUI, shadcn/ui and plain CSS. All three read the radio tokens: 24px control, edge, checked fill and dot.',
+    benches: [['radio', 'Radio', 'radio/default']],
+    gap: 'The MUI radio draws a smaller control than Flint\'s 24px, and ignores aria-invalid, so the Error row looks like Unselected.',
   },
   link: {
     name: 'Link',
