@@ -3,7 +3,8 @@
    Light uses the mark's own steps; dark uses the inverse mark's steps. The spark is the one warm
    accent (chart.2), and red never appears. Gap: these roles belong in tokens.json as an
    illustration component group; until then they live here. */
-:root {
+/* Declared on every data-theme element too, so a light or dark panel inside the page resolves its own roles. */
+:root, [data-theme] {
   --illo-lit: var(--color-blue-400);
   --illo-face: var(--color-blue-500);
   --illo-shade: var(--color-blue-600);
@@ -38,6 +39,7 @@
 .illo .i-deep { fill: var(--illo-deep); }
 .illo .i-spark { fill: var(--illo-spark); }
 .illo .i-spark-stroke { fill: none; stroke: var(--illo-spark); stroke-width: 2; stroke-linecap: round; }
+.illo .i-card-stroke { fill: none; stroke: var(--illo-card); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
 .illo .i-action { fill: var(--illo-action); }
 .illo .i-focus { fill: none; stroke: var(--illo-focus); stroke-width: 2; }
 

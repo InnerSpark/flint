@@ -1,0 +1,132 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import Illustration from '../../../components/Illustration.astro';
+import Guidance from '../../../components/Guidance.astro';
+import Code from '../../../components/Code.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import { art } from '../../../data/illustrations.js';
+import css from '../../../styles/illustration.css?raw';
+import '../../../styles/specimens.css';
+
+const toc = [
+  { id: 'rules', text: 'Rules' },
+  { id: 'roles', text: 'Color roles' },
+  { id: 'set', text: 'The set' },
+  { id: 'empty-states', text: 'Empty states' },
+  { id: 'use', text: 'Using one' },
+];
+
+// Every illustration stays small and wordless. The build stops if one breaks either rule.
+const BUDGET = 4096;
+for (const [name, a] of Object.entries(art)) {
+  const bytes = new TextEncoder().encode(a.body).length;
+  if (bytes > BUDGET) throw new Error(`Illustration "${name}" is ${bytes} bytes, over the ${BUDGET} byte budget`);
+  if (/<text|<image/.test(a.body)) throw new Error(`Illustration "${name}" has text or a raster image in it`);
+}
+const size = (name) => `${(new TextEncoder().encode(art[name].body).length / 1024).toFixed(1)} KB`;
+
+// Color roles, read from illustration.css so this table can't drift from the art.
+const block = (sel) => {
+  const m = css.match(new RegExp(`${sel.replace(/[[\]"]/g, '\\$&')}\\s*\\{([^}]*)\\}`));
+  return Object.fromEntries([...(m ? m[1] : '').matchAll(/--illo-([a-z]+):\s*var\((--[a-z0-9-]+)\)/g)].map((x) => [x[1], x[2]]));
+};
+const light = block(':root, [data-theme]');
+const dark = { ...light, ...block('[data-theme="dark"]') };
+const roleUse = {
+  lit: 'Facet facing the light', face: 'Main facet', shade: 'Facet turning away', mid: 'Lower facet', deep: 'Facet in shadow',
+  spark: 'The one warm accent', ground: 'Backdrop', card: 'Cards and panels in the scene', line: 'Edges and outlines',
+  ink: 'Stand-in text lines', action: 'Stand-in buttons', focus: 'Stand-in focus rings',
+};
+
+const groups = [
+  { title: 'Principles', names: ['looks', 'behaves', 'talks'], where: 'Principles page and home' },
+  { title: 'Get started and guides', names: ['start', 'web', 'react', 'theme', 'layers', 'phone', 'figma', 'access', 'checks', 'rules'], where: 'Beside the page lead' },
+  { title: 'Empty states', names: ['empty', 'error', 'success'], where: 'No results, something failed, task done' },
+  { title: 'Large', names: ['tiers', 'hero'], where: 'Home and Principles heroes' },
+];
+
+const states = [
+  { name: 'empty', title: 'No pages match', body: 'Try a shorter search, or clear the filters.', action: 'Clear filters', variant: 'secondary' },
+  { name: 'error', title: "We couldn't load your reports", body: 'Check your connection, then try again. Your reports are safe.', action: 'Try again', variant: 'primary' },
+  { name: 'success', title: 'Scan complete', body: 'No new issues on 12 pages since the last scan.', action: 'View report', variant: 'primary' },
+];
+
+const usage = `---
+import Illustration from '../components/Illustration.astro';
+---
+<!-- Decorative: the component sets aria-hidden. The words around it carry the meaning. -->
+<div class="empty-state">
+  <Illustration name="empty" />
+  <h2>No pages match</h2>
+  <p>Try a shorter search, or clear the filters.</p>
+  <button type="button" class="flint-btn flint-btn--secondary">Clear filters</button>
+</div>`;
+---
+<Docs title="Illustration" crumb="Foundations" lead="Small scenes built from the Flint mark: faceted stone, one spark, clean shapes. Every color is a token, so the art follows light and dark." toc={toc} wide illo="start">
+  <h2 id="rules">Rules</h2>
+  <ul>
+    <li><strong>Decorative only.</strong> Art is hidden from screen readers. The heading and text next to it say what happened, so nothing is lost without it.</li>
+    <li><strong>No words in the art.</strong> Text in a picture can't be translated, resized or read aloud.</li>
+    <li><strong>Tokens only.</strong> Every fill and stroke is a Flint variable. No hex in the SVG.</li>
+    <li><strong>One warm accent.</strong> The spark is the only color outside the blue ramp. Red never appears, because red means an error.</li>
+    <li><strong>Small.</strong> Inline SVG, under 4 KB each, no images. The build fails if one goes over.</li>
+    <li><strong>Calm motion.</strong> The spark twinkles twice on load, then stops. Off under Reduce Motion.</li>
+  </ul>
+  <Guidance doText="Put the art beside a clear heading and one next step, like an empty search with a Clear filters button." dontText="Use art to carry the message, like a red broken plug with no text. Some people can't see it, and screen readers skip it." />
+
+  <h2 id="roles">Color roles</h2>
+  <p>The art uses {Object.keys(light).length} roles. Each points at a Flint token, with a different step in dark mode so the stone stays lit from the top right.</p>
+  <TableWrap label="Illustration color roles">
+    <table class="data illo-roles">
+      <thead><tr><th scope="col">Role</th><th scope="col">Used for</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+        {Object.keys(light).map((k) => (
+          <tr>
+            <th scope="row"><code>.i-{k}</code></th>
+            <td>{roleUse[k] || ''}</td>
+            <td data-theme="light" class="illo-role-cell"><span class="illo-chip" style={`background:var(${light[k]})`} aria-hidden="true"></span><code>{light[k]}</code></td>
+            <td data-theme="dark" class="illo-role-cell"><span class="illo-chip" style={`background:var(${dark[k]})`} aria-hidden="true"></span><code>{dark[k]}</code></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </TableWrap>
+
+  <h2 id="set">The set</h2>
+  <p>Every illustration in light and dark, with its size.</p>
+  {groups.map((g) => (
+    <section class="illo-group" aria-labelledby={`g-${g.names[0]}`}>
+      <h3 id={`g-${g.names[0]}`}>{g.title}</h3>
+      <p class="muted">{g.where}</p>
+      <ul class={`illo-gallery${g.title === 'Large' ? ' illo-gallery--wide' : ''}`}>
+        {g.names.map((n) => (
+          <li class="illo-item">
+            <div class="illo-pair">
+              <div data-theme="light" class="illo-half"><Illustration name={n} /></div>
+              <div data-theme="dark" class="illo-half"><Illustration name={n} /></div>
+            </div>
+            <p class="illo-meta"><code>{n}</code><span>{size(n)}</span></p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+
+  <h2 id="empty-states">Empty states</h2>
+  <p>An empty state has four parts, in this order: the art, a heading that says what happened, one line on what to do, and one action. The art is the only part you can drop.</p>
+  <ul class="illo-states">
+    {states.map((s) => (
+      <li class="illo-state">
+        <div class="illo-state-art"><Illustration name={s.name} /></div>
+        <h3>{s.title}</h3>
+        <p>{s.body}</p>
+        <button type="button" class={`flint-btn flint-btn--${s.variant}`}>{s.action}</button>
+      </li>
+    ))}
+  </ul>
+  <Guidance doText="Say what happened in the heading and give one way forward." dontText="Show the art alone, or stack several actions under it." />
+
+  <h2 id="use">Using one</h2>
+  <p>In the docs, <code>&lt;Illustration name="…" /&gt;</code> renders the art with <code>aria-hidden</code> already set. Load <code>illustration.css</code> once for the color roles. Packaging the set for other apps waits on how Flint ships assets (ASDS-22).</p>
+  <Code label="Astro" code={usage} />
+</Docs>
