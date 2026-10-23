@@ -2,17 +2,18 @@
 import Docs from '../../../layouts/Docs.astro';
 import TableWrap from '../../../components/TableWrap.astro';
 import Code from '../../../components/Code.astro';
+import Guidance from '../../../components/Guidance.astro';
 import { resolved } from '../../../lib/flint.js';
 import '../../../styles/specimens.css';
 const easing = Object.entries(resolved.motion.easing);
 const durations = Object.entries(resolved.motion.duration);
-const easeUse = { standard: 'Moving between states', entrance: 'Things arriving', exit: 'Things leaving' };
+const easeUse = { standard: 'Moving between states', entrance: 'Things arriving', exit: 'Things leaving', emphasis: 'Small things arriving, with a little overshoot' };
 // The curve of a cubic-bezier token, drawn in a 100 by 100 box (y up).
 const curve = (v) => {
   const [x1, y1, x2, y2] = v.match(/[\d.]+/g).map(Number);
   return { d: `M0 100 C${x1 * 100} ${100 - y1 * 100} ${x2 * 100} ${100 - y2 * 100} 100 0`, h: [[0, 100, x1 * 100, 100 - y1 * 100], [100, 0, x2 * 100, 100 - y2 * 100]] };
 };
-const toc = [{ id: 'easing', text: 'Easing' }, { id: 'duration', text: 'Duration' }, { id: 'reduced', text: 'Reduced motion' }];
+const toc = [{ id: 'easing', text: 'Easing' }, { id: 'emphasis', text: 'Emphasis' }, { id: 'duration', text: 'Duration' }, { id: 'reduced', text: 'Reduced motion' }];
 const cssCode = `.drawer {
   transition: transform var(--duration-base) var(--ease-entrance);
 }
@@ -32,7 +33,7 @@ const cssCode = `.drawer {
         const c = curve(v);
         return (
           <li class="ease-item">
-            <svg class="ease-curve" viewBox="-6 -6 112 112" aria-hidden="true" focusable="false">
+            <svg class="ease-curve" viewBox="-6 -26 112 132" aria-hidden="true" focusable="false">
               <rect x="0" y="0" width="100" height="100" class="ease-box" />
               {c.h.map(([a, b, x, y]) => <line x1={a} y1={b} x2={x} y2={y} class="ease-handle" />)}
               <path d={c.d} class="ease-path" />
@@ -45,6 +46,17 @@ const cssCode = `.drawer {
       })}
     </ul>
   </div>
+
+  <h2 id="emphasis">Emphasis</h2>
+  <p><code>--ease-emphasis</code> runs about 10% past the end, then settles. One small overshoot, never a bounce. It is for small things arriving, so the eye catches them: a toast, a success check, a count changing, a switch thumb landing.</p>
+  <div class="spec-sheet motion-demo" data-motion>
+    <button type="button" class="flint-btn flint-btn--secondary flint-btn--sm" data-play>Play</button>
+    <div class="toast-stage" aria-hidden="true">
+      <div class="flint-alert flint-alert--success toast-demo"><svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.5 10.5l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><p class="flint-alert__title">Report saved</p><p class="flint-alert__body">Your VPAT draft is in Reports.</p></div>
+    </div>
+    <label class="flint-choice"><input type="checkbox" role="switch" class="flint-switch" /> Try the switch: its thumb lands with emphasis</label>
+  </div>
+  <Guidance doText="Use emphasis on small things arriving: a toast, a check, a badge count, a switch thumb." dontText="Use it on dialogs, drawers, menus or page transitions. Overshoot on a large surface is what makes people queasy. The build fails if you try." />
 
   <h2 id="duration">Duration</h2>
   <p>The same move at each duration, on <code>--ease-standard</code>. Small things use fast; things that travel far use slow.</p>

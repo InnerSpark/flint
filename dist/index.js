@@ -316,7 +316,8 @@ const tokens = {
     "easing": {
       "standard": "cubic-bezier(0.2, 0, 0, 1)",
       "entrance": "cubic-bezier(0, 0, 0.2, 1)",
-      "exit": "cubic-bezier(0.4, 0, 1, 1)"
+      "exit": "cubic-bezier(0.4, 0, 1, 1)",
+      "emphasis": "cubic-bezier(0.34, 1.4, 0.64, 1)"
     }
   },
   "zIndex": {

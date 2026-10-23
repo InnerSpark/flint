@@ -4,6 +4,8 @@
  *   - a var(--x) that tokens.css does not define: a typo or a token that was renamed
  *   - a px value outside border widths, pseudo-element glyph geometry (check marks, radio dots) and the
  *     .flint-sr-only utility (its 1px box is the standard visually-hidden pattern)
+ *   - --ease-emphasis (the overshoot) on anything large: dialogs, drawers, sheets, menus, popovers,
+ *     overlays, pages. Overshoot on a big surface is the motion most likely to make people queasy.
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -30,11 +32,13 @@ function rules(text) {
 }
 
 const problems = [];
+const LARGE = /dialog|drawer|sheet|modal|menu|popover|overlay|scrim|page|layout/i;
 for (const [selector, body] of rules(css)) {
   const sel = selector.trim();
   const glyph = /::(after|before)/.test(sel) || sel === '.flint-sr-only';
   for (const decl of body.split(';').map((d) => d.trim()).filter(Boolean)) {
     const prop = decl.split(':')[0].trim();
+    if (decl.includes('--ease-emphasis') && LARGE.test(sel)) problems.push(`${sel}: --ease-emphasis is for small things arriving, not "${sel}"`);
     if (/#[0-9a-f]{3,8}\b|\b(rgb|hsl)a?\(/i.test(decl)) problems.push(`${sel}: color literal in "${decl}"`);
     for (const [, v] of decl.matchAll(/var\((--[a-z0-9-]+)/g)) if (!defined.has(v)) problems.push(`${sel}: ${v} is not defined in tokens.css`);
     if (/\b\d+(\.\d+)?px\b/.test(decl) && !glyph && !/^border(-(top|right|bottom|left|block|inline)(-(start|end))?)?(-width)?$/.test(prop)) problems.push(`${sel}: px literal in "${decl}" (use a token)`);

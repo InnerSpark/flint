@@ -496,13 +496,14 @@ public enum Flint {
     }
 
     public enum Easing: Sendable {
-      case standard, entrance, exit
+      case standard, entrance, exit, emphasis
 
       var controlPoints: (Double, Double, Double, Double) {
         switch self {
         case .standard: return (0.2, 0, 0, 1)
         case .entrance: return (0, 0, 0.2, 1)
         case .exit: return (0.4, 0, 1, 1)
+        case .emphasis: return (0.34, 1.4, 0.64, 1)
         }
       }
     }
