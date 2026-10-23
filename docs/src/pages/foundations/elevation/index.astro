@@ -2,19 +2,33 @@
 import Docs from '../../../layouts/Docs.astro';
 import TableWrap from '../../../components/TableWrap.astro';
 import { resolved } from '../../../lib/flint.js';
+import '../../../styles/specimens.css';
 const toc = [{ id: 'shadows', text: 'Shadows' }, { id: 'layers', text: 'Layers' }];
 const use = { card: 'Cards and panels', popover: 'Menus and popovers', dialog: 'Dialogs and drawers', raised: 'Raised, floating elements' };
+const layers = Object.entries(resolved.zIndex).reverse();
+const layerUse = { base: 'The page', dropdown: 'Dropdown menus', sticky: 'Sticky headers', overlay: 'Scrims', modal: 'Dialogs', popover: 'Popovers over dialogs', toast: 'Toasts, always on top' };
 ---
-<Docs title="Elevation" crumb="Foundations" lead="Four shadow levels, each with a dark-mode version, and a fixed stacking order." toc={toc}>
+<Docs title="Elevation" crumb="Foundations" lead="Four shadow levels, each with a dark-mode version, and a fixed stacking order." toc={toc} wide>
   <h2 id="shadows">Shadows</h2>
-  <p>The same variable name switches to its dark version under <code>data-theme="dark"</code>.</p>
-  <TableWrap label="Shadows">
-    <table class="data">
-      <thead><tr><th scope="col">Token</th><th scope="col">Use</th><th scope="col">Sample</th></tr></thead>
-      <tbody>{Object.keys(resolved.shadow).map((k) => <tr><th scope="row"><code>--shadow-{k}</code></th><td>{use[k] || ''}</td><td><div style={`width:96px;height:48px;border-radius:var(--radius-card);background:var(--color-surface-default);box-shadow:var(--shadow-${k})`}></div></td></tr>)}</tbody>
-    </table>
-  </TableWrap>
+  <p>Each level on the page background, in light and dark. Dark shadows are deeper and add a faint edge, because a shadow alone barely shows on a dark page. The same variable name switches under <code>data-theme="dark"</code>.</p>
+  <div class="elev-pair">
+    {['light', 'dark'].map((mode) => (
+      <figure class="elev-panel" data-theme={mode}>
+        <figcaption>{mode === 'light' ? 'Light' : 'Dark'}</figcaption>
+        <ul class="elev-grid">
+          {Object.keys(resolved.shadow).map((k) => <li class="elev-card" style={`box-shadow:var(--shadow-${k})`}><code>--shadow-{k}</code><span>{use[k]}</span></li>)}
+        </ul>
+      </figure>
+    ))}
+  </div>
+
   <h2 id="layers">Layers</h2>
+  <p>A fixed stacking order, so a toast always lands above a dialog and a dialog above a sticky header. Use the token, never a raw z-index.</p>
+  <ol class="spec-sheet layer-stack">
+    {layers.map(([k, v], i) => (
+      <li class="layer" style={`--i:${layers.length - 1 - i}`}><span class="layer-plate" aria-hidden="true"></span><code>--z-{k}</code><span class="muted">{v} · {layerUse[k] || ''}</span></li>
+    ))}
+  </ol>
   <TableWrap label="Stacking order">
     <table class="data">
       <thead><tr><th scope="col">Token</th><th scope="col">z-index</th></tr></thead>

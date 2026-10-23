@@ -1,15 +1,17 @@
 ---
 import Docs from '../../../layouts/Docs.astro';
-import TableWrap from '../../../components/TableWrap.astro';
 import Code from '../../../components/Code.astro';
 import { resolved, kebab } from '../../../lib/flint.js';
+import '../../../styles/specimens.css';
 const styles = Object.entries(resolved.typography);
 const use = {
   displayXl: 'Marketing heroes only', display: 'Marketing heroes only', headingH1: 'One per page, the page title', headingH2: 'Section titles', headingH3: 'Card and panel titles',
   bodyLg: 'Lead paragraphs', bodyMd: 'Running text', bodySm: 'App default for dense UI', labelButton: 'Buttons', labelDefault: 'Field labels and nav items',
   labelCaption: 'Captions and metadata', labelHelper: 'Helper text under fields', labelKicker: 'Section eyebrows, sparingly', labelFinePrint: 'Legal and fine print',
 };
-const toc = [{ id: 'styles', text: 'Type styles' }, { id: 'rules', text: 'Rules' }, { id: 'css', text: 'In CSS' }];
+const sample = { displayXl: 'Trail ready', display: 'Trail ready at dawn' };
+const weights = Object.entries(resolved.fontWeight);
+const toc = [{ id: 'typeface', text: 'Typeface' }, { id: 'styles', text: 'Type styles' }, { id: 'rules', text: 'Rules' }, { id: 'css', text: 'In CSS' }];
 const cssCode = `.card-title {
   font-family: var(--font-sans);
   font-size: var(--type-heading-h3-size);
@@ -19,22 +21,37 @@ const cssCode = `.card-title {
 }`;
 ---
 <Docs title="Typography" crumb="Foundations" lead={`${styles.length} type styles, all Open Sans. Use a style, never a hand-set size.`} toc={toc} wide>
+  <h2 id="typeface">Typeface</h2>
+  <div class="spec-sheet type-hero">
+    <p class="type-hero-aa" aria-hidden="true">Aa</p>
+    <div class="type-hero-meta">
+      <p class="type-hero-name">Open Sans</p>
+      <p class="muted">A humanist sans with open letterforms, so l, I and 1 stay distinct at small sizes. One family for every screen.</p>
+      <ul class="type-weights">
+        {weights.map(([name, w]) => <li style={`font-weight:${w}`}><span class="type-weight-sample" aria-hidden="true">Ag</span> {name[0].toUpperCase() + name.slice(1)} {w}</li>)}
+      </ul>
+      <p class="type-charset" aria-hidden="true">ABCDEFGHIJKLM abcdefghijklm 0123456789 Il1 O0 &amp;?!</p>
+    </div>
+  </div>
+
   <h2 id="styles">Type styles</h2>
-  <TableWrap label="Type styles">
-    <table class="data">
-      <thead><tr><th scope="col">Style</th><th scope="col">Sample</th><th scope="col">Size, weight, line height</th><th scope="col">Use for</th></tr></thead>
-      <tbody>
-        {styles.map(([name, t]) => (
-          <tr>
-            <th scope="row"><code>{name}</code><br /><span class="muted"><code>--type-{kebab(name)}-*</code></span></th>
-            <td style={`font-family:${t.fontFamily};font-size:${t.fontSize}px;font-weight:${t.fontWeight};line-height:${t.lineHeight};letter-spacing:${t.letterSpacing};color:var(--color-text-heading)`}>Trail ready at dawn</td>
-            <td class="nowrap">{t.fontSize}px / {t.fontWeight} / {t.lineHeight}</td>
-            <td>{use[name] || ''}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </TableWrap>
+  <p>Each style at real size. The lines behind the sample are its line boxes: the height every line of that style takes up.</p>
+  <ol class="spec-sheet type-ramp">
+    {styles.map(([name, t]) => {
+      const v = `--type-${kebab(name)}`;
+      return (
+        <li class="type-row">
+          <div class="type-meta">
+            <p class="type-name"><code>{name}</code></p>
+            <p class="type-numbers">{t.fontSize}px · {t.fontWeight} · {t.lineHeight}</p>
+            <p class="type-use">{use[name] || ''}</p>
+          </div>
+          <p class="type-sample" style={`--ts:var(${v}-size);--tl:var(${v}-line-height);font-size:var(--ts);font-weight:var(${v}-weight);line-height:var(--tl);letter-spacing:var(${v}-tracking)`}>{sample[name] || 'Trail ready at dawn, coffee on the stove'}</p>
+        </li>
+      );
+    })}
+  </ol>
+
   <h2 id="rules">Rules</h2>
   <ul>
     <li>Nothing below 12px.</li>

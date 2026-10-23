@@ -2,41 +2,91 @@
 import Docs from '../../../layouts/Docs.astro';
 import TableWrap from '../../../components/TableWrap.astro';
 import { resolved, source, refName, leaves, at, kebab } from '../../../lib/flint.js';
-const toc = [{ id: 'space', text: 'Spacing scale' }, { id: 'radius', text: 'Radius' }, { id: 'sizes', text: 'Controls, icons and targets' }, { id: 'density', text: 'Density' }];
+import '../../../styles/specimens.css';
+const space = Object.entries(resolved.space).filter(([, v]) => v > 0);
+const roles = [['control', 'Buttons, inputs, nav items'], ['card', 'Cards and panels'], ['cardLg', 'Dialogs and large panels'], ['pill', 'Chips, badges, avatars']];
+const toc = [{ id: 'space', text: 'Spacing scale' }, { id: 'in-use', text: 'Spacing in use' }, { id: 'radius', text: 'Radius' }, { id: 'sizes', text: 'Controls and targets' }, { id: 'density', text: 'Density' }];
 ---
-<Docs title="Spacing and size" crumb="Foundations" lead="One spacing scale, a radius set, control heights and a minimum target. Nothing off scale." toc={toc}>
+<Docs title="Spacing and size" crumb="Foundations" lead="One spacing scale, a radius set, control heights and a minimum target. Nothing off scale." toc={toc} wide>
   <h2 id="space">Spacing scale</h2>
-  <TableWrap label="Spacing scale">
-    <table class="data">
-      <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col" style="width:50%">Size</th></tr></thead>
-      <tbody>{Object.entries(resolved.space).map(([k, v]) => <tr><th scope="row"><code>--space-{k}</code></th><td>{v}px</td><td><div style={`height:16px;width:${v}px;background:var(--color-action-primary);border-radius:var(--radius-xs)`}></div></td></tr>)}</tbody>
-    </table>
-  </TableWrap>
+  <p>Every gap, inset and margin is a step on this scale. Each block is drawn at its real size.</p>
+  <ol class="spec-sheet space-ruler">
+    {space.map(([k, v]) => (
+      <li class="space-step">
+        <span class="space-block" style={`width:var(--space-${k});height:var(--space-${k})`} aria-hidden="true"></span>
+        <code>--space-{k}</code>
+        <span class="space-px">{v}px</span>
+      </li>
+    ))}
+  </ol>
+
+  <h2 id="in-use">Spacing in use</h2>
+  <p>A card uses the inset steps for its padding and the gap steps between its parts. The hatched areas are space.</p>
+  <figure class="spec-sheet anatomy">
+    <div class="anatomy-card" aria-hidden="true">
+      <div class="anatomy-inner">
+        <p class="anatomy-title">Trip details</p>
+        <p class="anatomy-text">3 stops, 212 miles, leaving Friday.</p>
+        <span class="flint-btn flint-btn--primary flint-btn--sm">View route</span>
+      </div>
+      <span class="anatomy-tag anatomy-tag--inset">inset-xl · {resolved.density.comfortable.inset.xl}px</span>
+      <span class="anatomy-tag anatomy-tag--gap">gap-sm · {resolved.density.comfortable.gap.sm}px</span>
+    </div>
+    <figcaption>Padding is <code>--inset-xl</code> ({resolved.density.comfortable.inset.xl}px). The title, text and button are <code>--gap-sm</code> ({resolved.density.comfortable.gap.sm}px) apart.</figcaption>
+  </figure>
 
   <h2 id="radius">Radius</h2>
-  <p>Use the roles: <code>control</code> for buttons, inputs and nav items, <code>card</code> for cards and panels, <code>cardLg</code> for dialogs, <code>pill</code> for chips and avatars.</p>
+  <p>Use the roles, not the raw steps. Each shape below uses its role.</p>
+  <ul class="spec-sheet radius-roles">
+    {roles.map(([k, use]) => (
+      <li class="radius-role">
+        <span class={`radius-shape radius-shape--${k}`} style={`border-radius:var(--radius-${kebab(k)})`} aria-hidden="true"></span>
+        <code>--radius-{kebab(k)}</code>
+        <span class="muted">{resolved.radius[k] > 999 ? 'Fully round' : `${resolved.radius[k]}px`} · {use}</span>
+      </li>
+    ))}
+  </ul>
   <TableWrap label="Radius">
     <table class="data">
-      <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Points at</th><th scope="col">Shape</th></tr></thead>
-      <tbody>{Object.entries(resolved.radius).map(([k, v]) => <tr><th scope="row"><code>--radius-{kebab(k)}</code></th><td>{v}px</td><td>{refName(source.radius[k]) ? <code>{refName(source.radius[k])}</code> : <span class="muted">ramp step</span>}</td><td><div style={`width:80px;height:40px;border:2px solid var(--color-border-control);border-radius:${Math.min(v, 20)}px`}></div></td></tr>)}</tbody>
+      <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Points at</th></tr></thead>
+      <tbody>{Object.entries(resolved.radius).map(([k, v]) => <tr><th scope="row"><code>--radius-{kebab(k)}</code></th><td>{v}px</td><td>{refName(source.radius[k]) ? <code>{refName(source.radius[k])}</code> : <span class="muted">ramp step</span>}</td></tr>)}</tbody>
     </table>
   </TableWrap>
 
-  <h2 id="sizes">Controls, icons and targets</h2>
-  <TableWrap label="Control, icon and target sizes">
-    <table class="data">
-      <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Use</th></tr></thead>
-      <tbody>
-        <tr><th scope="row"><code>--control-sm</code></th><td>{resolved.control.sm}px</td><td>Compact controls</td></tr>
-        <tr><th scope="row"><code>--control-md</code></th><td>{resolved.control.md}px</td><td>Default buttons and inputs</td></tr>
-        {Object.entries(resolved.iconSize).map(([k, v]) => <tr><th scope="row"><code>--icon-size-{k}</code></th><td>{v}px</td><td>Icons</td></tr>)}
-        <tr><th scope="row"><code>--target-min</code></th><td>{resolved.targetMin}px</td><td>The smallest anything clickable may be (WCAG 2.5.8). Aim for 40px on anything used often; 44pt on iOS.</td></tr>
-      </tbody>
-    </table>
-  </TableWrap>
+  <h2 id="sizes">Controls and targets</h2>
+  <p>Two control heights, three icon sizes, and a floor: nothing clickable is smaller than {resolved.targetMin}px.</p>
+  <div class="spec-sheet size-board" aria-hidden="true">
+    <figure class="size-item">
+      <div class="size-stage"><span class="flint-btn flint-btn--secondary">Add stop</span><span class="size-ruler" style="height:var(--control-md)">{resolved.control.md}</span></div>
+      <figcaption><code>--control-md</code> · {resolved.control.md}px<br /><span class="muted">Default buttons and inputs</span></figcaption>
+    </figure>
+    <figure class="size-item">
+      <div class="size-stage"><span class="flint-btn flint-btn--secondary flint-btn--sm">Edit</span><span class="size-ruler" style="height:var(--control-sm)">{resolved.control.sm}</span></div>
+      <figcaption><code>--control-sm</code> · {resolved.control.sm}px<br /><span class="muted">Toolbars and table rows</span></figcaption>
+    </figure>
+    <figure class="size-item">
+      <div class="size-stage">
+        <span class="target-demo" style="width:var(--target-min);height:var(--target-min)"><svg class="flint-icon flint-icon--sm" viewBox="0 0 20 20" focusable="false"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </div>
+      <figcaption><code>--target-min</code> · {resolved.targetMin}px<br /><span class="muted">The dashed box is the hit area. A 16px icon still needs it.</span></figcaption>
+    </figure>
+    <figure class="size-item">
+      <div class="size-stage size-icons">{Object.entries(resolved.iconSize).map(([k]) => <svg class={`flint-icon flint-icon--${k}`} viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.5 10.5l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>)}</div>
+      <figcaption>Icons · {Object.values(resolved.iconSize).join(', ')}px<br /><span class="muted">sm, md, lg</span></figcaption>
+    </figure>
+  </div>
+  <p>Aim for 40px on anything used often; 44pt on iOS.</p>
 
   <h2 id="density">Density</h2>
   <p>Set <code>data-density="compact"</code> to tighten inset and gap by one step. Control heights, icon sizes and the minimum target stay the same, so a denser layout never shrinks a target.</p>
+  <div class="density-pair" aria-hidden="true">
+    {['comfortable', 'compact'].map((d) => (
+      <figure class="spec-sheet density-demo" data-density={d}>
+        <figcaption>{d === 'comfortable' ? 'Comfortable' : 'Compact'}</figcaption>
+        <ul class="density-list">{['Turkey Bend', 'Pace Bend', 'Muleshoe Bend'].map((n) => <li><span>{n}</span><span class="flint-btn flint-btn--text flint-btn--sm">Open</span></li>)}</ul>
+      </figure>
+    ))}
+  </div>
   <TableWrap label="Density">
     <table class="data">
       <thead><tr><th scope="col">Token</th><th scope="col">Comfortable</th><th scope="col">Compact</th></tr></thead>

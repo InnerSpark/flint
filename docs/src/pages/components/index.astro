@@ -3,6 +3,8 @@ import Docs from '../../layouts/Docs.astro';
 import TableWrap from '../../components/TableWrap.astro';
 import Icon from '../../components/Icon.astro';
 import { COMPONENTS } from '../../data/components.js';
+import { STATES } from '../../data/componentStates.js';
+import '../../styles/specimens.css';
 // The component list from FIGMA_LIBRARY_GUIDELINES.md, section 5, plus Icon (an atom in ASDS-1).
 const LIBRARY = [
   ['Actions', ['Button', 'Split button']],
@@ -19,8 +21,16 @@ const toc = [{ id: 'documented', text: 'Documented' }, { id: 'library', text: 'E
 ---
 <Docs title="Components" lead="Each component has one spec, written once and built per platform. These pages cover usage, the tokens it reads, code for each platform and how it works with a keyboard and screen reader." toc={toc}>
   <h2 id="documented">Documented</h2>
-  <ul class="link-list">
-    {documented.map(([name, slug]) => <li><a href={`/components/${slug}/`}><strong>{name}</strong><span>{COMPONENTS[slug].lead}</span></a></li>)}
+  <ul class="thumb-grid">
+    {documented.map(([name, slug]) => (
+      <li class="thumb">
+        <div class="thumb-stage" inert aria-hidden="true">
+          <div class="thumb-in" set:html={(STATES[slug]?.[0]?.[2] || '').replaceAll('__P__', `thumb-${slug}`)} />
+        </div>
+        <h3 class="thumb-name"><a href={`/components/${slug}/`}>{name}</a></h3>
+        <p class="thumb-lead">{COMPONENTS[slug].lead}</p>
+      </li>
+    ))}
   </ul>
   <h2 id="library">Everything in the library</h2>
   <p>{documented.length} of {all.length} Figma library components are documented here so far. The rest arrive with the SwiftUI components (ASDS-38) and the shadcn pilot. Product patterns used only by AccessSpark are moving to its own library (ASDS-37).</p>
@@ -36,3 +46,8 @@ const toc = [{ id: 'documented', text: 'Documented' }, { id: 'library', text: 'E
     </table>
   </TableWrap>
 </Docs>
+<script>
+  // The thumbnails reuse the Style tab states, some of which are forced (the focused skip link).
+  import { forceStates } from '../../workbench/forceStates.js';
+  forceStates();
+</script>
