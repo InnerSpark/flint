@@ -93,7 +93,7 @@ const checkbox = {
     if (impl === 'MUI') {
       // MUI shows keyboard focus with its Mui-focusVisible class on the root.
       return <label className="tb-cell"><MuiCheckbox defaultChecked={s.checked} indeterminate={!!s.mixed} disabled={s.disabled} className={`${s.cls || ''} ${s.focus ? 'Mui-focusVisible' : ''}`}
-        inputProps={{ 'aria-label': name, 'aria-invalid': invalid, className: s.focus ? 'st-focus' : undefined }} />{text}</label>;
+        slotProps={{ input: { 'aria-label': name, 'aria-invalid': invalid, className: s.focus ? 'st-focus' : undefined } }} />{text}</label>;
     }
     if (impl === 'shadcn') return <label className="tb-cell"><ShadCheckbox defaultChecked={s.mixed ? 'indeterminate' : s.checked} disabled={s.disabled} className={s.cls} aria-label={name} aria-invalid={invalid} />{text}</label>;
     return <label className="tb-cell"><input type="checkbox" className={`flint-check ${s.cls || ''}`} defaultChecked={s.checked} disabled={s.disabled} aria-label={name} aria-invalid={invalid}
@@ -158,7 +158,7 @@ const radio = {
     const text = <span>Just this page</span>;
     if (impl === 'MUI') {
       return <label className="tb-cell"><MuiRadio name={key} value="page" defaultChecked={s.checked} disabled={s.disabled} className={`${s.cls || ''} ${s.focus ? 'Mui-focusVisible' : ''}`}
-        inputProps={{ 'aria-label': name, 'aria-invalid': invalid, className: s.focus ? 'st-focus' : undefined }} />{text}</label>;
+        slotProps={{ input: { 'aria-label': name, 'aria-invalid': invalid, className: s.focus ? 'st-focus' : undefined } }} />{text}</label>;
     }
     if (impl === 'shadcn') {
       return <RadioGroup name={key} defaultValue={s.checked ? 'page' : undefined} aria-label={`Scan scope, ${impl}, ${s.label.toLowerCase()} state`}>

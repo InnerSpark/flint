@@ -14,7 +14,7 @@ export function RadioGroupItem({ className, ...props }) {
     <RadioGroupPrimitive.Item
       data-slot="radio-group-item"
       className={cn(
-        'peer inline-grid place-content-center size-[var(--radio-size)] shrink-0 cursor-pointer rounded-full border-2 border-[var(--radio-border)] bg-[var(--input-bg)] text-[var(--radio-checked-fg)] hover:border-[var(--radio-border-hover)] aria-[invalid=true]:border-[var(--radio-border-error)] outline-none focus-visible:[outline:var(--focus-ring-width)_solid_var(--focus-ring-color)] focus-visible:[outline-offset:var(--focus-ring-offset)] data-[state=checked]:border-[var(--radio-checked-bg)] data-[state=checked]:bg-[var(--radio-checked-bg)] disabled:cursor-not-allowed disabled:border-[var(--radio-disabled)] disabled:bg-[var(--radio-disabled-bg)] disabled:text-[var(--radio-disabled)]',
+        'peer inline-grid place-content-center size-[var(--radio-size)] shrink-0 cursor-pointer rounded-full border-2 border-[var(--radio-border)] bg-[var(--input-bg)] text-[var(--radio-checked-fg)] hover:border-[var(--radio-border-hover)] aria-[invalid=true]:border-[var(--radio-border-error)] outline-none focus-visible:[outline:var(--focus-ring-width)_solid_var(--focus-ring-color)] focus-visible:[outline-offset:var(--focus-ring-offset)] data-[state=checked]:border-[var(--radio-checked-bg)] data-[state=checked]:bg-[var(--radio-checked-bg)] disabled:cursor-not-allowed disabled:border-[var(--radio-disabled)] disabled:bg-[var(--radio-disabled-bg)] disabled:text-[var(--radio-disabled)] disabled:data-[state=checked]:border-[var(--radio-disabled)] disabled:data-[state=checked]:bg-[var(--radio-disabled-bg)]',
         className,
       )}
       {...props}

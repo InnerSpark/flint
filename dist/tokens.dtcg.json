@@ -1236,23 +1236,23 @@
       "chart": {
         "1": {
           "$type": "color",
-          "$value": "{color.blue.600}"
+          "$value": "{color.blue.800}"
         },
         "2": {
           "$type": "color",
-          "$value": "{color.amber.700}"
+          "$value": "{color.amber.600}"
         },
         "3": {
           "$type": "color",
-          "$value": "{color.violet.600}"
+          "$value": "{color.violet.700}"
         },
         "4": {
           "$type": "color",
-          "$value": "{color.green.700}"
+          "$value": "{color.sky.600}"
         },
         "5": {
           "$type": "color",
-          "$value": "{color.red.600}"
+          "$value": "{color.red.700}"
         }
       },
       "overlayScrim": {
@@ -1522,7 +1522,7 @@
       "chart": {
         "1": {
           "$type": "color",
-          "$value": "{color.blue.400}"
+          "$value": "{color.blue.500}"
         },
         "2": {
           "$type": "color",
@@ -1534,7 +1534,7 @@
         },
         "4": {
           "$type": "color",
-          "$value": "{color.green.400}"
+          "$value": "{color.sky.200}"
         },
         "5": {
           "$type": "color",

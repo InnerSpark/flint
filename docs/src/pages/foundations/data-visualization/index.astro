@@ -28,7 +28,7 @@ const toc = [{ id: 'categorical', text: 'Categorical colors' }, { id: 'vision', 
   <ul class="cr-list">{keys.map((k) => <ColorRow spec={specFor(['chart', k])} />)}</ul>
 
   <h2 id="vision">Under color vision deficiency</h2>
-  <p>The five series in order, simulated for the common types of color blindness. Where two bars look alike, label the series directly or add a pattern: never rely on color alone. The numbers under the bars are the direct labels doing that job.</p>
+  <p>The five series in order, simulated for the common types of color blindness. The build checks the first three simulations. Where two bars look alike, label the series directly or add a pattern: never rely on color alone. The numbers under the bars are the direct labels doing that job.</p>
   <ul class="cr-list">
     {VISION.map(([id, label]) => (
       <li class="cr">
@@ -54,6 +54,7 @@ const toc = [{ id: 'categorical', text: 'Categorical colors' }, { id: 'vision', 
     <li>Never let color carry meaning alone. Label series directly, or pair color with a pattern or marker shape.</li>
     <li>Keep to five series or fewer. More than that, group the rest or use small multiples.</li>
     <li>Give every chart a text summary of what it shows, for screen readers and for a quick read.</li>
-    <li>Chart colors 1 and 5 are blue and red, and 4 is green: never rely on red against green to tell two series apart.</li>
+    <li>The palette has no green, so red against green never comes up. The build simulates protanopia, deuteranopia and tritanopia and fails if any two chart colors get too close in either mode.</li>
+    <li>Grayscale is the exception: five colors that all clear 3:1 can't also all differ in lightness. That is why the first rule says to label series directly.</li>
   </ul>
 </Docs>

@@ -3,7 +3,7 @@
  * it can be tested standalone. `createFlintTheme` (index.mjs) wraps this with MUI's
  * `createTheme`. Parameterized by mode, so the same source drives light and dark.
  */
-import { color, semantic, component, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, shadowDark, space, breakpoint, density, targetMin } from '../dist/index.js';
+import { color, semantic, component, fontFamily, fontWeight, fontSize, lineHeight, radius, shadow, shadowDark, space, breakpoint, density, targetMin, motion } from '../dist/index.js';
 
 const t = (size, weight, lh, ls = '0') => ({
   fontFamily: fontFamily.sans,
@@ -23,6 +23,9 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
   const k = component[mode];
   const ring = `${k.focus.ring.width}px solid ${k.focus.ring.color}`;
   const S = mode === 'dark' ? shadowDark : shadow;
+  // MUI draws a checkbox or radio box at 18/24 of its icon, so size the icon to land the box on the token.
+  const boxIcon = (box) => Math.round((box * 24) / 18);
+  const focusRing = { outline: ring, outlineOffset: `${k.focus.ring.offset}px` };
   const intent = (name) => ({ success: c.feedback.success, warning: c.feedback.warning, error: c.feedback.error, info: c.feedback.info }[name]);
   return {
     palette: {
@@ -81,7 +84,18 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
           }
         `,
       },
-      MuiButton: { styleOverrides: { root: { textTransform: 'none', borderRadius: k.button.radius }, sizeSmall: { minHeight: k.button.heightSm } } },
+      // Buttons read the button component tokens (ASDS-44): 40px (32px small), and the secondary,
+      // text, danger and disabled colors, so MUI matches components.css instead of MUI's defaults.
+      MuiButton: {
+        styleOverrides: {
+          root: { textTransform: 'none', borderRadius: k.button.radius, minHeight: k.button.height, '&.Mui-disabled': { backgroundColor: k.button.disabled.bg, color: k.button.disabled.fg } },
+          sizeSmall: { minHeight: k.button.heightSm },
+          containedPrimary: { backgroundColor: k.button.primary.bg, color: k.button.primary.fg, '&:hover': { backgroundColor: k.button.primary.bgHover }, '&:active': { backgroundColor: k.button.primary.bgPressed } },
+          containedError: { backgroundColor: k.button.danger.bg, color: k.button.danger.fg, '&:hover': { backgroundColor: k.button.danger.bgHover }, '&:active': { backgroundColor: k.button.danger.bgPressed } },
+          outlined: { backgroundColor: k.button.secondary.bg, color: k.button.secondary.fg, borderColor: k.button.secondary.border, '&:hover': { backgroundColor: k.button.secondary.bgHover, borderColor: k.button.secondary.border }, '&.Mui-disabled': { borderColor: k.button.disabled.border } },
+          text: { color: k.button.text.fg, '&:hover': { backgroundColor: k.button.text.bgHover }, '&.Mui-disabled': { backgroundColor: 'transparent' } },
+        },
+      },
       // Canonical Paper: kills MUI's dark elevation overlay and maps the elevation
       // prop onto the shadow tokens (mode-aware). Covers Menu/Popover/Dialog/Drawer,
       // which are all Paper-based, so floating surfaces stop hand-rolling shadows.
@@ -151,7 +165,18 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
       MuiInputBase: { styleOverrides: { root: { fontFamily: fontFamily.sans, fontSize: fontSize.md } } },
       MuiOutlinedInput: {
         styleOverrides: {
-          root: { borderRadius: k.input.radius },
+          // Edges from the input tokens (ASDS-44): MUI's default edge is about 1.6:1, under the 3:1 a
+          // control boundary needs. aria-invalid turns the edge red too, not only the error prop.
+          root: {
+            borderRadius: k.input.radius,
+            '& .MuiOutlinedInput-notchedOutline': { borderColor: k.input.border },
+            '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: k.input.borderHover },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: k.input.borderFocus },
+            '&.Mui-error .MuiOutlinedInput-notchedOutline, &:has([aria-invalid="true"]) .MuiOutlinedInput-notchedOutline': { borderColor: k.input.borderError },
+            '&.Mui-disabled .MuiOutlinedInput-notchedOutline': { borderColor: c.border.disabled },
+            '&.Mui-disabled': { backgroundColor: c.action.disabledBg },
+            '& input::placeholder, & textarea::placeholder': { color: k.input.placeholder, opacity: 1 },
+          },
           input: { height: `${k.input.height}px`, paddingTop: 0, paddingBottom: 0, boxSizing: 'border-box' },
         },
       },
@@ -217,9 +242,18 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
           },
         },
       },
+      // Switch at Flint's size (ASDS-44): a 48x24 track with a 16px thumb inset 4px, like components.css,
+      // instead of MUI's 34x14 track with an overhanging 20px thumb. The thumb lands with --ease-emphasis.
       MuiSwitch: {
         styleOverrides: {
+          root: { width: space[48], height: targetMin, padding: 0, overflow: 'visible', '&:has(.Mui-focusVisible)': { ...focusRing, borderRadius: radius.pill } },
+          thumb: { width: space[16], height: space[16], boxShadow: 'none' },
           switchBase: {
+            padding: space[4],
+            transition: `transform ${motion.duration.base} ${motion.easing.emphasis}`,
+            '&.Mui-checked': { transform: `translateX(${space[24]}px)` },
+            '&.Mui-checked.Mui-disabled': { color: k.switch.thumbDisabled },
+            '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
             color: k.switch.thumb,
             // Checked thumb must be onPrimary, not white: in dark mode action.primary is a
             // light fill, so a white thumb lands at 1.80:1 against its own track (ASDS-45).
@@ -228,14 +262,18 @@ export function flintThemeOptions(mode = 'light', densityName = 'comfortable') {
             // Disabled thumb stays visible on the disabled track, so its position still reads.
             '&.Mui-disabled': { color: k.switch.thumbDisabled },
           },
-          track: { backgroundColor: k.switch.track, opacity: 1 },
+          track: { backgroundColor: k.switch.track, opacity: 1, borderRadius: radius.pill },
         },
       },
       MuiSelect: { styleOverrides: { icon: { color: k.select.icon } } },
       MuiAvatar: { styleOverrides: { root: { backgroundColor: c.surface.subtle, color: c.text.default, fontFamily: fontFamily.sans, fontWeight: fontWeight.semibold } } },
       MuiSnackbarContent: { styleOverrides: { root: { backgroundColor: c.surface.inverse, color: c.text.inverse, borderRadius: radius.sm, fontFamily: fontFamily.sans } } },
-      MuiCheckbox: { styleOverrides: { root: { color: k.checkbox.border, '&.Mui-checked': { color: k.checkbox.checkedBg }, '&.Mui-disabled': { color: k.checkbox.disabled } } } },
-      MuiRadio: { styleOverrides: { root: { color: k.radio.border, '&.Mui-checked': { color: k.radio.checkedBg }, '&.Mui-disabled': { color: k.radio.disabled } } } },
+      // Checkbox and radio: a 24px box (checkbox.size), the focus ring on keyboard focus, and a red edge
+      // when aria-invalid is set, as in components.css (ASDS-44).
+      MuiCheckbox: { styleOverrides: { root: { color: k.checkbox.border, '& .MuiSvgIcon-root': { fontSize: boxIcon(k.checkbox.size) }, '&:hover': { color: k.checkbox.borderHover }, '&.Mui-checked, &.MuiCheckbox-indeterminate': { color: k.checkbox.checkedBg }, '&:has(input[aria-invalid="true"])': { color: k.checkbox.borderError }, '&.Mui-disabled': { color: k.checkbox.disabled }, '&.Mui-focusVisible': focusRing } } },
+      MuiRadio: { styleOverrides: { root: { color: k.radio.border, '& .MuiSvgIcon-root': { fontSize: boxIcon(k.radio.size) }, '&:hover': { color: k.radio.borderHover }, '&.Mui-checked': { color: k.radio.checkedBg }, '&:has(input[aria-invalid="true"])': { color: k.radio.borderError }, '&.Mui-disabled': { color: k.radio.disabled }, '&.Mui-focusVisible': focusRing } } },
+      // Icons on the icon tokens: small, medium and large are 16, 20 and 24px instead of MUI's 20, 24 and 35.
+      MuiSvgIcon: { styleOverrides: { fontSizeSmall: { fontSize: k.icon.sm }, fontSizeMedium: { fontSize: k.icon.md }, fontSizeLarge: { fontSize: k.icon.lg } } },
       // Link underlined by default (WCAG 1.4.1); app keeps only its selector exceptions local.
       MuiLink: { defaultProps: { underline: 'always' }, styleOverrides: { root: { color: c.text.link, textDecorationColor: 'currentColor', textUnderlineOffset: '0.15em', '&:hover': { textDecorationThickness: '0.125em' } } } },
       MuiBackdrop: { styleOverrides: { root: { backgroundColor: c.overlayScrim } } },

@@ -398,7 +398,7 @@
       "label": "chart.1 on default",
       "fg": "chart.1",
       "bg": "surface.default",
-      "ratio": 6.47,
+      "ratio": 11.24,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -408,7 +408,7 @@
       "label": "chart.1 on page",
       "fg": "chart.1",
       "bg": "surface.page",
-      "ratio": 6.18,
+      "ratio": 10.75,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -418,7 +418,7 @@
       "label": "chart.2 on default",
       "fg": "chart.2",
       "bg": "surface.default",
-      "ratio": 5.02,
+      "ratio": 3.19,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -428,7 +428,7 @@
       "label": "chart.2 on page",
       "fg": "chart.2",
       "bg": "surface.page",
-      "ratio": 4.8,
+      "ratio": 3.04,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -438,7 +438,7 @@
       "label": "chart.3 on default",
       "fg": "chart.3",
       "bg": "surface.default",
-      "ratio": 5.7,
+      "ratio": 7.1,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -448,7 +448,7 @@
       "label": "chart.3 on page",
       "fg": "chart.3",
       "bg": "surface.page",
-      "ratio": 5.45,
+      "ratio": 6.79,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -458,7 +458,7 @@
       "label": "chart.4 on default",
       "fg": "chart.4",
       "bg": "surface.default",
-      "ratio": 5.02,
+      "ratio": 4.1,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -468,7 +468,7 @@
       "label": "chart.4 on page",
       "fg": "chart.4",
       "bg": "surface.page",
-      "ratio": 4.79,
+      "ratio": 3.91,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -478,7 +478,7 @@
       "label": "chart.5 on default",
       "fg": "chart.5",
       "bg": "surface.default",
-      "ratio": 4.83,
+      "ratio": 6.47,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -488,7 +488,7 @@
       "label": "chart.5 on page",
       "fg": "chart.5",
       "bg": "surface.page",
-      "ratio": 4.62,
+      "ratio": 6.18,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -1598,7 +1598,7 @@
       "label": "chart.1 on default",
       "fg": "chart.1",
       "bg": "surface.default",
-      "ratio": 6.8,
+      "ratio": 3.21,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -1608,7 +1608,7 @@
       "label": "chart.1 on page",
       "fg": "chart.1",
       "bg": "surface.page",
-      "ratio": 7.44,
+      "ratio": 3.51,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -1658,7 +1658,7 @@
       "label": "chart.4 on default",
       "fg": "chart.4",
       "bg": "surface.default",
-      "ratio": 9.93,
+      "ratio": 13.04,
       "threshold": 3,
       "kind": "ui",
       "pass": true
@@ -1668,7 +1668,7 @@
       "label": "chart.4 on page",
       "fg": "chart.4",
       "bg": "surface.page",
-      "ratio": 10.86,
+      "ratio": 14.26,
       "threshold": 3,
       "kind": "ui",
       "pass": true

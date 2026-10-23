@@ -92,7 +92,7 @@ export const COMPONENTS = {
   .frame(minHeight: Flint.Target.touch)
   .background(Flint.Component.buttonPrimaryBg,
               in: RoundedRectangle(cornerRadius: Flint.Component.buttonRadius))`,
-      muiGap: 'The MUI theme does not apply the secondary and disabled button tokens yet, and its buttons are 36px tall instead of 40px (ASDS-44).',
+      muiGap: 'MUI adds its ripple on press as well as the pressed color, and its loading prop hides the label instead of keeping it next to a spinner.',
     },
     keyboard: [['Tab', 'Moves focus to the button. A solid 2px ring shows where focus is.'], ['Enter or Space', 'Activates the button.']],
     screenReader: [
@@ -151,7 +151,7 @@ import FormLabel from '@mui/material/FormLabel';
   Text("The whole site").tag(Scope.site)
 }
 .pickerStyle(.inline) // A Form section. On iOS this is the native one-of-many control.`,
-      muiGap: 'The MUI radio reads the radio tokens for its edge, checked fill and disabled color, but keeps MUI\'s own 20px control and its ripple, so it is smaller than the 24px the tokens ask for and smaller than the plain-CSS and shadcn versions (ASDS-44).',
+      muiGap: 'The Flint MUI theme sizes the radio to 24px and reads the radio tokens, including aria-invalid. MUI still shows a round halo on hover and focus instead of the ring around the control. Pass aria-invalid through slotProps.input.',
     },
     keyboard: [
       ['Tab', 'Moves focus into the group, landing on the selected option, or the first one when nothing is selected. A second Tab leaves the group.'],
@@ -323,7 +323,6 @@ Last scanned 2 hours ago
 <SvgIcon titleAccess="Passed" sx={{ fontSize: 'var(--icon-md)', color: 'var(--icon-fg)' }}>
   <path d="..." />
 </SvgIcon>`,
-      muiGap: 'The MUI theme does not map SvgIcon sizes to the icon tokens: small, medium and large draw 20, 24 and 35px instead of 16, 20 and 24px (ASDS-44). Set fontSize from the tokens as above.',
       shadcnNote: 'shadcn/ui draws icons with lucide-react. Size and color them from the icon tokens.',
       shadcn: `import { CircleCheck, Clock } from 'lucide-react';
 
@@ -618,7 +617,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
       shadcn: shadSwitch,
       swift: `Toggle("Show passing checks in reports", isOn: $showPassing)
   .tint(Flint.Component.switchTrackChecked)`,
-      muiGap: 'The MUI switch is a 34x14 track with a 20px thumb that overhangs it, smaller than Flint\'s 48x24.',
     },
     keyboard: [['Tab', 'Moves focus to the switch.'], ['Space', 'Turns it on or off.']],
     screenReader: [
@@ -669,7 +667,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
       shadcn: shadCheckbox,
       swift: `Toggle("Bring the awning lights", isOn: $bringLights)
   .toggleStyle(.checkbox) // macOS. On iOS, use a list row with a checkmark.`,
-      muiGap: 'The MUI checkbox shows no focus ring on keyboard focus and draws an 18px box instead of 24px (ASDS-44).',
+      muiGap: 'The Flint MUI theme draws a 24px box and reads aria-invalid. MUI still shows a round halo on hover and focus, and a disabled box has no fill. Pass aria-invalid through slotProps.input; MUI v7 ignores inputProps.',
     },
     keyboard: [['Tab', 'Moves focus to the checkbox.'], ['Space', 'Checks or unchecks it.']],
     screenReader: [
@@ -816,7 +814,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
   .frame(minHeight: Flint.Target.touch)
   .overlay(RoundedRectangle(cornerRadius: Flint.Component.inputRadius)
     .strokeBorder(hasError ? Flint.Component.inputBorderError : Flint.Component.inputBorder))`,
-      muiGap: 'The MUI theme leaves the outlined input edge at MUI\'s default, about 1.6:1 (under 3:1), and its placeholder is dimmer than Flint\'s (ASDS-44).',
+      muiGap: 'A read-only MUI input looks the same as an editable one. Tint it with input.bgReadOnly if the difference matters.',
     },
     keyboard: [['Tab', 'Moves focus into the input. The edge turns to the focus color and the focus ring shows.'], ['Typing', 'Enters text.']],
     screenReader: [

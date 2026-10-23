@@ -43,9 +43,9 @@
     }
   },
   "scripts": {
-    "build": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs",
-    "check": "node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs",
-    "prepare": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs",
+    "build": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs && node scripts/check-cvd.mjs",
+    "check": "node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs && node scripts/check-cvd.mjs",
+    "prepare": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs && node scripts/check-cvd.mjs",
     "release:notes": "node scripts/next-version.mjs",
     "release:prepare": "node scripts/release-prepare.mjs",
     "preflight": "node scripts/preflight.mjs",

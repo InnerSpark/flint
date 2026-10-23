@@ -280,11 +280,11 @@
   --color-accent-cyan: #0c4a6e;
   --color-selected-surface: #eff6ff;
   --color-selected-text: #1550a0;
-  --color-chart-1: #1a5fa8;
-  --color-chart-2: #b45309;
-  --color-chart-3: #7c3aed;
-  --color-chart-4: #15803d;
-  --color-chart-5: #dc2626;
+  --color-chart-1: #0d3b6e;
+  --color-chart-2: #d97706;
+  --color-chart-3: #6d28d9;
+  --color-chart-4: #0284c7;
+  --color-chart-5: #b91c1c;
   --color-overlay-scrim: rgba(15, 23, 42, 0.5);
 }
 
@@ -349,10 +349,10 @@
   --color-accent-cyan: #7dd3fc;
   --color-selected-surface: #0d3b6e;
   --color-selected-text: #bfdbfe;
-  --color-chart-1: #60a5fa;
+  --color-chart-1: #2767cc;
   --color-chart-2: #fbbf24;
   --color-chart-3: #a78bfa;
-  --color-chart-4: #4ade80;
+  --color-chart-4: #bae6fd;
   --color-chart-5: #f87171;
   --color-overlay-scrim: rgba(0, 0, 0, 0.6);
 
@@ -424,11 +424,11 @@
   --color-accent-cyan: #0c4a6e;
   --color-selected-surface: #eff6ff;
   --color-selected-text: #1550a0;
-  --color-chart-1: #1a5fa8;
-  --color-chart-2: #b45309;
-  --color-chart-3: #7c3aed;
-  --color-chart-4: #15803d;
-  --color-chart-5: #dc2626;
+  --color-chart-1: #0d3b6e;
+  --color-chart-2: #d97706;
+  --color-chart-3: #6d28d9;
+  --color-chart-4: #0284c7;
+  --color-chart-5: #b91c1c;
   --color-overlay-scrim: rgba(15, 23, 42, 0.5);
 
   /* elevation (light) */
