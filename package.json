@@ -1,6 +1,6 @@
 {
   "name": "@innerspark/flint",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "description": "Flint Design System: framework-agnostic tokens with a MUI theme factory and Swift package, shared across AccessSpark, Inner Spark Media, and sister brands.",
   "license": "SEE LICENSE IN LICENSE",
   "private": true,

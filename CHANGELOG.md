@@ -2,8 +2,7 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
-## Unreleased
-
+## v1.15.0 (2026-10-23)
 - **Docs: concept diagram and spot illustrations (ASDS-56).** A "How one token travels" diagram follows `button.primary.bg` from primitive (light and dark steps) to semantic to component, then out to CSS, Flint React, MUI, shadcn/ui and SwiftUI. It sits on Get started and Token tiers, stacks vertically on phones, and works in both modes. Ten new decorative spot illustrations sit beside the lead on the Get started and Guides pages; they hide under 720px so text comes first.
 
 - **`@innerspark/flint/react` (ASDS-69).** React components that render components.css, with no styles of their own: Button, Link, Field (wires id, label, `aria-describedby`, `aria-invalid` and `required` into its control), Input, Textarea, Select, Checkbox (indeterminate), Radio and RadioGroup, Switch, Badge, Chip (remove button named after the chip), Alert, SkipLink (moves focus, not just the scroll), Icon (decorative or named). Dialog, Tabs, Menu, Tooltip and Toast are Radix underneath: focus trap and return, APG keyboard patterns, a live region, and a toast with an action that never times out. One 12 KB ESM file plus hand-written types, built for React 19.2 and Node 22 to match AccessSpark. React, React DOM and the five Radix packages are optional peer dependencies, so token-only installs never pull them in, and the build tooling lives in `react/package.json` so installing Flint from GitHub stays dependency-free. `react/dist` is committed; a new CI job builds it, checks the committed copy is current, renders every component and type-checks the declarations against a sample app.
