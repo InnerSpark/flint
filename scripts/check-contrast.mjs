@@ -23,9 +23,13 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { resolveTokens } from './resolve.mjs';
+import { loadSource, currentBrand, distFor } from './layers.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const tokens = resolveTokens(JSON.parse(readFileSync(join(root, 'tokens.json'), 'utf8')));
+// Per brand (ASDS-86): FLINT_BRAND picks the brand, so every brand meets the same bar in both modes.
+const BRAND = currentBrand();
+const tokens = resolveTokens(loadSource({ brand: BRAND }));
+console.log(`Brand: ${BRAND}`);
 
 const lin = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
 const lum = hex => { const n = parseInt(hex.slice(1), 16); return 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255); };
@@ -223,7 +227,7 @@ for (const [name, group] of Object.entries(tokens.density || {})) {
 
 // Contrast guarantees as data (ASDS-25): every checked pairing and its measured ratio, so the
 // workbench and AI tools can trust a pairing without recomputing it.
-writeFileSync(join(root, 'dist', 'contrast.json'), JSON.stringify({ standard: 'WCAG 2.2', textBar: AAA_TEXT, nonTextBar: 3, pairs: results }, null, 2) + '\n');
+writeFileSync(join(distFor(BRAND), 'contrast.json'), JSON.stringify({ standard: 'WCAG 2.2', textBar: AAA_TEXT, nonTextBar: 3, pairs: results }, null, 2) + '\n');
 
 const total = failures + usageFailures;
 console.log(`\n${failures} required contrast failure(s), ${usageFailures} usage failure(s).`);

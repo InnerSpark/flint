@@ -8,10 +8,13 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { currentBrand, distFor } from './layers.mjs';
 
 const MIN_DISTANCE = 0.1;
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const tokens = JSON.parse(readFileSync(join(root, 'dist/tokens.json'), 'utf8'));
+const BRAND = currentBrand();
+const tokens = JSON.parse(readFileSync(join(distFor(BRAND), 'tokens.json'), 'utf8'));
+console.log(`Brand: ${BRAND}`);
 
 const lin = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
 const rgb = (hex) => [1, 3, 5].map((i) => lin(parseInt(hex.slice(i, i + 2), 16) / 255));

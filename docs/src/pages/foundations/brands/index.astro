@@ -1,0 +1,124 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import Code from '../../../components/Code.astro';
+import TableWrap from '../../../components/TableWrap.astro';
+import '../../../../../dist/brands.css';
+import '../../../styles/specimens.css';
+import '../../../styles/brands.css';
+import flint from '../../../../../brands/flint.json';
+import accessspark from '../../../../../brands/accessspark.json';
+import innersparkmedia from '../../../../../brands/innersparkmedia.json';
+import studio from '../../../../../brands/studio.json';
+import ios from '../../../../../platforms/ios.json';
+import { resolved } from '../../../lib/flint.js';
+
+const toc = [
+  { id: 'layers', text: 'How the layers stack' },
+  { id: 'brands', text: 'The brands' },
+  { id: 'changes', text: 'What each brand changes' },
+  { id: 'platforms', text: 'Platforms' },
+  { id: 'use', text: 'Using a brand' },
+];
+
+const brands = [
+  { id: 'flint', name: 'Flint', where: 'The Flint docs', file: flint },
+  { id: 'accessspark', name: 'AccessSpark', where: 'The app and accessspark.io', file: accessspark },
+  { id: 'innersparkmedia', name: 'Inner Spark Media', where: 'innersparkmedia.com', file: innersparkmedia },
+  { id: 'studio', name: 'Inner Spark Studio', where: 'innerspark.studio', file: studio },
+];
+const swaps = brands.flatMap((b) => Object.entries(b.file.$source?.swapped || {}).map(([from, why]) => ({ brand: b.name, from, why })));
+
+// Platform rows: every value platforms/ios.json sets, beside the web value from tokens.json.
+const flat = (o, p = []) => Object.entries(o).flatMap(([k, v]) => (k.startsWith('$') ? [] : v && typeof v === 'object' && !('fontSize' in v) ? flat(v, [...p, k]) : [[[...p, k], v]]));
+const at = (o, p) => p.reduce((x, k) => (x == null ? undefined : x[k]), o);
+const show = (v) => (v == null ? 'iOS only' : typeof v === 'object' ? `${v.fontSize}px, ${v.fontWeight}` : `${v}px`);
+const platformRows = flat(ios).map(([p, v]) => ({ path: p.join('.'), web: show(at(resolved, p)), ios: show(v) }));
+
+const cssCode = `/* In the app: the brand's tokens, then the components */
+@import "@innerspark/flint/brands/innersparkmedia/tokens.css";
+@import "@innerspark/flint/components.css";
+
+/* Flint itself keeps its old paths */
+@import "@innerspark/flint/tokens.css";`;
+const jsCode = `import { semantic, radius } from '@innerspark/flint/brands/studio';`;
+const swiftCode = `// Package.swift: add the product for your brand, only one
+.product(name: "FlintInnerSparkMedia", package: "flint")
+
+// In code, every brand has the same API
+import FlintInnerSparkMedia
+Text("Hello").foregroundStyle(Flint.Colors.textHeading)`;
+---
+<Docs title="Brands and platforms" crumb="Foundations" lead="One system, four brands, two platforms. A brand can change any token. A platform changes sizes and type. Every combination passes the same contrast checks." toc={toc} wide>
+  <h2 id="layers">How the layers stack</h2>
+  <ol class="layer-flow">
+    <li><strong>Base</strong><span><code>tokens.json</code>, the Flint brand on the web.</span></li>
+    <li><strong>Brand</strong><span><code>brands/&lt;brand&gt;.json</code> overrides any token: colors, type, radius, shadows.</span></li>
+    <li><strong>Platform</strong><span><code>platforms/ios.json</code> overrides sizes, targets and type. Never color.</span></li>
+    <li><strong>Mode and density</strong><span>Light or dark, comfortable or compact, switched while the app runs.</span></li>
+  </ol>
+  <p>Brand and platform are chosen when Flint builds, so each app ships one brand. The build checks every brand in light and dark against the 7:1 text and 3:1 UI bars, and simulates color blindness on the chart colors. A brand file with a typo, or a platform file that touches color, fails the build.</p>
+
+  <h2 id="brands">The brands</h2>
+  <p>The same markup in each brand, light and dark. The second button shows its focus ring.</p>
+  <ul class="brand-grid">
+    {brands.map((b) => (
+      <li class="brand-item">
+        <h3 class="brand-name">{b.name}</h3>
+        <p class="muted brand-where">{b.where}</p>
+        <div class="brand-pair">
+          {['light', 'dark'].map((mode) => (
+            <div class="brand-panel" data-brand={b.id} data-theme={mode} aria-label={`${b.name}, ${mode}`} role="group">
+              <div class="brand-card">
+                <p class="brand-kicker">{mode === 'light' ? 'Light' : 'Dark'}</p>
+                <p class="brand-title">Trip report</p>
+                <p class="brand-body">Six pages scanned. Two need fixes.</p>
+                <p class="brand-muted">Updated 2 minutes ago</p>
+                <a class="flint-link" href="#use" tabindex="-1">Open report</a>
+                <div class="brand-actions">
+                  <button type="button" class="flint-btn flint-btn--primary" tabindex="-1">Fix issues</button>
+                  <button type="button" class="flint-btn flint-btn--secondary st-focus" tabindex="-1">Share</button>
+                </div>
+                <span class="brand-accent" aria-hidden="true"></span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  <h2 id="changes">What each brand changes</h2>
+  <p>Brand values come from each live site. Where a site's color misses Flint's bar, the brand uses the nearest step that passes, and the brand file records the original and why.</p>
+  <TableWrap label="Brand swaps from the live sites">
+    <table class="data">
+      <thead><tr><th scope="col">Brand</th><th scope="col">Site value</th><th scope="col">What Flint uses, and why</th></tr></thead>
+      <tbody>{swaps.map((s) => <tr><th scope="row">{s.brand}</th><td>{s.from}</td><td>{s.why}</td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+  <p>Flint and AccessSpark are the same today. AccessSpark's file is empty so it can diverge without touching Flint.</p>
+
+  <h2 id="platforms">Platforms</h2>
+  <p>The Swift package builds from the iOS platform; CSS, React, MUI and shadcn build from the web. Only these values differ:</p>
+  <TableWrap label="Platform values">
+    <table class="data">
+      <thead><tr><th scope="col">Token</th><th scope="col">Web</th><th scope="col">iOS</th></tr></thead>
+      <tbody>{platformRows.map((r) => <tr><th scope="row"><code>{r.path}</code></th><td>{r.web}</td><td>{r.ios}</td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+  <p>The same button on each platform. <code>data-platform="ios"</code> exists for previews like this one and the <a href="/get-started/ios/#try">iOS phone</a>; web apps never set it.</p>
+  <div class="platform-pair">
+    <figure class="platform-panel"><figcaption>Web, 40px</figcaption><button type="button" class="flint-btn flint-btn--primary" tabindex="-1">Start trip</button></figure>
+    <figure class="platform-panel" data-platform="ios"><figcaption>iOS, 44pt</figcaption><button type="button" class="flint-btn flint-btn--primary" tabindex="-1">Start trip</button></figure>
+  </div>
+
+  <h2 id="use">Using a brand</h2>
+  <Code label="CSS" code={cssCode} />
+  <Code label="JavaScript" code={jsCode} />
+  <Code label="Swift" code={swiftCode} />
+  <p>To preview brands side by side, as on this page, load <code>@innerspark/flint/brands.css</code> and set <code>data-brand</code> on any element. It carries all four palettes, so apps import their own brand's file instead.</p>
+</Docs>
+
+<script>
+  import { forceStates } from '../../../workbench/forceStates.js';
+  forceStates();
+</script>

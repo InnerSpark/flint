@@ -8,6 +8,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 import { resolveTokens, refOf, MODES } from './resolve.mjs';
+import { loadSource } from './layers.mjs';
 import { cssVarForPath, componentVar, camel } from './names.mjs';
 import { SHADCN_MAP } from './shadcn-map.mjs';
 
@@ -49,7 +50,7 @@ const cssScope = (files, mode) => {
   for (const f of files) {
     for (const b of blocks(read(f))) {
       const s = b.selector;
-      const applies = s === ':root' || s === ':root, [data-theme]' || s === `[data-theme="${mode}"]`;
+      const applies = s === ':root' || s === ':root, [data-theme]' || s === ':root, [data-theme], [data-platform]' || s === `[data-theme="${mode}"]`;
       if (applies) Object.assign(scope, b.vars);
     }
   }
@@ -118,6 +119,8 @@ checks++;
 for (const [n, l] of literal) fails.push(`mui    any   mui/options.mjs:${n} hardcodes a color; use a token: ${l.trim().slice(0, 90)}`);
 
 // ---------- Swift: the generated file the Swift package ships ----------
+// Swift is built from the ios platform layer (ASDS-86): 44pt targets and controls.
+const apple = resolveTokens(loadSource({ platform: 'ios' }));
 const swift = read('dist/swift/Flint.swift');
 const swiftEnum = (name) => {
   const m = swift.match(new RegExp(`public enum ${name} \\{([\\s\\S]*?)\\n  \\}`));
@@ -130,25 +133,25 @@ const colorLine = (body, name, fn) => {
 };
 const numLine = (body, name) => (body.match(new RegExp(`static let ${name}: CGFloat = ([\\d.]+)`)) || [])[1];
 const colorsBody = swiftEnum('Colors'), uiBody = swiftEnum('UIColors'), compBody = swiftEnum('Component');
-for (const [path, light] of leaves(tokens.semantic.light)) {
+for (const [path, light] of leaves(apple.semantic.light)) {
   if (!String(light).startsWith('#')) continue; // rgba scrims are checked by value elsewhere
-  const name = camel(...path), dark = at(tokens.semantic.dark, path);
+  const name = camel(...path), dark = at(apple.semantic.dark, path);
   for (const [platform, body, fn] of [['swift', colorsBody, 'dynamic'], ['uikit', uiBody, 'dynamicPlatform']]) {
     const got = colorLine(body, name, fn);
     expect(platform, `Colors.${name}`, 'light', got.light, hex(light));
     expect(platform, `Colors.${name}`, 'dark', got.dark, hex(dark));
   }
 }
-for (const [path, light] of leaves(tokens.component.light)) {
-  const name = camel(...path), dark = at(tokens.component.dark, path);
+for (const [path, light] of leaves(apple.component.light)) {
+  const name = camel(...path), dark = at(apple.component.dark, path);
   if (typeof light === 'number') { expect('swift', `Component.${name}`, 'any', numLine(compBody, name), String(light)); continue; }
   const got = colorLine(compBody, name, 'dynamic');
   expect('swift', `Component.${name}`, 'light', got.light, hex(light));
   expect('swift', `Component.${name}`, 'dark', got.dark, hex(dark));
 }
 const radiusBody = swiftEnum('Radius'), spaceBody = swiftEnum('Space');
-for (const [k, v] of Object.entries(tokens.radius)) expect('swift', `Radius.${camel(k)}`, 'any', numLine(radiusBody, camel(k)), String(v));
-for (const [k, v] of Object.entries(tokens.space)) expect('swift', `Space.s${k}`, 'any', numLine(spaceBody, `s${k}`), String(v));
+for (const [k, v] of Object.entries(apple.radius)) expect('swift', `Radius.${camel(k)}`, 'any', numLine(radiusBody, camel(k)), String(v));
+for (const [k, v] of Object.entries(apple.space)) expect('swift', `Space.s${k}`, 'any', numLine(spaceBody, `s${k}`), String(v));
 
 console.log(`\n== parity ==`);
 if (fails.length) for (const f of fails) console.log(`FAIL ${f}`);

@@ -14,20 +14,28 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { resolveTokens, refOf } from './resolve.mjs';
+import { loadSource, currentBrand, distFor, DEFAULT_BRAND } from './layers.mjs';
 import { SHADCN_MAP, SHADCN_THEME_COLORS } from './shadcn-map.mjs';
 import { kebab, camel, cssVarForPath, componentVar } from './names.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 // source keeps semantic tokens as {color.*} references (DTCG output preserves them);
 // tokens is the resolved copy every other output is built from.
-const source = JSON.parse(readFileSync(join(root, 'tokens.json'), 'utf8'));
+// Brand and platform layers (ASDS-86): FLINT_BRAND picks the brand. Web outputs read the web
+// platform; the Swift package reads the ios platform (44pt targets and controls, Apple chrome type).
+const BRAND = currentBrand();
+const source = loadSource({ brand: BRAND });
 const tokens = resolveTokens(source);
-const dist = join(root, 'dist');
-mkdirSync(join(dist, 'swift'), { recursive: true });
+const appleSource = loadSource({ brand: BRAND, platform: 'ios' });
+const apple = resolveTokens(appleSource);
+const dist = distFor(BRAND);
+const swiftDir = BRAND === DEFAULT_BRAND ? join(dist, 'swift') : join(root, 'dist', 'swift-brands', BRAND);
+mkdirSync(dist, { recursive: true });
+mkdirSync(swiftDir, { recursive: true });
 
 
-function semanticVars(mode) {
-  const s = tokens.semantic[mode];
+function semanticVars(mode, t = tokens) {
+  const s = t.semantic[mode];
   const out = [];
   for (const [group, val] of Object.entries(s)) {
     if (typeof val === 'string') {
@@ -47,15 +55,15 @@ const shadowDarkVars = () => Object.entries(tokens.shadowDark || {}).map(([k, v]
 // Density varies spacing only: inset and gap each drop one step down the space ramp in
 // compact. Control sizes, icon sizes, radius and targetMin are identical in both, so a
 // compact layout never shrinks the touch target (WCAG 2.5.8).
-const densityVars = (d) => {
-  const g = (tokens.density || {})[d] || {};
+const densityVars = (d, t = tokens) => {
+  const g = (t.density || {})[d] || {};
   return [
     ...Object.entries(g.inset || {}).map(([k, v]) => [`--inset-${k}`, `${v}px`]),
     ...Object.entries(g.gap || {}).map(([k, v]) => [`--gap-${k}`, `${v}px`]),
   ];
 };
 
-function staticVars() {
+function staticVars(tokens) {
   const out = [];
   for (const [ramp, steps] of Object.entries(tokens.color)) {
     if (typeof steps === 'string') out.push([`--color-${ramp}`, steps]);
@@ -81,7 +89,7 @@ function staticVars() {
     const k = kebab(name);
     out.push([`--type-${k}-size`, `${t.fontSize}px`], [`--type-${k}-weight`, `${t.fontWeight}`], [`--type-${k}-line-height`, `${t.lineHeight}`], [`--type-${k}-tracking`, t.letterSpacing]);
   }
-  out.push(...densityVars('comfortable'));
+  out.push(...densityVars('comfortable', tokens));
   out.push(['--font-sans', tokens.fontFamily.sans]);
   out.push(['--font-prose', tokens.fontFamily.prose]);
   out.push(['--font-mono', tokens.fontFamily.mono]);
@@ -90,6 +98,13 @@ function staticVars() {
 
 // Component tier (ASDS-39): one var per component token, written as a var() reference to
 // the token it points at. Mode-free, so dark mode needs no extra block.
+// iOS platform preview (ASDS-86): only the variables whose iOS value differs from the web, so the
+// docs can show a Flint screen at iOS sizes. Apps on the web never set data-platform.
+function platformVars() {
+  const web = new Map(staticVars(tokens));
+  return staticVars(apple).filter(([n, v]) => web.get(n) !== v);
+}
+
 function componentVars() {
   const out = [];
   const walk = (node, path) => {
@@ -109,7 +124,7 @@ const fmt = (pairs) => pairs.map(([n, v]) => `  ${n}: ${v};`).join('\n');
 
 writeFileSync(join(dist, 'tokens.css'), `/* GENERATED from tokens.json. Flint Design System. Do not edit by hand. */
 :root {
-${fmt(staticVars())}
+${fmt(staticVars(tokens))}
 
   /* semantic (light) */
 ${fmt(semanticVars('light'))}
@@ -138,14 +153,19 @@ ${fmt(densityVars('compact'))}
 
 /* component tier: re-declared wherever a theme is set, so a nested data-theme="dark" section
    resolves these against its own colors instead of inheriting the page's */
-:root, [data-theme] {
+[data-platform="ios"] {
+  /* platform (ios): 44pt targets and controls, Apple chrome type */
+${fmt(platformVars())}
+}
+
+:root, [data-theme], [data-platform] {
 ${fmt(componentVars())}
 }
 `);
 
 writeFileSync(join(dist, 'tokens.media.css'), `/* GENERATED from tokens.json. Auto dark via prefers-color-scheme. Do not edit by hand. */
 :root {
-${fmt(staticVars())}
+${fmt(staticVars(tokens))}
 
   /* semantic (light) */
 ${fmt(semanticVars('light'))}
@@ -168,7 +188,12 @@ ${fmt(densityVars('compact'))}
 
 /* component tier: re-declared wherever a theme is set, so a nested data-theme="dark" section
    resolves these against its own colors instead of inheriting the page's */
-:root, [data-theme] {
+[data-platform="ios"] {
+  /* platform (ios): 44pt targets and controls, Apple chrome type */
+${fmt(platformVars())}
+}
+
+:root, [data-theme], [data-platform] {
 ${fmt(componentVars())}
 }
 `);
@@ -347,8 +372,8 @@ const flatten = (obj, path = []) => Object.entries(obj).flatMap(([k, v]) => (typ
 const at = (obj, path) => path.reduce((o, k) => (o == null ? undefined : o[k]), obj);
 const num = (n) => (Number.isInteger(n) ? `${n}` : `${+n.toFixed(4)}`);
 
-const semanticArgs = flatten(tokens.semantic.light).map(([path, lightVal]) => {
-  const darkVal = at(tokens.semantic.dark, path);
+const semanticArgs = flatten(apple.semantic.light).map(([path, lightVal]) => {
+  const darkVal = at(apple.semantic.dark, path);
   if (typeof darkVal !== 'string') throw new Error(`Swift export: semantic.dark.${path.join('.')} missing`);
   const l = swiftColor(lightVal), d = swiftColor(darkVal);
   const args = [`light: ${l.hex}`, l.a !== 1 ? `lightOpacity: ${l.a}` : null, `dark: ${d.hex}`, d.a !== 1 ? `darkOpacity: ${d.a}` : null].filter(Boolean).join(', ');
@@ -359,8 +384,8 @@ const semanticLines = semanticArgs.map(([name, args]) => `    public static let 
 // locks to the current appearance, so UIKit APIs like UINavigationBarAppearance need these instead.
 const componentSwiftLines = (() => {
   const walk = (node, path) => Object.entries(node).flatMap(([k, v]) => (v && typeof v === 'object' ? walk(v, [...path, k]) : [[[...path, k], v]]));
-  return walk(source.component || {}, []).map(([path]) => {
-    const lv = at(tokens.component.light, path), dv = at(tokens.component.dark, path);
+  return walk(appleSource.component || {}, []).map(([path]) => {
+    const lv = at(apple.component.light, path), dv = at(apple.component.dark, path);
     if (typeof lv === 'number') return `    public static let ${camel(...path)}: CGFloat = ${num(lv)}`;
     const l = swiftColor(lv), d = swiftColor(dv);
     const args = [`light: ${l.hex}`, l.a !== 1 ? `lightOpacity: ${l.a}` : null, `dark: ${d.hex}`, d.a !== 1 ? `darkOpacity: ${d.a}` : null].filter(Boolean).join(', ');
@@ -368,7 +393,7 @@ const componentSwiftLines = (() => {
   });
 })();
 const platformLines = semanticArgs.map(([name, args]) => `    public static let ${name} = dynamicPlatform(${args})`);
-const paletteLines = Object.entries(tokens.color).flatMap(([ramp, steps]) =>
+const paletteLines = Object.entries(apple.color).flatMap(([ramp, steps]) =>
   typeof steps === 'string'
     ? [`    public static let ${camel(ramp)} = Color(flintHex: ${swiftColor(steps).hex})`]
     : Object.entries(steps).map(([step, hex]) => `    public static let ${camel(ramp, step)} = Color(flintHex: ${swiftColor(hex).hex})`));
@@ -376,23 +401,20 @@ const cgGroup = (obj, prefix = '') => Object.entries(obj).map(([k, v]) => `    p
 
 const psFamily = (stack) => (stack.match(/'([^']+)'|"([^"]+)"/) || [])[1]?.replace(/\s+/g, '') || 'OpenSans';
 const weightName = { 400: 'Regular', 500: 'Medium', 600: 'SemiBold', 700: 'Bold', 800: 'ExtraBold' };
-const roleMap = { displayXl: 'largeTitle', display: 'largeTitle', headingH1: 'largeTitle', headingH2: 'title2', headingH3: 'title3', bodyLg: 'body', bodyMd: 'body', bodySm: 'subheadline', labelButton: 'subheadline', labelDefault: 'subheadline' };
+const roleMap = { navTitleLarge: 'largeTitle', navTitle: 'headline', tabLabel: 'caption2', displayXl: 'largeTitle', display: 'largeTitle', headingH1: 'largeTitle', headingH2: 'title2', headingH3: 'title3', bodyLg: 'body', bodyMd: 'body', bodySm: 'subheadline', labelButton: 'subheadline', labelDefault: 'subheadline' };
 const relativeTo = (name, size) => roleMap[name] || (size <= 12 ? 'caption' : size <= 14 ? 'subheadline' : 'body');
-const typeLines = Object.entries(tokens.typography).map(([name, t]) => {
+const typeLines = Object.entries(apple.typography).map(([name, t]) => {
   if (!weightName[t.fontWeight]) throw new Error(`Swift export: no Open Sans face for weight ${t.fontWeight} (${name})`);
   const font = `${psFamily(t.fontFamily)}-${weightName[t.fontWeight]}`;
   return `    public static let ${camel(name)} = FlintTextStyle(fontName: "${font}", size: ${num(t.fontSize)}, relativeTo: .${relativeTo(name, t.fontSize)}, lineHeight: ${num(t.lineHeight)}, tracking: ${num(parseFloat(t.letterSpacing) || 0)})`;
 });
 
 const seconds = (v) => { const m = String(v).match(/^([\d.]+)\s*(ms|s)$/); if (!m) throw new Error(`Swift export: bad duration "${v}"`); return m[2] === 'ms' ? +m[1] / 1000 : +m[1]; };
-const durationLines = Object.entries(tokens.motion.duration).map(([k, v]) => `      public static let ${camel(k)}: Double = ${num(seconds(v))}`);
-const easingNames = Object.keys(tokens.motion.easing).map((k) => camel(k));
-const easingCases = Object.entries(tokens.motion.easing).map(([k, v]) => { const [a, b, c, d] = bezier(v); return `        case .${camel(k)}: return (${a}, ${b}, ${c}, ${d})`; });
+const durationLines = Object.entries(apple.motion.duration).map(([k, v]) => `      public static let ${camel(k)}: Double = ${num(seconds(v))}`);
+const easingNames = Object.keys(apple.motion.easing).map((k) => camel(k));
+const easingCases = Object.entries(apple.motion.easing).map(([k, v]) => { const [a, b, c, d] = bezier(v); return `        case .${camel(k)}: return (${a}, ${b}, ${c}, ${d})`; });
 
-// Apple HIG minimum hit target. Platform rule, not a brand token, so it lives here rather than tokens.json.
-const APPLE_TOUCH_MIN = 44;
-
-writeFileSync(join(dist, 'swift', 'Flint.swift'), `// GENERATED from tokens.json by scripts/build.mjs. Flint Design System. Do not edit by hand.
+writeFileSync(join(swiftDir, 'Flint.swift'), `// GENERATED from tokens.json (brand ${BRAND}, platform ios) by scripts/build.mjs. Flint Design System. Do not edit by hand.
 // Colors: Flint.Colors (semantic, light/dark aware) and Flint.Palette (raw ramps).
 // Layout: Flint.Space, Flint.Radius, Flint.Control, Flint.IconSize, Flint.Target.
 // Type:   Flint.Typography + .flintText(_:). Needs the Open Sans static TTFs bundled in the app.
@@ -435,27 +457,27 @@ ${componentSwiftLines.join('\n')}
   }
 
   public enum Space {
-${cgGroup(tokens.space, 's').join('\n')}
+${cgGroup(apple.space, 's').join('\n')}
   }
 
   public enum Radius {
-${cgGroup(tokens.radius).join('\n')}
+${cgGroup(apple.radius).join('\n')}
   }
 
   /// Control heights.
   public enum Control {
-${cgGroup(tokens.control).join('\n')}
+${cgGroup(apple.control).join('\n')}
   }
 
   public enum IconSize {
-${cgGroup(tokens.iconSize).join('\n')}
+${cgGroup(apple.iconSize).join('\n')}
   }
 
   public enum Target {
-    /// Flint targetMin (WCAG 2.2 AA, 2.5.8).
-    public static let minimum: CGFloat = ${num(tokens.targetMin)}
-    /// Apple HIG minimum hit target. Use this for touch UI on iOS.
-    public static let touch: CGFloat = ${APPLE_TOUCH_MIN}
+    /// Smallest hit target on this platform: targetMin from platforms/ios.json (Apple HIG, 44pt).
+    public static let minimum: CGFloat = ${num(apple.targetMin)}
+    /// Same as minimum. Kept so apps written against Flint 1.15 and earlier still build.
+    public static let touch: CGFloat = ${num(apple.targetMin)}
   }
 
   public enum Typography {
@@ -596,4 +618,4 @@ private func dynamic(light: UInt32, lightOpacity: Double = 1, dark: UInt32, dark
 writeFileSync(join(dist, 'components.css'), `/* GENERATED copy of css/components.css. Flint Design System. Edit the source, not this file. */
 ${readFileSync(join(root, 'css', 'components.css'), 'utf8')}`);
 
-console.log('Built dist/: tokens.json, tokens.css, tokens.media.css, fonts.css, shadcn.css, components.css, index.js, index.d.ts, tokens.dtcg.json, swift/Flint.swift');
+console.log(`Built ${BRAND} into ${dist.replace(root + '/', '')}/ (Swift: ${swiftDir.replace(root + '/', '')}):`, 'tokens.json, tokens.css, tokens.media.css, fonts.css, shadcn.css, components.css, index.js, index.d.ts, tokens.dtcg.json, swift/Flint.swift');

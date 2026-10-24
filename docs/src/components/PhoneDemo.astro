@@ -32,7 +32,7 @@ const def = 3;
 
   <figure class="pd-device">
     <div class="pd-frame">
-      <div class="pd-screen" data-theme="light" style={`--dt:${sizes[def][1]}`} role="group" aria-label="iPhone preview: Trips">
+      <div class="pd-screen" data-theme="light" data-platform="ios" style={`--dt:${sizes[def][1]}`} role="group" aria-label="iPhone preview: Trips">
         <div class="pd-status" aria-hidden="true">
           <span>9:41</span>
           <span class="pd-island"></span>
@@ -60,7 +60,7 @@ const def = 3;
       </div>
     </div>
     <div class="pd-caption" aria-hidden="true" data-on="true"><span class="pd-caption-label">VoiceOver</span><span class="pd-caption-text">Tab into the phone to hear a control.</span></div>
-    <figcaption class="pd-figcaption"><strong>Web preview.</strong> Drawn in HTML from the same tokens as the Swift package, with 44pt touch targets. Real SwiftUI can differ slightly.</figcaption>
+    <figcaption class="pd-figcaption"><strong>Web preview.</strong> Drawn in HTML from the same tokens as the Swift package, with the iOS platform tokens (44pt targets and controls). Real SwiftUI can differ slightly.</figcaption>
   </figure>
 </div>
 

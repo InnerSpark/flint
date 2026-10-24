@@ -1,0 +1,16 @@
+{
+  "$description": "Inner Spark Studio, the portfolio (innerspark.studio). Flint with the portfolio's softer body text: one step lighter than Flint's default.",
+  "$source": {
+    "from": "portfolio-2025 src/styles/tokens.css, checked 2026-10-24. The site already copies Flint's ramps and spacing.",
+    "kept": "Navy, sky accent, surfaces, radius and spacing match Flint.",
+    "swapped": {
+      "body text #475569 (gray.600)": "7.58:1 on white but 6.92:1 on the subtle surface (chips, badges, read-only fields, menu hover), under Flint's 7:1 text bar. Uses gray.700 #334155, the nearest step that passes everywhere. Still lighter than Flint's default text.",
+      "muted text #64748B (gray.500)": "4.76:1, under 7:1. Keeps Flint's muted, gray.700, so muted and body text are the same color in this brand. Use size, weight or position for hierarchy.",
+      "link #2767CC (blue.500)": "5.39:1, under 7:1. Keeps Flint's link, blue.700 #1550A0 (7.82:1)."
+    },
+    "added": "No dark mode on the live site. Dark uses Flint's dark values."
+  },
+  "semantic": {
+    "light": { "text": { "default": "{color.gray.700}" } }
+  }
+}

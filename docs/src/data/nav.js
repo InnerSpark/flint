@@ -22,6 +22,7 @@ export const NAV = [
       ['Motion', '/foundations/motion/'],
       ['Elevation', '/foundations/elevation/'],
       ['Data visualization', '/foundations/data-visualization/'],
+      ['Brands and platforms', '/foundations/brands/'],
       ['Illustration', '/foundations/illustration/'],
       ['Token explorer', '/foundations/tokens/'],
     ],

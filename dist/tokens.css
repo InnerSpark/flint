@@ -451,7 +451,25 @@
 
 /* component tier: re-declared wherever a theme is set, so a nested data-theme="dark" section
    resolves these against its own colors instead of inheriting the page's */
-:root, [data-theme] {
+[data-platform="ios"] {
+  /* platform (ios): 44pt targets and controls, Apple chrome type */
+  --control-md: 44px;
+  --target-min: 44px;
+  --type-nav-title-large-size: 34px;
+  --type-nav-title-large-weight: 700;
+  --type-nav-title-large-line-height: 1.2;
+  --type-nav-title-large-tracking: -0.4px;
+  --type-nav-title-size: 17px;
+  --type-nav-title-weight: 700;
+  --type-nav-title-line-height: 1.3;
+  --type-nav-title-tracking: 0;
+  --type-tab-label-size: 12px;
+  --type-tab-label-weight: 600;
+  --type-tab-label-line-height: 1.2;
+  --type-tab-label-tracking: 0;
+}
+
+:root, [data-theme], [data-platform] {
   --link-fg: var(--color-text-link);
   --button-radius: var(--radius-control);
   --button-height: var(--control-md);
@@ -486,7 +504,7 @@
   --input-border-hover: var(--color-border-control-hover);
   --input-border-focus: var(--color-border-focus);
   --input-border-error: var(--color-border-error);
-  --checkbox-size: var(--target-min);
+  --checkbox-size: var(--icon-size-lg);
   --checkbox-radius: var(--radius-xs);
   --checkbox-border: var(--color-border-control);
   --checkbox-border-hover: var(--color-border-control-hover);
@@ -495,7 +513,7 @@
   --checkbox-checked-fg: var(--color-action-on-primary);
   --checkbox-disabled: var(--color-action-disabled);
   --checkbox-disabled-bg: var(--color-action-disabled-bg);
-  --radio-size: var(--target-min);
+  --radio-size: var(--icon-size-lg);
   --radio-border: var(--color-border-control);
   --radio-border-hover: var(--color-border-control-hover);
   --radio-border-error: var(--color-border-error);

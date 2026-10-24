@@ -1,4 +1,4 @@
-// GENERATED from tokens.json by scripts/build.mjs. Flint Design System. Do not edit by hand.
+// GENERATED from tokens.json (brand flint, platform ios) by scripts/build.mjs. Flint Design System. Do not edit by hand.
 // Colors: Flint.Colors (semantic, light/dark aware) and Flint.Palette (raw ramps).
 // Layout: Flint.Space, Flint.Radius, Flint.Control, Flint.IconSize, Flint.Target.
 // Type:   Flint.Typography + .flintText(_:). Needs the Open Sans static TTFs bundled in the app.
@@ -317,7 +317,7 @@ public enum Flint {
   public enum Component {
     public static let linkFg = dynamic(light: 0x1550a0, dark: 0x93c5fd)
     public static let buttonRadius: CGFloat = 8
-    public static let buttonHeight: CGFloat = 40
+    public static let buttonHeight: CGFloat = 44
     public static let buttonHeightSm: CGFloat = 32
     public static let buttonPrimaryBg = dynamic(light: 0x1550a0, dark: 0x93c5fd)
     public static let buttonPrimaryBgHover = dynamic(light: 0x0d3b6e, dark: 0xbfdbfe)
@@ -340,7 +340,7 @@ public enum Flint {
     public static let fieldHelperFg = dynamic(light: 0x334155, dark: 0xaeb8c2)
     public static let fieldErrorFg = dynamic(light: 0x7f1d1d, dark: 0xfee2e2)
     public static let inputRadius: CGFloat = 8
-    public static let inputHeight: CGFloat = 40
+    public static let inputHeight: CGFloat = 44
     public static let inputBg = dynamic(light: 0xffffff, dark: 0x161b22)
     public static let inputBgReadOnly = dynamic(light: 0xf1f5f9, dark: 0x21262d)
     public static let inputFg = dynamic(light: 0x1e293b, dark: 0xc9d1d9)
@@ -373,7 +373,7 @@ public enum Flint {
     public static let switchThumbChecked = dynamic(light: 0xffffff, dark: 0x0d1117)
     public static let switchThumbDisabled = dynamic(light: 0x64748b, dark: 0x828b95)
     public static let selectRadius: CGFloat = 8
-    public static let selectHeight: CGFloat = 40
+    public static let selectHeight: CGFloat = 44
     public static let selectBg = dynamic(light: 0xffffff, dark: 0x161b22)
     public static let selectFg = dynamic(light: 0x1e293b, dark: 0xc9d1d9)
     public static let selectPlaceholder = dynamic(light: 0x334155, dark: 0xaeb8c2)
@@ -479,7 +479,7 @@ public enum Flint {
   /// Control heights.
   public enum Control {
     public static let sm: CGFloat = 32
-    public static let md: CGFloat = 40
+    public static let md: CGFloat = 44
   }
 
   public enum IconSize {
@@ -489,9 +489,9 @@ public enum Flint {
   }
 
   public enum Target {
-    /// Flint targetMin (WCAG 2.2 AA, 2.5.8).
-    public static let minimum: CGFloat = 24
-    /// Apple HIG minimum hit target. Use this for touch UI on iOS.
+    /// Smallest hit target on this platform: targetMin from platforms/ios.json (Apple HIG, 44pt).
+    public static let minimum: CGFloat = 44
+    /// Same as minimum. Kept so apps written against Flint 1.15 and earlier still build.
     public static let touch: CGFloat = 44
   }
 
@@ -510,6 +510,9 @@ public enum Flint {
     public static let labelKicker = FlintTextStyle(fontName: "OpenSans-Bold", size: 12, relativeTo: .caption, lineHeight: 1.2, tracking: 1.68)
     public static let labelFinePrint = FlintTextStyle(fontName: "OpenSans-Bold", size: 12, relativeTo: .caption, lineHeight: 1.2, tracking: 0.55)
     public static let labelHelper = FlintTextStyle(fontName: "OpenSans-Regular", size: 12, relativeTo: .caption, lineHeight: 1.4, tracking: 0)
+    public static let navTitleLarge = FlintTextStyle(fontName: "OpenSans-Bold", size: 34, relativeTo: .largeTitle, lineHeight: 1.2, tracking: -0.4)
+    public static let navTitle = FlintTextStyle(fontName: "OpenSans-Bold", size: 17, relativeTo: .headline, lineHeight: 1.3, tracking: 0)
+    public static let tabLabel = FlintTextStyle(fontName: "OpenSans-SemiBold", size: 12, relativeTo: .caption2, lineHeight: 1.2, tracking: 0)
   }
 
   public enum Motion {

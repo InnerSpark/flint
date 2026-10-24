@@ -1,0 +1,4 @@
+{
+  "$description": "AccessSpark: the app (app.accessspark.io) and the marketing site (accessspark.io). Both already use Flint as-is, so this layer is empty today. Add overrides here when AccessSpark should look different from Flint.",
+  "$source": "accessspark-www src/styles/tokens.css aliases Flint's tokens.css; the app reads @innerspark/flint directly. Checked 2026-10-24."
+}

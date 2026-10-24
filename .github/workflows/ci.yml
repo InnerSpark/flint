@@ -19,7 +19,8 @@ jobs:
         with:
           node-version: '22'
 
-      # build.mjs regenerates dist/, then check-contrast and check-parity verify it.
+      # build-all.mjs regenerates dist/ for every brand (ASDS-86) and runs the contrast, color-vision,
+      # parity and component guards on each.
       - name: Build and verify tokens
         run: npm run build
 
@@ -74,3 +75,14 @@ jobs:
           [ "$TAG" = "$HEAD_SECTION" ] || { echo "Tag $TAG does not match the top CHANGELOG section $HEAD_SECTION"; exit 1; }
           node scripts/changelog-section.mjs "$TAG" > /dev/null || { echo "Could not extract release notes for $TAG"; exit 1; }
           echo "tag, package.json and CHANGELOG agree"
+
+  # The Swift package (ASDS-86, ASDS-38). Linux can't compile SwiftUI, so this runs on macOS and
+  # builds every brand's product for iOS and for macOS. The repo is public, so macOS minutes are free.
+  swift:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build for macOS (every product)
+        run: swift build
+      - name: Build for iOS Simulator (every product)
+        run: xcodebuild -scheme Flint-Package -destination 'generic/platform=iOS Simulator' -quiet build

@@ -16,6 +16,24 @@ The single source of truth for color, type, spacing, radius, size, motion, and e
 
 The build resolves every reference. CSS, JS, MUI, and Swift consumers always get final values. The DTCG export keeps the references so Tokens Studio and Style Dictionary see the link back to the ladder.
 
+## Brands and platforms
+
+Two more layers sit on top of `tokens.json` and merge in before references resolve (ASDS-86):
+
+- **Brand:** `brands/<brand>.json` can override any token. Brands: `flint` (the base, empty), `accessspark` (same as Flint today), `innersparkmedia` (orange accent and focus ring, 8px cards, lighter shadows) and `studio` (softer body text). Values came from each live site; anything under Flint's 7:1 text or 3:1 UI bar uses the nearest passing step, and the file's `$source` records the original and why.
+- **Platform:** `platforms/ios.json` overrides sizes, targets and type for the Swift package: `targetMin` and `control.md` are 44, plus `navTitleLarge`, `navTitle` and `tabLabel` type styles. Platforms can't touch color.
+
+Every brand gets the contrast and color-vision checks in light and dark. A brand path that isn't in `tokens.json`, or a platform that sets a color, fails the build.
+
+| Brand | CSS | JS | Swift product |
+|---|---|---|---|
+| flint | `@innerspark/flint/tokens.css` | `@innerspark/flint` | `Flint` |
+| accessspark | `@innerspark/flint/brands/accessspark/tokens.css` | `@innerspark/flint/brands/accessspark` | `FlintAccessSpark` |
+| innersparkmedia | `@innerspark/flint/brands/innersparkmedia/tokens.css` | `@innerspark/flint/brands/innersparkmedia` | `FlintInnerSparkMedia` |
+| studio | `@innerspark/flint/brands/studio/tokens.css` | `@innerspark/flint/brands/studio` | `FlintStudio` |
+
+Each brand folder also has `tokens.media.css`, `tokens.json` and `shadcn.css`. `components.css` is shared. `@innerspark/flint/brands.css` puts every brand under `[data-brand="<brand>"]` for side-by-side previews, and `tokens.css` has a `[data-platform="ios"]` block for iOS-size previews; apps don't need either. Not per brand yet: the MUI theme (only AccessSpark uses it, and it matches Flint).
+
 ### One token, four names
 
 | Figma variable | CSS | JS | Swift |
@@ -124,7 +142,7 @@ For a compact layout, use the object form: `createFlintTheme({ mode: 'light', de
 
 ### Swift / SwiftUI (iOS 16+, macOS 13+)
 
-Add the package in Xcode (File > Add Package Dependencies) with `https://github.com/InnerSpark/flint`, pinned to a version tag.
+Add the package in Xcode (File > Add Package Dependencies) with `https://github.com/InnerSpark/flint`, pinned to a version tag. Add one product, the one for your brand (`Flint`, `FlintAccessSpark`, `FlintInnerSparkMedia` or `FlintStudio`); each exposes the same `Flint` API. The Swift output uses the iOS platform values.
 
 ```swift
 import Flint
@@ -139,8 +157,8 @@ Text("Awning")
 
 - **UIKit / AppKit colors:** `Flint.UIColors.*` (iOS) and `Flint.NSColors.*` (macOS) are the same semantic tokens as dynamic platform colors. Use them for `UINavigationBarAppearance` and other UIKit APIs; `UIColor(Flint.Colors.x)` locks to light mode.
 - **Colors:** `Flint.Colors.*` are the semantic tokens, flat camelCase (`--color-feedback-success-text` is `feedback.success.text` is `Flint.Colors.feedbackSuccessText`). Each follows the system light/dark appearance. `Flint.Palette.*` holds the raw ramps (`blue500`) and does not change between modes.
-- **Layout:** `Flint.Space.s0` to `s64`, `Flint.Radius`, `Flint.Control`, `Flint.IconSize`. `Flint.Target.minimum` is `targetMin` (24); use `Flint.Target.touch` (44, Apple HIG) for touch UI.
-- **Type:** `.flintText(Flint.Typography.bodyMd)` sets font, line height, and tracking, all scaled with Dynamic Type. Bundle the Open Sans static TTFs (Regular, Medium, SemiBold, Bold, ExtraBold) in the app and list them under `UIAppFonts`; the styles use PostScript names like `OpenSans-Bold`.
+- **Layout:** `Flint.Space.s0` to `s64`, `Flint.Radius`, `Flint.Control`, `Flint.IconSize`. `Flint.Target.minimum` is the iOS `targetMin`, 44 (Apple HIG); `Flint.Target.touch` is the same value, kept for older code. `Flint.Control.md` and the button, input and select heights are 44 too.
+- **Type:** `.flintText(Flint.Typography.bodyMd)` sets font, line height, and tracking, all scaled with Dynamic Type. Apple chrome styles: `navTitleLarge` (34), `navTitle` (17), `tabLabel` (12). Bundle the Open Sans static TTFs (Regular, Medium, SemiBold, Bold, ExtraBold) in the app and list them under `UIAppFonts`; the styles use PostScript names like `OpenSans-Bold`.
 - **Motion:** `withAnimation(Flint.Motion.animation(.standard, duration: Flint.Motion.Duration.base, reduceMotion: reduceMotion)) { ... }`, with `reduceMotion` from `@Environment(\.accessibilityReduceMotion)`. Returns nil (no animation) when Reduce Motion is on.
 - **Not in the Swift output yet:** shadows, z-index, breakpoints.
 
@@ -151,7 +169,8 @@ Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--r
 ## Build
 
 ```bash
-npm run build       # regenerates dist/ from tokens.json and css/, then runs the contrast, parity, component CSS and chart color checks
+npm run build       # builds every brand (dist/ and dist/brands/), then runs the contrast and chart color checks per brand, plus parity and component CSS
+npm run check       # the same checks against the committed dist/, without rebuilding
 npm run test:react  # builds react/dist, renders every React component, type-checks react/index.d.ts (needs npm ci --prefix react)
 ```
 

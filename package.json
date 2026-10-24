@@ -16,6 +16,8 @@
   ],
   "files": [
     "tokens.json",
+    "brands",
+    "platforms",
     "css",
     "js",
     "dist",
@@ -39,6 +41,15 @@
     "./tokens.dtcg.json": "./dist/tokens.dtcg.json",
     "./shadcn.css": "./dist/shadcn.css",
     "./components.css": "./dist/components.css",
+    "./brands.css": "./dist/brands.css",
+    "./brands/*/tokens.css": "./dist/brands/*/tokens.css",
+    "./brands/*/tokens.media.css": "./dist/brands/*/tokens.media.css",
+    "./brands/*/tokens.json": "./dist/brands/*/tokens.json",
+    "./brands/*/shadcn.css": "./dist/brands/*/shadcn.css",
+    "./brands/*": {
+      "types": "./dist/brands/*/index.d.ts",
+      "import": "./dist/brands/*/index.js"
+    },
     "./behaviors.js": {
       "types": "./js/behaviors.d.ts",
       "import": "./js/behaviors.js"
@@ -54,9 +65,9 @@
     }
   },
   "scripts": {
-    "build": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs && node scripts/check-cvd.mjs",
-    "check": "node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs && node scripts/check-cvd.mjs",
-    "prepare": "node scripts/build.mjs && node scripts/check-contrast.mjs && node scripts/check-parity.mjs && node scripts/check-components.mjs && node scripts/check-cvd.mjs",
+    "build": "node scripts/build-all.mjs",
+    "check": "node scripts/build-all.mjs --check",
+    "prepare": "node scripts/build-all.mjs",
     "release:notes": "node scripts/next-version.mjs",
     "release:prepare": "node scripts/release-prepare.mjs",
     "preflight": "node scripts/preflight.mjs",

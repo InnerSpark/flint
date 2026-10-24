@@ -1,0 +1,11 @@
+{
+  "$description": "iOS and macOS (the Swift package). Apple's 44pt minimum hit target and control height, plus the type styles only Apple chrome uses. Sizes, targets and type only; colors come from the brand.",
+  "$source": "Apple Human Interface Guidelines: 44x44pt minimum hit target; navigation bar large title 34pt and inline title 17pt; tab bar labels. Tab labels use 12pt, Flint's smallest size, instead of Apple's 10pt.",
+  "targetMin": 44,
+  "control": { "md": 44 },
+  "typography": {
+    "navTitleLarge": { "fontFamily": "'Open Sans', sans-serif", "fontSize": 34, "fontWeight": 700, "lineHeight": 1.2, "letterSpacing": "-0.4px" },
+    "navTitle": { "fontFamily": "'Open Sans', sans-serif", "fontSize": 17, "fontWeight": 700, "lineHeight": 1.3, "letterSpacing": "0" },
+    "tabLabel": { "fontFamily": "'Open Sans', sans-serif", "fontSize": 12, "fontWeight": 600, "lineHeight": 1.2, "letterSpacing": "0" }
+  }
+}
