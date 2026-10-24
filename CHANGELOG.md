@@ -4,6 +4,14 @@ Flint tokens follow semver, independent of the consuming apps.
 
 ## Unreleased
 
+- **SwiftUI components (ASDS-38).** Every brand product now includes the same components, drawn from its own tokens:
+  - From Bounder: `FlintButtonStyle` (`.buttonStyle(.flint(.primary))`, now with danger and text), `.flintCard()`, `FlintNotice` (adds success, a title and actions), `FlintTag` (one pill for the three hand-built copies), `FlintSectionTitle`, `FlintToggleRow`, `FlintChoicePicker`, `FlintStepper`, `FlintStatTile` and `FlintEmptyState`. Each keeps Bounder's accessibility behavior: spoken values, Dynamic Type layout switches, disabled reasons read aloud.
+  - iOS only: `FlintChrome.apply()` styles Apple's own navigation bar, tab bar, toolbar and alert tint with the new platform type styles. It doesn't replace them, so VoiceOver, the large content viewer and iPad sidebars keep working.
+  - Screens, lists and sheets: `FlintScreen`, `.flintList()` with `FlintRow`, `FlintRowButton` and `FlintListHeader`, plus `.flintSheet()` and `FlintSheetHeader`.
+  - Xcode previews in light, dark and Accessibility 3 text. Source in `swift/Components/`, copied into each product by the build.
+  - **Visible change for Bounder when it switches:** cards use `Radius.card` (12) instead of `Radius.lg` (16), and buttons use the button tokens (44pt tall on iOS, 8pt radius).
+  - **CI:** Swift compiler errors now show as annotations on the PR.
+  - **Docs:** the iOS page lists the components and shows a full app with the native tab bar.
 - **Brand and platform layers (ASDS-86).** Flint gets two new layers on top of `tokens.json`, merged before references resolve:
   - **Brands:** `flint`, `accessspark`, `innersparkmedia` and `studio`, in `brands/`. A brand can override any token. Values came from each live site. Anything under Flint's bar moved to the nearest passing step, and each brand file records the original and why. Findings: the Inner Spark Media orange is 4.27:1 on white (the site's comment says 5.0:1), so it's used for the focus ring and accent, never text. The studio's body text misses 7:1 on subtle surfaces, so it moves one step darker.
   - **Platforms:** `web` and `ios`, in `platforms/`. The Swift package now builds from `ios`: `targetMin` and `control.md` are 44, and new `navTitleLarge`, `navTitle` and `tabLabel` type styles cover Apple chrome. Platforms can't touch color.

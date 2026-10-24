@@ -2,9 +2,8 @@
 import Docs from '../../../layouts/Docs.astro';
 import Code from '../../../components/Code.astro';
 import TableWrap from '../../../components/TableWrap.astro';
-import Notice from '../../../components/Notice.astro';
 import PhoneDemo from '../../../components/PhoneDemo.astro';
-const toc = [{ id: 'try', text: 'Try it' }, { id: 'add', text: 'Add the package' }, { id: 'use', text: 'Use it' }, { id: 'reference', text: 'What is in the package' }, { id: 'uikit', text: 'UIKit colors' }];
+const toc = [{ id: 'try', text: 'Try it' }, { id: 'add', text: 'Add the package' }, { id: 'use', text: 'Use it' }, { id: 'reference', text: 'What is in the package' }, { id: 'components', text: 'Components' }, { id: 'chrome', text: 'Tab bar, nav bar and toolbar' }, { id: 'uikit', text: 'UIKit colors' }];
 const useCode = `import SwiftUI
 import Flint
 
@@ -14,7 +13,7 @@ struct TripCard: View {
       .flintText(Flint.Typography.headingH2)
       .foregroundStyle(Flint.Colors.textHeading)
       .padding(Flint.Space.s16)
-      .frame(minHeight: Flint.Target.touch)
+      .frame(minHeight: Flint.Target.minimum)
       .background(Flint.Colors.surfaceDefault,
                   in: RoundedRectangle(cornerRadius: Flint.Radius.card))
   }
@@ -44,7 +43,7 @@ struct TripsScreen: View {
             Toggle("Lights", isOn: $lightsOn)
               .flintText(Flint.Typography.bodyMd)
               .tint(Flint.Colors.actionPrimary)
-              .frame(minHeight: Flint.Target.touch)
+              .frame(minHeight: Flint.Target.minimum)
           }
           .padding(Flint.Space.s16)
           .background(Flint.Colors.surfaceDefault,
@@ -67,7 +66,7 @@ struct TripsScreen: View {
             TextField("Trip name", text: $tripName, prompt: Text("Big Bend, March"))
               .flintText(Flint.Typography.bodyMd)
               .padding(.horizontal, Flint.Space.s12)
-              .frame(minHeight: Flint.Target.touch)
+              .frame(minHeight: Flint.Target.minimum)
               .overlay(RoundedRectangle(cornerRadius: Flint.Radius.control)
                          .stroke(Flint.Colors.borderControl))
           }
@@ -80,7 +79,7 @@ struct TripsScreen: View {
           } label: {
             Text("Start trip")
               .flintText(Flint.Typography.labelButton)
-              .frame(maxWidth: .infinity, minHeight: Flint.Target.touch)
+              .frame(maxWidth: .infinity, minHeight: Flint.Target.minimum)
           }
           .foregroundStyle(Flint.Component.buttonPrimaryFg)
           .background(Flint.Component.buttonPrimaryBg,
@@ -101,6 +100,58 @@ struct TripsScreen: View {
     }
   }
 }`;
+const chromeCode = `import SwiftUI
+import Flint
+
+@main
+struct TripsApp: App {
+  // Styles Apple's own bars once. They stay native: VoiceOver, the large content
+  // viewer and iPad sidebars keep working.
+  init() { FlintChrome.apply() }
+
+  var body: some Scene {
+    WindowGroup {
+      TabView {
+        NavigationStack {
+          FlintScreen("Trips") {
+            FlintNotice("Rain after 6 PM. Pack the awning.", tone: .info)
+            Button("Start trip") {}.buttonStyle(.flint(.primary, fullWidth: true))
+          }
+        }
+        .tabItem { Label("Trips", systemImage: "map") }
+
+        NavigationStack {
+          List {
+            Section {
+              FlintRow("Wi-Fi", value: "Trailer-5G", systemImage: "wifi")
+              FlintRowButton("Delete trip", role: .destructive) {}
+            } header: { FlintListHeader("Trailer") }
+          }
+          .flintList()
+          .navigationTitle("Settings")
+        }
+        .tabItem { Label("Settings", systemImage: "gear") }
+      }
+      .tint(Flint.Colors.actionPrimary)
+    }
+  }
+}`;
+const components = [
+  ['FlintButtonStyle', '`.buttonStyle(.flint(.primary))`: primary, secondary, danger and text, from the button tokens, 44pt tall.'],
+  ['.flintCard()', 'Default surface, card radius, hairline edge.'],
+  ['FlintNotice', 'Info, success, warning or error message with its icon, an optional title and actions.'],
+  ['FlintTag', 'Status pill with words and an optional icon. Can carry a separate spoken label.'],
+  ['FlintSectionTitle', 'Section heading with the header trait.'],
+  ['FlintToggleRow', 'Large on/off row in a card; a disabled row shows and reads its reason.'],
+  ['FlintChoicePicker', 'Segmented control that turns into a list of rows at large text sizes.'],
+  ['FlintStepper', 'Large minus and plus, one VoiceOver element you swipe to adjust, separate spoken value.'],
+  ['FlintStatTile', 'One reading with an icon, big value and detail; visual and spoken values kept apart.'],
+  ['FlintEmptyState', 'What happened, optional numbered steps, one action.'],
+  ['FlintScreen', 'Scrolling page with the page background, standard insets and a large or inline title.'],
+  ['.flintList(), FlintRow, FlintRowButton, FlintListHeader', 'Settings-style grouped list. Rows read as one element and stack at accessibility sizes.'],
+  ['.flintSheet(), FlintSheetHeader', 'Sheet with detents, a grab handle, the large card radius, a heading and a Close button.'],
+  ['FlintChrome.apply()', 'Native navigation bar, tab bar, toolbar and alert styling. iOS only.'],
+];
 const uikitCode = `let bar = UINavigationBarAppearance()
 bar.backgroundColor = Flint.UIColors.surfacePage
 bar.titleTextAttributes = [.foregroundColor: Flint.UIColors.textHeading]`;
@@ -115,7 +166,7 @@ bar.titleTextAttributes = [.foregroundColor: Flint.UIColors.textHeading]`;
   <ol>
     <li>In Xcode, open File, then Add Package Dependencies.</li>
     <li>Enter <code>https://github.com/InnerSpark/flint</code> and pin it to a version.</li>
-    <li>The repository is private, so add your GitHub account under Xcode, Settings, Accounts first.</li>
+    <li>Add one product, the one for your brand: <code>Flint</code>, <code>FlintAccessSpark</code>, <code>FlintInnerSparkMedia</code> or <code>FlintStudio</code>. Each has the same API. See <a href="/foundations/brands/">Brands and platforms</a>.</li>
     <li>Bundle the Open Sans static fonts (Regular, Medium, SemiBold, Bold, ExtraBold) and list them under <code>UIAppFonts</code>.</li>
   </ol>
 
@@ -134,16 +185,27 @@ bar.titleTextAttributes = [.foregroundColor: Flint.UIColors.textHeading]`;
         <tr><th scope="row"><code>Flint.Typography</code></th><td>Type styles. Apply with <code>.flintText(_:)</code>; they scale with Dynamic Type.</td></tr>
         <tr><th scope="row"><code>Flint.Space</code>, <code>Flint.Radius</code></th><td>The spacing scale and radius, including <code>Radius.control</code> and <code>Radius.card</code>.</td></tr>
         <tr><th scope="row"><code>Flint.Control</code>, <code>Flint.IconSize</code></th><td>Control heights and icon sizes.</td></tr>
-        <tr><th scope="row"><code>Flint.Target</code></th><td><code>minimum</code> is 24 (WCAG 2.5.8). Use <code>touch</code>, 44 (Apple HIG), for touch UI.</td></tr>
+        <tr><th scope="row"><code>Flint.Target</code></th><td><code>minimum</code> is 44 (Apple HIG), from the iOS platform tokens. <code>touch</code> is the same value, kept for older code.</td></tr>
         <tr><th scope="row"><code>Flint.Motion</code></th><td>Durations and easing. <code>animation(_:duration:reduceMotion:)</code> returns nil when Reduce Motion is on.</td></tr>
       </tbody>
     </table>
   </TableWrap>
 
+  <h2 id="components">Components</h2>
+  <p>Every brand product ships the same components, drawn from that brand's tokens. They keep Apple's accessibility behavior: Dynamic Type layouts, spoken values, Reduce Motion, and disabled reasons that are read aloud. Each has an Xcode preview in light, dark and Accessibility 3 text.</p>
+  <TableWrap label="SwiftUI components">
+    <table class="data">
+      <thead><tr><th scope="col">Component</th><th scope="col">What it does</th></tr></thead>
+      <tbody>{components.map(([n, d]) => <tr><th scope="row"><code>{n}</code></th><td>{d.split('`').map((part, i) => (i % 2 ? <code>{part}</code> : part))}</td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+
+  <h2 id="chrome">Tab bar, nav bar and toolbar</h2>
+  <p>Flint styles Apple's own bars instead of replacing them. Call <code>FlintChrome.apply()</code> once at launch: titles use the <code>navTitleLarge</code> and <code>navTitle</code> styles, tab labels use <code>tabLabel</code>, and the selected tab shows its label and icon in the primary color. Alerts and confirmation dialogs stay native and pick up the tint.</p>
+  <Code label="SwiftUI app" code={chromeCode} />
+
   <h2 id="uikit">UIKit colors</h2>
   <p><code>UIColor(Flint.Colors.x)</code> locks to light mode. For UIKit APIs such as navigation bar appearance, use <code>Flint.UIColors</code>, which switch with the appearance.</p>
   <Code label="Swift" code={uikitCode} />
-  <Notice title="SwiftUI components are on the way">
-    <p>The package ships tokens today. Buttons, notices, tags and controls proven in Bounder are moving into it (ASDS-38).</p>
-  </Notice>
+
 </Docs>

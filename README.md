@@ -162,6 +162,16 @@ Text("Awning")
 - **Motion:** `withAnimation(Flint.Motion.animation(.standard, duration: Flint.Motion.Duration.base, reduceMotion: reduceMotion)) { ... }`, with `reduceMotion` from `@Environment(\.accessibilityReduceMotion)`. Returns nil (no animation) when Reduce Motion is on.
 - **Not in the Swift output yet:** shadows, z-index, breakpoints.
 
+**Components (ASDS-38).** Every brand product includes the same SwiftUI components, drawn from that brand's tokens. The source is `swift/Components/`; the build copies it into each product, so edit the source, not `dist/`.
+
+- Buttons and content: `.buttonStyle(.flint(.primary))` (primary, secondary, danger, text), `.flintCard()`, `FlintNotice`, `FlintTag`, `FlintSectionTitle`, `FlintEmptyState`, `FlintStatTile`.
+- Controls: `FlintToggleRow`, `FlintChoicePicker` (segmented, rows at large text), `FlintStepper` (one adjustable VoiceOver element).
+- Screens and lists: `FlintScreen`, `.flintList()`, `FlintRow`, `FlintRowButton`, `FlintListHeader`.
+- Sheets: `.flintSheet()` and `FlintSheetHeader` (heading plus a Close button).
+- Native bars: call `FlintChrome.apply()` once at launch (iOS). It styles the real navigation bar, tab bar, toolbar and alert tint, so they keep Apple's accessibility behavior.
+
+CI builds every product for macOS and the iOS Simulator on each push.
+
 ## Figma Make
 
 Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--radius` / `--font` set in light and dark) or at **`dist/tokens.json`** for the structured, resolved values. Either gives Make the whole Flint scale to design against. For a standards-based ingest (Tokens Studio, Style Dictionary), use `@innerspark/flint/tokens.dtcg.json` (W3C DTCG `$type` / `$value`, semantic split into `light` and `dark`).
