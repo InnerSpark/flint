@@ -13,11 +13,11 @@ public struct FlintButtonStyle: ButtonStyle {
   }
 
   public func makeBody(configuration: Configuration) -> some View {
-    Body(kind: kind, fullWidth: fullWidth, configuration: configuration)
+    Styled(kind: kind, fullWidth: fullWidth, configuration: configuration)
   }
 
   // A view, so it can read isEnabled; a custom ButtonStyle gets no automatic dimming.
-  private struct Body: View {
+  private struct Styled: View {
     let kind: Kind
     let fullWidth: Bool
     let configuration: ButtonStyleConfiguration

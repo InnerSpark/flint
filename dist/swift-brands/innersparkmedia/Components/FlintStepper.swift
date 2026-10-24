@@ -86,8 +86,8 @@ public struct FlintStepper: View {
   }
 
   private struct CircleStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View { Body(configuration: configuration) }
-    private struct Body: View {
+    func makeBody(configuration: Configuration) -> some View { Styled(configuration: configuration) }
+    private struct Styled: View {
       let configuration: ButtonStyleConfiguration
       @Environment(\.isEnabled) private var isEnabled
       var body: some View {
