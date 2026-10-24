@@ -10,7 +10,7 @@
  *   dist/components.css  plain CSS component classes, copied from css/components.css (ASDS-58)
  * No runtime dependencies; Node only.
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { resolveTokens, refOf } from './resolve.mjs';
@@ -612,6 +612,16 @@ private func dynamic(light: UInt32, lightOpacity: Double = 1, dark: UInt32, dark
   #endif
 }
 `);
+
+// SwiftUI components (ASDS-38). One source in swift/Components, copied next to each brand's
+// generated Flint.swift so every brand product ships the same components in its own colors.
+const componentSrc = join(root, 'swift', 'Components');
+const componentOut = join(swiftDir, 'Components');
+rmSync(componentOut, { recursive: true, force: true });
+mkdirSync(componentOut, { recursive: true });
+for (const f of readdirSync(componentSrc).filter((n) => n.endsWith('.swift')).sort()) {
+  writeFileSync(join(componentOut, f), `// GENERATED copy of swift/Components/${f}. Edit the source, not this file.\n${readFileSync(join(componentSrc, f), 'utf8')}`);
+}
 
 // Component classes (ASDS-58). Hand-written in css/components.css, shipped from dist/ like every other
 // output. scripts/check-components.mjs guards it after the build.
