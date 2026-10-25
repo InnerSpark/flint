@@ -148,3 +148,71 @@
 
 /* hidden must win over the display rules above */
 .ios-body[hidden], .ios-sheet[hidden], .ios-scrim[hidden], .ios-bar-btn[hidden] { display: none; }
+
+/* ---------- Liquid Glass, iOS 26 and later (ASDS-88) ----------
+   An HTML stand-in for Apple's material: a translucent Flint surface, blurred and brightened, with
+   a light edge. Bars float over content that scrolls underneath. data-reduce-transparency makes
+   every glass surface solid, as the iOS setting does; data-increase-contrast adds a strong edge. */
+.ios-screen[data-glass] {
+  --glass-fill: color-mix(in srgb, var(--color-surface-default) 68%, transparent);
+  --glass-edge: color-mix(in srgb, var(--color-white) 55%, transparent);
+  --glass-shadow: var(--shadow-popover);
+}
+.ios-screen[data-glass][data-theme="dark"] {
+  --glass-fill: color-mix(in srgb, var(--color-surface-default) 70%, transparent);
+  --glass-edge: color-mix(in srgb, var(--color-white) 14%, transparent);
+}
+.ios-screen[data-glass] .ios-tabbar,
+.ios-screen[data-glass] .ios-toolbar,
+.ios-screen[data-glass] .ios-glass,
+.ios-screen[data-glass] .ios-navbar .ios-bar-btn,
+.ios-screen[data-glass] .ios-sheet {
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(14px) saturate(1.8);
+  backdrop-filter: blur(14px) saturate(1.8);
+  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-edge), inset 0 0 0 1px var(--glass-edge);
+}
+
+/* Bars float: content runs under the nav bar and the tab bar. */
+.ios-screen[data-glass] { position: relative; }
+.ios-screen[data-glass] > .ios-body { padding-top: calc(var(--target-min) + var(--space-48)); padding-bottom: calc(var(--target-min) + var(--space-48)); }
+.ios-screen[data-glass] > .ios-status { position: absolute; inset: 0 0 auto; z-index: 3; }
+.ios-screen[data-glass] .ios-navbar { position: absolute; inset: var(--space-32) 0 auto; z-index: 2; padding: var(--space-8) var(--space-12) var(--space-16); background: linear-gradient(var(--color-surface-page) 70%, transparent); box-shadow: none; }
+.ios-screen[data-glass] .ios-navbar .ios-bar-btn { border-radius: var(--radius-pill); }
+.ios-screen[data-glass] .ios-tabbar { position: absolute; inset: auto var(--space-16) var(--space-24); z-index: 2; padding: var(--space-4); border-radius: var(--radius-pill); }
+.ios-screen[data-glass] .ios-tab { border-radius: var(--radius-pill); color: var(--color-text-default); padding: var(--space-4) 0; }
+.ios-screen[data-glass] .ios-tab[aria-selected="true"], .ios-screen[data-glass] .ios-tab[aria-current="page"] { background: color-mix(in srgb, var(--color-text-heading) 10%, transparent); color: var(--color-action-primary); }
+.ios-screen[data-glass] .ios-toolbar { position: absolute; inset: auto var(--space-16) var(--space-24); z-index: 2; border-radius: var(--radius-pill); padding: 0 var(--space-4); }
+.ios-screen[data-glass] .ios-home { position: absolute; bottom: 0; left: 50%; translate: -50% 0; z-index: 3; }
+.ios-screen[data-glass] .ios-sheet { inset: auto var(--space-8) var(--space-8); border-radius: 2rem; }
+.ios-glass { display: inline-flex; align-items: center; gap: var(--space-8); min-height: var(--target-min); padding: 0 var(--space-16); border: 0; border-radius: var(--radius-pill); color: var(--color-text-heading); font: inherit; font-weight: 600; font-size: calc(var(--type-label-button-size) * var(--dt)); cursor: pointer; }
+.ios-screen[data-glass] .ios-glass--prominent { background: color-mix(in srgb, var(--color-action-primary) 88%, transparent); color: var(--color-action-on-primary); }
+.ios-glass:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.ios-float { position: absolute; z-index: 2; inset: auto var(--space-16) calc(var(--space-24) + var(--target-min) + var(--space-16)) auto; display: flex; gap: var(--space-8); }
+
+/* Colorful content, so the glass has something to show. Decorative bands from the chart colors. */
+.ios-photo { height: 5.5rem; border-radius: var(--radius-card) var(--radius-card) 0 0; background: linear-gradient(135deg, var(--color-chart-1), var(--color-chart-4) 55%, var(--color-chart-2)); }
+.ios-photo--b { background: linear-gradient(135deg, var(--color-chart-3), var(--color-chart-5) 60%, var(--color-chart-2)); }
+.ios-photo + .ios-card, .ios-card.ios-card--photo { border-radius: 0 0 var(--radius-card) var(--radius-card); }
+.ios-trip { display: grid; }
+
+/* Accessibility settings, as iOS applies them. */
+.ios-screen[data-glass][data-reduce-transparency] .ios-tabbar,
+.ios-screen[data-glass][data-reduce-transparency] .ios-toolbar,
+.ios-screen[data-glass][data-reduce-transparency] .ios-glass,
+.ios-screen[data-glass][data-reduce-transparency] .ios-navbar .ios-bar-btn,
+.ios-screen[data-glass][data-reduce-transparency] .ios-sheet { background: var(--color-surface-default); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.ios-screen[data-glass][data-reduce-transparency] .ios-glass--prominent { background: var(--color-action-primary); }
+.ios-screen[data-glass][data-reduce-transparency] .ios-navbar { background: var(--color-surface-page); }
+.ios-screen[data-glass][data-increase-contrast] .ios-tabbar,
+.ios-screen[data-glass][data-increase-contrast] .ios-toolbar,
+.ios-screen[data-glass][data-increase-contrast] .ios-glass,
+.ios-screen[data-glass][data-increase-contrast] .ios-navbar .ios-bar-btn,
+.ios-screen[data-glass][data-increase-contrast] .ios-sheet { box-shadow: var(--glass-shadow), inset 0 0 0 1.5px var(--color-border-control); }
+/* Glass previews on component pages: a fixed screen height so content runs under the floating bars. */
+.ios-stage--glass .ios-screen { height: 30rem; min-height: 0; }
+.ios-stage--glass .ios-screen[data-glass] > .ios-body { padding-bottom: var(--space-16); overflow: hidden; }
+/* The edge fade starts at the top of the screen, under the status bar; the sheet and its dimming sit above the floating bars. */
+.ios-screen[data-glass] .ios-navbar { inset: 0 0 auto; padding-top: calc(var(--space-32) + var(--space-8)); }
+.ios-screen[data-glass] .ios-scrim { z-index: 4; }
+.ios-screen[data-glass] .ios-sheet { z-index: 5; }

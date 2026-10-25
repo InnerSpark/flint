@@ -3,18 +3,23 @@
 // text. The dark and large-text phones are inert copies so keyboard and screen reader users meet
 // each control once; the figcaption says what they show.
 import '../styles/ios.css';
-const { html, id, label } = Astro.props;
-const copies = [
+const { html, id, label, glass = false } = Astro.props;
+// Glass previews swap the large-text phone for Reduce Transparency, the setting that changes glass most.
+const copies = glass ? [
+  { key: 'light', caption: 'Light', theme: 'light', live: true },
+  { key: 'dark', caption: 'Dark', theme: 'dark', live: false },
+  { key: 'rt', caption: 'Reduce Transparency', theme: 'light', rt: true, live: false },
+] : [
   { key: 'light', caption: 'Light', theme: 'light', ax: false, live: true },
   { key: 'dark', caption: 'Dark', theme: 'dark', ax: false, live: false },
   { key: 'ax', caption: 'Accessibility 3 text', theme: 'light', ax: true, live: false },
 ];
 ---
-<div class="ios-stage">
+<div class={`ios-stage${glass ? ' ios-stage--glass' : ''}`}>
   {copies.map((c) => (
     <figure>
       <div class="ios-phone">
-        <div class="ios-screen" data-theme={c.theme} data-platform="ios" data-ax={c.ax ? '' : undefined}
+        <div class="ios-screen" data-theme={c.theme} data-platform="ios" data-ax={c.ax ? '' : undefined} data-glass={glass ? '' : undefined} data-reduce-transparency={c.rt ? '' : undefined}
              inert={!c.live} role={c.live ? 'group' : undefined} aria-label={c.live ? `${label}, iPhone preview` : undefined}
              set:html={html.replaceAll('__P__', `${id}-${c.key}`)} />
       </div>

@@ -149,8 +149,9 @@ const components = [
   ['FlintEmptyState', 'What happened, optional numbered steps, one action.'],
   ['FlintScreen', 'Scrolling page with the page background, standard insets and a large or inline title.'],
   ['.flintList(), FlintRow, FlintRowButton, FlintListHeader', 'Settings-style grouped list. Rows read as one element and stack at accessibility sizes.'],
-  ['.flintSheet(), FlintSheetHeader', 'Sheet with detents, a grab handle, the large card radius, a heading and a Close button.'],
-  ['FlintChrome.apply()', 'Native navigation bar, tab bar, toolbar and alert styling. iOS only.'],
+  ['.flintSheet(), FlintSheetHeader', 'Sheet with detents, a grab handle, a heading and a Close button. Liquid Glass on iOS 26 and later.'],
+  ['.flintGlassButton()', 'Floating control over content: Liquid Glass on iOS 26 and later, a Flint button before.'],
+  ['FlintChrome.apply()', 'Native navigation bar, tab bar, toolbar and alert styling. Keeps Liquid Glass on iOS 26 and later. iOS only.'],
 ];
 const uikitCode = `let bar = UINavigationBarAppearance()
 bar.backgroundColor = Flint.UIColors.surfacePage
@@ -202,6 +203,7 @@ bar.titleTextAttributes = [.foregroundColor: Flint.UIColors.textHeading]`;
 
   <h2 id="chrome">Tab bar, nav bar and toolbar</h2>
   <p>Flint styles Apple's own bars instead of replacing them. Call <code>FlintChrome.apply()</code> once at launch: titles use the <code>navTitleLarge</code> and <code>navTitle</code> styles, tab labels use <code>tabLabel</code>, and the selected tab shows its label and icon in the primary color. Alerts and confirmation dialogs stay native and pick up the tint.</p>
+  <p><strong>Liquid Glass (iOS 26 and later).</strong> Apple asks apps to remove bar and sheet background customization, because it replaces the glass with a flat surface. So on iOS 26 and later <code>FlintChrome.apply()</code> sets only the title fonts and the selected-tab tint, and <code>.flintSheet()</code> leaves the background to the system. The bars then follow Reduce Transparency, Increase Contrast and the iOS 27 Clear to Tinted slider with no app code. iOS 16 to 25 get solid Flint bars from the same call. Glass is for the navigation layer: cards, notices and lists stay solid.</p>
   <Code label="SwiftUI app" code={chromeCode} />
 
   <h2 id="uikit">UIKit colors</h2>

@@ -32,8 +32,16 @@ const tabbar = (selected = 0, badge = false) => `<div class="ios-tabbar" role="t
   `<button type="button" role="tab" class="ios-tab" aria-selected="${n === selected}" tabindex="${n === selected ? 0 : -1}">${icon(i)}<span>${l}</span>${badge && n === 2 ? '<span class="ios-badge" aria-hidden="true">1</span><span class="flint-sr-only">, 1 new</span>' : ''}</button>`).join('')}</div>`;
 const navInline = (title, back = '', trailing = '') => `<div class="ios-navbar">${back ? `<button type="button" class="ios-bar-btn">${icon('back')}${back}</button>` : '<span></span>'}<p class="ios-navbar-title">${title}</p>${trailing}</div>`;
 
+
+// Content for the glass previews: photo cards scroll under the floating bars.
+const trips = (n = 3) => [['Big Bend', 'March 14 to 18', ''], ['Guadalupe Mountains', 'April 2 to 4', ' ios-photo--b'], ['Enchanted Rock', 'May 10 to 11', '']].slice(0, n)
+  .map(([t, d, v]) => `<div class="ios-trip"><div class="ios-photo${v}" aria-hidden="true"></div><div class="ios-card ios-card--photo"><p class="ios-h3">${t}</p><p class="ios-muted">${d}</p></div></div>`).join('');
+const glassNav = (title, trailing = '') => `<div class="ios-navbar"><span></span><p class="ios-navbar-title">${title}</p>${trailing}</div>`;
+
 export const IOS = {
   'tab-bar': {
+    glass: screen({ nav: glassNav('Trips', `<button type="button" class="ios-bar-btn" aria-label="New trip">${icon('plus')}</button>`), body: trips(), bottom: tabbar(0, true) }),
+    glassNote: 'On iOS 26 and later the tab bar floats over the content as Liquid Glass and can shrink as you scroll down (`.tabBarMinimizeBehavior(.onScrollDown)`). FlintChrome sets only the selected tint; the system keeps the glass.',
     name: 'Tab bar', swift: 'FlintChrome.apply()', lead: "Apple's own tab bar, styled once at launch. Top-level places in the app, one tap away.",
     web: 'tabs',
     preview: screen({ nav: navInline('Trips'), body: '<p class="ios-sm">Three to five tabs, each a place in the app. Every tab has an icon and a label.</p>', bottom: tabbar(0, true) }),
@@ -61,6 +69,8 @@ struct TripsApp: App {
     a11y: ['VoiceOver reads "Trips, tab, 1 of 3, selected". The label carries selection, not the color.', 'Long-press a tab at large text sizes to see it in the large content viewer. That only works because the bar stays native.', 'Badges are read with the tab ("Settings, 1 new item").', 'Unselected tabs use the muted text color (over 7:1); the selected tab uses the primary action color.'],
   },
   'navigation-bar': {
+    glass: screen({ nav: glassNav('Trips', `<button type="button" class="ios-bar-btn">Edit</button>`), body: trips() }),
+    glassNote: 'On iOS 26 and later the bar has no background. Content scrolls under it behind a soft edge effect, and bar buttons sit on their own glass. FlintChrome sets only the title fonts.',
     name: 'Navigation bar', swift: 'FlintChrome.apply()', lead: 'Large title at the top of a screen, shrinking to an inline title as content scrolls under it.',
     preview: screen({ nav: navInline('', '', `<button type="button" class="ios-bar-btn">Edit</button>`), body: '<h2 class="ios-large-title">Trips</h2><p class="ios-sm">The large title uses navTitleLarge (34). Scrolled, the bar turns solid with a hairline and shows navTitle (17).</p><div class="ios-card"><p class="ios-h3">Big Bend</p><p class="ios-muted">March 14 to 18</p></div>' }),
     previewScrolled: screen({ nav: navInline('Big Bend', 'Trips', '<button type="button" class="ios-bar-btn" aria-label="Share">' + icon('share') + '</button>'), body: '<p class="ios-sm">Deeper screens use the inline title and a back button that names the screen it returns to.</p>' }),
@@ -79,6 +89,8 @@ FlintScreen("Big Bend", largeTitle: false) {  // inline, deeper in the stack
     a11y: ['The title is the screen\'s heading, so VoiceOver announces it when the screen opens.', 'Icon-only bar buttons need a label: "Share", not "square.and.arrow.up".', 'The back button reads the previous screen\'s name.'],
   },
   toolbar: {
+    glass: screen({ nav: glassNav('Big Bend'), body: trips(2), bottom: `<div class="ios-toolbar"><button type="button" class="ios-bar-btn">${icon('share')}<span class="flint-sr-only">Share</span></button><button type="button" class="ios-bar-btn">${icon('trash')}<span class="flint-sr-only">Delete trip</span></button></div>` }),
+    glassNote: 'On iOS 26 and later the toolbar floats as a glass capsule. Use `ToolbarSpacer` to split it into groups.',
     name: 'Toolbar', swift: 'FlintChrome.apply()', lead: 'A bar of actions along the bottom of a screen, matching the scrolled navigation bar.',
     preview: screen({ nav: navInline('Big Bend', 'Trips'), body: '<p class="ios-sm">Actions for this screen sit within thumb reach. Use a toolbar when there is no tab bar on the screen.</p>', bottom: `<div class="ios-toolbar"><button type="button" class="ios-bar-btn">${icon('share')}<span class="flint-sr-only">Share</span></button><button type="button" class="ios-bar-btn">${icon('trash')}<span class="flint-sr-only">Delete trip</span></button></div>` }),
     when: ['Two to five actions for the current screen, on screens without a tab bar.'],
@@ -114,6 +126,8 @@ FlintScreen("Big Bend", largeTitle: false) {  // inline, deeper in the stack
     a11y: ['Each row is one VoiceOver element: "Wi-Fi, Trailer-5G, button".', 'At accessibility text sizes the value moves under the title and the icon drops, so nothing truncates. See the third preview.', 'Section headers are headings, so the rotor jumps between them.', 'Destructive rows say what they destroy ("Delete trip", not "Delete") and use the danger color plus words.'],
   },
   sheet: {
+    glass: screen({ nav: glassNav('Trips'), body: trips(2) }).replace('<span class="ios-home"', `<div class="ios-sheet" role="dialog" aria-modal="true" aria-labelledby="__P__-gsheet"><span class="ios-grabber" aria-hidden="true"></span><div class="ios-sheet-head"><h2 class="ios-h2" id="__P__-gsheet">New trip</h2><button type="button" class="ios-bar-btn ios-glass" aria-label="Close">${icon('close')}</button></div><div class="ios-sheet-body"><p class="ios-sm">Where are you headed?</p><button type="button" class="flint-btn flint-btn--primary ios-full">Plan trip</button></div></div><span class="ios-home"`),
+    glassNote: 'On iOS 26 and later a sheet at medium height floats inset from the screen edges as Liquid Glass, and turns solid as it grows to full height. `.flintSheet()` leaves its background and corners to the system there.',
     name: 'Sheet', swift: '.flintSheet(), FlintSheetHeader', lead: 'A task that slides up over the current screen, with a grab handle and a Close button.',
     preview: screen({ nav: navInline('Trips'), body: '<h2 class="ios-large-title">Trips</h2><div class="ios-card"><p class="ios-h3">Big Bend</p></div>' }).replace('<span class="ios-home"', `<div class="ios-scrim" aria-hidden="true"></div><div class="ios-sheet" role="dialog" aria-modal="true" aria-labelledby="__P__-sheet"><span class="ios-grabber" aria-hidden="true"></span><div class="ios-sheet-head"><h2 class="ios-h2" id="__P__-sheet">New trip</h2><button type="button" class="ios-bar-btn" aria-label="Close">${icon('close')}</button></div><div class="ios-sheet-body"><p class="ios-sm">Where are you headed?</p><button type="button" class="flint-btn flint-btn--primary ios-full">Plan trip</button></div></div><span class="ios-home"`),
     when: ['A short task that keeps the screen behind it in context: create, edit, filter.', 'Medium height for quick tasks; let it grow to large for forms.'],
@@ -126,6 +140,25 @@ FlintScreen("Big Bend", largeTitle: false) {  // inline, deeper in the stack
   .flintSheet(detents: [.medium, .large])
 }`,
     a11y: ['Focus moves into the sheet and stays there until it closes; VoiceOver reads the title first.', 'Always show a Close button. Not everyone can swipe down, and the grab handle is not a button.', 'Escape on a hardware keyboard closes it, and focus returns to the control that opened it.'],
+  },
+  'glass-button': {
+    name: 'Glass button', swift: '.flintGlassButton()', lead: 'Floating controls over content, in Liquid Glass on iOS 26 and later and Flint buttons before that.',
+    preview: screen({ body: trips(2) + '<div class="ios-row-actions"><button type="button" class="flint-btn flint-btn--secondary">Locate</button><button type="button" class="flint-btn flint-btn--primary">Start trip</button></div>' }),
+    glass: screen({ body: trips(3) }).replace('<span class="ios-home"', `<div class="ios-float"><button type="button" class="ios-glass">${icon('map')}Locate</button><button type="button" class="ios-glass ios-glass--prominent">Start trip</button></div><span class="ios-home"`),
+    glassNote: 'iOS 26 and later use Apple\'s `.glass` and `.glassProminent` button styles tinted with the primary action color. The prominent label uses the on-primary color, so it keeps Flint\'s contrast in dark mode.',
+    when: ['Controls that float over content the person is looking at: Locate on a map, playback controls, a Start button over a route.'],
+    not: ['Buttons inside content, such as forms, cards and notices. Glass is for the navigation layer; use `.buttonStyle(.flint(...))` there.', 'Stacking glass on glass. Group nearby glass buttons in a `GlassEffectContainer` so they render as one.'],
+    code: `ZStack(alignment: .bottomTrailing) {
+  RouteMap()
+  HStack {
+    Button("Locate", systemImage: "location") { locate() }
+      .flintGlassButton()
+    Button("Start trip") { start() }
+      .flintGlassButton(prominent: true)
+  }
+  .padding(Flint.Space.s16)
+}`,
+    a11y: ['Reduce Transparency turns the glass solid; Increase Contrast adds a stronger edge. Both come from the system.', 'iOS 27 adds a Clear to Tinted slider for Liquid Glass. Native glass follows it with no app code.', 'Before iOS 26 the same call draws Flint\'s secondary and primary buttons.'],
   },
   button: {
     name: 'Button', swift: 'FlintButtonStyle', lead: 'Primary, secondary, danger and text buttons from the button tokens, 44pt tall on iOS.',
@@ -234,4 +267,4 @@ FlintToggleRow("Generator", detail: "Auto start", isOn: $autoStart,
   },
 };
 
-export const IOS_ORDER = ['tab-bar', 'navigation-bar', 'toolbar', 'list', 'sheet', 'button', 'notice', 'tag', 'card', 'toggle-row', 'choice-picker', 'stepper', 'stat-tile', 'empty-state'];
+export const IOS_ORDER = ['tab-bar', 'navigation-bar', 'toolbar', 'list', 'sheet', 'glass-button', 'button', 'notice', 'tag', 'card', 'toggle-row', 'choice-picker', 'stepper', 'stat-tile', 'empty-state'];

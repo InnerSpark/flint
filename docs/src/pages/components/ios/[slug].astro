@@ -10,7 +10,8 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const c = IOS[slug];
 const toc = [
-  { id: 'preview', text: 'Preview' },
+  ...(c.glass ? [{ id: 'glass', text: 'Liquid Glass' }] : []),
+  { id: 'preview', text: c.glass ? 'Before iOS 26' : 'Preview' },
   ...(c.previewScrolled ? [{ id: 'deeper', text: 'Deeper in the stack' }] : []),
   { id: 'when', text: 'When to use' },
   { id: 'swiftui', text: 'SwiftUI' },
@@ -22,7 +23,16 @@ const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>
 <Docs title={c.name} crumb="iOS components" lead={c.lead} toc={toc} wide description={`${c.name} for iOS in the Flint Design System. ${c.lead}`}>
   <p class="muted">SwiftUI: <code>{c.swift}</code>. Web preview drawn in HTML from the iOS platform tokens; real SwiftUI can differ slightly.</p>
 
-  <h2 id="preview">Preview</h2>
+  {c.glass && (
+    <>
+      <h2 id="glass">Liquid Glass, iOS 26 and later</h2>
+      <p set:html={rich(c.glassNote)} />
+      <IosStage html={c.glass} id={`${slug}-glass`} label={`${c.name}, Liquid Glass`} glass />
+    </>
+  )}
+
+  <h2 id="preview">{c.glass ? 'Before iOS 26' : 'Preview'}</h2>
+  {c.glass && <p>iOS 16 to 25 get solid Flint bars and surfaces from the same code.</p>}
   <IosStage html={c.preview} id={slug} label={c.name} />
 
   {c.previewScrolled && (
