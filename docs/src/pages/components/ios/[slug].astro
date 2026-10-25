@@ -1,0 +1,45 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import IosStage from '../../../components/IosStage.astro';
+import Code from '../../../components/Code.astro';
+import { IOS, IOS_ORDER } from '../../../data/iosComponents.js';
+
+export function getStaticPaths() {
+  return IOS_ORDER.map((slug) => ({ params: { slug } }));
+}
+const { slug } = Astro.params;
+const c = IOS[slug];
+const toc = [
+  { id: 'preview', text: 'Preview' },
+  ...(c.previewScrolled ? [{ id: 'deeper', text: 'Deeper in the stack' }] : []),
+  { id: 'when', text: 'When to use' },
+  { id: 'swiftui', text: 'SwiftUI' },
+  { id: 'accessibility', text: 'Accessibility' },
+];
+// Inline `code` in the notes becomes <code>.
+const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>` : part)).join('');
+---
+<Docs title={c.name} crumb="iOS components" lead={c.lead} toc={toc} wide description={`${c.name} for iOS in the Flint Design System. ${c.lead}`}>
+  <p class="muted">SwiftUI: <code>{c.swift}</code>. Web preview drawn in HTML from the iOS platform tokens; real SwiftUI can differ slightly.</p>
+
+  <h2 id="preview">Preview</h2>
+  <IosStage html={c.preview} id={slug} label={c.name} />
+
+  {c.previewScrolled && (
+    <>
+      <h2 id="deeper">Deeper in the stack</h2>
+      <IosStage html={c.previewScrolled} id={`${slug}-deeper`} label={`${c.name}, inline title`} />
+    </>
+  )}
+
+  <h2 id="when">When to use</h2>
+  <ul>{c.when.map((w) => <li>{w}</li>)}</ul>
+  {c.not && (<><p><strong>Don't use it for:</strong></p><ul>{c.not.map((w) => <li>{w}</li>)}</ul></>)}
+
+  <h2 id="swiftui">SwiftUI</h2>
+  <Code label="SwiftUI" code={c.code} />
+  {c.web && <p>On the web: <a href={`/components/${c.web}/`}>{c.web[0].toUpperCase() + c.web.slice(1)}</a>.</p>}
+
+  <h2 id="accessibility">Accessibility</h2>
+  <ul>{c.a11y.map((a) => <li set:html={rich(a)} />)}</ul>
+</Docs>

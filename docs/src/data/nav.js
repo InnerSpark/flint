@@ -1,3 +1,4 @@
+import { IOS, IOS_ORDER } from './iosComponents.js';
 export const NAV = [
   {
     title: 'Get started',
@@ -49,6 +50,13 @@ export const NAV = [
       ['Tabs', '/components/tabs/'],
       ['Toast', '/components/toast/'],
       ['Tooltip', '/components/tooltip/'],
+    ],
+  },
+  {
+    title: 'iOS components',
+    items: [
+      ['Overview', '/components/ios/'],
+      ...IOS_ORDER.map((slug) => [IOS[slug].name, `/components/ios/${slug}/`]),
     ],
   },
   {

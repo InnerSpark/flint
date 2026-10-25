@@ -1,0 +1,24 @@
+---
+// Three phones for an iOS component page (ASDS-87): light (interactive), dark and Accessibility 3
+// text. The dark and large-text phones are inert copies so keyboard and screen reader users meet
+// each control once; the figcaption says what they show.
+import '../styles/ios.css';
+const { html, id, label } = Astro.props;
+const copies = [
+  { key: 'light', caption: 'Light', theme: 'light', ax: false, live: true },
+  { key: 'dark', caption: 'Dark', theme: 'dark', ax: false, live: false },
+  { key: 'ax', caption: 'Accessibility 3 text', theme: 'light', ax: true, live: false },
+];
+---
+<div class="ios-stage">
+  {copies.map((c) => (
+    <figure>
+      <div class="ios-phone">
+        <div class="ios-screen" data-theme={c.theme} data-platform="ios" data-ax={c.ax ? '' : undefined}
+             inert={!c.live} role={c.live ? 'group' : undefined} aria-label={c.live ? `${label}, iPhone preview` : undefined}
+             set:html={html.replaceAll('__P__', `${id}-${c.key}`)} />
+      </div>
+      <figcaption>{c.caption}{c.live ? '' : ', same screen'}</figcaption>
+    </figure>
+  ))}
+</div>

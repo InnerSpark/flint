@@ -1,0 +1,19 @@
+---
+import Docs from '../../../layouts/Docs.astro';
+import { IOS, IOS_ORDER } from '../../../data/iosComponents.js';
+import '../../../styles/ios.css';
+---
+<Docs title="iOS components" crumb="Components" lead="The SwiftUI components in the Flint Swift package, drawn from the iOS platform tokens. Every brand product ships them." description="iOS and SwiftUI components in the Flint Design System." wide>
+  <p>Native bars (tab bar, navigation bar, toolbar) stay Apple's own and take Flint's colors and type from <code>FlintChrome.apply()</code>. The rest are SwiftUI views. Setup is on the <a href="/get-started/ios/">iOS and SwiftUI</a> page.</p>
+  <ul class="ios-grid">
+    {IOS_ORDER.map((slug) => (
+      <li class="ios-card-link">
+        <div class="ios-thumb" inert>
+          <div class="ios-screen" data-platform="ios" set:html={IOS[slug].preview.replaceAll('__P__', `thumb-${slug}`)} />
+        </div>
+        <a href={`/components/ios/${slug}/`}><strong>{IOS[slug].name}</strong></a>
+        <span class="muted">{IOS[slug].lead}</span>
+      </li>
+    ))}
+  </ul>
+</Docs>

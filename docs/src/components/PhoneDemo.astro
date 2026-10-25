@@ -1,8 +1,10 @@
 ---
-// Web phone preview for the Swift package (ASDS-85). An HTML stand-in drawn from the same tokens,
-// with the iOS settings that change how a Flint screen looks: appearance, Dynamic Type, Reduce
-// Motion, plus a caption bar that shows what VoiceOver says for the focused control.
+// Web phone preview for the Swift package (ASDS-85, ASDS-87): a small app drawn in HTML from the
+// iOS platform tokens. Tab bar, a navigation bar whose large title shrinks on scroll, a settings
+// list and a sheet, plus the iOS settings that change how it looks and a VoiceOver caption bar.
 import '../styles/phone.css';
+import '../styles/ios.css';
+import { icon } from '../data/iosComponents.js';
 
 // Dynamic Type steps, scaled from the body size at each setting (Large is the default, 17pt).
 const sizes = [
@@ -11,10 +13,11 @@ const sizes = [
   ['Accessibility medium', 1.65], ['Accessibility large', 1.94], ['Accessibility extra large', 2.35],
 ];
 const def = 3;
+const tabs = [['trips', 'Trips', 'map'], ['settings', 'Settings', 'gear']];
 ---
 <div class="pd" data-phone-demo data-sizes={JSON.stringify(sizes)}>
   <div class="pd-settings">
-    <h3 class="pd-settings-title" id="pd-settings-title">iOS settings</h3>
+    <h3 class="pd-settings-title">iOS settings</h3>
     <fieldset class="flint-fieldset">
       <legend class="flint-fieldset__legend">Appearance</legend>
       <label class="flint-choice"><input type="radio" class="flint-radio" name="pd-appearance" value="light" checked /> Light</label>
@@ -27,67 +30,123 @@ const def = 3;
     </div>
     <label class="flint-choice"><input type="checkbox" role="switch" class="flint-switch" data-pd="motion" /> Reduce Motion</label>
     <label class="flint-choice"><input type="checkbox" role="switch" class="flint-switch" data-pd="captions" checked /> VoiceOver captions</label>
-    <p class="pd-note">Captions show what VoiceOver says when you tab to a control in the phone.</p>
+    <p class="pd-note">Tab into the phone. Arrow keys move between tabs. The plus button opens a sheet; Escape closes it.</p>
   </div>
 
   <figure class="pd-device">
-    <div class="pd-frame">
-      <div class="pd-screen" data-theme="light" data-platform="ios" style={`--dt:${sizes[def][1]}`} role="group" aria-label="iPhone preview: Trips">
-        <div class="pd-status" aria-hidden="true">
-          <span>9:41</span>
-          <span class="pd-island"></span>
-          <svg viewBox="0 0 44 12" class="pd-status-icons"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="1" width="3" height="11" rx="1"/><rect x="23" y="1.5" width="18" height="9" rx="2.5" fill="none" stroke="currentColor"/><rect x="25" y="3.5" width="12" height="5" rx="1"/><rect x="42" y="4.5" width="1.5" height="3" rx="0.7"/></svg>
+    <div class="ios-phone ios-phone--tall">
+      <div class="ios-screen" data-theme="light" data-platform="ios" style={`--dt:${sizes[def][1]}`} role="group" aria-label="iPhone preview: Trips app">
+        <div class="ios-status" aria-hidden="true"><span>9:41</span><span class="ios-island"></span><svg viewBox="0 0 44 12"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="1" width="3" height="11" rx="1"/><rect x="23" y="1.5" width="18" height="9" rx="2.5" fill="none" stroke="currentColor"/><rect x="25" y="3.5" width="12" height="5" rx="1"/></svg></div>
+
+        <div class="ios-navbar" data-chrome>
+          <span></span>
+          <p class="ios-navbar-title" hidden aria-hidden="true">Trips</p>
+          <button type="button" class="ios-bar-btn" data-open-sheet aria-label="New trip"><Fragment set:html={icon('plus')} /></button>
         </div>
-        <div class="pd-body">
-          <h4 class="pd-title">Trips</h4>
-          <section class="pd-card" aria-labelledby="pd-card-title">
-            <h5 class="pd-card-title" id="pd-card-title">Awning lights</h5>
-            <p class="pd-muted">Warm white strip along the awning.</p>
-            <label class="pd-row"><span>Lights</span><input type="checkbox" role="switch" class="flint-switch" /></label>
+
+        <div class="ios-body" id="pd-panel-trips" role="tabpanel" aria-labelledby="pd-tab-trips" data-panel="trips">
+          <h4 class="ios-large-title" data-large-title>Trips</h4>
+          <section class="ios-card" aria-labelledby="pd-card-title">
+            <h5 class="ios-h3" id="pd-card-title">Awning lights</h5>
+            <p class="ios-muted">Warm white strip along the awning.</p>
+            <label class="ios-toggle-row"><span>Lights</span><input type="checkbox" role="switch" class="ios-switch" /></label>
           </section>
-          <div class="flint-alert pd-alert">
-            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 9v5M10 6.2v.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <div class="flint-alert__body">Rain after 6 PM. Pack the awning.</div>
-          </div>
+          <div class="ios-notice ios-tone-info"><div class="ios-notice-main"><span class="ios-notice-icon"><Fragment set:html={icon('info')} /></span><div><p class="ios-sm">Rain after 6 PM. Pack the awning.</p></div></div></div>
           <div class="pd-field">
-            <label class="pd-label" for="pd-trip">Trip name</label>
+            <label class="ios-label" for="pd-trip">Trip name</label>
             <input id="pd-trip" class="flint-input" type="text" placeholder="Big Bend, March" autocomplete="off" />
           </div>
-          <button type="button" class="flint-btn flint-btn--primary pd-start">Start trip</button>
+          <button type="button" class="flint-btn flint-btn--primary ios-full pd-start">Start trip</button>
           <p class="pd-done" role="status"></p>
+          <section class="ios-section" aria-labelledby="pd-recent">
+            <h5 class="ios-section-header" id="pd-recent">Recent trips</h5>
+            <ul class="ios-group">
+              {[['Big Bend', 'March 14 to 18'], ['Guadalupe Mountains', 'April 2 to 4'], ['Enchanted Rock', 'May 10 to 11'], ['Padre Island', 'June 20 to 24']].map(([t, d]) => (
+                <li><button type="button" class="ios-row" data-speak={`${t}, ${d}, button.`}><span class="ios-row-icon"><Fragment set:html={icon('map')} /></span><span class="ios-row-text"><span>{t}</span><span class="ios-muted">{d}</span></span><span class="ios-row-chev"><Fragment set:html={icon('chevron')} /></span></button></li>
+              ))}
+            </ul>
+          </section>
         </div>
-        <span class="pd-home" aria-hidden="true"></span>
+
+        <div class="ios-body" id="pd-panel-settings" role="tabpanel" aria-labelledby="pd-tab-settings" data-panel="settings" hidden>
+          <h4 class="ios-large-title" data-large-title>Settings</h4>
+          <section class="ios-section" aria-labelledby="pd-conn">
+            <h5 class="ios-section-header" id="pd-conn">Connections</h5>
+            <ul class="ios-group">
+              <li><button type="button" class="ios-row" data-speak="Wi-Fi, Trailer-5G, button."><span class="ios-row-icon"><Fragment set:html={icon('wifi')} /></span><span class="ios-row-text">Wi-Fi</span><span class="ios-row-value">Trailer-5G</span><span class="ios-row-chev"><Fragment set:html={icon('chevron')} /></span></button></li>
+              <li><button type="button" class="ios-row" data-speak="Cerbo, 192.168.1.20, button."><span class="ios-row-icon"><Fragment set:html={icon('server')} /></span><span class="ios-row-text"><span>Cerbo</span><span class="ios-muted">192.168.1.20</span></span><span class="ios-row-chev"><Fragment set:html={icon('chevron')} /></span></button></li>
+              <li><label class="ios-row"><span class="ios-row-icon"><Fragment set:html={icon('bell')} /></span><span class="ios-row-text">Weekly summary</span><input type="checkbox" role="switch" class="ios-switch" checked /></label></li>
+            </ul>
+          </section>
+          <section class="ios-section" aria-label="Trip actions">
+            <ul class="ios-group"><li><button type="button" class="ios-row ios-row--danger">Delete trip</button></li></ul>
+          </section>
+        </div>
+
+        <div class="ios-tabbar" role="tablist" aria-label="Tabs" data-chrome>
+          {tabs.map(([id, label, ic], i) => (
+            <button type="button" role="tab" class="ios-tab" id={`pd-tab-${id}`} aria-controls={`pd-panel-${id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-tab={id}><Fragment set:html={icon(ic)} /><span>{label}</span></button>
+          ))}
+        </div>
+        <span class="ios-home" aria-hidden="true"></span>
+
+        <div class="ios-scrim" hidden data-scrim></div>
+        <div class="ios-sheet" role="dialog" aria-modal="true" aria-labelledby="pd-sheet-title" hidden data-sheet>
+          <span class="ios-grabber" aria-hidden="true"></span>
+          <div class="ios-sheet-head">
+            <h4 class="ios-h2" id="pd-sheet-title" tabindex="-1">New trip</h4>
+            <button type="button" class="ios-bar-btn" data-close-sheet aria-label="Close"><Fragment set:html={icon('close')} /></button>
+          </div>
+          <div class="ios-sheet-body">
+            <div class="pd-field">
+              <label class="ios-label" for="pd-dest">Destination</label>
+              <input id="pd-dest" class="flint-input" type="text" placeholder="Guadalupe Mountains" autocomplete="off" />
+            </div>
+            <button type="button" class="flint-btn flint-btn--primary ios-full" data-close-sheet data-plan>Plan trip</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="pd-caption" aria-hidden="true" data-on="true"><span class="pd-caption-label">VoiceOver</span><span class="pd-caption-text">Tab into the phone to hear a control.</span></div>
-    <figcaption class="pd-figcaption"><strong>Web preview.</strong> Drawn in HTML from the same tokens as the Swift package, with the iOS platform tokens (44pt targets and controls). Real SwiftUI can differ slightly.</figcaption>
+    <figcaption class="pd-figcaption"><strong>Web preview.</strong> Drawn in HTML from the iOS platform tokens (44pt targets and controls, Apple chrome type). The real tab bar and navigation bar are Apple's own, styled by <code>FlintChrome.apply()</code>.</figcaption>
   </figure>
 </div>
 
 <script>
   // What VoiceOver on iOS says for a control: name, trait, value, then the hint.
   function speak(el) {
-    const name = el.labels?.[0]?.textContent.trim() || el.getAttribute('aria-label') || el.textContent.trim();
-    if (el.getAttribute('role') === 'switch') return `${name}, switch button, ${el.checked ? 'on' : 'off'}. Double-tap to toggle setting.`;
+    if (el.dataset.speak) return el.dataset.speak;
+    const role = el.getAttribute('role');
+    const name = el.getAttribute('aria-label') || el.labels?.[0]?.textContent.trim().replace(/\s+/g, ' ') || el.textContent.trim().replace(/\s+/g, ' ');
+    if (role === 'tab') {
+      const all = [...el.parentElement.querySelectorAll('[role="tab"]')];
+      return `${name}, tab, ${all.indexOf(el) + 1} of ${all.length}${el.getAttribute('aria-selected') === 'true' ? ', selected' : ''}.`;
+    }
+    if (role === 'switch') return `${name}, switch button, ${el.checked ? 'on' : 'off'}. Double-tap to toggle setting.`;
     if (el.tagName === 'INPUT') return `${name}, text field${el.value ? `, ${el.value}` : ''}. Double-tap to edit.`;
+    if (/^H\d$/.test(el.tagName)) return `${name}, heading.`;
     if (el.tagName === 'BUTTON') return `${name}, button.`;
     return name;
   }
+
   for (const root of document.querySelectorAll('[data-phone-demo]')) {
-    const screen = root.querySelector('.pd-screen');
+    const screen = root.querySelector('.ios-screen');
     const caption = root.querySelector('.pd-caption');
     const captionText = root.querySelector('.pd-caption-text');
     const sizes = JSON.parse(root.dataset.sizes);
     const size = root.querySelector('#pd-size');
     const out = root.querySelector('#pd-size-out');
-    const done = root.querySelector('.pd-done');
+    const navbar = screen.querySelector('.ios-navbar');
+    const inlineTitle = navbar.querySelector('.ios-navbar-title');
+    const tabs = [...screen.querySelectorAll('[role="tab"]')];
+    const panels = [...screen.querySelectorAll('[data-panel]')];
+    const sheet = screen.querySelector('[data-sheet]');
+    const scrim = screen.querySelector('[data-scrim]');
+    const say = (text) => { captionText.textContent = text; };
 
-    // Start in the page's own appearance.
-    const pageDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const setTheme = (t) => screen.setAttribute('data-theme', t);
-    if (pageDark) { root.querySelector('input[value="dark"]').checked = true; setTheme('dark'); }
-    root.querySelectorAll('input[name="pd-appearance"]').forEach((r) => r.addEventListener('change', () => setTheme(r.value)));
-
+    // Settings: appearance (start in the page's own), text size, Reduce Motion, captions.
+    if (document.documentElement.getAttribute('data-theme') === 'dark') { root.querySelector('input[value="dark"]').checked = true; screen.setAttribute('data-theme', 'dark'); }
+    root.querySelectorAll('input[name="pd-appearance"]').forEach((r) => r.addEventListener('change', () => screen.setAttribute('data-theme', r.value)));
     size.addEventListener('input', () => {
       const [label, scale] = sizes[size.value];
       screen.style.setProperty('--dt', scale);
@@ -96,17 +155,86 @@ const def = 3;
     });
     root.querySelector('[data-pd="motion"]').addEventListener('change', (e) => screen.toggleAttribute('data-reduce-motion', e.target.checked));
     root.querySelector('[data-pd="captions"]').addEventListener('change', (e) => { caption.dataset.on = String(e.target.checked); });
+    screen.addEventListener('focusin', (e) => say(speak(e.target)));
+    screen.addEventListener('change', (e) => { if (e.target === document.activeElement) say(speak(e.target)); });
 
-    const say = (el) => { captionText.textContent = speak(el); };
-    screen.addEventListener('focusin', (e) => say(e.target));
-    screen.addEventListener('change', (e) => { if (e.target === document.activeElement) say(e.target); });
+    // Navigation bar: the inline title and the solid bar appear once the large title scrolls away.
+    const observers = panels.map((panel) => {
+      const big = panel.querySelector('[data-large-title]');
+      const io = new IntersectionObserver(([entry]) => {
+        if (panel.hidden) return;
+        const away = !entry.isIntersecting;
+        navbar.toggleAttribute('data-scrolled', away);
+        inlineTitle.hidden = !away;
+      }, { root: panel, threshold: 0 });
+      io.observe(big);
+      return io;
+    });
 
+    // Tab bar: arrow keys, Home and End move between tabs (APG tabs, automatic activation).
+    const select = (tab, focus = true) => {
+      tabs.forEach((t) => { const on = t === tab; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
+      panels.forEach((p) => { p.hidden = p.dataset.panel !== tab.dataset.tab; });
+      inlineTitle.textContent = tab.textContent.trim();
+      inlineTitle.hidden = true;
+      navbar.removeAttribute('data-scrolled');
+      navbar.querySelector('[data-open-sheet]').hidden = tab.dataset.tab !== 'trips';
+      if (focus) tab.focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', (e) => {
+        const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+        if (next === undefined) return;
+        e.preventDefault();
+        select(tabs[(next + tabs.length) % tabs.length]);
+      });
+    });
+
+    // Sheet: everything behind it goes inert, focus moves to its title, Tab stays inside, Escape or
+    // Close returns focus to the button that opened it.
+    let opener = null;
+    const behind = () => [...screen.children].filter((el) => el !== sheet && el !== scrim);
+    const openSheet = (from) => {
+      opener = from;
+      behind().forEach((el) => { el.inert = true; });
+      scrim.hidden = false;
+      sheet.hidden = false;
+      sheet.querySelector('#pd-sheet-title').focus();
+    };
+    const closeSheet = () => {
+      sheet.hidden = true;
+      scrim.hidden = true;
+      behind().forEach((el) => { el.inert = false; });
+      opener?.focus();
+    };
+    screen.querySelector('[data-open-sheet]').addEventListener('click', (e) => openSheet(e.currentTarget));
+    sheet.querySelectorAll('[data-close-sheet]').forEach((b) => b.addEventListener('click', () => {
+      const dest = sheet.querySelector('#pd-dest').value.trim();
+      const planned = b.hasAttribute('data-plan');
+      closeSheet();
+      if (planned) {
+        const done = screen.querySelector('.pd-done');
+        done.textContent = '';
+        requestAnimationFrame(() => { done.textContent = `${dest || 'Trip'} planned`; say(done.textContent); });
+      }
+    }));
+    scrim.addEventListener('click', closeSheet);
+    sheet.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); closeSheet(); return; }
+      if (e.key !== 'Tab') return;
+      const items = [...sheet.querySelectorAll('button, input')];
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement.id === 'pd-sheet-title')) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    // Start trip on the Trips tab: announced through the status line.
     root.querySelector('.pd-start').addEventListener('click', () => {
+      const done = screen.querySelector('.pd-done');
       const name = root.querySelector('#pd-trip').value.trim();
       done.textContent = '';
-      const msg = name ? `${name} started` : 'Trip started';
-      // Cleared then set on the next frame, so a repeat press is announced again.
-      requestAnimationFrame(() => { done.textContent = msg; captionText.textContent = msg; });
+      requestAnimationFrame(() => { done.textContent = name ? `${name} started` : 'Trip started'; say(done.textContent); });
     });
   }
 </script>
