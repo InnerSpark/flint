@@ -5,6 +5,12 @@ import UIKit
 /// Styles Apple's own navigation bars, tab bars, toolbars and alerts with Flint colors and type.
 /// Call once at launch: `init() { FlintChrome.apply() }` in your App. The bars stay native, so
 /// VoiceOver, the large content viewer, iPad sidebars and the system look keep working.
+///
+/// iOS 26 and later (Liquid Glass): bars are glass. Apple asks apps to remove bar background
+/// customization, because UIBarAppearance and background colors replace the glass with a flat
+/// surface. So on 26+ Flint sets only title fonts and the selected-tab tint, and the system keeps
+/// glass, the scroll edge effect, Reduce Transparency, Increase Contrast and the Clear/Tinted
+/// setting. iOS 16 to 25 get solid Flint bars.
 public enum FlintChrome {
   @MainActor public static func apply() {
     navigationBars()
@@ -16,6 +22,13 @@ public enum FlintChrome {
 
   /// Large title on the page background at the top; a solid bar with a hairline once content scrolls under it.
   @MainActor public static func navigationBars() {
+    if #available(iOS 26, *) {
+      // Fonts only. Bar buttons keep the system label color, which Apple uses for legibility on glass.
+      let bar = UINavigationBar.appearance()
+      bar.largeTitleTextAttributes = [.font: Flint.Typography.navTitleLarge.uiFont, .foregroundColor: Flint.UIColors.textHeading]
+      bar.titleTextAttributes = [.font: Flint.Typography.navTitle.uiFont, .foregroundColor: Flint.UIColors.textHeading]
+      return
+    }
     let large: [NSAttributedString.Key: Any] = [.font: Flint.Typography.navTitleLarge.uiFont, .foregroundColor: Flint.UIColors.textHeading]
     let inline: [NSAttributedString.Key: Any] = [.font: Flint.Typography.navTitle.uiFont, .foregroundColor: Flint.UIColors.textHeading]
 
@@ -42,6 +55,12 @@ public enum FlintChrome {
   /// Tab bar on the default surface with a hairline. Unselected items use muted text, the selected
   /// item the primary action color; both carry a label, so selection never rests on color alone.
   @MainActor public static func tabBars() {
+    if #available(iOS 26, *) {
+      // The floating glass tab bar: only the selected tint is Flint's. Unselected items keep the
+      // system's adaptive color, which stays legible over whatever scrolls underneath.
+      UITabBar.appearance().tintColor = Flint.UIColors.actionPrimary
+      return
+    }
     let font = Flint.Typography.tabLabel.uiFont
     let item = UITabBarItemAppearance()
     item.normal.iconColor = Flint.UIColors.textMuted
@@ -67,6 +86,7 @@ public enum FlintChrome {
 
   /// Bottom toolbar, matching the scrolled navigation bar.
   @MainActor public static func toolbars() {
+    if #available(iOS 26, *) { return }  // glass toolbar, system defaults
     let tools = UIToolbarAppearance()
     tools.configureWithOpaqueBackground()
     tools.backgroundColor = Flint.UIColors.surfaceDefault

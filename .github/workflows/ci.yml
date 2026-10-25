@@ -82,6 +82,13 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      # Liquid Glass APIs (ASDS-88) need the iOS 26 SDK: use the newest Xcode 26 on the runner.
+      - name: Select Xcode 26
+        run: |
+          XC=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
+          [ -n "$XC" ] || { echo "::error::No Xcode 26 on this runner"; ls -d /Applications/Xcode*.app; exit 1; }
+          sudo xcode-select -s "$XC"
+          xcodebuild -version
       # Compiler errors become annotations, so they show on the PR without opening the log.
       - name: Build for macOS (every product)
         run: |

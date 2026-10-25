@@ -31,6 +31,10 @@ struct FlintComponentPreviews: PreviewProvider {
             Button("Delete") {}.buttonStyle(.flint(.danger))
             Button("Skip") {}.buttonStyle(.flint(.text))
           }
+          HStack {
+            Button("Locate", systemImage: "location") {}.flintGlassButton()
+            Button("Start trip") {}.flintGlassButton(prominent: true)
+          }
         }
       }
     }

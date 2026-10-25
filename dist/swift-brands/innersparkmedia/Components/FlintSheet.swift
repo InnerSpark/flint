@@ -2,7 +2,9 @@
 import SwiftUI
 
 public extension View {
-  /// Flint sheet: detents, a visible grab handle, the default surface and the large card radius.
+  /// Flint sheet: detents and a visible grab handle. On iOS 26 and later the sheet is Liquid Glass
+  /// at partial heights and turns solid as it grows, so Flint leaves its background and corners to
+  /// the system. Before 26 it gets the default surface and the large card radius.
   /// Apply to the sheet's content: `.sheet(isPresented: $open) { TripForm().flintSheet() }`.
   func flintSheet(detents: Set<PresentationDetent> = [.medium, .large]) -> some View {
     modifier(FlintSheetModifier(detents: detents))
@@ -16,7 +18,9 @@ private struct FlintSheetModifier: ViewModifier {
     let base = content
       .presentationDetents(detents)
       .presentationDragIndicator(.visible)
-    if #available(iOS 16.4, macOS 13.3, *) {
+    if #available(iOS 26, macOS 26, *) {
+      base
+    } else if #available(iOS 16.4, macOS 13.3, *) {
       base
         .presentationBackground(Flint.Colors.surfaceDefault)
         .presentationCornerRadius(Flint.Radius.cardLg)
