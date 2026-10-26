@@ -2,7 +2,7 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
-## Unreleased
+## v1.16.0 (2026-10-25)
 
 - **Liquid Glass (ASDS-88).** On iOS 26 and later, `FlintChrome.apply()` was painting solid backgrounds on the navigation bar, tab bar and toolbar, and `.flintSheet()` a solid sheet. Both replace Liquid Glass with a flat surface, so they no longer do. On 26 and later Flint sets only the title fonts and the selected-tab tint, as Apple's guidance asks, and the system keeps the glass, the scroll edge effect, Reduce Transparency, Increase Contrast and the iOS 27 Clear/Tinted setting. iOS 16 to 25 keep the solid Flint bars.
   - New `.flintGlassButton(prominent:)` for floating controls: Apple's `.glass` / `.glassProminent` tinted with the primary action color on 26 and later (the prominent label keeps the on-primary color for contrast in dark mode), Flint secondary or primary before.
