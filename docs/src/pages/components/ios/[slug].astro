@@ -27,6 +27,7 @@ const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>
     <>
       <h2 id="glass">Liquid Glass, iOS 26 and later</h2>
       <p set:html={rich(c.glassNote)} />
+      <p>Glass can't guarantee contrast: it depends on what scrolls underneath. Keep it to the navigation layer and test with Reduce Transparency on. See <a href="/get-started/ios/#liquid-glass">Liquid Glass and contrast</a>.</p>
       <IosStage html={c.glass} id={`${slug}-glass`} label={`${c.name}, Liquid Glass`} glass />
     </>
   )}

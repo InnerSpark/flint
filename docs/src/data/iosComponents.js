@@ -158,7 +158,7 @@ FlintScreen("Big Bend", largeTitle: false) {  // inline, deeper in the stack
   }
   .padding(Flint.Space.s16)
 }`,
-    a11y: ['Reduce Transparency turns the glass solid; Increase Contrast adds a stronger edge. Both come from the system.', 'iOS 27 adds a Clear to Tinted slider for Liquid Glass. Native glass follows it with no app code.', 'Before iOS 26 the same call draws Flint\'s secondary and primary buttons.'],
+    a11y: ['Reduce Transparency turns the glass solid; Increase Contrast adds a stronger edge. Both come from the system.', 'iOS 26.1 added a Clear and Tinted setting for Liquid Glass (Settings, Display and Brightness, Liquid Glass). Native glass follows it with no app code.', 'Before iOS 26 the same call draws Flint\'s secondary and primary buttons.'],
   },
   button: {
     name: 'Button', swift: 'FlintButtonStyle', lead: 'Primary, secondary, danger and text buttons from the button tokens, 44pt tall on iOS.',

@@ -169,7 +169,7 @@ Text("Awning")
 - Screens and lists: `FlintScreen`, `.flintList()`, `FlintRow`, `FlintRowButton`, `FlintListHeader`.
 - Sheets: `.flintSheet()` and `FlintSheetHeader` (heading plus a Close button).
 - Native bars: call `FlintChrome.apply()` once at launch (iOS). It styles the real navigation bar, tab bar, toolbar and alert tint, so they keep Apple's accessibility behavior.
-- Liquid Glass (iOS 26 and later): `FlintChrome.apply()` sets only fonts and the selected-tab tint, and `.flintSheet()` leaves the sheet background to the system, so bars and sheets stay glass and follow Reduce Transparency, Increase Contrast and the iOS 27 Clear/Tinted setting. iOS 16 to 25 get solid Flint bars. `.flintGlassButton(prominent:)` gives floating controls Apple's glass button styles on 26+ and Flint buttons before. CI builds with Xcode 26.
+- Liquid Glass (iOS 26 and later): `FlintChrome.apply()` sets only fonts and the selected-tab tint, and `.flintSheet()` leaves the sheet background to the system, so bars and sheets stay glass and follow Reduce Transparency, Increase Contrast and the Clear and Tinted setting (iOS 26.1 and later). iOS 16 to 25 get solid Flint bars. Glass can't guarantee contrast, so Flint keeps it to the navigation layer; `scripts/measure-glass.mjs` (run by the build) writes the worst-case label contrast on glass to `dist/glass.json`, and the iOS docs page shows it. `.flintGlassButton(prominent:)` gives floating controls Apple's glass button styles on 26+ and Flint buttons before. CI builds with Xcode 26.
 
 CI builds every product for macOS and the iOS Simulator on each push.
 

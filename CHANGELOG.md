@@ -4,6 +4,9 @@ Flint tokens follow semver, independent of the consuming apps.
 
 ## Unreleased
 
+- **Two new principles and a Liquid Glass position (ASDS-91).** "Legible over any background" and "Native before custom" join How it behaves (14 principles now). A new section on the iOS page, Liquid Glass and contrast, says plainly that glass can't guarantee contrast and sets Flint's rules: navigation layer only, selection never rests on color, test with Reduce Transparency and Increase Contrast, point people to the Tinted setting. `scripts/measure-glass.mjs` (run by `npm run build`) writes `dist/glass.json` with the worst-case label contrast on Flint's glass model: in light, the selected tab's color falls to 3.5:1 and body-text colors to 6.5:1; in dark, unselected tabs fall to 4.1:1. Report only, not a gate. Each glass component page links to the section.
+- **Fix:** the Clear and Tinted Liquid Glass setting arrived in iOS 26.1, not iOS 27. Corrected in the README, the iOS page and the glass button page.
+- **Why lines (ASDS-92).** Every component, iOS component and foundation page now shows a "Why" line under the lead that links the principles it follows. The map lives in `docs/src/data/principleLinks.js`, and the build fails on an unknown principle id.
 - **Docs analytics (ASDS-90).** flint.innersparkmedia.com now reports page views to the same GA4 property as innersparkmedia.com (`G-9XNG65F6HM`); filter by Hostname to see the docs. No Google Ads tag. The CSP allows googletagmanager.com for scripts and the GA collection hosts for connect and img, and `postbuild.mjs` keeps those hosts when it rehashes inline scripts. The footer says the site uses Google Analytics cookies.
 - **Figma library synced to v1.16 (ASDS-89).** No package change; the library now matches the repo.
   - Fixed drift: added `color/red/950`, pointed `action/danger-active` at it, and added `text/inverse-muted` and `chart/1` to `chart/5`.

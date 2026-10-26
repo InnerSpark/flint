@@ -7,6 +7,7 @@ import '@fontsource/open-sans/800.css';
 import '../styles/site.css';
 import Icon from '../components/Icon.astro';
 import { NAV } from '../data/nav.js';
+import { principlesFor } from '../data/principleLinks.js';
 import { pkg } from '../lib/flint.js';
 
 /**
@@ -15,6 +16,7 @@ import { pkg } from '../lib/flint.js';
  * home: render the slot full-bleed with no page head (the home page builds its own).
  */
 const { title, lead, crumb, toc = [], tabs, wide = false, home = false, description, illo } = Astro.props;
+const why = principlesFor(Astro.url.pathname);
 const path = Astro.url.pathname;
 const isCurrent = (href) => path === href;
 // Top nav, as on the AccessSpark site. A section is current when the page sits inside it.
@@ -110,6 +112,9 @@ const jsonLd = {
                 {crumb && <p class="crumb">{crumb}</p>}
                 <h1 id="page-title" tabindex="-1">{title}</h1>
                 {lead && <p class="lead">{lead}</p>}
+                {why.length > 0 && (
+                  <p class="page-why">Why: {why.map((p, i) => <>{i > 0 && ', '}<a href={`/principles/#${p.id}`}>{p.title}</a></>)}</p>
+                )}
               </div>
               {illo && <div class="page-illo"><Illustration name={illo} /></div>}
             </header>

@@ -57,6 +57,22 @@ export const PRINCIPLE_GROUPS = [
         enforced: ['Accessibility', '/guides/accessibility/'],
       },
       {
+        id: 'legible-any-background',
+        title: 'Legible over any background',
+        why: 'Text and controls clear the bar against the worst content that can sit behind them, not the best. Translucent material like Liquid Glass can\'t promise that, so Flint keeps it to the navigation layer and never puts body text on it.',
+        enforced: ['Liquid Glass', '/get-started/ios/#liquid-glass'],
+        do: 'Keep glass to bars, sheets and floating buttons, and test with Reduce Transparency on.',
+        dont: 'Set a paragraph or a form on glass over a photo.',
+      },
+      {
+        id: 'native-before-custom',
+        title: 'Native before custom',
+        why: 'Style the platform\'s own controls instead of drawing look-alikes. Native bars, sheets and switches keep VoiceOver, Dynamic Type, the large content viewer and the system\'s accessibility settings. A copy loses them, and so does painting over them.',
+        enforced: ['iOS and SwiftUI', '/get-started/ios/#chrome'],
+        do: 'Call FlintChrome.apply() once and keep Apple\'s tab bar.',
+        dont: 'Build a custom tab bar to match a mockup pixel for pixel.',
+      },
+      {
         id: 'one-main-action',
         title: 'One main action per view',
         why: 'One primary button. Everything else is secondary or text. If two things compete, the page has two jobs.',

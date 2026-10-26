@@ -3,7 +3,8 @@ import Docs from '../../../layouts/Docs.astro';
 import Code from '../../../components/Code.astro';
 import TableWrap from '../../../components/TableWrap.astro';
 import PhoneDemo from '../../../components/PhoneDemo.astro';
-const toc = [{ id: 'try', text: 'Try it' }, { id: 'add', text: 'Add the package' }, { id: 'use', text: 'Use it' }, { id: 'reference', text: 'What is in the package' }, { id: 'components', text: 'Components' }, { id: 'chrome', text: 'Tab bar, nav bar and toolbar' }, { id: 'uikit', text: 'UIKit colors' }];
+import { glass } from '../../../lib/flint.js';
+const toc = [{ id: 'try', text: 'Try it' }, { id: 'add', text: 'Add the package' }, { id: 'use', text: 'Use it' }, { id: 'reference', text: 'What is in the package' }, { id: 'components', text: 'Components' }, { id: 'chrome', text: 'Tab bar, nav bar and toolbar' }, { id: 'liquid-glass', text: 'Liquid Glass and contrast' }, { id: 'uikit', text: 'UIKit colors' }];
 const useCode = `import SwiftUI
 import Flint
 
@@ -203,8 +204,28 @@ bar.titleTextAttributes = [.foregroundColor: Flint.UIColors.textHeading]`;
 
   <h2 id="chrome">Tab bar, nav bar and toolbar</h2>
   <p>Flint styles Apple's own bars instead of replacing them. Call <code>FlintChrome.apply()</code> once at launch: titles use the <code>navTitleLarge</code> and <code>navTitle</code> styles, tab labels use <code>tabLabel</code>, and the selected tab shows its label and icon in the primary color. Alerts and confirmation dialogs stay native and pick up the tint.</p>
-  <p><strong>Liquid Glass (iOS 26 and later).</strong> Apple asks apps to remove bar and sheet background customization, because it replaces the glass with a flat surface. So on iOS 26 and later <code>FlintChrome.apply()</code> sets only the title fonts and the selected-tab tint, and <code>.flintSheet()</code> leaves the background to the system. The bars then follow Reduce Transparency, Increase Contrast and the iOS 27 Clear to Tinted slider with no app code. iOS 16 to 25 get solid Flint bars from the same call. Glass is for the navigation layer: cards, notices and lists stay solid.</p>
+  <p><strong>Liquid Glass (iOS 26 and later).</strong> Apple asks apps to remove bar and sheet background customization, because it replaces the glass with a flat surface. So on iOS 26 and later <code>FlintChrome.apply()</code> sets only the title fonts and the selected-tab tint, and <code>.flintSheet()</code> leaves the background to the system. The bars then follow Reduce Transparency, Increase Contrast and the Clear and Tinted setting (iOS 26.1 and later) with no app code. iOS 16 to 25 get solid Flint bars from the same call. Glass is for the navigation layer: cards, notices and lists stay solid.</p>
   <Code label="SwiftUI app" code={chromeCode} />
+
+  <h2 id="liquid-glass">Liquid Glass and contrast</h2>
+  <p><strong>Liquid Glass can't guarantee contrast.</strong> What sits under the glass changes as people scroll, so no one can promise a ratio for text on it, Apple included. Flint ships native glass anyway, because a look-alike or a painted-over bar loses the system settings that fix it: Reduce Transparency makes the bars solid and Increase Contrast adds a strong edge. Flint's position:</p>
+  <ul>
+    <li><strong>Navigation layer only.</strong> Bars, sheets at medium height and floating buttons. Never cards, lists, notices or body text.</li>
+    <li><strong>Selection never rests on color.</strong> On glass the selected tab's color can fall well under 4.5:1, so tabs always show a label and an icon, and the selected one gets a tinted pill.</li>
+    <li><strong>Test with the settings on.</strong> Check every glass screen with Reduce Transparency and with Increase Contrast before release.</li>
+    <li><strong>Tell people where the setting is.</strong> In your app's help, point to Settings, Display and Brightness, Liquid Glass, where Tinted makes the glass more opaque.</li>
+  </ul>
+  <p>The numbers below come from the build. They model the docs' glass: <code>surface/default</code> at 68% (light) or 70% (dark) over any flat color, the worst case for blur. Real glass also adapts its tint to the content, so treat them as a model, not a device measurement. Flint's bar is 7:1 for text and 4.5:1 is the WCAG AA minimum.</p>
+  {Object.entries(glass.modes).map(([mode, rows]) => (
+    <TableWrap label={`Glass contrast, ${mode}`}>
+      <table class="data">
+        <caption>{mode === 'light' ? 'Light' : 'Dark'} mode</caption>
+        <thead><tr><th scope="col">Label</th><th scope="col">Worst case on glass</th><th scope="col">Solid, Reduce Transparency</th></tr></thead>
+        <tbody>{rows.map((r) => <tr><th scope="row">{r.label}</th><td>{r.worst.toFixed(2)}:1{r.worst < glass.labelBar ? ' (under AA)' : r.worst < glass.textBar ? ' (under 7:1)' : ''}</td><td>{r.reduceTransparency.toFixed(2)}:1</td></tr>)}</tbody>
+      </table>
+    </TableWrap>
+  ))}
+  <p>See the principle <a href="/principles/#legible-any-background">Legible over any background</a>.</p>
 
   <h2 id="uikit">UIKit colors</h2>
   <p><code>UIColor(Flint.Colors.x)</code> locks to light mode. For UIKit APIs such as navigation bar appearance, use <code>Flint.UIColors</code>, which switch with the appearance.</p>

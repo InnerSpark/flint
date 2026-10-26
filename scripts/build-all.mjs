@@ -19,7 +19,7 @@ for (const brand of BRANDS) {
   if (!checkOnly) run('build.mjs', brand);
   run('check-contrast.mjs', brand);
   run('check-cvd.mjs', brand);
-  if (brand === DEFAULT_BRAND) { run('check-parity.mjs', brand); run('check-components.mjs', brand); }
+  if (brand === DEFAULT_BRAND) { run('check-parity.mjs', brand); run('check-components.mjs', brand); run('measure-glass.mjs', brand); }
 }
 if (!checkOnly) run('build-brand-preview.mjs', DEFAULT_BRAND);
 console.log(`\nAll ${BRANDS.length} brands ${checkOnly ? 'checked' : 'built and checked'}.`);

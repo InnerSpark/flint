@@ -55,6 +55,7 @@
       "import": "./js/behaviors.js"
     },
     "./contrast.json": "./dist/contrast.json",
+    "./glass.json": "./dist/glass.json",
     "./mui": {
       "types": "./mui/index.d.ts",
       "import": "./mui/index.mjs"

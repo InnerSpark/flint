@@ -1,0 +1,67 @@
+{
+  "model": "surface/default at 68% light, 70% dark; prominent = action/primary at 88%; flat backdrop, 16-step sRGB grid",
+  "textBar": 7,
+  "labelBar": 4.5,
+  "modes": {
+    "light": [
+      {
+        "label": "text/heading on glass (bar buttons, titles)",
+        "worst": 6.49,
+        "worstBackdrop": "#000000",
+        "best": 14.5,
+        "reduceTransparency": 14.5
+      },
+      {
+        "label": "text/default on glass (unselected tabs)",
+        "worst": 6.55,
+        "worstBackdrop": "#000000",
+        "best": 14.63,
+        "reduceTransparency": 14.63
+      },
+      {
+        "label": "action/primary on glass (selected tab)",
+        "worst": 3.5,
+        "worstBackdrop": "#000000",
+        "best": 7.82,
+        "reduceTransparency": 7.82
+      },
+      {
+        "label": "action/on-primary on prominent glass",
+        "worst": 5.86,
+        "worstBackdrop": "#ffffff",
+        "best": 9.15,
+        "reduceTransparency": 7.82
+      }
+    ],
+    "dark": [
+      {
+        "label": "text/heading on glass (bar buttons, titles)",
+        "worst": 5.86,
+        "worstBackdrop": "#ffffff",
+        "best": 17.13,
+        "reduceTransparency": 15.89
+      },
+      {
+        "label": "text/default on glass (unselected tabs)",
+        "worst": 4.13,
+        "worstBackdrop": "#ffffff",
+        "best": 12.08,
+        "reduceTransparency": 11.21
+      },
+      {
+        "label": "action/primary on glass (selected tab)",
+        "worst": 3.54,
+        "worstBackdrop": "#ffffff",
+        "best": 10.34,
+        "reduceTransparency": 9.59
+      },
+      {
+        "label": "action/on-primary on prominent glass",
+        "worst": 8.12,
+        "worstBackdrop": "#000000",
+        "best": 11.31,
+        "reduceTransparency": 10.49
+      }
+    ]
+  }
+}

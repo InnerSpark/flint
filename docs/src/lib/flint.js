@@ -2,11 +2,12 @@
 import resolved from '../../../dist/tokens.json';
 import source from '../../../tokens.json';
 import contrast from '../../../dist/contrast.json';
+import glass from '../../../dist/glass.json';
 import pkg from '../../../package.json';
 import { kebab, camel, cssVarForPath, componentVar } from '../../../scripts/names.mjs';
 import { SHADCN_MAP } from '../../../scripts/shadcn-map.mjs';
 
-export { resolved, source, contrast, pkg, kebab, camel, cssVarForPath, componentVar, SHADCN_MAP };
+export { resolved, source, contrast, glass, pkg, kebab, camel, cssVarForPath, componentVar, SHADCN_MAP };
 
 export const MODES = ['light', 'dark'];
 
