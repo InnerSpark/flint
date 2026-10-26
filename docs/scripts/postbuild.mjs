@@ -27,7 +27,7 @@ for (const p of pages) {
     .map(([, body]) => `'sha256-${createHash('sha256').update(body).digest('base64')}'`);
   const fixed = html
     .replace(/<(h[2-4]) id="([^"]+)"(?![^>]*tabindex)/g, '<$1 id="$2" tabindex="-1"')
-    .replace(/script-src 'self'(?: 'sha256-[^']+')*/, `script-src 'self' ${[...new Set(hashes)].join(' ')}`)
+    .replace(/script-src 'self'((?: https:\/\/[^ ;']+)*)(?: 'sha256-[^']+')*/, `script-src 'self'$1 ${[...new Set(hashes)].join(' ')}`)
     .replace(/(style-src 'self' 'unsafe-inline')(?: 'sha256-[^']+')+/g, '$1');
   if (!fixed.includes("style-src 'self' 'unsafe-inline';")) throw new Error(`CSP style-src not as expected in ${file}`);
   writeFileSync(file, fixed);

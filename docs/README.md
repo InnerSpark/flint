@@ -4,6 +4,8 @@ The Flint docs site, published at **flint.innersparkmedia.com**. Astro, static, 
 
 Every token value, contrast ratio and code sample is read from the Flint build or the workbench source. Nothing is typed by hand.
 
+Analytics: Google Analytics, the same GA4 property as innersparkmedia.com (`G-9XNG65F6HM`), loaded in `src/layouts/Docs.astro`. In GA, filter by Hostname `flint.innersparkmedia.com`. The CSP in `astro.config.mjs` allows googletagmanager.com and the GA collection hosts; add any new outside host there too, or the browser blocks it.
+
 ## Run it
 
 ```bash

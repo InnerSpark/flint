@@ -4,6 +4,7 @@ Flint tokens follow semver, independent of the consuming apps.
 
 ## Unreleased
 
+- **Docs analytics (ASDS-90).** flint.innersparkmedia.com now reports page views to the same GA4 property as innersparkmedia.com (`G-9XNG65F6HM`); filter by Hostname to see the docs. No Google Ads tag. The CSP allows googletagmanager.com for scripts and the GA collection hosts for connect and img, and `postbuild.mjs` keeps those hosts when it rehashes inline scripts. The footer says the site uses Google Analytics cookies.
 - **Figma library synced to v1.16 (ASDS-89).** No package change; the library now matches the repo.
   - Fixed drift: added `color/red/950`, pointed `action/danger-active` at it, and added `text/inverse-muted` and `chart/1` to `chart/5`.
   - New **Brand** collection (Flint, AccessSpark, Inner Spark Media, Studio) and **Platform** collection (Web, iOS). Semantic and Sizing point at them, so brand, platform and light/dark switch independently with no extra modes. A diff against every brand's build returns zero differences.

@@ -72,6 +72,14 @@ const jsonLd = {
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
+  <!-- Google Analytics (ASDS-90): same GA4 property as innersparkmedia.com, split by hostname. No ads tag. -->
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-9XNG65F6HM"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-9XNG65F6HM');
+  </script>
 </head>
 <body>
   <a class="flint-skip-link" href="#page-title">Skip to content</a>
@@ -156,6 +164,7 @@ const jsonLd = {
     </div>
     <div class="footer-legal">
       <p>Flint {pkg.version}. Built and audited by Inner Spark Media. Published accessibility target: WCAG 2.2 AA.</p>
+      <p>This site uses Google Analytics cookies to count page views. No advertising cookies.</p>
       <p>© {year} Inner Spark Media, LLC. All rights reserved. <a href="https://github.com/InnerSpark/flint/blob/main/LICENSE">License</a>.</p>
     </div>
   </footer>

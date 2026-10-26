@@ -16,7 +16,9 @@ export default defineConfig({
   experimental: {
     csp: {
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
-      directives: ["default-src 'self'", "img-src 'self' data:", "font-src 'self' data:", "connect-src 'self'", "object-src 'none'", "base-uri 'self'", "form-action 'self'"],
+      // Google Analytics (ASDS-90): gtag.js from googletagmanager.com, hits to the GA collection hosts.
+      scriptDirective: { resources: ["'self'", 'https://www.googletagmanager.com'] },
+      directives: ["default-src 'self'", "img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com", "font-src 'self' data:", "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com", "object-src 'none'", "base-uri 'self'", "form-action 'self'"],
     },
   },
   // React for the workbench islands (MUI and shadcn render live); Tailwind only for the shadcn bench.
