@@ -2,6 +2,18 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## Unreleased
+
+- **Figma library synced to v1.16 (ASDS-89).** No package change; the library now matches the repo.
+  - Fixed drift: added `color/red/950`, pointed `action/danger-active` at it, and added `text/inverse-muted` and `chart/1` to `chart/5`.
+  - New **Brand** collection (Flint, AccessSpark, Inner Spark Media, Studio) and **Platform** collection (Web, iOS). Semantic and Sizing point at them, so brand, platform and light/dark switch independently with no extra modes. A diff against every brand's build returns zero differences.
+  - iOS text styles: `ios/nav-title-large`, `ios/nav-title`, `ios/tab-label`.
+  - New **iOS components** page: all 15 SwiftUI components with light and dark previews, Solid and Liquid Glass styles for the bars, sheet and floating buttons.
+  - New **Illustration** page: the 18 docs illustrations as components, every fill bound to a variable (new `illustration/*` facet variables).
+  - New **Link**, **Menu** and **Textarea** components.
+  - CSS and Swift code syntax on every Semantic and Sizing variable.
+  - `FIGMA_LIBRARY_GUIDELINES.md` and the docs Figma page describe the new collections and pages.
+
 ## v1.16.0 (2026-10-25)
 
 - **Liquid Glass (ASDS-88).** On iOS 26 and later, `FlintChrome.apply()` was painting solid backgrounds on the navigation bar, tab bar and toolbar, and `.flintSheet()` a solid sheet. Both replace Liquid Glass with a flat surface, so they no longer do. On 26 and later Flint sets only the title fonts and the selected-tab tint, as Apple's guidance asks, and the system keeps the glass, the scroll edge effect, Reduce Transparency, Increase Contrast and the iOS 27 Clear/Tinted setting. iOS 16 to 25 keep the solid Flint bars.

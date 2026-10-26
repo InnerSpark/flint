@@ -18,6 +18,19 @@ Source of truth for values: `tokens.json` in the `flint` repo. The Figma variabl
 
 Use the **Semantic** collection. It has two modes, Light and Dark. Set the mode on the top frame; everything inside follows.
 
+### Brand and platform modes
+
+Two more collections switch the whole design, the same way Light and Dark do. Set them on the top frame.
+
+| Collection | Modes | What changes |
+|---|---|---|
+| Brand | Flint, AccessSpark, Inner Spark Media, Studio | The few tokens a brand overrides: secondary action, focus ring, focus border, default text, card radius. Inner Spark Media gets its orange focus ring and an 8 card radius; Studio gets a lighter default text that still clears 7:1. |
+| Platform | Web, iOS | Touch target and control height: 24 and 40 on the web, 44 and 44 on iOS. Platforms never change color. |
+
+Don't bind to `brand/*` or `platform/*` directly. They're hidden from the pickers; Semantic and Sizing point at them. The repo has the same layers (`brands/*.json`, `platforms/*.json`), and the variables mirror them.
+
+Illustrations use five more Semantic variables, `illustration/lit`, `face`, `shade`, `mid` and `deep`, for the faceted shard. Use them only in illustrations.
+
 ### Pairings that pass AAA
 
 Use these pairs as-is. If you need a pair that isn't listed, measure it before you ship it.
@@ -61,6 +74,7 @@ Font is Open Sans for everything. Use the text styles; don't set sizes by hand.
 | label/button (14 bold) | Buttons |
 | label/caption, label/helper (12) | Helper text, metadata |
 | label/kicker (12 bold, uppercase) | Section eyebrows |
+| ios/nav-title-large (34), ios/nav-title (17), ios/tab-label (12) | iOS bars only: large and inline navigation titles, tab labels |
 
 - Nothing below 12px.
 - Headings follow document order (h1, then h2, then h3). Don't pick a heading level for its size.
@@ -74,7 +88,7 @@ Use the **Sizing** variables for padding, gaps, radius and control sizes.
 - **Inset (padding):** space/inset/sm, md, lg, xl. **Gap:** space/gap/sm, md, lg.
 - **Radius:** radius/control (8) for inputs, buttons and nav items. radius/card for cards and panels. radius/card-lg for dialogs. radius/pill for chips and avatars.
 - **Controls:** size/control/sm (32) and md (40).
-- **Touch targets:** at least 24 by 24 (size/target/min). Aim for 40 on anything used often.
+- **Touch targets:** at least 24 by 24 on the web (size/target/min). Aim for 40 on anything used often. In the iOS platform mode size/target/min is 44.
 - **Icons:** size/icon/sm 16, md 20, lg 24.
 - **Shadows:** use the effect styles (shadow/card, popover, dialog, raised) and their shadow/dark/* versions in Dark mode.
 
@@ -85,13 +99,14 @@ Use these before building anything new. Pick variants with properties; don't det
 | Need | Use |
 |---|---|
 | Actions | Button (primary, secondary, text, destructive), Split button |
-| Forms | Form field (label, helper, error built in), Input, Select, Checkbox, Radio, Toggle |
+| Forms | Form field (label, helper, error built in), Input, Textarea, Select, Checkbox, Radio, Toggle |
 | Status | Chip, Badge, Severity chip, Status pill (VPAT conformance), Alert, Toast |
-| Navigation | Tab, Pagination, Skip link, Menu item |
-| Containers | Dialog, Drawer, Empty state, Tooltip |
+| Navigation | Tab, Pagination, Link, Skip link, Menu item (site nav) |
+| Containers | Dialog, Drawer, Menu and Menu item (dropdown), Empty state, Tooltip |
 | Data | Table cell (header, text, number, status), Progress, Score card, Score donut |
 | Product patterns | Issue card, Comparison card, CTA band, Step card, Conformance row, Conformance stat card, Verification method, Icon tile |
 | Chrome | Footer. App headers and sidebars are product-specific and live in each product's file, not here |
+| Illustration | 18 spot illustrations on the Illustration page, decorative only |
 
 Rules:
 
@@ -101,6 +116,14 @@ Rules:
 - **Errors:** the field shows the error state, the message replaces the helper text, and focus moves to the first errored field.
 - **Dialogs and drawers** sit over overlay/scrim, trap focus, close on Esc and return focus to what opened them.
 - **Don't detach instances.** If an instance can't do what you need, that's an ASDS ticket.
+
+### iOS components
+
+The **iOS components** page has the SwiftUI components from the Swift package: Tab bar, Navigation bar, Bar button, Toolbar, List row and List header, Sheet, Glass button, Notice, Tag, Card, Switch, Toggle row, Choice picker, Stepper, Stat tile and Empty state. The page is set to the iOS platform mode. Buttons are the web Button, which is 44pt tall in that mode.
+
+- Bars come in two styles. **Solid** is iOS 16 to 25. **Glass** is Liquid Glass on iOS 26 and later, drawn with Figma's glass effect over content. On a device the system draws the glass, Reduce Transparency and Increase Contrast; Flint only sets fonts and the selected tint.
+- Keep glass on the navigation layer: bars, sheets and floating buttons. Never on cards, lists or notices.
+- Icons on that page are decorative stroke icons (`iOS icon/*`) that match the docs. In SwiftUI use the matching SF Symbol.
 
 ## 6. Icons
 

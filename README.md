@@ -173,6 +173,10 @@ Text("Awning")
 
 CI builds every product for macOS and the iOS Simulator on each push.
 
+## Figma library
+
+The [Flint Design System library](https://www.figma.com/design/SPVtGNr2eMf2LrwV4F3VVo/Flint-Design-System) mirrors this repo. Its variables have five collections: Primitives, Semantic (Light, Dark), Sizing (Comfortable, Compact), Brand (one mode per brand) and Platform (Web, iOS), matching `tokens.json`, `brands/` and `platforms/`. It has the web components, an iOS components page with Solid and Liquid Glass styles, and the illustrations. Rules for designing with it are in [`FIGMA_LIBRARY_GUIDELINES.md`](FIGMA_LIBRARY_GUIDELINES.md). If the library and the repo disagree, the repo wins.
+
 ## Figma Make
 
 Point Figma Make at **`dist/tokens.css`** (the full `--color` / `--space` / `--radius` / `--font` set in light and dark) or at **`dist/tokens.json`** for the structured, resolved values. Either gives Make the whole Flint scale to design against. For a standards-based ingest (Tokens Studio, Style Dictionary), use `@innerspark/flint/tokens.dtcg.json` (W3C DTCG `$type` / `$value`, semantic split into `light` and `dark`).
