@@ -1,8 +1,13 @@
 ---
-// Token explorer (ASDS-50): follow any token down to the ladder, and see what uses it.
+// Token explorer (ASDS-50, directory view ASDS-93): browse every token as folders, follow any token
+// down to the ladder, see its value in each brand and what uses it. View only: tokens.json is the source.
 // Every chain, value and name is computed here from Flint's build. Nothing is typed by hand.
 import Docs from '../../../layouts/Docs.astro';
 import TableWrap from '../../../components/TableWrap.astro';
+import TokenTree from '../../../components/TokenTree.astro';
+import brandAccessspark from '../../../../../dist/brands/accessspark/tokens.json';
+import brandIsm from '../../../../../dist/brands/innersparkmedia/tokens.json';
+import brandStudio from '../../../../../dist/brands/studio/tokens.json';
 import Swatch from '../../../components/Swatch.astro';
 import { COMPONENTS } from '../../../data/components.js';
 import { source, resolved, leaves, at, refName, isColor, cssVarForPath, componentVar, camel, kebab, MODES } from '../../../lib/flint.js';
@@ -43,11 +48,23 @@ for (const t of Object.values(T)) {
     t.value[mode] = t.kind === 'component' ? at(resolved.component[mode], t.path) : at(resolved.semantic[mode], t.path);
   }
 }
+// Every primitive leaf gets an entry, referenced or not, so the directory shows the whole source.
+for (const top of Object.keys(source).filter((k) => k !== 'semantic' && k !== 'component' && !k.startsWith('$'))) {
+  for (const [p] of leaves(source[top])) if (!p.some((k) => k.startsWith('$'))) add([top, ...p].join('.'));
+}
 // Primitives: one value in both modes.
 for (const t of Object.values(T).filter((x) => x.kind === 'primitive')) {
   const v = at(resolved, t.key.split('.')) ?? lookup(t.key, 'light');
   for (const mode of MODES) { t.value[mode] = v; t.chain[mode] = [t.key]; }
 }
+
+// Per-brand values, kept only where a brand differs from Flint.
+const BRAND_TOKENS = { AccessSpark: brandAccessspark, 'Inner Spark Media': brandIsm, Studio: brandStudio };
+const valueIn = (tok, t, mode) => (t.kind === 'component' ? at(tok.component[mode], t.path) : t.kind === 'semantic' ? at(tok.semantic[mode], t.path) : at(tok, t.key.split('.')));
+const brandsFor = (t) => {
+  const rows = Object.entries(BRAND_TOKENS).map(([name, tok]) => [name, MODES.map((m) => valueIn(tok, t, m))]);
+  return rows.some(([, v]) => v.some((x, i) => String(x) !== String(t.value[MODES[i]]))) ? [['Flint', MODES.map((m) => t.value[m])], ...rows] : [];
+};
 
 const names = (t) => {
   const parts = t.key.split('.');
@@ -68,13 +85,36 @@ const data = Object.values(T)
     chain: t.chain, value: t.value,
     color: MODES.some((m) => isColor(t.value[m])),
     names: names(t).filter(([, n]) => n),
+    brands: brandsFor(t),
     usedBy: Object.entries(t.usedBy).map(([k, modes]) => [k, [...modes]]).sort(([a], [b]) => a.localeCompare(b)),
   }))
   .sort((a, b) => a.key.localeCompare(b.key));
-const groups = [['component', 'Component'], ['semantic', 'Semantic'], ['primitive', 'Primitive']]
-  .map(([kind, label]) => ({ label, items: data.filter((d) => d.kind === kind) }));
 const short = (key) => key.replace(/^(component|semantic)\./, '');
 const initial = 'component.button.primary.bg';
+
+// Directory: three sets, then folders by path, then tokens. Counts are tokens under each folder.
+const SETS = [['component', 'Component'], ['semantic', 'Semantic'], ['primitive', 'Primitive']];
+const build = (items, strip) => {
+  const root = { children: new Map() };
+  for (const d of items) {
+    const parts = strip(d.key);
+    let node = root, path = d.kind === 'primitive' ? [] : [d.kind];
+    parts.forEach((part, i) => {
+      path = [...path, part];
+      if (i === parts.length - 1) { node.children.set(part + '\u0000', { name: part, path: path.join('.'), token: d.key, color: d.color ? d.value.light : undefined, count: 1, children: [] }); return; }
+      if (!node.children.has(part)) node.children.set(part, { name: part, path: path.join('.'), count: 0, children: new Map() });
+      node = node.children.get(part);
+    });
+  }
+  const finish = (n) => { const kids = [...n.children.values()].map((c) => (c.token ? c : finish(c))); return { ...n, children: kids, count: kids.reduce((s, c) => s + c.count, 0) }; };
+  return finish(root).children;
+};
+const tree = SETS.map(([kind, label]) => {
+  const items = data.filter((d) => d.kind === kind);
+  const children = build(items, (k) => (kind === 'primitive' ? k.split('.') : k.split('.').slice(1)));
+  return { name: label, path: kind, count: items.length, children };
+});
+const total = data.length;
 // Components with tokens but no docs page yet. Their tokens are listed here until the page ships;
 // a component page then lists its own (and this list drops it), so every token has a home.
 const documentedGroups = Object.entries(COMPONENTS).map(([slug, c]) => c.tokens || slug);
@@ -85,49 +125,75 @@ const show = (v) => (isColor(v) ? null : typeof v === 'number' ? `${v}px` : Stri
 <Docs
   title="Token explorer"
   crumb="Foundations"
-  lead="Pick any token to see what it points at, the value it lands on in light and dark, its name on every platform, and what else uses it."
+  lead={`Browse all ${total} tokens as folders, the way they sit in tokens.json. Open a folder to see its tokens side by side, or pick one to see what it points at, its value in light, dark and each brand, its name on every platform, and what uses it.`}
+  wide
 >
-  <div class="explorer">
-    <div class="field explorer-pick">
-      <label for="token-select">Token</label>
-      <select id="token-select" class="flint-input" aria-describedby="token-help">
-        {groups.map((g) => (
-          <optgroup label={`${g.label} (${g.items.length})`}>
-            {g.items.map((d) => <option value={d.key} selected={d.key === initial}>{short(d.key)}</option>)}
-          </optgroup>
-        ))}
-      </select>
-      <p class="helper" id="token-help">Component tokens point at semantic tokens, which point at the ladder. Primitives are the ladder.</p>
+  <div class="tx">
+    <nav class="tx-nav" aria-labelledby="tx-nav-title">
+      <h2 id="tx-nav-title" class="tx-nav-title">Tokens</h2>
+      <div class="field tx-filter">
+        <label for="tx-filter">Filter</label>
+        <input id="tx-filter" class="flint-input" type="search" autocomplete="off" spellcheck="false" aria-describedby="tx-filter-help" />
+        <p class="helper" id="tx-filter-help">Part of a name, like blue.700 or button.</p>
+      </div>
+      <p id="tx-count" class="visually-hidden" role="status" aria-live="polite"></p>
+      <p id="tx-none" class="muted" hidden>No tokens match.</p>
+      <ul class="tx-list tx-root" role="list">
+        <TokenTree nodes={tree} />
+      </ul>
+    </nav>
+
+    <div class="tx-view">
+      <noscript><p>The explorer needs JavaScript. The <a href="/guides/token-tiers/">Token tiers</a> guide explains the same chain without it.</p></noscript>
+      <p id="explorer-status" class="visually-hidden" role="status" aria-live="polite"></p>
+      <p class="tx-back"><a href="#tx-nav-title" id="tx-back">Back to the token list</a></p>
+
+      <section class="explorer-result" aria-labelledby="result-title" hidden id="explorer-result">
+        <h2 id="result-title" tabindex="-1"></h2>
+        <p class="explorer-kind" id="result-kind"></p>
+
+        <div id="group-view" hidden>
+          <div class="table-wrap" role="region" aria-labelledby="result-title" tabindex="0">
+            <table class="data">
+              <thead><tr><th scope="col">Token</th><th scope="col" id="gv-light">Light</th><th scope="col" id="gv-dark">Dark</th><th scope="col">CSS</th></tr></thead>
+              <tbody id="group-rows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="token-view" hidden>
+          <h3>Light and dark</h3>
+          <div class="table-wrap" role="region" aria-label="Resolution in light and dark" tabindex="0">
+            <table class="data">
+              <thead><tr><th scope="col">Mode</th><th scope="col">Points at</th><th scope="col">Value</th></tr></thead>
+              <tbody id="result-modes"></tbody>
+            </table>
+          </div>
+
+          <div id="brand-view" hidden>
+            <h3>By brand</h3>
+            <div class="table-wrap" role="region" aria-label="Values by brand" tabindex="0">
+              <table class="data">
+                <thead><tr><th scope="col">Brand</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+                <tbody id="result-brands"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <h3>Every name</h3>
+          <div class="table-wrap" role="region" aria-label="Names by platform" tabindex="0">
+            <table class="data">
+              <thead><tr><th scope="col">Platform</th><th scope="col">Name</th></tr></thead>
+              <tbody id="result-names"></tbody>
+            </table>
+          </div>
+
+          <h3>Used by</h3>
+          <p id="result-usedby-empty" class="muted">Nothing references this token directly. It is used in code.</p>
+          <ul class="used-by" id="result-usedby"></ul>
+        </div>
+      </section>
     </div>
-
-    <noscript><p>The explorer needs JavaScript. The <a href="/guides/token-tiers/">Token tiers</a> guide explains the same chain without it.</p></noscript>
-
-    <p id="explorer-status" class="visually-hidden" role="status" aria-live="polite"></p>
-
-    <section class="explorer-result" aria-labelledby="result-title" hidden id="explorer-result">
-      <h2 id="result-title" tabindex="-1"></h2>
-      <p class="explorer-kind" id="result-kind"></p>
-
-      <h3>Light and dark</h3>
-      <div class="table-wrap" role="region" aria-label="Resolution in light and dark" tabindex="0">
-        <table class="data">
-          <thead><tr><th scope="col">Mode</th><th scope="col">Points at</th><th scope="col">Value</th></tr></thead>
-          <tbody id="result-modes"></tbody>
-        </table>
-      </div>
-
-      <h3>Every name</h3>
-      <div class="table-wrap" role="region" aria-label="Names by platform" tabindex="0">
-        <table class="data">
-          <thead><tr><th scope="col">Platform</th><th scope="col">Name</th></tr></thead>
-          <tbody id="result-names"></tbody>
-        </table>
-      </div>
-
-      <h3>Used by</h3>
-      <p id="result-usedby-empty" class="muted">Nothing references this token directly. It is used in code.</p>
-      <ul class="used-by" id="result-usedby"></ul>
-    </section>
   </div>
 
   {pending.length > 0 && (
@@ -162,88 +228,5 @@ const show = (v) => (isColor(v) ? null : typeof v === 'number' ? `${v}px` : Stri
   )}
 
   <script type="application/json" id="token-data" set:html={JSON.stringify(data)} />
-  <script is:inline>
-    (function () {
-      var data = JSON.parse(document.getElementById('token-data').textContent);
-      var byKey = {};
-      data.forEach(function (d) { byKey[d.key] = d; });
-      var select = document.getElementById('token-select');
-      var status = document.getElementById('explorer-status');
-      var result = document.getElementById('explorer-result');
-      var title = document.getElementById('result-title');
-      var kind = document.getElementById('result-kind');
-      var modes = document.getElementById('result-modes');
-      var namesBody = document.getElementById('result-names');
-      var used = document.getElementById('result-usedby');
-      var usedEmpty = document.getElementById('result-usedby-empty');
-      var KIND = { component: 'Component token. Mode-free: it follows light and dark through the semantic token it points at.', semantic: 'Semantic token. Defined once per mode.', primitive: 'Primitive. A ladder step or raw scale value. Never used directly in UI.' };
-      var short = function (k) { return k.replace(/^(component|semantic)\./, ''); };
-      function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
-
-      function render(key, quiet) {
-        var d = byKey[key];
-        if (!d) return false;
-        title.textContent = short(key);
-        kind.textContent = KIND[d.kind];
-        modes.textContent = '';
-        ['light', 'dark'].forEach(function (m) {
-          var tr = el('tr');
-          var th = el('th', null, m === 'light' ? 'Light' : 'Dark'); th.scope = 'row'; tr.appendChild(th);
-          var td = el('td'); var ol = el('ol', 'chain');
-          d.chain[m].slice(1).forEach(function (s) { var li = el('li'); li.appendChild(el('code', null, short(s))); ol.appendChild(li); });
-          if (!ol.childNodes.length) td.appendChild(el('span', 'muted', 'Itself (a raw value)')); else td.appendChild(ol);
-          tr.appendChild(td);
-          var tv = el('td'); var sw = el('span', 'swatch');
-          if (d.color) { var chip = el('span', 'swatch-chip'); chip.setAttribute('aria-hidden', 'true'); chip.style.background = d.value[m]; sw.appendChild(chip); }
-          sw.appendChild(el('code', null, String(d.value[m])));
-          tv.appendChild(sw); tr.appendChild(tv);
-          modes.appendChild(tr);
-        });
-        namesBody.textContent = '';
-        d.names.forEach(function (n) {
-          var tr = el('tr'); var th = el('th', null, n[0]); th.scope = 'row'; tr.appendChild(th);
-          var td = el('td'); td.appendChild(el('code', null, n[1])); tr.appendChild(td); namesBody.appendChild(tr);
-        });
-        used.textContent = '';
-        d.usedBy.forEach(function (u) {
-          var li = el('li'); var a = el('a', null, short(u[0]));
-          a.href = '?token=' + encodeURIComponent(u[0]); a.setAttribute('data-token', u[0]);
-          if (u[1].length === 1) a.appendChild(el('small', null, u[1][0] + ' only'));
-          li.appendChild(a); used.appendChild(li);
-        });
-        usedEmpty.hidden = d.usedBy.length > 0;
-        result.hidden = false;
-        if (!quiet) status.textContent = 'Showing ' + short(key) + '.';
-        return true;
-      }
-
-      function go(key, push) {
-        if (!render(key)) return false;
-        select.value = key;
-        var url = '?token=' + encodeURIComponent(key);
-        if (push) history.pushState({ token: key }, '', url); else history.replaceState({ token: key }, '', url);
-        return true;
-      }
-
-      // Changing the select re-renders and keeps focus on the select.
-      select.addEventListener('change', function () { go(select.value, false); });
-      // "Used by" links switch tokens in place and move focus to the new result's heading.
-      // So do the token links in the "without a page yet" tables.
-      document.addEventListener('click', function (e) {
-        var a = e.target.closest && e.target.closest('a[data-token], a[href^="?token="]');
-        if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-        var key = a.getAttribute('data-token') || new URLSearchParams(a.getAttribute('href')).get('token');
-        if (!byKey[key]) return;
-        e.preventDefault();
-        if (go(key, true)) { title.focus({ preventScroll: true }); title.scrollIntoView({ block: 'start' }); }
-      });
-      window.addEventListener('popstate', function () {
-        var k = new URLSearchParams(location.search).get('token');
-        if (k && render(k)) select.value = k;
-      });
-
-      var start = new URLSearchParams(location.search).get('token');
-      if (start && byKey[start]) { render(start, true); select.value = start; } else render(select.value, true);
-    })();
-  </script>
+  <script is:inline src="/token-explorer.js"></script>
 </Docs>

@@ -1,0 +1,28 @@
+---
+// One level of the token directory (ASDS-93). Folders are disclosure buttons, tokens are links.
+// Recursive: a folder renders its children with this same component.
+interface Node { name: string; path: string; count: number; token?: string; color?: string; children: Node[] }
+const { nodes, level = 1 } = Astro.props as { nodes: Node[]; level?: number };
+const gid = (p: string) => 'tx-g-' + p.replace(/[^a-zA-Z0-9]+/g, '-');
+---
+{nodes.map((n) => (
+  n.token ? (
+    <li class="tx-token" data-key={n.token}>
+      <a href={`?token=${n.token}`} data-token={n.token}>
+        {n.color && <span class="tx-chip" aria-hidden="true" style={`background:${n.color}`}></span>}
+        <span>{n.name}</span>
+      </a>
+    </li>
+  ) : (
+    <li class="tx-folder" data-group={n.path}>
+      <button type="button" class="tx-toggle" aria-expanded="false" aria-controls={gid(n.path)} data-group={n.path}>
+        <span class="tx-caret" aria-hidden="true"></span>
+        <span>{n.name}</span>
+        <span class="tx-n">{n.count}<span class="visually-hidden"> tokens</span></span>
+      </button>
+      <ul id={gid(n.path)} class="tx-list" role="list" hidden>
+        <Astro.self nodes={n.children} level={level + 1} />
+      </ul>
+    </li>
+  )
+))}
