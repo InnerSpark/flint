@@ -1,11 +1,23 @@
-# One-page components (ASDS-94). The old tab, workbench and iOS URLs land on the matching section.
-/components/button/style/ /components/button/#states 301
-/components/button/style /components/button/#states 301
-/components/button/code/ /components/button/#code 301
-/components/button/code /components/button/#code 301
-/components/button/accessibility/ /components/button/#accessibility 301
-/components/button/accessibility /components/button/#accessibility 301
-/workbench/button/ /components/button/#code 301
-/workbench/button /components/button/#code 301
+# One page per component (ASDS-94, ASDS-95). Old tab, workbench and iOS twin URLs land on the matching section.
+/components/:name/style/ /components/:name/#states 301
+/components/:name/style /components/:name/#states 301
+/components/:name/code/ /components/:name/#code 301
+/components/:name/code /components/:name/#code 301
+/components/:name/accessibility/ /components/:name/#accessibility 301
+/components/:name/accessibility /components/:name/#accessibility 301
+/workbench/ /components/ 301
+/workbench /components/ 301
+/workbench/:name/ /components/:name/#code 301
+/workbench/:name /components/:name/#code 301
+/components/ios/tab-bar/ /components/tabs/?platform=ios 301
 /components/ios/button/ /components/button/?platform=ios 301
+/components/ios/notice/ /components/alert/?platform=ios 301
+/components/ios/tag/ /components/badge/?platform=ios 301
+/components/ios/toggle-row/ /components/switch/?platform=ios 301
+/components/ios/choice-picker/ /components/radio/?platform=ios 301
+/components/ios/tab-bar /components/tabs/?platform=ios 301
 /components/ios/button /components/button/?platform=ios 301
+/components/ios/notice /components/alert/?platform=ios 301
+/components/ios/tag /components/badge/?platform=ios 301
+/components/ios/toggle-row /components/switch/?platform=ios 301
+/components/ios/choice-picker /components/radio/?platform=ios 301

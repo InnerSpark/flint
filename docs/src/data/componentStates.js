@@ -1,4 +1,4 @@
-// Each component's states, as the real components.css markup. The Style tab renders every state in a
+// Each component's states, as the real components.css markup. The States section renders every state in a
 // light and a dark panel (data-theme), so the component's own tokens show in use. Hover, pressed and
 // focus use the workbench's forced-state classes (st-hover, st-active, st-focus). "__P__" keeps ids
 // unique per panel. `reads` names the tokens the state changes, so the row ties back to the table below.

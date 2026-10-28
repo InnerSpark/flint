@@ -141,16 +141,6 @@ code, kbd { font-family: var(--font-mono); font-size: 0.9em; }
 .prose li + li { margin-top: var(--space-4); }
 .prose > :first-child { margin-top: 0; }
 
-/* page tabs: each tab is its own URL */
-.page-tabs { margin: var(--space-24) 0 var(--space-32); border-bottom: 1px solid var(--color-border-default); }
-.page-tabs ul { display: flex; flex-wrap: wrap; gap: var(--space-4); list-style: none; margin: 0; padding: 0; }
-.page-tabs a {
-  display: inline-flex; align-items: center; min-height: 40px; padding: 0 var(--space-16); margin-bottom: -1px;
-  border-bottom: 3px solid transparent; color: var(--color-text-default); text-decoration: none; font-weight: 600; font-size: var(--font-size-sm);
-}
-.page-tabs a:hover { color: var(--color-text-heading); border-bottom-color: var(--color-border-control); }
-.page-tabs a[aria-current="page"] { color: var(--color-selected-text); border-bottom-color: var(--color-action-primary); font-weight: 800; }
-
 /* on this page */
 .toc { position: sticky; top: calc(var(--site-header-h) + var(--space-48)); font-size: var(--font-size-sm); }
 .toc h2 { margin: 0 0 var(--space-8); font-size: var(--font-size-sm); font-weight: 700; color: var(--color-text-heading); }

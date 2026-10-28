@@ -1,7 +1,6 @@
 ---
 import Docs from '../../../layouts/Docs.astro';
 import { IOS, IOS_ORDER, iosHref } from '../../../data/iosComponents.js';
-import { ONE_PAGE } from '../../../data/components.js';
 import '../../../styles/ios.css';
 ---
 <Docs title="iOS components" crumb="Components" lead="The SwiftUI components in the Flint Swift package, drawn from the iOS platform tokens. Every brand product ships them." description="iOS and SwiftUI components in the Flint Design System." wide>
@@ -12,7 +11,7 @@ import '../../../styles/ios.css';
         <div class="ios-thumb" inert>
           <div class="ios-screen" data-platform="ios" set:html={IOS[slug].preview.replaceAll('__P__', `thumb-${slug}`)} />
         </div>
-        <a href={iosHref(slug, ONE_PAGE)}><strong>{IOS[slug].name}</strong></a>
+        <a href={iosHref(slug)}><strong>{IOS[slug].name}</strong></a>
         <span class="muted">{IOS[slug].lead}</span>
       </li>
     ))}

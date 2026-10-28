@@ -1,4 +1,4 @@
-// The Flint React snippet on each component's Code tab. @innerspark/flint/react renders the same classes
+// The Flint React snippet on each component's Code section. @innerspark/flint/react renders the same classes
 // as the plain CSS above it.
 const imp = (names) => `import { ${names} } from '@innerspark/flint/react';\n\n`;
 export const REACT_CODE = {

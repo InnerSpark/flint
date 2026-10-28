@@ -13,7 +13,7 @@ cd docs && npm ci && npm run build && npm run verify`;
     <li><strong>Reuse first.</strong> Build only when no token or component fits.</li>
     <li><strong>Tokens first.</strong> Add or change tokens before touching a component.</li>
     <li><strong>Every state,</strong> with an accessibility note.</li>
-    <li><strong>Add it to the workbench</strong> (<code>docs/src/workbench/benches.jsx</code>) and walk it: every state, light and dark, both densities, keyboard only.</li>
+    <li><strong>Add a bench</strong> (<code>docs/src/workbench/benches.jsx</code>) and walk it under Code on the component page: every state, light and dark, both densities, keyboard only.</li>
     <li><strong>Document it here:</strong> usage, style, code and accessibility.</li>
     <li><strong>Release:</strong> bump the version, add a changelog entry, tag it.</li>
   </ol>
@@ -26,7 +26,7 @@ cd docs && npm ci && npm run build && npm run verify`;
         <tr><th scope="row">Contrast</th><td>A text pair drops under 7:1, or a control edge, focus ring or chart color under 3:1, in either mode.</td></tr>
         <tr><th scope="row">Usage</th><td>A control is drawn with a decorative border, or a density shrinks a control or target.</td></tr>
         <tr><th scope="row">Parity</th><td>CSS, MUI, shadcn or Swift lands on a value tokens.json didn't give it, or the MUI theme hardcodes a color.</td></tr>
-        <tr><th scope="row">Docs and workbench</th><td>Any axe violation on any page, light or dark (workbench pages at both densities); a blocked script or style; sideways scroll at phone width; focus not landing and holding on headings; a workbench Hover row that looks like Default; or a semantic or component token with no row in the docs.</td></tr>
+        <tr><th scope="row">Docs</th><td>Any axe violation on any page, light or dark (the side-by-side comparisons at both densities); a blocked script or style; sideways scroll at phone width; focus not landing and holding on headings; a comparison Hover row that looks like Default; or a semantic or component token with no row in the docs.</td></tr>
       </tbody>
     </table>
   </TableWrap>

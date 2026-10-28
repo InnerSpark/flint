@@ -2,9 +2,9 @@
 
 **Source-available, not open source.** The repository is public so our own apps, CI and Xcode can install it without managing access, and so the design decisions are open to read. It is not licensed for reuse: you may read it, you may not build with it. See [LICENSE](LICENSE). To ask about a license, mike@innersparkmedia.com.
 
-**Docs:** [flint.innersparkmedia.com](https://flint.innersparkmedia.com) (built from `docs/`). The workbench, every component live as MUI, shadcn/ui and plain CSS, is at `/workbench/`.
+**Docs:** [flint.innersparkmedia.com](https://flint.innersparkmedia.com) (built from `docs/`). Each component has one page (`/components/<name>/`) with a Web / iOS switch where there is a SwiftUI twin, and a live side-by-side of MUI, shadcn/ui, plain CSS and Flint React under Code.
 
-The single source of truth for color, type, spacing, radius, size, motion, and elevation across AccessSpark, Inner Spark Media, and sister brands. Framework-agnostic tokens, plus a MUI theme factory, a shadcn/ui bridge and a Swift package. Components ship as plain CSS classes in `@innerspark/flint/components.css` (ASDS-57), with a React layer on Radix to follow. The workbench shows each one as MUI, shadcn and plain CSS.
+The single source of truth for color, type, spacing, radius, size, motion, and elevation across AccessSpark, Inner Spark Media, and sister brands. Framework-agnostic tokens, plus a MUI theme factory, a shadcn/ui bridge and a Swift package. Components ship as plain CSS classes in `@innerspark/flint/components.css` (ASDS-57), with a React layer on Radix to follow. Each component page shows it as MUI, shadcn and plain CSS side by side.
 
 `tokens.json` is the source. The build emits CSS custom properties, typed JS exports, a resolved `tokens.json`, W3C DTCG, and SwiftUI tokens into `dist/`.
 
@@ -127,7 +127,7 @@ Read the package export, not the file at the repo root. The root `tokens.json` i
 @import "@innerspark/flint/shadcn.css";
 ```
 
-Every shadcn variable becomes a `var()` into Flint; `dark:` follows `data-theme="dark"`. Restyle components onto the component tokens (see the workbench for Button, Input and Checkbox).
+Every shadcn variable becomes a `var()` into Flint; `dark:` follows `data-theme="dark"`. Restyle components onto the component tokens (see Code on the Button, Input and Checkbox pages).
 
 ### MUI
 

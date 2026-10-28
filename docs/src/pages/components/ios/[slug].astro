@@ -3,10 +3,9 @@ import Docs from '../../../layouts/Docs.astro';
 import IosStage from '../../../components/IosStage.astro';
 import Code from '../../../components/Code.astro';
 import { IOS, IOS_ORDER } from '../../../data/iosComponents.js';
-import { ONE_PAGE } from '../../../data/components.js';
 
 export function getStaticPaths() {
-  return IOS_ORDER.filter((slug) => !ONE_PAGE.includes(IOS[slug].web)).map((slug) => ({ params: { slug } }));
+  return IOS_ORDER.filter((slug) => !IOS[slug].web).map((slug) => ({ params: { slug } }));
 }
 const { slug } = Astro.params;
 const c = IOS[slug];

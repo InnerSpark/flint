@@ -1,5 +1,4 @@
 import { IOS, IOS_ORDER, iosHref } from './iosComponents.js';
-import { ONE_PAGE } from './components.js';
 export const NAV = [
   {
     title: 'Get started',
@@ -57,30 +56,7 @@ export const NAV = [
     title: 'iOS components',
     items: [
       ['Overview', '/components/ios/'],
-      ...IOS_ORDER.map((slug) => [IOS[slug].name, iosHref(slug, ONE_PAGE)]),
-    ],
-  },
-  {
-    title: 'Workbench',
-    items: [
-      ['Overview', '/workbench/'],
-      ['Alert', '/workbench/alert/'],
-      ['Badge', '/workbench/badge/'],
-      ['Checkbox', '/workbench/checkbox/'],
-      ['Chip', '/workbench/chip/'],
-      ['Dialog', '/workbench/dialog/'],
-      ['Field', '/workbench/field/'],
-      ['Icon', '/workbench/icon/'],
-      ['Input', '/workbench/input/'],
-      ['Link', '/workbench/link/'],
-      ['Menu', '/workbench/menu/'],
-      ['Radio', '/workbench/radio/'],
-      ['Select', '/workbench/select/'],
-      ['Skip link', '/workbench/skip-link/'],
-      ['Switch', '/workbench/switch/'],
-      ['Tabs', '/workbench/tabs/'],
-      ['Toast', '/workbench/toast/'],
-      ['Tooltip', '/workbench/tooltip/'],
+      ...IOS_ORDER.map((slug) => [IOS[slug].name, iosHref(slug)]),
     ],
   },
   {

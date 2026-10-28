@@ -36,17 +36,12 @@ const MAP = {
   '/components/tooltip/': ['keyboard-and-reader', 'plain-words'],
   // iOS components
   '/components/ios/': ['native-before-custom', 'legible-any-background'],
-  '/components/ios/tab-bar/': ['native-before-custom', 'legible-any-background'],
   '/components/ios/navigation-bar/': ['native-before-custom', 'legible-any-background'],
   '/components/ios/toolbar/': ['native-before-custom', 'name-the-action'],
   '/components/ios/list/': ['native-before-custom', 'red-means-danger'],
   '/components/ios/sheet/': ['native-before-custom', 'keyboard-and-reader'],
   '/components/ios/glass-button/': ['legible-any-background', 'one-main-action'],
-  '/components/ios/notice/': ['red-means-danger', 'plain-words'],
-  '/components/ios/tag/': ['accessible-primitives', 'plain-words'],
   '/components/ios/card/': ['content-leads'],
-  '/components/ios/toggle-row/': ['native-before-custom', 'plain-words'],
-  '/components/ios/choice-picker/': ['native-before-custom', 'accessible-primitives'],
   '/components/ios/stepper/': ['keyboard-and-reader', 'accessible-primitives'],
   '/components/ios/stat-tile/': ['content-leads', 'plain-words'],
   '/components/ios/empty-state/': ['plain-words', 'one-main-action'],
@@ -55,11 +50,10 @@ const MAP = {
 const TITLES = Object.fromEntries(PRINCIPLE_GROUPS.flatMap((g) => g.items.map((p) => [p.id, p.title])));
 for (const ids of Object.values(MAP)) for (const id of ids) if (!TITLES[id]) throw new Error(`principleLinks: unknown principle "${id}"`);
 
-/** [{ id, title }] for a page path; component tab pages (/components/x/style/) use their parent. */
+/** [{ id, title }] for a page path. */
 export function principlesFor(pathname) {
   const path = pathname.endsWith('/') ? pathname : pathname + '/';
-  const base = path.replace(/^(\/components\/(?!ios\/)[^/]+\/)(?:style|code|accessibility)\/$/, '$1');
-  return (MAP[base] || []).map((id) => ({ id, title: TITLES[id] }));
+  return (MAP[path] || []).map((id) => ({ id, title: TITLES[id] }));
 }
 
 export const PRINCIPLE_PAGES = Object.keys(MAP);

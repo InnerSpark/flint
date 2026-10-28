@@ -12,15 +12,15 @@ import { pkg } from '../lib/flint.js';
 
 /**
  * title: page h1. lead: one-paragraph answer under it. toc: [{ id, text }] for "On this page".
- * tabs: [{ label, href }] page-level tabs (each is its own URL). wide: drop the reading measure for tables.
+ * wide: drop the reading measure for tables.
  * home: render the slot full-bleed with no page head (the home page builds its own).
  */
-const { title, lead, crumb, toc = [], tabs, wide = false, home = false, description, illo } = Astro.props;
+const { title, lead, crumb, toc = [], wide = false, home = false, description, illo } = Astro.props;
 const why = principlesFor(Astro.url.pathname);
 const path = Astro.url.pathname;
 const isCurrent = (href) => path === href;
 // Top nav, as on the AccessSpark site. A section is current when the page sits inside it.
-const TOP = [['Get started', '/get-started/'], ['Principles', '/principles/'], ['Foundations', '/foundations/color/'], ['Components', '/components/'], ['Workbench', '/workbench/']];
+const TOP = [['Get started', '/get-started/'], ['Principles', '/principles/'], ['Foundations', '/foundations/color/'], ['Components', '/components/']];
 const section = (href) => '/' + href.split('/')[1] + '/';
 const topCurrent = (href) => (path === href ? 'page' : path.startsWith(section(href)) && section(href) !== '/' ? 'true' : undefined);
 const year = new Date().getFullYear();
@@ -118,13 +118,6 @@ const jsonLd = {
               </div>
               {illo && <div class="page-illo"><Illustration name={illo} /></div>}
             </header>
-            {tabs && (
-              <nav class="page-tabs" aria-label={`${title} sections`}>
-                <ul>
-                  {tabs.map((t) => <li><a href={t.href} aria-current={isCurrent(t.href) ? 'page' : undefined}>{t.label}</a></li>)}
-                </ul>
-              </nav>
-            )}
             <div class="prose"><slot /></div>
           </main>
           {toc.length > 0 && (
@@ -159,7 +152,7 @@ const jsonLd = {
         <p>The design system behind AccessSpark and Inner Spark Media. Accessible in the primitive, one source for every platform.</p>
       </div>
       <nav class="footer-cols" aria-label="Footer">
-        {NAV.filter((g) => g.title !== 'Workbench').map((g) => (
+        {NAV.map((g) => (
           <div class="footer-col">
             <p class="footer-heading">{g.title}</p>
             <ul>{g.items.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>

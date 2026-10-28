@@ -1,6 +1,6 @@
 # Flint docs
 
-The Flint docs site, published at **flint.innersparkmedia.com**. Astro, static, styled only with Flint's own CSS variables. The workbench lives at `/workbench/`: Button, Checkbox and Input rendered live as MUI, shadcn/ui and plain CSS, from `src/workbench/` (React islands).
+The Flint docs site, published at **flint.innersparkmedia.com**. Astro, static, styled only with Flint's own CSS variables. Each component has one page with a live side-by-side of MUI, shadcn/ui, plain CSS and Flint React under Code, from `src/workbench/` (React islands that load when that section opens).
 
 Every token value, contrast ratio and code sample is read from the Flint build or the workbench source. Nothing is typed by hand.
 
@@ -13,7 +13,7 @@ Analytics: Google Analytics, the same GA4 property as innersparkmedia.com (`G-9X
 ```bash
 npm ci
 npm run dev       # http://localhost:4321
-npm run build     # Flint build and checks, then the docs and workbench
+npm run build     # Flint build and checks, then the docs
 ```
 
 ## Check it
@@ -43,10 +43,10 @@ Then the Worker, Settings, Domains & Routes, Add, Custom domain, `flint.innerspa
 
 Every push to `main` rebuilds and redeploys. `public/_headers` sets the security headers. Each page also carries a Content-Security-Policy meta tag: scripts run only if their hash is listed (`scripts/postbuild.mjs` rehashes them from the final HTML), and `verify.mjs` fails on any CSP violation. The postbuild step also writes `sitemap.xml`. 
 
-## One-page components (ASDS-94 pilot)
+## Component pages (ASDS-94, ASDS-95)
 
-Components listed in `ONE_PAGE` (`src/data/components.js`) get one page instead of four tabs: Example, When to use, States, Code, Accessibility. When an iOS component points at it (`web:` in `src/data/iosComponents.js`), the page gets a Web / iOS switch and the iOS page and nav link fold into it (`?platform=ios`). Its workbench benches move into the Code section. Add each old URL to `public/_redirects` when you add a name to `ONE_PAGE`. Today: Button.
+Every component is one page (`src/pages/components/[name]/index.astro`): Example, When to use, Accessibility, States, Code. When an iOS component points at it (`web:` in `src/data/iosComponents.js`), the page gets a Web / iOS switch and the iOS page folds into it (`?platform=ios`); iOS components without a web twin keep their own page under `/components/ios/`. The benches from `src/data/workbench.js` and the Density switch sit in a collapsed section under Code. The old tab, workbench and iOS twin URLs 301 from `public/_redirects`.
 
 ## Adding a component
 
-Add the plain CSS to `css/components.css` at the repo root (it ships as `@innerspark/flint/components.css`) and the shadcn version to `src/workbench/ui/`, then a bench in `src/workbench/benches.jsx` and `src/data/workbench.js`, and an entry in `src/data/components.js`. The pages, tabs and nav come from those entries.
+Add the plain CSS to `css/components.css` at the repo root (it ships as `@innerspark/flint/components.css`) and the shadcn version to `src/workbench/ui/`, then a bench in `src/workbench/benches.jsx` and `src/data/workbench.js`, and an entry in `src/data/components.js`. The page and nav come from those entries.

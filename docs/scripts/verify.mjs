@@ -1,10 +1,10 @@
 /**
- * Docs verify. Serves dist/ and, for every docs page (the workbench has its own verify):
+ * Docs verify. Serves dist/ and, for every docs page:
  *   - axe, WCAG 2.0 to 2.2 A and AA, in light and dark
  *   - no sideways scroll at 375px and 320px wide, and the header stays on one line
  *   - no Content-Security-Policy violations (scripts or styles the CSP did not allow)
- *   - workbench pages: islands hydrate, axe passes at compact density too, and forced Hover rows really differ
- *   - one-page components: collapsed sections open, their benches hydrate, and axe passes with them open
+ *   - component pages: collapsed sections open, the side-by-side benches hydrate, axe passes with them open
+ *     and at compact density, and forced Hover rows really differ
  *   - every semantic and component token from the build has a row (data-token) somewhere in the docs
  * Reading order: on every page the side nav follows <main> in the DOM, and Tab goes header > main > side nav > footer.
  * Plus focus checks, sampled over 700ms because browsers reset focus late:
@@ -95,7 +95,7 @@ for (const theme of ['light', 'dark']) {
       const ro = await page.evaluate(axeRun);
       for (const v of ro.violations) for (const n of v.nodes) problems.push(`${path} [${theme}, sections open]: axe ${v.id} at ${n.target.join(' ')}`);
     }
-    if (path.startsWith('/workbench/') && path !== '/workbench/') {
+    if (await page.locator('.density-switch').count()) {
       // Compact density: same page, same bar.
       await page.check('.density-switch input[value="compact"]');
       await page.waitForFunction(() => document.documentElement.dataset.density === 'compact');

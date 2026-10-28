@@ -1,4 +1,4 @@
-// Component docs content. Live examples use the plain-CSS classes from the workbench; code tabs read
+// Component docs content. Live examples use the plain-CSS classes from the workbench; the Code section reads
 // the workbench source directly, so the docs show the exact code the workbench tests.
 import plainCss from '../../../css/components.css?raw';
 import shadButton from '../workbench/ui/button.jsx?raw';
@@ -1144,14 +1144,3 @@ import FormControlLabel from '@mui/material/FormControlLabel';
     target: 'Inputs are 40px tall (control.md). On iOS, at least 44pt.',
   },
 };
-
-// Components on the one-page template (ASDS-94 pilot). Their old tab URLs redirect (public/_redirects),
-// and their Workbench and iOS pages fold into the one page.
-export const ONE_PAGE = ['button'];
-
-export const TABS = [
-  ['usage', 'Usage'],
-  ['style', 'Style'],
-  ['code', 'Code'],
-  ['accessibility', 'Accessibility'],
-];
