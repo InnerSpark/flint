@@ -3,7 +3,7 @@ import Docs from '../../../layouts/Docs.astro';
 import Notice from '../../../components/Notice.astro';
 const toc = [{ id: 'library', text: 'The library' }, { id: 'rules', text: 'Rules for designing' }, { id: 'make', text: 'Figma Make' }, { id: 'publishing', text: 'Publishing changes' }];
 ---
-<Docs illo="figma" title="Figma" crumb="Get started" lead="The Flint library mirrors tokens.json. If the two ever disagree, the repo wins and the library gets fixed." toc={toc}>
+<Docs illo="figma" title="Figma" crumb="Get started" lead="The Flint library mirrors tokens.json. If the two ever disagree, the repo wins and the library gets fixed." toc={toc} wide>
   <h2 id="library">The library</h2>
   <p>Enable the <a href="https://www.figma.com/design/SPVtGNr2eMf2LrwV4F3VVo/Flint-Design-System">Flint Design System library</a> in your file. Variables live in five collections: Primitives, Semantic (Light and Dark), Sizing (Comfortable and Compact), Brand (Flint, AccessSpark, Inner Spark Media, Studio) and Platform (Web and iOS). Set the modes on the top frame of a design. Every Semantic and Sizing variable carries its CSS and Swift name for Dev Mode.</p>
   <p>Pages follow the docs: foundations, an Illustration page, the web components by group, and an iOS components page with every SwiftUI component in Solid (iOS 16 to 25) and Liquid Glass (iOS 26 and later) styles.</p>

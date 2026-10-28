@@ -4,6 +4,7 @@ Flint tokens follow semver, independent of the consuming apps.
 
 ## Unreleased
 
+- **Get started, Guides and Principles use the full width,** like Foundations and Components (the `wide` layout, and the Principles hero and lists no longer cap at the reading measure). Body text still does.
 - **Word budget (ASDS-100).** Docs verify now counts each page's words, collapsed sections included, and fails when a page goes over its budget in `docs/word-budget.json` (its words at the restructure plus 15%). New pages get 800. Raise a budget on purpose with `node scripts/verify.mjs --write-budget` and commit it.
 - **Get started is 3 pages plus the overview, Guides is 2 (ASDS-99).** Web now holds plain CSS, Flint React, MUI and shadcn/ui as sections, with the longer code collapsed. Usage rules now holds token tiers, the rules and the accessibility guarantees; Contributing picks up adding a token and the hands-on tests. Principles leaves the Get started list (it is in the top nav). Old URLs 301 to the matching section.
 - **One Color page (ASDS-98).** Color, Contrast and Data visualization are one page: core roles, a table of every role family linked to the token explorer, the contrast report (every pairing, collapsed by kind with a pass count), the chart palette with the color vision simulations, and the ladders. Collapsed sections get a real style: a bordered row, 44px target, visible focus ring and a caret that respects reduced motion.

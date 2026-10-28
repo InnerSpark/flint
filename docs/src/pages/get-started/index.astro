@@ -8,7 +8,7 @@ import '../../styles/specimens.css';
 const install = `npm install "github:InnerSpark/flint#semver:^${pkg.version}"`;
 const toc = [{ id: 'install', text: 'Install' }, { id: 'how', text: 'How one token travels' }, { id: 'pick', text: 'Pick your platform' }, { id: 'what-you-get', text: 'What you get' }];
 ---
-<Docs illo="start" title="Get started" lead="Install the package once, then use the output that fits your stack. Every output carries the same values." toc={toc}>
+<Docs illo="start" title="Get started" lead="Install the package once, then use the output that fits your stack. Every output carries the same values." toc={toc} wide>
   <h2 id="install">Install</h2>
   <p>Flint is a private package on GitHub. Install it with a semver range so <code>npm update</code> picks up new minor and patch releases and never jumps a major.</p>
   <Code label="Terminal" code={install} />

@@ -13,6 +13,7 @@ const say = (n) => words[n] ?? String(n);
   crumb="Get started"
   lead={`${say(PRINCIPLE_COUNT).replace(/^./, (c) => c.toUpperCase())} rules in ${say(PRINCIPLE_GROUPS.length)} groups. When a decision isn't covered by a token or a component, start here.`}
   toc={toc}
+  wide
 >
   <div class="principles-hero"><Illustration name="hero" /></div>
 
