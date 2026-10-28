@@ -93,7 +93,9 @@ for (const theme of ['light', 'dark']) {
       for (const island of await page.$$('details.more astro-island')) { await island.evaluate((n) => (n.firstElementChild || n).scrollIntoView()); await page.waitForTimeout(300); }
       await hydrated(page);
       // Back to the top: scrolling the benches into view can leave a control under the sticky header, which axe reads as covered.
+      // MUI animates color for 250ms after it loads; let that finish before measuring contrast.
       await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(400);
       const ro = await page.evaluate(axeRun);
       for (const v of ro.violations) for (const n of v.nodes) problems.push(`${path} [${theme}, sections open]: axe ${v.id} at ${n.target.join(' ')}`);
     }
@@ -101,7 +103,8 @@ for (const theme of ['light', 'dark']) {
       // Compact density: same page, same bar.
       await page.check('.density-switch input[value="compact"]');
       await page.waitForFunction(() => document.documentElement.dataset.density === 'compact');
-      await page.waitForTimeout(150);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(400);
       const rc = await page.evaluate(axeRun);
       for (const v of rc.violations) for (const n of v.nodes) problems.push(`${path} [${theme}, compact]: axe ${v.id} at ${n.target.join(' ')}`);
       await page.check('.density-switch input[value="comfortable"]');
