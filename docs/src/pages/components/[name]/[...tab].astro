@@ -46,12 +46,10 @@ const tabLabel = TABS.find(([t]) => t === tab)[1];
 const one = ONE_PAGE.includes(name);
 const ios = Object.values(IOS).find((x) => x.web === name);
 const bench = WORKBENCH[name];
-const oneToc = [{ id: 'example', text: 'Example' }, { id: 'when', text: 'When to use' }, { id: 'states', text: 'States' }, { id: 'code', text: 'Code' }, { id: 'accessibility', text: 'Accessibility' }];
+const oneToc = [{ id: 'example', text: 'Example' }, { id: 'when', text: 'When to use' }, { id: 'accessibility', text: 'Accessibility' }, { id: 'states', text: 'States' }, { id: 'code', text: 'Code' }];
+// Screen reader notes: set ARIA attributes and element names as code.
+const srRich = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/(aria-[a-z]+(?:="[^"]*")?|&lt;[a-z]+&gt;)/g, '<code>$1</code>');
 const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>` : part)).join('');
-const contrastLines = pairLabels.filter((l) => !pairs.find((p) => p.label === l).kind.match(/decorative|exempt/)).map((label) => {
-  const l = pairs.find((p) => p.label === label && p.mode === 'light'), d = pairs.find((p) => p.label === label && p.mode === 'dark');
-  return `${label[0].toUpperCase() + label.slice(1)}: ${l.ratio.toFixed(2)}:1 light, ${d.ratio.toFixed(2)}:1 dark (needs ${l.threshold}:1).`;
-});
 ---
 {one ? (
 <Docs title={c.name} crumb="Components" lead={c.lead} toc={oneToc} wide description={`${c.name} in the Flint Design System, for web and iOS. ${c.lead}`}>
@@ -89,6 +87,42 @@ const contrastLines = pairLabels.filter((l) => !pairs.find((p) => p.label === l)
     </div>
   )}
   {c.guidance.map(([d, dn]) => <Guidance doText={d} dontText={dn} />)}
+
+  <h2 id="accessibility">Accessibility</h2>
+  <p>Flint's {c.name.toLowerCase()} brings the focus ring, contrast and target size. Your code brings the name and the state. The test: finish the task with a keyboard alone, and with VoiceOver or NVDA alone.</p>
+  <div data-show="web">
+    <h3 id="keyboard">Keyboard</h3>
+    <TableWrap label={`${c.name} keyboard support`}>
+      <table class="data">
+        <thead><tr><th scope="col">Key</th><th scope="col">What it does</th></tr></thead>
+        <tbody>{c.keyboard.map(([k, d]) => <tr><th scope="row"><kbd>{k}</kbd></th><td>{d}</td></tr>)}</tbody>
+      </table>
+    </TableWrap>
+    <h3 id="screen-readers">Screen readers</h3>
+    <ul>{c.screenReader.map((s) => <li set:html={srRich(s)} />)}</ul>
+  </div>
+  {ios && (
+    <div data-show="ios" hidden>
+      <h3 id="voiceover">VoiceOver and system settings</h3>
+      <ul>{ios.a11y.map((a) => <li set:html={rich(a)} />)}</ul>
+    </div>
+  )}
+  <h3 id="contrast">Contrast</h3>
+  <p>Measured on every build, against Flint's bar of 7:1 for text and 3:1 for UI. Every pairing in the system is on <a href="/foundations/contrast/">Contrast</a>.</p>
+  <TableWrap label={`${c.name} contrast`}>
+    <table class="data">
+      <thead><tr><th scope="col">Pairing</th><th scope="col">Needs</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+        {pairLabels.map((label) => {
+          const l = pairs.find((p) => p.label === label && p.mode === 'light');
+          const d = pairs.find((p) => p.label === label && p.mode === 'dark');
+          return <tr><th scope="row">{label[0].toUpperCase() + label.slice(1)}</th><td>{l.threshold}:1</td><td class="nowrap">{l.ratio.toFixed(2)}:1 <Result pair={l} /></td><td class="nowrap">{d.ratio.toFixed(2)}:1 <Result pair={d} /></td></tr>;
+        })}
+      </tbody>
+    </table>
+  </TableWrap>
+  <h3 id="target">Target size</h3>
+  <p>{c.target}</p>
 
   <h2 id="states">States</h2>
   <div data-show="web">
@@ -140,19 +174,6 @@ const contrastLines = pairLabels.filter((l) => !pairs.find((p) => p.label === l)
   </div>
   {ios && <div data-show="ios" hidden><Code label="SwiftUI" code={ios.code} /></div>}
 
-  <h2 id="accessibility">Accessibility</h2>
-  <div data-show="web">
-    <TableWrap label={`${c.name} keyboard support`}>
-      <table class="data">
-        <thead><tr><th scope="col">Key</th><th scope="col">What it does</th></tr></thead>
-        <tbody>{c.keyboard.map(([k, d]) => <tr><th scope="row"><kbd>{k}</kbd></th><td>{d}</td></tr>)}</tbody>
-      </table>
-    </TableWrap>
-    <ul>{c.screenReader.map((s) => <li>{s}</li>)}</ul>
-  </div>
-  {ios && <div data-show="ios" hidden><ul>{ios.a11y.map((a) => <li set:html={rich(a)} />)}</ul></div>}
-  <p><strong>Contrast</strong>, measured on every build. {contrastLines.join(' ')}</p>
-  <p><strong>Target size.</strong> {c.target}</p>
 </Docs>
 ) : (
 <Docs title={c.name} crumb="Components" lead={c.lead} tabs={tabs} toc={tocByTab[tab]} wide={tab === 'style'} description={`${c.name} ${tabLabel.toLowerCase()} in the Flint Design System. ${c.lead}`}>
