@@ -90,7 +90,7 @@ for (const theme of ['light', 'dark']) {
     // One-page components (ASDS-94): open the collapsed sections, let their benches load, run axe again.
     if (await page.locator('details.more').count()) {
       await page.$$eval('details.more', (ds) => ds.forEach((d) => { d.open = true; }));
-      await page.$$eval('details.more astro-island', (is) => is.forEach((i) => i.scrollIntoView()));
+      for (const island of await page.$$('details.more astro-island')) { await island.evaluate((n) => (n.firstElementChild || n).scrollIntoView()); await page.waitForTimeout(300); }
       await hydrated(page);
       const ro = await page.evaluate(axeRun);
       for (const v of ro.violations) for (const n of v.nodes) problems.push(`${path} [${theme}, sections open]: axe ${v.id} at ${n.target.join(' ')}`);
