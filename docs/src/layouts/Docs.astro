@@ -7,7 +7,7 @@ import '@fontsource/open-sans/700.css';
 import '@fontsource/open-sans/800.css';
 import '../styles/site.css';
 import Icon from '../components/Icon.astro';
-import { NAV } from '../data/nav.js';
+import { NAV, FOOTER } from '../data/nav.js';
 import { principlesFor } from '../data/principleLinks.js';
 import { pkg } from '../lib/flint.js';
 
@@ -167,7 +167,7 @@ const jsonLd = {
         <p>The design system behind AccessSpark and Inner Spark Media. Accessible in the primitive, one source for every platform.</p>
       </div>
       <nav class="footer-cols" aria-label="Footer">
-        {NAV.filter((g) => g.footer !== false).map((g) => (
+        {FOOTER.map((g) => (
           <div class="footer-col">
             <p class="footer-heading">{g.title}</p>
             <ul>{g.items.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>

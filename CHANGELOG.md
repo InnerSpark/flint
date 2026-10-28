@@ -4,6 +4,7 @@ Flint tokens follow semver, independent of the consuming apps.
 
 ## Unreleased
 
+- **A shorter footer.** Four columns of key pages (Start, Foundations, Build, Guides) instead of the whole side nav. It had grown to 7 columns and more than 60 links. Column headings get their spacing back.
 - **Principles get their own section, and a page each (ASDS-101).** Principles has its own side nav: the overview, then each group with its principles. Each of the 14 has a page with why it exists, a do and a don't, where it's enforced, every docs page that follows it (from the Why-line map) and the rest of its group. Why lines link straight to them, and old `/principles/#<id>` links forward. The copy is rewritten around the person using the product: what they notice first, then how Flint makes it happen. Several titles changed (for example "Blue means you can do something", "Readable over anything", "Forms go top to bottom"); the URLs did not. Every principle now has a do and a don't.
 - **Get started, Guides and Principles use the full width,** like Foundations and Components (the `wide` layout, and the Principles hero and lists no longer cap at the reading measure). Body text still does.
 - **Word budget (ASDS-100).** Docs verify now counts each page's words, collapsed sections included, and fails when a page goes over its budget in `docs/word-budget.json` (its words at the restructure plus 15%). New pages get 800. Raise a budget on purpose with `node scripts/verify.mjs --write-budget` and commit it.

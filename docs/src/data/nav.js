@@ -10,10 +10,9 @@ export const NAV = [
       ['Figma', '/get-started/figma/'],
     ],
   },
-  // Principles (ASDS-101): an overview, then one page per principle under its group. footer: false keeps
-  // the 14 links out of the footer, which lists the Principles overview only.
+  // Principles (ASDS-101): an overview, then one page per principle under its group.
   { title: 'Principles', items: [['Overview', '/principles/']] },
-  ...PRINCIPLE_GROUPS.map((g) => ({ title: g.title, footer: false, items: g.items.map((p) => [p.title, `/principles/${p.id}/`]) })),
+  ...PRINCIPLE_GROUPS.map((g) => ({ title: g.title, items: g.items.map((p) => [p.title, `/principles/${p.id}/`]) })),
   {
     title: 'Foundations',
     items: [
@@ -64,4 +63,12 @@ export const NAV = [
       ['Contributing', '/guides/contributing/'],
     ],
   },
+];
+
+// The footer is a short map of the docs, not the side nav again: four columns, each a handful of links.
+export const FOOTER = [
+  { title: 'Start', items: [['Get started', '/get-started/'], ['Principles', '/principles/'], ['Web', '/get-started/web/'], ['iOS and SwiftUI', '/get-started/ios/'], ['Figma', '/get-started/figma/']] },
+  { title: 'Foundations', items: [['Color', '/foundations/color/'], ['Typography', '/foundations/typography/'], ['Spacing and size', '/foundations/spacing/'], ['Motion', '/foundations/motion/'], ['Elevation', '/foundations/elevation/']] },
+  { title: 'Build', items: [['Components', '/components/'], ['iOS components', '/components/ios/'], ['Token explorer', '/foundations/tokens/'], ['Brands and platforms', '/foundations/brands/'], ['Illustration', '/foundations/illustration/']] },
+  { title: 'Guides', items: [['Usage rules', '/guides/usage-rules/'], ['Contributing', '/guides/contributing/']] },
 ];

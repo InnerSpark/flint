@@ -372,7 +372,7 @@ table.data th[scope="row"] { font-weight: 600; color: var(--color-text-heading);
 .footer-brand .brand strong { color: var(--site-band-fg); }
 .footer-brand p { margin-top: var(--space-12); max-width: 36ch; }
 .footer-cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-32); }
-.footer-heading { margin: 0 0 var(--space-16); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--site-band-muted); }
+.site-footer .footer-heading { margin: 0 0 var(--space-12); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--site-band-muted); }
 .footer-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-8); }
 .footer-col a { display: inline-flex; align-items: center; min-height: 24px; text-decoration: none; }
 .footer-col a:hover { text-decoration: underline; }
