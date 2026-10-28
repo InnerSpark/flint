@@ -34,7 +34,8 @@ const SCOPES = [['/components/', ['Components', 'iOS components']], ['/foundatio
 const scope = (SCOPES.find(([p]) => path.startsWith(p)) || [null, []])[1];
 const sideGroups = path === TOKENS ? [] : NAV.filter((g) => scope.includes(g.title));
 const year = new Date().getFullYear();
-const pageTitle = home ? 'Flint Design System: one token source for web and iOS' : `${title} | Flint Design System by Inner Spark Media`;
+// Search results cut titles off near 65 characters (ASDS-103): use the longest suffix that fits.
+const pageTitle = home ? 'Flint Design System: one token source for web and iOS' : [' | Flint Design System', ' | Flint'].map((s) => title + s).find((t) => t.length <= 65) || `${title} | Flint`;
 // Search snippets cut off near 160 characters: end on a whole word.
 const clamp = (s) => (s.length <= 158 ? s : s.slice(0, 155).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '') + '...');
 const metaDescription = clamp(description || lead || 'Flint is the design system behind AccessSpark and Inner Spark Media: one token source for web and iOS.');
@@ -85,6 +86,8 @@ const jsonLd = {
     })();
   </script>
   <!-- Google Analytics (ASDS-90): same GA4 property as innersparkmedia.com, split by hostname. No ads tag. -->
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="preconnect" href="https://static.cloudflareinsights.com" />
   <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-9XNG65F6HM"></script>
   <script is:inline>
     window.dataLayer = window.dataLayer || [];
@@ -177,7 +180,7 @@ const jsonLd = {
     </div>
     <div class="footer-legal">
       <p>Flint {pkg.version}. Built and audited by Inner Spark Media. Published accessibility target: WCAG 2.2 AA.</p>
-      <p>This site uses Google Analytics cookies to count page views. No advertising cookies.</p>
+      <p>This site uses Google Analytics cookies to count page views. No advertising cookies. <a href="/privacy/">Privacy</a>.</p>
       <p>© {year} Inner Spark Media, LLC. All rights reserved. <a href="https://github.com/InnerSpark/flint/blob/main/LICENSE">License</a>.</p>
     </div>
   </footer>

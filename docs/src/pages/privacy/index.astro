@@ -1,0 +1,23 @@
+---
+import Docs from '../../layouts/Docs.astro';
+// Privacy for the Flint docs (ASDS-103). Says only what this site actually runs: Google Analytics
+// (ASDS-90) and Cloudflare's own analytics. Update it whenever a tracking script is added or removed.
+const toc = [{ id: 'what', text: 'What runs here' }, { id: 'cookies', text: 'Cookies' }, { id: 'opt-out', text: 'Opting out' }, { id: 'contact', text: 'Questions' }];
+---
+<Docs title="Privacy" lead="What the Flint docs collect when you visit, and how to turn it off. There are no accounts and no forms here, so nothing you type is sent anywhere." toc={toc} description="Privacy for the Flint Design System docs: Google Analytics page views, no advertising, and how to opt out.">
+  <h2 id="what">What runs here</h2>
+  <ul>
+    <li><strong>Google Analytics</strong> counts page views: which pages people read, roughly where they came from, and the browser and device. It's the same Google Analytics account as innersparkmedia.com, so both sites show up in one place. Google says Analytics 4 doesn't log or store IP addresses.</li>
+    <li><strong>Cloudflare</strong>, which hosts the site, keeps its own visit counts and security logs. Its analytics don't use cookies.</li>
+    <li><strong>No advertising.</strong> No ad tags, no ad cookies, and nothing is sold or shared for ads.</li>
+  </ul>
+
+  <h2 id="cookies">Cookies</h2>
+  <p>Google Analytics sets first-party cookies (named <code>_ga</code> and <code>_ga_</code> plus an ID) to tell a new visit from a returning one. The docs also remember a few choices in your own browser: light or dark, Web or iOS, and density. Those never leave your device.</p>
+
+  <h2 id="opt-out">Opting out</h2>
+  <p>Block or clear cookies in your browser, or install Google's <a href="https://tools.google.com/dlpage/gaoptout">Analytics opt-out add-on</a>. The docs work the same either way.</p>
+
+  <h2 id="contact">Questions</h2>
+  <p>Flint is made by Inner Spark Media, LLC. Ask anything about this page through the <a href="https://innersparkmedia.com/contact">Inner Spark Media contact form</a>. For innersparkmedia.com itself, see its <a href="https://innersparkmedia.com/privacy">privacy policy</a>.</p>
+</Docs>
