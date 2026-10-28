@@ -7,7 +7,7 @@ const space = Object.entries(resolved.space).filter(([, v]) => v > 0);
 const roles = [['control', 'Buttons, inputs, nav items'], ['card', 'Cards and panels'], ['cardLg', 'Dialogs and large panels'], ['pill', 'Chips, badges, avatars']];
 const toc = [{ id: 'space', text: 'Spacing scale' }, { id: 'in-use', text: 'Spacing in use' }, { id: 'radius', text: 'Radius' }, { id: 'sizes', text: 'Controls and targets' }, { id: 'density', text: 'Density' }];
 ---
-<Docs title="Spacing and size" crumb="Foundations" lead="One spacing scale, a radius set, control heights and a minimum target. Nothing off scale." toc={toc} wide>
+<Docs title="Spacing and size" crumb="Foundations" lead="Every gap, corner and control size comes from one scale, so nothing ends up 13px by accident. Nothing people click is smaller than 24px." toc={toc} wide>
   <h2 id="space">Spacing scale</h2>
   <p>Every gap, inset and margin is a step on this scale. Each block is drawn at its real size.</p>
   <ol class="spec-sheet space-ruler">

@@ -771,7 +771,7 @@ AccessibilityNotification.Announcement("Report saved").post()`,
   },
   alert: {
     name: 'Alert',
-    lead: 'An alert tells people something about the page or a task they just did: it worked, it needs a look, or it failed. Icon and words, in one feedback color family.',
+    lead: 'An alert tells people something about the page or a task they just did: it worked, it needs a look, or it failed. It always pairs an icon with words, in one set of feedback colors.',
     example: `<div class="flint-alert">${infoIcon}<p class="flint-alert__title">Scan scheduled</p><p class="flint-alert__body">We'll email you when the report is ready, usually in a few minutes.</p></div>
 <div class="flint-alert flint-alert--success">${successIcon}<p class="flint-alert__title">Report saved</p><p class="flint-alert__body">Your VPAT draft is in Reports.</p></div>
 <div class="flint-alert flint-alert--warning">${warningIcon}<p class="flint-alert__title">12 checks need a person</p><p class="flint-alert__body">Automated tests can't judge these. <a href="#">Review them</a> before you export.</p></div>

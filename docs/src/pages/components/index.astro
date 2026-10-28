@@ -19,7 +19,7 @@ const documented = Object.entries(COMPONENTS).map(([slug, c]) => [c.name, slug])
 const all = LIBRARY.flatMap(([, l]) => l);
 const toc = [{ id: 'documented', text: 'Documented' }, { id: 'library', text: 'Everything in the library' }];
 ---
-<Docs title="Components" lead="Each component has one spec, written once and built per platform. These pages cover usage, the tokens it reads, code for each platform and how it works with a keyboard and screen reader." toc={toc}>
+<Docs title="Components" lead="Each component is designed once and built for every platform. Its page shows when to use it, how it works with a keyboard and a screen reader, and the code for your stack." toc={toc}>
   <h2 id="documented">Documented</h2>
   <ul class="thumb-grid">
     {documented.map(([name, slug]) => (

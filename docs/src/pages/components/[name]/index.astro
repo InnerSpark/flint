@@ -52,7 +52,7 @@ const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>
   <div data-show="web"><Example label={`${c.name} example in light and dark`}><Fragment set:html={c.example} /></Example></div>
   {ios && (
     <div data-show="ios" hidden>
-      <p class="muted">{ios.name !== c.name && <>On iOS this is the {ios.name.toLowerCase()}. </>}SwiftUI: <code>{ios.swift}</code>. Drawn in HTML from the iOS platform tokens; real SwiftUI can differ slightly.</p>
+      <p class="muted">{ios.name !== c.name && <>On iOS this is the {ios.name.toLowerCase()}. </>}In SwiftUI it's <code>{ios.swift}</code>. These phones are drawn in HTML from the iOS tokens, so the real thing can look a little different.</p>
       {ios.glass && <>
         <p set:html={rich(ios.glassNote)} />
         <p>Glass can't guarantee contrast: it depends on what scrolls underneath. Keep it to the navigation layer and test with Reduce Transparency on. See <a href="/get-started/ios/#liquid-glass">Liquid Glass and contrast</a>.</p>
@@ -82,7 +82,7 @@ const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>
   {c.guidance.map(([d, dn]) => <Guidance doText={d} dontText={dn} />)}
 
   <h2 id="accessibility">Accessibility</h2>
-  <p>Flint's {c.name.toLowerCase()} brings the focus ring, contrast and target size. Your code brings the name and the state. The test: finish the task with a keyboard alone, and with VoiceOver or NVDA alone.</p>
+  <p>Flint takes care of the focus ring, contrast and target size. You take care of the label and the state. Then try it with only a keyboard, and again with only VoiceOver or NVDA. If you can't finish the task, it isn't done.</p>
   <div data-show="web">
     <h3 id="keyboard">Keyboard</h3>
     <TableWrap label={`${c.name} keyboard support`}>
@@ -101,7 +101,7 @@ const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>
     </div>
   )}
   <h3 id="contrast">Contrast</h3>
-  <p>Measured on every build, against Flint's bar of 7:1 for text and 3:1 for UI. Every pairing in the system is under <a href="/foundations/color/#contrast">Color, Contrast</a>.</p>
+  <p>The build measures these every time. Text needs 7:1, and controls and other UI need 3:1. Every other pairing in the system is on the <a href="/foundations/color/#contrast">Color page</a>.</p>
   <TableWrap label={`${c.name} contrast`}>
     <table class="data">
       <thead><tr><th scope="col">Pairing</th><th scope="col">Needs</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
@@ -135,21 +135,21 @@ const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>
       ))}
     </ul>
   </div>
-  {ios && <div data-show="ios" hidden><p>Same tokens as the web, with 44pt targets from the iOS platform tokens. The phones in the example show it in light, dark and Accessibility 3 text.</p></div>}
+  {ios && <div data-show="ios" hidden><p>iOS uses the same tokens, with targets of at least 44pt. The phones at the top show it in light, dark and the Accessibility 3 text size.</p></div>}
   {ownTokens
-    ? <p>Every token {c.name.toLowerCase()} reads, with its name on each platform: <a href={`/foundations/tokens/?group=component.${group}`}>{c.name} in the token explorer</a>.</p>
-    : <p>{c.name} has no component tokens of its own. It reads the semantic feedback families directly: <a href="/foundations/tokens/?group=semantic.feedback">feedback in the token explorer</a>.</p>}
+    ? <p>See every token the {c.name.toLowerCase()} uses, and what it's called on each platform, in the <a href={`/foundations/tokens/?group=component.${group}`}>token explorer</a>.</p>
+    : <p>{c.name} has no tokens of its own. It uses the feedback colors directly, which you can browse in the <a href="/foundations/tokens/?group=semantic.feedback">token explorer</a>.</p>}
 
   <h2 id="code">Code</h2>
   <div data-show="web">
     <Code label={c.code.css.label} code={c.code.css.code} />
     {REACT_CODE[name] && <>
-      <p>Flint React, from <code>@innerspark/flint/react</code>. It renders the same classes. See <a href="/get-started/web/#react">React</a>.</p>
+      <p>In React, use Flint's own components from <code>@innerspark/flint/react</code>. They render the same classes. Setup is on the <a href="/get-started/web/#react">Web page</a>.</p>
       <Code label="React" code={REACT_CODE[name]} />
     </>}
     <details class="more">
       <summary>The CSS behind it</summary>
-      <p>For Astro, EJS and plain HTML. These rules read only component tokens.</p>
+      <p>This is what the classes do, for Astro, EJS or plain HTML. It only reads component tokens.</p>
       <Code label="CSS" code={c.code.css.rules} />
     </details>
     <details class="more">
@@ -161,12 +161,12 @@ const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>
       </>}
       {c.code.shadcn && <>
         <h3 id="shadcn">shadcn/ui</h3>
-        <p>{c.code.shadcnNote || 'The Flint version of the shadcn component. Same API as upstream; every value reads a Flint token.'}</p>
+        <p>{c.code.shadcnNote || "Flint's version of the shadcn component. It has the same API as shadcn's, and every value comes from a Flint token."}</p>
         <Code label={`components/ui/${name}.jsx`} code={c.code.shadcn} />
       </>}
       {bench && <>
         <h3 id="compare">Side by side, every state</h3>
-        <p>MUI, shadcn/ui, plain CSS and Flint React, live. Where they differ, that is a finding.</p>
+        <p>All four running live, side by side, in every state. If two of them don't match, that's a bug worth filing.</p>
         {bench.gap && <Notice tone="warning" title="Known gaps">{bench.gap}</Notice>}
         <DensitySwitch />
         {bench.benches.map(([id, text, b]) => <><h4 id={`compare-${id}`}>{text}</h4><Bench client:visible bench={b} labelledBy={`compare-${id}`} /></>)}
@@ -176,7 +176,7 @@ const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>
       <details class="more">
         <summary>SwiftUI</summary>
         <Code label="SwiftUI" code={c.code.swift} />
-        <Notice><p>{c.code.swiftNote || `A ready-made SwiftUI ${c.name.toLowerCase()} is moving into the Flint package (ASDS-38). Until then, build it from the component tokens as above.`}</p></Notice>
+        <Notice><p>{c.code.swiftNote || `There's no ready-made SwiftUI ${c.name.toLowerCase()} yet. It's coming to the Flint package (ASDS-38). Until then, build it from the component tokens.`}</p></Notice>
       </details>
     )}
   </div>
