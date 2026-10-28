@@ -267,4 +267,7 @@ FlintToggleRow("Generator", detail: "Auto start", isOn: $autoStart,
   },
 };
 
+// Where an iOS component's docs live. Components on the one-page template (ONE_PAGE) show iOS behind the platform switch.
+export const iosHref = (slug, onePage) => (onePage.includes(IOS[slug].web) ? `/components/${IOS[slug].web}/?platform=ios` : `/components/ios/${slug}/`);
+
 export const IOS_ORDER = ['tab-bar', 'navigation-bar', 'toolbar', 'list', 'sheet', 'glass-button', 'button', 'notice', 'tag', 'card', 'toggle-row', 'choice-picker', 'stepper', 'stat-tile', 'empty-state'];

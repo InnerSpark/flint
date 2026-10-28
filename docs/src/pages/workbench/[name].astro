@@ -4,9 +4,10 @@ import Notice from '../../components/Notice.astro';
 import DensitySwitch from '../../components/DensitySwitch.astro';
 import Bench from '../../workbench/Bench.jsx';
 import { WORKBENCH } from '../../data/workbench.js';
+import { ONE_PAGE } from '../../data/components.js';
 
 export function getStaticPaths() {
-  return Object.keys(WORKBENCH).map((name) => ({ params: { name } }));
+  return Object.keys(WORKBENCH).filter((name) => !ONE_PAGE.includes(name)).map((name) => ({ params: { name } }));
 }
 const { name } = Astro.params;
 const c = WORKBENCH[name];

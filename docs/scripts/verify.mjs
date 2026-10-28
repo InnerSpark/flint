@@ -4,6 +4,7 @@
  *   - no sideways scroll at 375px and 320px wide, and the header stays on one line
  *   - no Content-Security-Policy violations (scripts or styles the CSP did not allow)
  *   - workbench pages: islands hydrate, axe passes at compact density too, and forced Hover rows really differ
+ *   - one-page components: collapsed sections open, their benches hydrate, and axe passes with them open
  *   - every semantic and component token from the build has a row (data-token) somewhere in the docs
  * Reading order: on every page the side nav follows <main> in the DOM, and Tab goes header > main > side nav > footer.
  * Plus focus checks, sampled over 700ms because browsers reset focus late:
@@ -65,7 +66,8 @@ const sampleFocus = (page, ms = 700) => page.evaluate((ms) => new Promise((done)
   (function tick() { seen.push(document.activeElement && (document.activeElement.id || document.activeElement.tagName)); if (performance.now() - start < ms) requestAnimationFrame(tick); else done(seen); })();
 }), ms);
 
-const hydrated = (page) => page.waitForFunction(() => [...document.querySelectorAll('astro-island')].every((i) => !i.hasAttribute('ssr')), null, { timeout: 15000 });
+// Islands inside a closed <details> load when opened (client:visible), so they are checked after opening it (below).
+const hydrated = (page) => page.waitForFunction(() => [...document.querySelectorAll('astro-island')].every((i) => !i.hasAttribute('ssr') || i.closest('details:not([open])')), null, { timeout: 15000 });
 const axeRun = () => window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] } });
 const tokensSeen = new Set();
 
@@ -85,6 +87,14 @@ for (const theme of ['light', 'dark']) {
     await page.evaluate(axeSource); // Runtime.evaluate is not subject to the page CSP, so axe loads without weakening it.
     const r = await page.evaluate(axeRun);
     for (const v of r.violations) for (const n of v.nodes) problems.push(`${path} [${theme}]: axe ${v.id} at ${n.target.join(' ')}: ${n.failureSummary?.split('\n')[1]?.trim() || v.help}`);
+    // One-page components (ASDS-94): open the collapsed sections, let their benches load, run axe again.
+    if (await page.locator('details.more').count()) {
+      await page.$$eval('details.more', (ds) => ds.forEach((d) => { d.open = true; }));
+      await page.$$eval('details.more astro-island', (is) => is.forEach((i) => i.scrollIntoView()));
+      await hydrated(page);
+      const ro = await page.evaluate(axeRun);
+      for (const v of ro.violations) for (const n of v.nodes) problems.push(`${path} [${theme}, sections open]: axe ${v.id} at ${n.target.join(' ')}`);
+    }
     if (path.startsWith('/workbench/') && path !== '/workbench/') {
       // Compact density: same page, same bar.
       await page.check('.density-switch input[value="compact"]');

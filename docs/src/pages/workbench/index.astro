@@ -1,6 +1,7 @@
 ---
 import Docs from '../../layouts/Docs.astro';
 import { WORKBENCH } from '../../data/workbench.js';
+import { ONE_PAGE } from '../../data/components.js';
 const toc = [{ id: 'use', text: 'How to use it' }, { id: 'benches', text: 'Benches' }, { id: 'checks', text: 'What gets checked' }];
 ---
 <Docs title="Workbench" lead="Every Flint component rendered live as MUI, shadcn/ui and plain CSS, side by side, in every state. Where the three differ, that is a finding." toc={toc}>
@@ -13,7 +14,7 @@ const toc = [{ id: 'use', text: 'How to use it' }, { id: 'benches', text: 'Bench
   </ol>
   <h2 id="benches">Benches</h2>
   <ul class="link-list">
-    {Object.entries(WORKBENCH).map(([slug, c]) => <li><a href={`/workbench/${slug}/`}><strong>{c.name}</strong><span>{c.lead}</span></a></li>)}
+    {Object.entries(WORKBENCH).map(([slug, c]) => <li><a href={ONE_PAGE.includes(slug) ? `/components/${slug}/#code` : `/workbench/${slug}/`}><strong>{c.name}</strong><span>{c.lead}</span></a></li>)}
   </ul>
   <p>Usage guidance and code live on the <a href="/components/">component pages</a>. Which Figma components are built yet is listed there too.</p>
   <h2 id="checks">What gets checked</h2>

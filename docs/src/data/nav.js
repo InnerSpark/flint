@@ -1,4 +1,5 @@
-import { IOS, IOS_ORDER } from './iosComponents.js';
+import { IOS, IOS_ORDER, iosHref } from './iosComponents.js';
+import { ONE_PAGE } from './components.js';
 export const NAV = [
   {
     title: 'Get started',
@@ -56,7 +57,7 @@ export const NAV = [
     title: 'iOS components',
     items: [
       ['Overview', '/components/ios/'],
-      ...IOS_ORDER.map((slug) => [IOS[slug].name, `/components/ios/${slug}/`]),
+      ...IOS_ORDER.map((slug) => [IOS[slug].name, iosHref(slug, ONE_PAGE)]),
     ],
   },
   {
@@ -65,7 +66,6 @@ export const NAV = [
       ['Overview', '/workbench/'],
       ['Alert', '/workbench/alert/'],
       ['Badge', '/workbench/badge/'],
-      ['Button', '/workbench/button/'],
       ['Checkbox', '/workbench/checkbox/'],
       ['Chip', '/workbench/chip/'],
       ['Dialog', '/workbench/dialog/'],

@@ -1,0 +1,11 @@
+# One-page components (ASDS-94). The old tab, workbench and iOS URLs land on the matching section.
+/components/button/style/ /components/button/#states 301
+/components/button/style /components/button/#states 301
+/components/button/code/ /components/button/#code 301
+/components/button/code /components/button/#code 301
+/components/button/accessibility/ /components/button/#accessibility 301
+/components/button/accessibility /components/button/#accessibility 301
+/workbench/button/ /components/button/#code 301
+/workbench/button /components/button/#code 301
+/components/ios/button/ /components/button/?platform=ios 301
+/components/ios/button /components/button/?platform=ios 301

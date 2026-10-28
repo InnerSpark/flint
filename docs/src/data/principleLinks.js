@@ -42,7 +42,6 @@ const MAP = {
   '/components/ios/list/': ['native-before-custom', 'red-means-danger'],
   '/components/ios/sheet/': ['native-before-custom', 'keyboard-and-reader'],
   '/components/ios/glass-button/': ['legible-any-background', 'one-main-action'],
-  '/components/ios/button/': ['one-main-action', 'name-the-action'],
   '/components/ios/notice/': ['red-means-danger', 'plain-words'],
   '/components/ios/tag/': ['accessible-primitives', 'plain-words'],
   '/components/ios/card/': ['content-leads'],

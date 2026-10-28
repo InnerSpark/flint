@@ -43,6 +43,10 @@ Then the Worker, Settings, Domains & Routes, Add, Custom domain, `flint.innerspa
 
 Every push to `main` rebuilds and redeploys. `public/_headers` sets the security headers. Each page also carries a Content-Security-Policy meta tag: scripts run only if their hash is listed (`scripts/postbuild.mjs` rehashes them from the final HTML), and `verify.mjs` fails on any CSP violation. The postbuild step also writes `sitemap.xml`. 
 
+## One-page components (ASDS-94 pilot)
+
+Components listed in `ONE_PAGE` (`src/data/components.js`) get one page instead of four tabs: Example, When to use, States, Code, Accessibility. When an iOS component points at it (`web:` in `src/data/iosComponents.js`), the page gets a Web / iOS switch and the iOS page and nav link fold into it (`?platform=ios`). Its workbench benches move into the Code section. Add each old URL to `public/_redirects` when you add a name to `ONE_PAGE`. Today: Button.
+
 ## Adding a component
 
 Add the plain CSS to `css/components.css` at the repo root (it ships as `@innerspark/flint/components.css`) and the shadcn version to `src/workbench/ui/`, then a bench in `src/workbench/benches.jsx` and `src/data/workbench.js`, and an entry in `src/data/components.js`. The pages, tabs and nav come from those entries.

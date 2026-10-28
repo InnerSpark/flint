@@ -428,7 +428,7 @@ table.data th[scope="row"] { font-weight: 600; color: var(--color-text-heading);
 }
 
 /* Workbench density switch */
-.density-switch { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-16); margin: 0 0 var(--space-24); padding: var(--space-8) var(--space-16); border: 1px solid var(--color-border-control); border-radius: var(--radius-card); }
-.density-switch legend { float: left; padding: 0; margin-right: var(--space-8); font-weight: 700; color: var(--color-text-heading); }
-.density-switch label { display: inline-flex; align-items: center; gap: var(--space-8); min-height: 24px; cursor: pointer; }
-.density-switch input { width: 20px; height: 20px; margin: 0; accent-color: var(--color-action-primary); }
+.density-switch, .platform-switch { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-16); margin: 0 0 var(--space-24); padding: var(--space-8) var(--space-16); border: 1px solid var(--color-border-control); border-radius: var(--radius-card); }
+.density-switch legend, .platform-switch legend { float: left; padding: 0; margin-right: var(--space-8); font-weight: 700; color: var(--color-text-heading); }
+.density-switch label, .platform-switch label { display: inline-flex; align-items: center; gap: var(--space-8); min-height: 24px; cursor: pointer; }
+.density-switch input, .platform-switch input { width: 20px; height: 20px; margin: 0; accent-color: var(--color-action-primary); }

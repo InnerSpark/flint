@@ -7,13 +7,17 @@ import Notice from '../../../components/Notice.astro';
 import TableWrap from '../../../components/TableWrap.astro';
 import Swatch from '../../../components/Swatch.astro';
 import Result from '../../../components/Result.astro';
-import { COMPONENTS, TABS } from '../../../data/components.js';
+import IosStage from '../../../components/IosStage.astro';
+import Bench from '../../../workbench/Bench.jsx';
+import { COMPONENTS, TABS, ONE_PAGE } from '../../../data/components.js';
+import { IOS } from '../../../data/iosComponents.js';
+import { WORKBENCH } from '../../../data/workbench.js';
 import { STATES } from '../../../data/componentStates.js';
 import { REACT_CODE } from '../../../data/reactCode.js';
 import { resolved, source, contrast, leaves, at, refName, componentVar, camel, isColor } from '../../../lib/flint.js';
 
 export function getStaticPaths() {
-  return Object.keys(COMPONENTS).flatMap((name) => TABS.map(([tab]) => ({ params: { name, tab: tab === 'usage' ? undefined : tab } })));
+  return Object.keys(COMPONENTS).flatMap((name) => (ONE_PAGE.includes(name) ? [['usage']] : TABS).map(([tab]) => ({ params: { name, tab: tab === 'usage' ? undefined : tab } })));
 }
 
 const { name } = Astro.params;
@@ -37,7 +41,120 @@ const tocByTab = {
   accessibility: [{ id: 'keyboard', text: 'Keyboard' }, { id: 'screen-readers', text: 'Screen readers' }, { id: 'contrast', text: 'Contrast' }, { id: 'target', text: 'Target size' }],
 };
 const tabLabel = TABS.find(([t]) => t === tab)[1];
+
+// One-page template (ASDS-94): every section on one URL, with a Web / iOS switch when the component has an iOS twin.
+const one = ONE_PAGE.includes(name);
+const ios = Object.values(IOS).find((x) => x.web === name);
+const bench = WORKBENCH[name];
+const oneToc = [{ id: 'example', text: 'Example' }, { id: 'when', text: 'When to use' }, { id: 'states', text: 'States' }, { id: 'code', text: 'Code' }, { id: 'accessibility', text: 'Accessibility' }];
+const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>` : part)).join('');
+const contrastLines = pairLabels.filter((l) => !pairs.find((p) => p.label === l).kind.match(/decorative|exempt/)).map((label) => {
+  const l = pairs.find((p) => p.label === label && p.mode === 'light'), d = pairs.find((p) => p.label === label && p.mode === 'dark');
+  return `${label[0].toUpperCase() + label.slice(1)}: ${l.ratio.toFixed(2)}:1 light, ${d.ratio.toFixed(2)}:1 dark (needs ${l.threshold}:1).`;
+});
 ---
+{one ? (
+<Docs title={c.name} crumb="Components" lead={c.lead} toc={oneToc} wide description={`${c.name} in the Flint Design System, for web and iOS. ${c.lead}`}>
+  {ios && (
+    <fieldset class="platform-switch" id="platform-switch">
+      <legend>Platform</legend>
+      <label><input type="radio" name="platform" value="web" checked /> Web</label>
+      <label><input type="radio" name="platform" value="ios" /> iOS</label>
+    </fieldset>
+  )}
+
+  <h2 id="example">Example</h2>
+  <div data-show="web"><Example label={`${c.name} example in light and dark`}><Fragment set:html={c.example} /></Example></div>
+  {ios && (
+    <div data-show="ios" hidden>
+      <p class="muted">SwiftUI: <code>{ios.swift}</code>. Drawn in HTML from the iOS platform tokens; real SwiftUI can differ slightly.</p>
+      <IosStage html={ios.preview} id={`${name}-ios`} label={`${c.name}, iOS`} />
+    </div>
+  )}
+
+  <h2 id="when">When to use</h2>
+  <div data-show="web">
+    <ul>{c.when.map((w) => <li>{w}</li>)}</ul>
+    <TableWrap label={`${c.name} variants`}>
+      <table class="data">
+        <thead><tr><th scope="col">Variant or state</th><th scope="col">Use</th></tr></thead>
+        <tbody>{c.variants.map(([v, d]) => <tr><th scope="row">{v}</th><td>{d}</td></tr>)}</tbody>
+      </table>
+    </TableWrap>
+  </div>
+  {ios && (
+    <div data-show="ios" hidden>
+      <ul>{ios.when.map((w) => <li>{w}</li>)}</ul>
+      {ios.not && <p><strong>Don't use it for:</strong> {ios.not.join(' ')}</p>}
+    </div>
+  )}
+  {c.guidance.map(([d, dn]) => <Guidance doText={d} dontText={dn} />)}
+
+  <h2 id="states">States</h2>
+  <div data-show="web">
+    <ul class="cr-list state-list">
+      {(STATES[name] || []).map(([label, reads, html], i) => (
+        <li class="cr">
+          <div class="cr-name"><h3>{label}</h3><p>Reads <code>{reads}</code></p></div>
+          {['light', 'dark'].map((mode) => (
+            <div class="cr-mode">
+              <p class="cr-mode-label">{mode === 'light' ? 'Light' : 'Dark'}</p>
+              <div class="stage state-stage" data-theme={mode} inert aria-hidden="true">
+                <div class="stage-in state-in" set:html={html.replaceAll('__P__', `${i}-${mode}`)} />
+              </div>
+            </div>
+          ))}
+        </li>
+      ))}
+    </ul>
+  </div>
+  {ios && <div data-show="ios" hidden><p>Same button tokens as the web, 44pt tall from the iOS platform tokens. The phones above show every variant and the disabled state in light, dark and Accessibility 3 text.</p></div>}
+  <p>Every token {c.name.toLowerCase()} reads, with its name on each platform: <a href={`/foundations/tokens/?group=component.${group}`}>{c.name} in the token explorer</a>.</p>
+
+  <h2 id="code">Code</h2>
+  <div data-show="web">
+    <Code label={c.code.css.label} code={c.code.css.code} />
+    {REACT_CODE[name] && <>
+      <p>Flint React, from <code>@innerspark/flint/react</code>. It renders the same classes. See <a href="/get-started/react/">React</a>.</p>
+      <Code label="React" code={REACT_CODE[name]} />
+    </>}
+    <details class="more">
+      <summary>The CSS behind it</summary>
+      <p>For Astro, EJS and plain HTML. These rules read only component tokens.</p>
+      <Code label="CSS" code={c.code.css.rules} />
+    </details>
+    <details class="more">
+      <summary>MUI and shadcn/ui, and how they compare</summary>
+      <h3 id="mui">MUI</h3>
+      <Code label="React (MUI)" code={c.code.mui} />
+      {c.code.muiGap && <Notice tone="warning" title="Known gap"><p>{c.code.muiGap}</p></Notice>}
+      <h3 id="shadcn">shadcn/ui</h3>
+      <p>{c.code.shadcnNote || 'The Flint version of the shadcn component. Same API as upstream; every value reads a Flint token.'}</p>
+      <Code label={`components/ui/${name}.jsx`} code={c.code.shadcn} />
+      {bench && <>
+        <h3 id="compare">Side by side, every state</h3>
+        <p>MUI, shadcn/ui, plain CSS and Flint React from the workbench. Where they differ, that is a finding.</p>
+        {bench.benches.map(([id, text, b]) => <><h4 id={`compare-${id}`}>{text}</h4><Bench client:visible bench={b} labelledBy={`compare-${id}`} /></>)}
+      </>}
+    </details>
+  </div>
+  {ios && <div data-show="ios" hidden><Code label="SwiftUI" code={ios.code} /></div>}
+
+  <h2 id="accessibility">Accessibility</h2>
+  <div data-show="web">
+    <TableWrap label={`${c.name} keyboard support`}>
+      <table class="data">
+        <thead><tr><th scope="col">Key</th><th scope="col">What it does</th></tr></thead>
+        <tbody>{c.keyboard.map(([k, d]) => <tr><th scope="row"><kbd>{k}</kbd></th><td>{d}</td></tr>)}</tbody>
+      </table>
+    </TableWrap>
+    <ul>{c.screenReader.map((s) => <li>{s}</li>)}</ul>
+  </div>
+  {ios && <div data-show="ios" hidden><ul>{ios.a11y.map((a) => <li set:html={rich(a)} />)}</ul></div>}
+  <p><strong>Contrast</strong>, measured on every build. {contrastLines.join(' ')}</p>
+  <p><strong>Target size.</strong> {c.target}</p>
+</Docs>
+) : (
 <Docs title={c.name} crumb="Components" lead={c.lead} tabs={tabs} toc={tocByTab[tab]} wide={tab === 'style'} description={`${c.name} ${tabLabel.toLowerCase()} in the Flint Design System. ${c.lead}`}>
   {tab === 'usage' && (
     <>
@@ -167,8 +284,25 @@ const tabLabel = TABS.find(([t]) => t === tab)[1];
     </>
   )}
 </Docs>
+)}
 <script>
   // Hover, pressed and focus rows use the workbench's forced-state classes.
   import { forceStates } from '../../../workbench/forceStates.js';
   forceStates();
+  // Web / iOS switch (ASDS-94): ?platform= wins, then the saved choice, then Web.
+  const sw = document.getElementById('platform-switch');
+  if (sw) {
+    const show = (p) => {
+      document.querySelectorAll('[data-show]').forEach((el) => { el.hidden = el.dataset.show !== p; });
+      const r = sw.querySelector(`input[value="${p}"]`); if (r) r.checked = true;
+    };
+    let start = new URLSearchParams(location.search).get('platform');
+    if (start !== 'web' && start !== 'ios') { try { start = localStorage.getItem('flint-platform'); } catch (e) { start = null; } }
+    show(start === 'ios' ? 'ios' : 'web');
+    sw.addEventListener('change', (e) => {
+      const p = e.target.value; show(p);
+      try { localStorage.setItem('flint-platform', p); } catch (e) {}
+      const u = new URL(location.href); u.searchParams.set('platform', p); history.replaceState(history.state, '', u);
+    });
+  }
 </script>

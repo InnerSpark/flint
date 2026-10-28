@@ -1145,6 +1145,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
   },
 };
 
+// Components on the one-page template (ASDS-94 pilot). Their old tab URLs redirect (public/_redirects),
+// and their Workbench and iOS pages fold into the one page.
+export const ONE_PAGE = ['button'];
+
 export const TABS = [
   ['usage', 'Usage'],
   ['style', 'Style'],
