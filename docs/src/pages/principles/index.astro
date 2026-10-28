@@ -1,6 +1,5 @@
 ---
 import Docs from '../../layouts/Docs.astro';
-import Guidance from '../../components/Guidance.astro';
 import Illustration from '../../components/Illustration.astro';
 import { PRINCIPLE_GROUPS, PRINCIPLE_COUNT } from '../../data/principles.js';
 import '../../styles/principles.css';
@@ -10,11 +9,11 @@ const say = (n) => words[n] ?? String(n);
 ---
 <Docs
   title="Principles"
-  crumb="Get started"
-  lead={`${say(PRINCIPLE_COUNT).replace(/^./, (c) => c.toUpperCase())} rules in ${say(PRINCIPLE_GROUPS.length)} groups. When a decision isn't covered by a token or a component, start here.`}
+  lead={`${say(PRINCIPLE_COUNT).replace(/^./, (c) => c.toUpperCase())} rules in ${say(PRINCIPLE_GROUPS.length)} groups. When a decision isn't covered by a token or a component, start here. Each one has its own page: why it exists, what it looks like in practice, where the build enforces it and every page that follows it.`}
   toc={toc}
   wide
 >
+  <script type="application/json" id="principle-ids" set:html={JSON.stringify(PRINCIPLE_GROUPS.flatMap((g) => g.items.map((p) => p.id)))} />
   <div class="principles-hero"><Illustration name="hero" /></div>
 
   {PRINCIPLE_GROUPS.map((g) => (
@@ -26,16 +25,15 @@ const say = (n) => words[n] ?? String(n);
         </div>
         <div class="principle-illo"><Illustration name={g.illustration} /></div>
       </div>
-      <ol class="principle-list">
-        {g.items.map((p) => (
-          <li class="principle">
-            <h3 id={p.id}>{p.title}</h3>
-            <p>{p.why}</p>
-            {p.do && <Guidance doText={p.do} dontText={p.dont} />}
-            <p class="principle-enforced">Where it's enforced: <a href={p.enforced[1]}>{p.enforced[0]}</a></p>
-          </li>
-        ))}
-      </ol>
+      <ul class="link-list principle-links">
+        {g.items.map((p) => <li><a href={`/principles/${p.id}/`}><strong>{p.title}</strong><span>{p.why}</span></a></li>)}
+      </ul>
     </section>
   ))}
 </Docs>
+<script>
+  // Old links pointed at /principles/#<principle>. Each principle has its own page now (ASDS-101).
+  const ids = new Set(JSON.parse(document.getElementById('principle-ids').textContent));
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (ids.has(id)) location.replace(`/principles/${id}/`);
+</script>

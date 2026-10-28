@@ -15,3 +15,9 @@
   .principle-group-head { grid-template-columns: minmax(0, 1fr); }
   .principle-illo { width: 120px; order: -1; }
 }
+/* Overview and principle pages (ASDS-101) */
+.principle-links { margin-top: var(--space-16); }
+.follows-list { display: flex; flex-wrap: wrap; gap: var(--space-8); list-style: none; padding: 0; }
+.prose .follows-list li + li { margin-top: 0; }
+.follows-list a { display: inline-flex; align-items: center; min-height: 32px; padding: 0 var(--space-12); border: 1px solid var(--color-border-control); border-radius: var(--radius-pill); font-size: var(--font-size-sm); font-weight: 600; text-decoration: none; }
+.follows-list a:hover { background: var(--color-surface-subtle); }

@@ -1,15 +1,19 @@
 import { IOS, IOS_ORDER, iosHref } from './iosComponents.js';
+import { PRINCIPLE_GROUPS } from './principles.js';
 export const NAV = [
   {
     title: 'Get started',
     items: [
       ['Overview', '/get-started/'],
-      ['Principles', '/principles/'],
       ['Web', '/get-started/web/'],
       ['iOS and SwiftUI', '/get-started/ios/'],
       ['Figma', '/get-started/figma/'],
     ],
   },
+  // Principles (ASDS-101): an overview, then one page per principle under its group. footer: false keeps
+  // the 14 links out of the footer, which lists the Principles overview only.
+  { title: 'Principles', items: [['Overview', '/principles/']] },
+  ...PRINCIPLE_GROUPS.map((g) => ({ title: g.title, footer: false, items: g.items.map((p) => [p.title, `/principles/${p.id}/`]) })),
   {
     title: 'Foundations',
     items: [

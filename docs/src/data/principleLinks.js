@@ -1,5 +1,5 @@
 // Which principles each page follows (ASDS-92). The layout shows them as a "Why" line under the lead,
-// linking to /principles/. One map, keyed by the page's base path; component tabs share their parent.
+// linking to each principle's page; each principle page lists the pages that follow it (ASDS-101).
 import { PRINCIPLE_GROUPS } from './principles.js';
 
 const MAP = {
@@ -55,3 +55,6 @@ export function principlesFor(pathname) {
 }
 
 export const PRINCIPLE_PAGES = Object.keys(MAP);
+
+/** The docs pages that follow a principle, in map order. */
+export const pagesFor = (id) => Object.keys(MAP).filter((path) => MAP[path].includes(id));

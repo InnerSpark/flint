@@ -1,0 +1,47 @@
+---
+import Docs from '../../layouts/Docs.astro';
+import Guidance from '../../components/Guidance.astro';
+import { PRINCIPLE_GROUPS } from '../../data/principles.js';
+import { pagesFor } from '../../data/principleLinks.js';
+import { NAV } from '../../data/nav.js';
+import '../../styles/principles.css';
+
+// One page per principle (ASDS-101). Everything here comes from principles.js and the Why-line map,
+// so a page can't drift from the rule or from the pages that cite it.
+export function getStaticPaths() {
+  return PRINCIPLE_GROUPS.flatMap((g) => g.items.map((p) => ({ params: { id: p.id }, props: { p, g } })));
+}
+const { p, g } = Astro.props;
+// Page names for the "follows it" list, from the nav. "Overview" takes its section's name.
+const titleOf = Object.fromEntries(NAV.flatMap((n) => n.items.map(([label, href]) => [href.split('?')[0], label === 'Overview' ? n.title : label])));
+titleOf['/foundations/tokens/'] = 'Token explorer';
+const pages = pagesFor(p.id).map((path) => [path, titleOf[path] || path]);
+const siblings = g.items.filter((x) => x.id !== p.id);
+const toc = [
+  ...(p.do ? [{ id: 'practice', text: 'In practice' }] : []),
+  { id: 'enforced', text: "Where it's enforced" },
+  ...(pages.length ? [{ id: 'follows', text: 'Pages that follow it' }] : []),
+  { id: 'group', text: `More of ${g.title.toLowerCase()}` },
+];
+---
+<Docs title={p.title} crumb={g.title} lead={p.why} toc={toc} illo={g.illustration} wide description={`${p.title}: a Flint Design System principle. ${p.why}`}>
+  {p.do && <>
+    <h2 id="practice">In practice</h2>
+    <Guidance doText={p.do} dontText={p.dont} />
+  </>}
+
+  <h2 id="enforced">Where it's enforced</h2>
+  <p>The rule lives in <a href={p.enforced[1]}>{p.enforced[0]}</a>.</p>
+
+  {pages.length > 0 && <>
+    <h2 id="follows">Pages that follow it</h2>
+    <p>Each of these pages names this principle in its Why line.</p>
+    <ul class="follows-list">{pages.map(([href, title]) => <li><a href={href}>{title}</a></li>)}</ul>
+  </>}
+
+  <h2 id="group">More of {g.title.toLowerCase()}</h2>
+  <p>{g.lead}</p>
+  <ul class="link-list principle-links">
+    {siblings.map((x) => <li><a href={`/principles/${x.id}/`}><strong>{x.title}</strong><span>{x.why}</span></a></li>)}
+  </ul>
+</Docs>

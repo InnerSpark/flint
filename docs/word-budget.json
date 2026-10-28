@@ -43,5 +43,19 @@
   "/get-started/web/": 1400,
   "/guides/contributing/": 500,
   "/guides/usage-rules/": 1150,
-  "/principles/": 800
+  "/principles/": 750,
+  "/principles/accessible-primitives/": 500,
+  "/principles/content-leads/": 300,
+  "/principles/forms-one-column/": 500,
+  "/principles/keyboard-and-reader/": 500,
+  "/principles/legible-any-background/": 500,
+  "/principles/motion-steps-aside/": 450,
+  "/principles/name-the-action/": 200,
+  "/principles/native-before-custom/": 500,
+  "/principles/no-sparkle/": 200,
+  "/principles/one-action-color/": 300,
+  "/principles/one-main-action/": 450,
+  "/principles/one-source/": 300,
+  "/principles/plain-words/": 200,
+  "/principles/red-means-danger/": 300
 }

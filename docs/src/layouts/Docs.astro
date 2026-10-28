@@ -1,5 +1,6 @@
 ---
 import Illustration from '../components/Illustration.astro';
+import { PRINCIPLE_GROUPS } from '../data/principles.js';
 import '@fontsource/open-sans/400.css';
 import '@fontsource/open-sans/600.css';
 import '@fontsource/open-sans/700.css';
@@ -29,7 +30,7 @@ const topCurrent = (href) => {
   return path.startsWith(section(href)) && section(href) !== '/' ? 'true' : undefined;
 };
 // The side nav lists only the section you're in (ASDS-97). The footer keeps the full map.
-const SCOPES = [['/components/', ['Components', 'iOS components']], ['/foundations/', ['Foundations']], ['/get-started/', ['Get started', 'Guides']], ['/guides/', ['Get started', 'Guides']], ['/principles/', ['Get started', 'Guides']]];
+const SCOPES = [['/components/', ['Components', 'iOS components']], ['/foundations/', ['Foundations']], ['/get-started/', ['Get started', 'Guides']], ['/guides/', ['Get started', 'Guides']], ['/principles/', ['Principles', ...PRINCIPLE_GROUPS.map((g) => g.title)]]];
 const scope = (SCOPES.find(([p]) => path.startsWith(p)) || [null, []])[1];
 const sideGroups = path === TOKENS ? [] : NAV.filter((g) => scope.includes(g.title));
 const year = new Date().getFullYear();
@@ -122,7 +123,7 @@ const jsonLd = {
                 <h1 id="page-title" tabindex="-1">{title}</h1>
                 {lead && <p class="lead">{lead}</p>}
                 {why.length > 0 && (
-                  <p class="page-why">Why: {why.map((p, i) => <>{i > 0 && ', '}<a href={`/principles/#${p.id}`}>{p.title}</a></>)}</p>
+                  <p class="page-why">Why: {why.map((p, i) => <>{i > 0 && ', '}<a href={`/principles/${p.id}/`}>{p.title}</a></>)}</p>
                 )}
               </div>
               {illo && <div class="page-illo"><Illustration name={illo} /></div>}
@@ -166,7 +167,7 @@ const jsonLd = {
         <p>The design system behind AccessSpark and Inner Spark Media. Accessible in the primitive, one source for every platform.</p>
       </div>
       <nav class="footer-cols" aria-label="Footer">
-        {NAV.map((g) => (
+        {NAV.filter((g) => g.footer !== false).map((g) => (
           <div class="footer-col">
             <p class="footer-heading">{g.title}</p>
             <ul>{g.items.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
