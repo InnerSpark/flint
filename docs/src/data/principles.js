@@ -48,13 +48,13 @@ export const PRINCIPLE_GROUPS = [
         id: 'accessible-primitives',
         title: 'Accessible in the primitive',
         why: 'Text clears 7:1, control edges and focus rings clear 3:1, and every target is at least 24px. The build checks these, so a component inherits them.',
-        enforced: ['Contrast', '/foundations/contrast/'],
+        enforced: ['Contrast', '/foundations/color/#contrast'],
       },
       {
         id: 'keyboard-and-reader',
         title: 'Works by keyboard and screen reader alone',
         why: 'Every control is reachable and named. Focus goes where you went: the heading after a skip link, the first error after submit, back to the trigger when a dialog closes.',
-        enforced: ['Accessibility', '/guides/accessibility/'],
+        enforced: ['Accessibility', '/guides/usage-rules/#accessibility'],
       },
       {
         id: 'legible-any-background',

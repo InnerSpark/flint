@@ -8,6 +8,10 @@ Token explorer (`/foundations/tokens/`): a view-only directory of every token, b
 
 Analytics: Google Analytics, the same GA4 property as innersparkmedia.com (`G-9XNG65F6HM`), loaded in `src/layouts/Docs.astro`. In GA, filter by Hostname `flint.innersparkmedia.com`. The CSP in `astro.config.mjs` allows googletagmanager.com and the GA collection hosts; add any new outside host there too, or the browser blocks it.
 
+## Word budget
+
+`scripts/verify.mjs` fails when a page goes over its word budget in `word-budget.json`. New pages get 800 words. If a page needs more, cut first; if it really does, run `node scripts/verify.mjs --write-budget` (each page's words plus 15%) and commit the file with the change that needed it.
+
 ## Run it
 
 ```bash

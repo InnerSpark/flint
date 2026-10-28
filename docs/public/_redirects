@@ -21,3 +21,17 @@
 /components/ios/tag /components/badge/?platform=ios 301
 /components/ios/toggle-row /components/switch/?platform=ios 301
 /components/ios/choice-picker /components/radio/?platform=ios 301
+/foundations/contrast/ /foundations/color/#contrast 301
+/foundations/contrast /foundations/color/#contrast 301
+/foundations/data-visualization/ /foundations/color/#charts 301
+/foundations/data-visualization /foundations/color/#charts 301
+/get-started/react/ /get-started/web/#react 301
+/get-started/react /get-started/web/#react 301
+/get-started/mui/ /get-started/web/#mui 301
+/get-started/mui /get-started/web/#mui 301
+/get-started/shadcn/ /get-started/web/#shadcn 301
+/get-started/shadcn /get-started/web/#shadcn 301
+/guides/token-tiers/ /guides/usage-rules/#tiers 301
+/guides/token-tiers /guides/usage-rules/#tiers 301
+/guides/accessibility/ /guides/usage-rules/#accessibility 301
+/guides/accessibility /guides/usage-rules/#accessibility 301

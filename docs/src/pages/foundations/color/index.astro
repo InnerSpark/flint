@@ -4,11 +4,14 @@ import ColorCard from '../../../components/ColorCard.astro';
 import ColorRow from '../../../components/ColorRow.astro';
 import PaintStrip from '../../../components/PaintStrip.astro';
 import Guidance from '../../../components/Guidance.astro';
-import { resolved, leaves, at, isColor } from '../../../lib/flint.js';
-import { CORE, CORE_USE, specFor } from '../../../data/colorRoles.js';
+import TableWrap from '../../../components/TableWrap.astro';
+import Result from '../../../components/Result.astro';
+import { resolved, leaves, at, isColor, contrast } from '../../../lib/flint.js';
+import { CORE, CORE_USE, specFor, varOf } from '../../../data/colorRoles.js';
 
+// One page for color (ASDS-98): roles, contrast and charts, which used to be three pages.
 const rows = leaves(resolved.semantic.light).filter(([p]) => isColor(at(resolved.semantic.light, p)));
-const groups = [...new Set(rows.map(([p]) => p[0]))];
+const groups = [...new Set(rows.map(([p]) => p[0]))].filter((g) => g !== 'chart');
 const about = {
   surface: 'Backgrounds: the page, cards, tinted areas, inverse bands and code.',
   text: 'Text and icons that sit on surfaces. Every pairing clears 7:1.',
@@ -17,31 +20,111 @@ const about = {
   feedback: 'Success, warning, error and info. Keep each family together.',
   accent: 'Small highlights. Not for large fills.',
   selected: 'The selected state, always paired with a second cue such as weight or a bar.',
-  chart: 'Data visualization marks. See Data visualization.',
   overlayScrim: 'The dimmed layer behind dialogs and drawers.',
 };
 const title = (g) => (g === 'overlayScrim' ? 'Overlay' : g[0].toUpperCase() + g.slice(1));
 const ramps = Object.entries(resolved.color).filter(([, v]) => typeof v === 'object');
-const toc = [{ id: 'core', text: 'Core roles' }, ...groups.map((g) => ({ id: g, text: title(g) })), { id: 'ladders', text: 'The ladders' }];
+
+// Contrast: every pairing the build measures, by kind, light and dark side by side.
+const labels = [...new Set(contrast.pairs.map((p) => p.label))];
+const pairs = labels.map((label) => ({ label, light: contrast.pairs.find((p) => p.label === label && p.mode === 'light'), dark: contrast.pairs.find((p) => p.label === label && p.mode === 'dark') }));
+const KINDS = [
+  ['text', 'Text', `Text and icons on the surfaces they sit on. ${contrast.textBar}:1.`],
+  ['control', 'Control edges', `Edges that show where a control is. ${contrast.nonTextBar}:1.`],
+  ['focus', 'Focus rings', `The focus ring on every surface it can land on. ${contrast.nonTextBar}:1.`],
+  ['ui', 'Other UI', `Fills and marks that carry meaning without text. ${contrast.nonTextBar}:1.`],
+  ['decorative', 'Decorative', 'Dividers and card edges. Advisory: WCAG does not require them to contrast.'],
+  ['exempt', 'Disabled', 'Disabled labels. Advisory: WCAG exempts inactive controls.'],
+].filter(([k]) => pairs.some((p) => p.light.kind === k));
+const advisory = (k) => k === 'decorative' || k === 'exempt';
+const failing = contrast.pairs.filter((p) => !p.pass && !advisory(p.kind)).length;
+
+// Charts: simulations use the Machado, Oliveira and Fernandes (2009) matrices at full severity, and
+// luminance for grayscale. A preview of how series separate, not a diagnosis tool.
+const chartKeys = Object.keys(resolved.semantic.light.chart);
+const VISION = [
+  ['typical', 'Typical color vision', null],
+  ['protan', 'Protanopia (no red cones)', '0.152 1.053 -0.205 0 0  0.115 0.786 0.099 0 0  -0.004 -0.048 1.052 0 0  0 0 0 1 0'],
+  ['deutan', 'Deuteranopia (no green cones)', '0.367 0.861 -0.228 0 0  0.280 0.673 0.047 0 0  -0.012 0.043 0.969 0 0  0 0 0 1 0'],
+  ['tritan', 'Tritanopia (no blue cones)', '1.256 -0.077 -0.179 0 0  -0.078 0.931 0.148 0 0  0.005 0.691 0.304 0 0  0 0 0 1 0'],
+  ['gray', 'Grayscale', '0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0 0 0 1 0'],
+];
+const HEIGHTS = [70, 90, 55, 80, 40];
+const toc = [{ id: 'core', text: 'Core roles' }, { id: 'roles', text: 'Every role' }, { id: 'contrast', text: 'Contrast' }, { id: 'charts', text: 'Charts' }, { id: 'ladders', text: 'The ladders' }];
 ---
-<Docs title="Color" crumb="Foundations" lead={`${rows.length} semantic colors in each mode, each one a reference to a step on the ladders below. Use semantic colors in UI. Never a ladder step, never a raw hex.`} toc={toc} wide>
+<Docs title="Color" crumb="Foundations" lead={`${rows.length} semantic colors in each mode, each one a step on the ladders below, and every pairing measured on each build. Use semantic colors in UI. Never a ladder step, never a raw hex.`} toc={toc} wide>
   <Guidance doText="Use the semantic token for the role: text.muted for secondary text on any surface." dontText="Pick a gray from the ladder because it looks right. It won't follow dark mode or a future contrast fix." />
   <p id="hint-var" hidden>Copies the CSS variable.</p>
   <p id="hint-hex" hidden>Copies the hex value.</p>
 
-  <section aria-labelledby="core">
-    <h2 id="core">Core roles</h2>
-    <p>The ten colors most screens are built from, each shown doing its job in light and in dark. Contrast is measured against the color it meets in use. Select a name to copy its CSS variable, or a hex to copy the value.</p>
-    <ul class="cc-grid">{CORE.map((path) => <ColorCard spec={specFor(path.split('.'))} use={CORE_USE[path]} />)}</ul>
-  </section>
+  <h2 id="core">Core roles</h2>
+  <p>The ten colors most screens are built from, each shown doing its job in light and in dark. Select a name to copy its CSS variable, or a hex to copy the value.</p>
+  <ul class="cc-grid">{CORE.map((path) => <ColorCard spec={specFor(path.split('.'))} use={CORE_USE[path]} />)}</ul>
 
-  {groups.map((g) => (
-    <section aria-labelledby={g}>
-      <h2 id={g}>{title(g)}</h2>
-      <p>{about[g]}</p>
-      <ul class="cr-list">{rows.filter(([p]) => p[0] === g).map(([p]) => <ColorRow spec={specFor(p)} />)}</ul>
-    </section>
-  ))}
+  <h2 id="roles">Every role</h2>
+  <p>Each family, what it is for, and its colors in the token explorer with light and dark values and every platform name.</p>
+  <TableWrap label="Semantic color families">
+    <table class="data">
+      <thead><tr><th scope="col">Family</th><th scope="col">Use</th><th scope="col">Colors</th></tr></thead>
+      <tbody>{groups.map((g) => <tr><th scope="row"><a href={`/foundations/tokens/?group=semantic.${g}`}>{title(g)}</a></th><td>{about[g]}</td><td>{rows.filter(([p]) => p[0] === g).length}</td></tr>)}</tbody>
+    </table>
+  </TableWrap>
+
+  <h2 id="contrast">Contrast</h2>
+  <p>The build measures {labels.length} pairings in each mode and fails if a required one drops below its bar: <strong>{contrast.textBar}:1</strong> for text (WCAG AAA, Flint's internal bar) and <strong>{contrast.nonTextBar}:1</strong> for control edges, focus rings and chart marks. Flint's published claim stays WCAG 2.2 AA. {failing === 0 ? 'Every required pairing passes today.' : `${failing} required pairings fail today.`}</p>
+  {KINDS.map(([kind, name, note]) => {
+    const list = pairs.filter((p) => p.light.kind === kind);
+    const bad = list.filter((p) => !p.light.pass || !p.dark.pass).length;
+    return (
+      <details class="more">
+        <summary>{name}<span class="summary-note">{list.length} pairings, {advisory(kind) ? 'advisory' : bad ? `${bad} failing` : 'all pass'}</span></summary>
+        <p>{note}</p>
+        <TableWrap label={`${name} contrast`}>
+          <table class="data">
+            <thead><tr><th scope="col">Pairing</th><th scope="col">Needs</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+            <tbody>{list.map((p) => <tr><th scope="row">{p.label}</th><td>{p.light.threshold}:1</td><td class="nowrap">{p.light.ratio.toFixed(2)}:1 <Result pair={p.light} /></td><td class="nowrap">{p.dark.ratio.toFixed(2)}:1 <Result pair={p.dark} /></td></tr>)}</tbody>
+          </table>
+        </TableWrap>
+      </details>
+    );
+  })}
+
+  <h2 id="charts">Charts</h2>
+  <p>Five categorical colors, used in order. They map to shadcn's <code>--chart-1</code> through <code>--chart-5</code>, and each clears {contrast.nonTextBar}:1 against the surface charts sit on.</p>
+  <ul class="cr-list">{chartKeys.map((k) => <ColorRow spec={specFor(['chart', k])} />)}</ul>
+  <svg class="cvd-defs" aria-hidden="true" focusable="false" width="0" height="0">
+    {VISION.filter(([, , m]) => m).map(([id, , m]) => (
+      <filter id={`cvd-${id}`} color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values={m} /></filter>
+    ))}
+  </svg>
+  <details class="more">
+    <summary>The five series under color vision deficiency</summary>
+    <p>Simulated for the common types of color blindness. The build checks the first three and fails if any two chart colors get too close. The numbers under the bars are the direct labels.</p>
+    <ul class="cr-list">
+      {VISION.map(([id, label]) => (
+        <li class="cr">
+          <div class="cr-name"><h3>{label}</h3></div>
+          {['light', 'dark'].map((mode) => (
+            <div class="cr-mode">
+              <p class="cr-mode-label">{mode === 'light' ? 'Light' : 'Dark'}</p>
+              <div class="stage stage--sm" data-theme={mode} aria-hidden="true">
+                <div class="stage-in stage-in--series" style={id === 'typical' ? '' : `filter:url(#cvd-${id})`}>
+                  {chartKeys.map((k, i) => (
+                    <span class="series-col"><span class="stage-bar" style={`height:${HEIGHTS[i]}%;background:var(${varOf(`chart.${k}`)})`}></span><span class="series-num">{k}</span></span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </li>
+      ))}
+    </ul>
+  </details>
+  <ul>
+    <li>Never let color carry meaning alone. Label series directly, or add a pattern or marker shape. Five colors that all clear 3:1 can't also all differ in grayscale.</li>
+    <li>Five series or fewer. Past that, group the rest or use small multiples.</li>
+    <li>Give every chart a text summary, for screen readers and for a quick read.</li>
+  </ul>
 
   <h2 id="ladders">The ladders</h2>
   <p>The primitive ramps every semantic color points at. Reference only: build UI from the semantic colors above. Each band says whether the step is safe for text on white. Select a band to copy its CSS variable.</p>

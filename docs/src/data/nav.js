@@ -4,11 +4,7 @@ export const NAV = [
     title: 'Get started',
     items: [
       ['Overview', '/get-started/'],
-      ['Principles', '/principles/'],
-      ['Web and CSS', '/get-started/web/'],
-      ['React', '/get-started/react/'],
-      ['MUI', '/get-started/mui/'],
-      ['shadcn/ui', '/get-started/shadcn/'],
+      ['Web', '/get-started/web/'],
       ['iOS and SwiftUI', '/get-started/ios/'],
       ['Figma', '/get-started/figma/'],
     ],
@@ -17,15 +13,12 @@ export const NAV = [
     title: 'Foundations',
     items: [
       ['Color', '/foundations/color/'],
-      ['Contrast', '/foundations/contrast/'],
       ['Typography', '/foundations/typography/'],
       ['Spacing and size', '/foundations/spacing/'],
       ['Motion', '/foundations/motion/'],
       ['Elevation', '/foundations/elevation/'],
-      ['Data visualization', '/foundations/data-visualization/'],
       ['Brands and platforms', '/foundations/brands/'],
       ['Illustration', '/foundations/illustration/'],
-      ['Token explorer', '/foundations/tokens/'],
     ],
   },
   {
@@ -62,9 +55,7 @@ export const NAV = [
   {
     title: 'Guides',
     items: [
-      ['Token tiers', '/guides/token-tiers/'],
       ['Usage rules', '/guides/usage-rules/'],
-      ['Accessibility', '/guides/accessibility/'],
       ['Contributing', '/guides/contributing/'],
     ],
   },

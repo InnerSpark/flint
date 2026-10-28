@@ -2,7 +2,10 @@
 import Docs from '../../../layouts/Docs.astro';
 import Code from '../../../components/Code.astro';
 import Notice from '../../../components/Notice.astro';
-const toc = [{ id: 'import', text: 'Import the variables' }, { id: 'use', text: 'Use them' }, { id: 'components', text: 'Components' }, { id: 'dark', text: 'Dark mode' }, { id: 'density', text: 'Density' }, { id: 'fonts', text: 'Fonts' }];
+import TableWrap from '../../../components/TableWrap.astro';
+import { SHADCN_MAP, cssVarForPath } from '../../../lib/flint.js';
+// One page for the web (ASDS-99): plain CSS, Flint React, MUI and shadcn/ui, which used to be four pages.
+const toc = [{ id: 'css', text: 'CSS' }, { id: 'react', text: 'React' }, { id: 'mui', text: 'MUI' }, { id: 'shadcn', text: 'shadcn/ui' }];
 const importCode = `import '@innerspark/flint/tokens.css';`;
 const useCode = `.card {
   background: var(--color-surface-default);
@@ -35,41 +38,165 @@ const darkCode = `<!-- the whole page -->
 <section data-theme="dark">...</section>
 <section data-theme="light">...</section>`;
 const componentsCode = `import '@innerspark/flint/tokens.css';
-import '@innerspark/flint/components.css';`;
 const componentHtml = `<button class="flint-btn flint-btn--primary">Save changes</button>
 <button class="flint-btn flint-btn--secondary">Cancel</button>`;
 const mediaCode = `import '@innerspark/flint/tokens.media.css';`;
 const densityCode = `<main data-density="compact">...</main>`;
 const fontCode = `import '@innerspark/flint/fonts.css';`;
----
-<Docs illo="web" title="Web and CSS" crumb="Get started" lead="Flint as CSS variables. Works anywhere you can load a stylesheet: Astro, EJS, plain HTML." toc={toc}>
-  <h2 id="import">Import the variables</h2>
-  <Code label="JavaScript or your CSS entry" code={importCode} />
+const reactInstallCode = `// Once, at the root of the app
+const reactPeersCode = `npm install react react-dom \\
+  @radix-ui/react-dialog @radix-ui/react-dropdown-menu @radix-ui/react-tabs \\
+  @radix-ui/react-toast @radix-ui/react-tooltip`;
+const reactUseCode = `import { Button, Field, Input, Checkbox, Alert } from '@innerspark/flint/react';
 
-  <h2 id="use">Use them</h2>
+export function TripForm({ error, saving }) {
+  return (
+    <form>
+      <Field label="Campsite name" helper="Shown on your trip card." error={error} required>
+        <Input />
+      </Field>
+      <Checkbox label="Bring the awning lights" />
+      {error && <Alert intent="error" title="We couldn't save the trip" role="alert">{error}</Alert>}
+      <Button type="submit" busy={saving}>Save trip</Button>
+    </form>
+  );
+}`;
+const reactOverlayCode = `import { Dialog, DialogTrigger, DialogContent, DialogClose, Button,
+  Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator,
+  ToastProvider, ToastRegion, Toast } from '@innerspark/flint/react';
+
+<Dialog>
+  <DialogTrigger asChild><Button variant="danger">Delete trip</Button></DialogTrigger>
+  <DialogContent
+    title="Delete this trip?"
+    footer={<>
+      <DialogClose asChild><Button variant="secondary">Keep trip</Button></DialogClose>
+      <Button variant="danger" onClick={remove}>Delete trip</Button>
+    </>}
+  >
+    <p>The route and packing list go with it. You can't undo this.</p>
+  </DialogContent>
+</Dialog>
+
+<Menu>
+  <MenuTrigger asChild><Button variant="secondary">Trip actions</Button></MenuTrigger>
+  <MenuContent>
+    <MenuItem onSelect={rename}>Rename</MenuItem>
+    <MenuSeparator />
+    <MenuItem danger onSelect={remove}>Delete trip</MenuItem>
+  </MenuContent>
+</Menu>
+
+// Wrap the app once; the region is a polite live region.
+<ToastProvider>
+  <App />
+  <Toast open={saved} onOpenChange={setSaved} title="Report saved" description="Your VPAT draft is in Reports." />
+  <ToastRegion />
+</ToastProvider>`;
+const themeCode = `import { ThemeProvider } from '@mui/material/styles';
+
+const theme = createFlintTheme({ mode: 'light', density: 'comfortable' });
+
+export default function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {/* your app */}
+    </ThemeProvider>
+  );
+}`;
+const layerCode = `import { StyledEngineProvider } from '@mui/material/styles';
+
+<StyledEngineProvider enableCssLayer>
+  <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
+  {/* ThemeProvider and the app */}
+</StyledEngineProvider>`;
+const shadcnImportCode = `@import "tailwindcss";
+@import "@innerspark/flint/tokens.css";
+@import "@innerspark/flint/shadcn.css";`;
+const shadcnButtonCode = `const buttonVariants = cva(
+  'inline-flex items-center justify-center rounded-[var(--button-radius)] min-h-[var(--button-height)] px-4 text-sm font-bold focus-visible:[outline:var(--focus-ring-width)_solid_var(--focus-ring-color)] focus-visible:[outline-offset:var(--focus-ring-offset)]',
+  {
+    variants: {
+      variant: {
+        default: 'bg-[var(--button-primary-bg)] text-[var(--button-primary-fg)] hover:bg-[var(--button-primary-bg-hover)]',
+        secondary: 'border border-[var(--button-secondary-border)] bg-[var(--button-secondary-bg)] text-[var(--button-secondary-fg)]',
+        destructive: 'bg-[var(--button-danger-bg)] text-[var(--button-danger-fg)] hover:bg-[var(--button-danger-bg-hover)]',
+      },
+    },
+  },
+);`;
+const shadcnRows = Object.entries(SHADCN_MAP);
+---
+<Docs illo="web" title="Web" crumb="Get started" lead="Flint on the web: plain CSS variables and classes for any stack, then Flint React, MUI or shadcn/ui on top. Every one reads the same tokens." toc={toc}>
+  <h2 id="css">CSS</h2>
+  <p>Works anywhere you can load a stylesheet: Astro, EJS, plain HTML. The other three build on it.</p>
+  <h3 id="css-import">Import the variables</h3>
+  <Code label="JavaScript or your CSS entry" code={importCode} />
+  <h3 id="css-use">Use them</h3>
   <p>Reach for semantic and component variables. Never a primitive like <code>--color-blue-700</code>, and never a raw hex.</p>
   <Code label="CSS" code={useCode} />
-
-  <h2 id="components">Components</h2>
+  <h3 id="css-components">Components</h3>
   <p>Flint's components ship as plain CSS classes. Load them after the variables.</p>
   <Code label="JavaScript or your CSS entry" code={componentsCode} />
-  <p>Each class is <code>.flint-</code> plus the component, with <code>--</code> modifiers for variants. States come from native attributes like <code>disabled</code>, <code>checked</code> and <code>aria-invalid</code>, so there are no state classes to keep in sync. See each <a href="/components/">component page</a> for its markup.</p>
+  <p>Each class is <code>.flint-</code> plus the component, with <code>--</code> modifiers for variants. States come from native attributes like <code>disabled</code>, <code>checked</code> and <code>aria-invalid</code>, so there are no state classes to keep in sync. Each <a href="/components/">component page</a> has its markup.</p>
   <Code label="HTML" code={componentHtml} />
-
-  <h2 id="dark">Dark mode</h2>
+  <h3 id="css-dark">Dark mode</h3>
   <p>Set <code>data-theme</code> on the page or on any section. Every color variable switches, component variables included, and a light section can sit inside a dark page.</p>
   <Code label="HTML" code={darkCode} />
   <p>For automatic dark mode with no toggle, import the media version instead. It follows <code>prefers-color-scheme</code>.</p>
   <Code label="JavaScript" code={mediaCode} />
-
-  <h2 id="density">Density</h2>
+  <h3 id="css-density">Density</h3>
   <p>Compact tightens <code>--inset-*</code> and <code>--gap-*</code> by one step. Control heights and the 24px minimum target never change.</p>
   <Code label="HTML" code={densityCode} />
-
-  <h2 id="fonts">Fonts</h2>
-  <p>Flint uses Open Sans. Load it yourself (Flint uses <code>@fontsource/open-sans</code>), and add the metric-matched fallback so the page doesn't shift while it loads.</p>
+  <h3 id="css-fonts">Fonts</h3>
+  <p>Flint uses Open Sans. Load it yourself (Flint uses <code>@fontsource/open-sans</code>), and add the metric-matched fallback so the page doesn't shift while it loads: put <code>'Open Sans Fallback'</code> after Open Sans in your font stack.</p>
   <Code label="JavaScript" code={fontCode} />
-  <Notice title="Add the fallback to your stack">
-    <p>After importing <code>fonts.css</code>, add <code>'Open Sans Fallback'</code> to your font stack after Open Sans.</p>
+
+  <h2 id="react">React</h2>
+  <p><code>@innerspark/flint/react</code> renders the same classes as the plain CSS, so a React app looks and behaves like an Astro page or an EJS template. Radix handles the hard behavior: focus trapping, arrow keys, Esc and live regions. It has no styles of its own.</p>
+  <h3 id="react-install">Install</h3>
+  <p>It ships inside <code>@innerspark/flint</code>. Load the tokens and the component CSS once:</p>
+  <Code label="React" code={reactInstallCode} />
+  <p>React 19.2 or later, React DOM and the Radix packages are optional peer dependencies, so apps that only use the tokens never install them:</p>
+  <Code label="Shell" code={reactPeersCode} />
+  <h3 id="react-use">Use the components</h3>
+  <p>Props not listed pass through to the element underneath. <code>Field</code> wires its one control: id, label, <code>aria-describedby</code> for the helper and error, <code>aria-invalid</code> and <code>required</code>.</p>
+  <Code label="React" code={reactUseCode} />
+  <details class="more">
+    <summary>Dialogs, menus and toasts</summary>
+    <p>Dialog, Tabs, Menu, Tooltip and Toast are Radix underneath. The dialog traps focus and returns it to its trigger; menus and tabs follow the WAI-ARIA patterns; toasts never take focus, and one with an action never times out.</p>
+    <Code label="React" code={reactOverlayCode} />
+  </details>
+  <p>Each component is rendered and checked for its classes and ARIA on every push, and the types are compiled against a sample app. React 19.2 and Node 22, matching AccessSpark.</p>
+
+  <h2 id="mui">MUI</h2>
+  <p>A ready MUI theme built from Flint: palette, type, spacing, breakpoints, elevation and component overrides, in light and dark. <code>@mui/material</code> is an optional peer dependency.</p>
+  <Code label="React" code={themeCode} />
+  <p>Pass <code>mode: 'dark'</code> for dark and <code>density: 'compact'</code> for compact. <code>flintThemeOptions(mode, density)</code> returns the raw options if you build the theme yourself.</p>
+  <h3 id="mui-tailwind">Next to Tailwind</h3>
+  <p>MUI's baseline reset is not in a cascade layer, so on a page that also uses Tailwind it overrides every Tailwind utility. Put MUI in its own layer, below Tailwind's utilities.</p>
+  <Code label="React" code={layerCode} />
+  <Notice tone="warning" title="What the MUI theme can't change">
+    <p>MUI's own behavior: a round halo on checkbox and radio focus, a <code>loading</code> button that hides its label, a TextField label that floats inside the input, an Alert that is <code>role="alert"</code> by default, and a Snackbar that shows one message at a time. Each component's Code section says how to work around it.</p>
   </Notice>
+
+  <h2 id="shadcn">shadcn/ui</h2>
+  <p>One CSS import points every shadcn/ui variable at Flint. In your Tailwind v4 entry CSS:</p>
+  <Code label="CSS" code={shadcnImportCode} />
+  <p>Dark mode follows <code>data-theme="dark"</code>, the same attribute as everywhere else in Flint. The bridge also points Tailwind's <code>dark:</code> variant at it, so you need no <code>.dark</code> class.</p>
+  <details class="more">
+    <summary>How the variables map</summary>
+    <p>Each shadcn variable becomes a reference to a Flint variable. The bridge picks no values of its own. shadcn's secondary maps to <code>surface.subtle</code> with heading text, because white text on Flint's sky-blue <code>action.secondary</code> fails contrast.</p>
+    <TableWrap label="shadcn to Flint variable mapping">
+      <table class="data">
+        <thead><tr><th scope="col">shadcn variable</th><th scope="col">Flint variable</th><th scope="col">Flint token</th></tr></thead>
+        <tbody>{shadcnRows.map(([name, path]) => <tr><th scope="row"><code>{name}</code></th><td><code>{cssVarForPath(path)}</code></td><td><code>{path}</code></td></tr>)}</tbody>
+      </table>
+    </TableWrap>
+  </details>
+  <h3 id="shadcn-components">Restyle the components</h3>
+  <p>The bridge fixes colors. shadcn's components still ship with their own sizes, a 50% transparent focus ring and a 16px checkbox. Restyle each one onto Flint's component tokens before you call it Flint. The button, for example:</p>
+  <Code label="components/ui/button.jsx" code={shadcnButtonCode} />
+  <p>Flint versions of Button, Input and Checkbox sit under Code on each component page (for example <a href="/components/button/#code">Button</a>), with their source in <code>docs/src/workbench/ui</code>.</p>
 </Docs>

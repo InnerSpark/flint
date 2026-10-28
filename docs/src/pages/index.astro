@@ -23,18 +23,15 @@ const pairsPerMode = contrast.pairs.length / 2;
 const shippedComponents = Object.values(COMPONENTS).map((c) => c.name);
 
 const platforms = [
-  ['Web and CSS', '/get-started/web/', 'Variables and component classes for Astro, EJS and any static site. Dark mode and density are one attribute each.'],
-  ['MUI', '/get-started/mui/', 'A ready theme for React apps on MUI, in light and dark, comfortable and compact.'],
-  ['shadcn/ui', '/get-started/shadcn/', 'One import maps every shadcn variable onto Flint for Tailwind v4 projects.'],
+  ['Web', '/get-started/web/', 'CSS variables and component classes for any stack, plus Flint React, a ready MUI theme and a shadcn/ui bridge.'],
   ['iOS and SwiftUI', '/get-started/ios/', 'A Swift package with colors, type, space, motion and UIKit colors.'],
   ['Figma', '/get-started/figma/', 'The Flint library mirrors the tokens. If they ever disagree, the repo wins.'],
-  ['Components', '/components/', `${shippedComponents.join(', ')}. Usage, style, code and accessibility for each.`],
+  ['Components', '/components/', `${shippedComponents.join(', ')}. One page each, for web and iOS.`],
 ];
 const foundations = [
-  ['Color', '/foundations/color/', `${semanticCount} semantic colors per mode and the ladders they point at.`],
+  ['Color', '/foundations/color/', `${semanticCount} semantic colors per mode, every contrast pairing the build measures, and the chart palette.`],
   ['Typography', '/foundations/typography/', `${Object.keys(resolved.typography).length} type styles in Open Sans, nothing below 12px.`],
   ['Spacing and size', '/foundations/spacing/', 'The spacing scale, radius, control heights and the 24px minimum target.'],
-  ['Contrast', '/foundations/contrast/', 'Every pairing the build measures, with its ratio.'],
   ['Motion', '/foundations/motion/', 'Durations and easing as tokens, and what changes under reduced motion.'],
   ['Token explorer', '/foundations/tokens/', 'Follow any token to the ladder, in light and dark, with its name on every platform.'],
 ];

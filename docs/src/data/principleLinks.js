@@ -4,13 +4,11 @@ import { PRINCIPLE_GROUPS } from './principles.js';
 
 const MAP = {
   // Foundations
-  '/foundations/color/': ['content-leads', 'one-action-color', 'red-means-danger'],
-  '/foundations/contrast/': ['accessible-primitives', 'legible-any-background'],
+  '/foundations/color/': ['content-leads', 'one-action-color', 'red-means-danger', 'accessible-primitives'],
   '/foundations/typography/': ['accessible-primitives', 'content-leads'],
   '/foundations/spacing/': ['accessible-primitives'],
   '/foundations/motion/': ['motion-steps-aside'],
   '/foundations/elevation/': ['content-leads', 'legible-any-background'],
-  '/foundations/data-visualization/': ['accessible-primitives', 'red-means-danger'],
   '/foundations/brands/': ['one-source', 'accessible-primitives'],
   '/foundations/illustration/': ['content-leads', 'plain-words'],
   '/foundations/tokens/': ['one-source'],

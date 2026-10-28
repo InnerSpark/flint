@@ -101,7 +101,7 @@ const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>
     </div>
   )}
   <h3 id="contrast">Contrast</h3>
-  <p>Measured on every build, against Flint's bar of 7:1 for text and 3:1 for UI. Every pairing in the system is on <a href="/foundations/contrast/">Contrast</a>.</p>
+  <p>Measured on every build, against Flint's bar of 7:1 for text and 3:1 for UI. Every pairing in the system is under <a href="/foundations/color/#contrast">Color, Contrast</a>.</p>
   <TableWrap label={`${c.name} contrast`}>
     <table class="data">
       <thead><tr><th scope="col">Pairing</th><th scope="col">Needs</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
@@ -144,7 +144,7 @@ const rich = (t) => t.split('`').map((part, i) => (i % 2 ? `<code>${part}</code>
   <div data-show="web">
     <Code label={c.code.css.label} code={c.code.css.code} />
     {REACT_CODE[name] && <>
-      <p>Flint React, from <code>@innerspark/flint/react</code>. It renders the same classes. See <a href="/get-started/react/">React</a>.</p>
+      <p>Flint React, from <code>@innerspark/flint/react</code>. It renders the same classes. See <a href="/get-started/web/#react">React</a>.</p>
       <Code label="React" code={REACT_CODE[name]} />
     </>}
     <details class="more">

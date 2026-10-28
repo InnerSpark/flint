@@ -2,7 +2,7 @@
 import Docs from '../../../layouts/Docs.astro';
 import TableWrap from '../../../components/TableWrap.astro';
 import Code from '../../../components/Code.astro';
-const toc = [{ id: 'path', text: 'The path for anything new' }, { id: 'checks', text: 'What the build checks' }, { id: 'run', text: 'Run the checks' }, { id: 'versioning', text: 'Versioning' }];
+const toc = [{ id: 'path', text: 'The path for anything new' }, { id: 'tokens', text: 'Adding or changing a token' }, { id: 'checks', text: 'What the build checks' }, { id: 'test', text: 'Test it yourself' }, { id: 'versioning', text: 'Versioning' }];
 const runCode = `npm run build          # tokens, contrast, usage, parity
 cd docs && npm ci && npm run build && npm run verify`;
 ---
@@ -14,8 +14,15 @@ cd docs && npm ci && npm run build && npm run verify`;
     <li><strong>Tokens first.</strong> Add or change tokens before touching a component.</li>
     <li><strong>Every state,</strong> with an accessibility note.</li>
     <li><strong>Add a bench</strong> (<code>docs/src/workbench/benches.jsx</code>) and walk it under Code on the component page: every state, light and dark, both densities, keyboard only.</li>
-    <li><strong>Document it here:</strong> usage, style, code and accessibility.</li>
+    <li><strong>Document it here:</strong> an entry in <code>docs/src/data/components.js</code> gives it a page.</li>
     <li><strong>Release:</strong> bump the version, add a changelog entry, tag it.</li>
+  </ol>
+
+  <h2 id="tokens">Adding or changing a token</h2>
+  <ol>
+    <li>Edit <code>tokens.json</code>. Point at an existing token with a reference wherever you can. See <a href="/guides/usage-rules/#tiers">Token tiers</a>.</li>
+    <li>Run <code>npm run build</code>. It rebuilds every output, then runs the contrast, usage and parity checks.</li>
+    <li>Check the result on the component pages in light and dark, including the side-by-side comparison under Code.</li>
   </ol>
 
   <h2 id="checks">What the build checks</h2>
@@ -31,8 +38,15 @@ cd docs && npm ci && npm run build && npm run verify`;
     </table>
   </TableWrap>
 
-  <h2 id="run">Run the checks</h2>
   <Code label="Terminal" code={runCode} />
+
+  <h2 id="test">Test it yourself</h2>
+  <p>The checks catch a lot, not everything. Before it ships:</p>
+  <ol>
+    <li>Walk the side-by-side comparison under Code on the component page: every state, light and dark, both densities.</li>
+    <li>Use it with a keyboard only.</li>
+    <li>Use it with VoiceOver or NVDA only. If someone can't finish the task that way, it isn't done.</li>
+  </ol>
 
   <h2 id="versioning">Versioning</h2>
   <p>Flint uses semver, separate from the apps that use it. A new token or component is a minor. A value fix is a patch. A rename or removal is a major. Deprecated tokens keep working for one minor release, then go in the next major.</p>

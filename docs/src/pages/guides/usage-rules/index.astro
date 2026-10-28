@@ -1,10 +1,56 @@
 ---
 import Docs from '../../../layouts/Docs.astro';
+import TableWrap from '../../../components/TableWrap.astro';
 import Guidance from '../../../components/Guidance.astro';
-const toc = [{ id: 'color', text: 'Color' }, { id: 'type', text: 'Type' }, { id: 'space', text: 'Space and size' }, { id: 'components', text: 'Components' }, { id: 'words', text: 'Words' }];
+import Code from '../../../components/Code.astro';
+import TokenFlow from '../../../components/TokenFlow.astro';
+import { source, refName, contrast } from '../../../lib/flint.js';
+import '../../../styles/specimens.css';
+// One guide for using Flint (ASDS-99): token tiers, usage rules and accessibility, which used to be three pages.
+const toc = [{ id: 'tiers', text: 'Token tiers' }, { id: 'rules', text: 'Rules' }, { id: 'accessibility', text: 'Accessibility' }];
+const refCode = `"semantic": {
+  "light": { "text": { "link": "${source.semantic.light.text.link}" } },
+  "dark":  { "text": { "link": "${source.semantic.dark.text.link}" } }
+},
+"component": {
+  "button": { "primary": { "bg": "${source.component.button.primary.bg}" } }
+}`;
 ---
-<Docs illo="rules" title="Usage rules" crumb="Guides" lead="The short list. Every rule here exists because something shipped broken without it." toc={toc}>
-  <h2 id="color">Color</h2>
+<Docs illo="rules" title="Usage rules" crumb="Guides" lead="How the tokens fit together, the short list of rules, and what Flint guarantees for accessibility. Every rule here exists because something shipped broken without it." toc={toc}>
+  <h2 id="tiers">Token tiers</h2>
+  <p>Three tiers. Each points at the one below it, so a change at the bottom flows everywhere above it, and nothing above can drift.</p>
+  <TokenFlow />
+  <TableWrap label="Token tiers">
+    <table class="data">
+      <thead><tr><th scope="col">Tier</th><th scope="col">Example</th><th scope="col">Use it for</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Primitive</th><td><code>color.blue.700</code>, <code>space.16</code>, <code>radius.sm</code></td><td>Nothing in UI. Primitives only feed the tiers above.</td></tr>
+        <tr><th scope="row">Semantic</th><td><code>text.link</code> points at <code>{refName(source.semantic.light.text.link)}</code></td><td>Colors and roles in UI: surfaces, text, borders, feedback, charts.</td></tr>
+        <tr><th scope="row">Component</th><td><code>button.primary.bg</code> points at <code>{refName(source.component.button.primary.bg)}</code></td><td>The decisions a component makes, shared by MUI, shadcn, CSS and SwiftUI.</td></tr>
+      </tbody>
+    </table>
+  </TableWrap>
+
+  <details class="more">
+    <summary>References, and one token's name on every platform</summary>
+    <p>Semantic colors exist twice, once per mode, and each points at a ladder step. Component tokens point at a semantic token without naming a mode, so they follow light and dark on their own. The build resolves every reference and fails on one that points nowhere.</p>
+    <Code label="tokens.json" code={refCode} />
+    <TableWrap label="Token names by platform">
+      <table class="data">
+        <thead><tr><th scope="col">Figma</th><th scope="col">CSS</th><th scope="col">JS</th><th scope="col">Swift</th></tr></thead>
+        <tbody>
+          <tr><td><code>text/link</code></td><td><code>--color-text-link</code></td><td><code>semantic.light.text.link</code></td><td><code>Flint.Colors.textLink</code></td></tr>
+          <tr><td><code>feedback/success/text</code></td><td><code>--color-feedback-success-text</code></td><td><code>semantic.light.feedback.success.text</code></td><td><code>Flint.Colors.feedbackSuccessText</code></td></tr>
+          <tr><td><code>button/primary/bg</code></td><td><code>--button-primary-bg</code></td><td><code>component.light.button.primary.bg</code></td><td><code>Flint.Component.buttonPrimaryBg</code></td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+    <p>Figma uses slashes, CSS uses kebab-case with a prefix, JS keeps the path, Swift joins the path in camelCase.</p>
+
+  </details>
+
+  <h2 id="rules">Rules</h2>
+  <h3 id="color">Color</h3>
   <ul>
     <li><strong>Use semantic tokens, never ladder steps,</strong> and never a raw hex.</li>
     <li><strong>Text on a fill uses its "on" token.</strong> Labels on <code>action.primary</code> use <code>action.onPrimary</code>. In dark mode the fills are light, so typed white text drops to about 1.8:1.</li>
@@ -18,21 +64,21 @@ const toc = [{ id: 'color', text: 'Color' }, { id: 'type', text: 'Type' }, { id:
   </ul>
   <Guidance doText="Show a selected nav item with the selected surface, selected text and a 3px bar." dontText="Show it with a tinted background only. Some people can't see the difference." />
 
-  <h2 id="type">Type</h2>
+  <h3 id="type">Type</h3>
   <ul>
     <li>Open Sans for everything. Use the type styles, never a hand-set size.</li>
     <li>Nothing below 12px. Running text stays under about 80 characters a line.</li>
     <li>Headings follow document order. Never pick a heading level for its size.</li>
   </ul>
 
-  <h2 id="space">Space and size</h2>
+  <h3 id="space">Space and size</h3>
   <ul>
     <li>Spacing stays on the scale: 0, 2, 4, 8, 12, 16, 24, 32, 40, 48, 64.</li>
     <li>Targets are at least 24px (44pt on iOS). Aim for 40px on anything used often.</li>
     <li>Density changes inset and gap only.</li>
   </ul>
 
-  <h2 id="components">Components</h2>
+  <h3 id="components">Components</h3>
   <ul>
     <li>One primary button per view. Everything else is secondary or text.</li>
     <li>Destructive actions use the danger button and a confirm step.</li>
@@ -41,11 +87,48 @@ const toc = [{ id: 'color', text: 'Color' }, { id: 'type', text: 'Type' }, { id:
     <li>Every interactive thing has every state: default, hover, focus, disabled, and selected or error where they apply.</li>
   </ul>
 
-  <h2 id="words">Words</h2>
+  <h3 id="words">Words</h3>
   <ul>
     <li><strong>Name the action.</strong> Buttons say what happens: "Save changes", not "OK" or "Submit".</li>
     <li><strong>Plain words.</strong> Short sentences, common words, no jargon.</li>
     <li><strong>Errors say what happened and how to fix it.</strong> One or two short sentences, no codes.</li>
     <li><strong>Name what AI does.</strong> "Suggest alt text", never a sparkle icon or "Magic".</li>
   </ul>
+
+  <h2 id="accessibility">Accessibility</h2>
+  <p>Built into the tokens, not added at the end. The build enforces most of it; the rest is up to each screen.</p>
+  <TableWrap label="Accessibility guarantees">
+    <table class="data">
+      <thead><tr><th scope="col">Area</th><th scope="col">Guarantee</th><th scope="col">WCAG</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Text contrast</th><td>Every semantic text pairing clears {contrast.textBar}:1 in light and dark. The build fails otherwise.</td><td>1.4.3, 1.4.6</td></tr>
+        <tr><th scope="row">Non-text contrast</th><td>Control edges, focus rings and chart marks clear {contrast.nonTextBar}:1.</td><td>1.4.11</td></tr>
+        <tr><th scope="row">Focus</th><td>A solid 2px ring, offset 2px, in the focus color. Never removed, never transparent.</td><td>2.4.7, 2.4.11</td></tr>
+        <tr><th scope="row">Target size</th><td>24px minimum as a token. Density can't shrink it. 44pt on iOS.</td><td>2.5.8</td></tr>
+        <tr><th scope="row">Motion</th><td>Every animation has a reduced-motion version; Swift's helper returns none when Reduce Motion is on.</td><td>2.3.3</td></tr>
+        <tr><th scope="row">Text size</th><td>Nothing below 12px. Swift type styles scale with Dynamic Type.</td><td>1.4.4</td></tr>
+      </tbody>
+    </table>
+  </TableWrap>
+  <p>Flint holds text to AAA internally. Its published claim stays WCAG 2.2 AA. An AAA token pass is not a AAA conformance claim.</p>
+
+  <h3 id="annotations">Annotate every screen</h3>
+  <p>Every new screen or component ships with notes engineering can build from without guessing:</p>
+  <ul>
+    <li>Landmarks: header, nav with a label, main, footer.</li>
+    <li>Accessible names for icon-only controls.</li>
+    <li>States: <code>aria-current="page"</code> for nav, <code>aria-selected</code> for tabs and options, <code>aria-pressed</code> for toggles, <code>aria-expanded</code> for anything that opens.</li>
+    <li>Live regions: <code>role="status"</code> for progress and counts, <code>role="alert"</code> for errors. Keep them in the page, empty when unused.</li>
+    <li>Focus order, and where focus goes when something opens or closes.</li>
+    <li>What each animation becomes under reduced motion.</li>
+  </ul>
+
+  <h3 id="focus">Focus</h3>
+  <ul>
+    <li>Skip links and same-page links move focus to the destination heading, not just the scroll position.</li>
+    <li>On a field error, focus moves to the first field with an error.</li>
+    <li>Dialogs trap focus inside and return it to the control that opened them.</li>
+    <li>Icons inside a labeled control are <code>aria-hidden</code>, so they aren't read twice.</li>
+  </ul>
+
 </Docs>

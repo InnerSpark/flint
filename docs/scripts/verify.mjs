@@ -13,11 +13,13 @@
  *   - an "On this page" link moves focus to its heading
  * Copy: a color chip copies its CSS variable and the live region announces it.
  * Behavior: dialog, tabs, menu, tooltip and toast work by keyboard alone (focus in, keys, Esc, focus back).
+ *   - every page stays under its word budget (word-budget.json); new pages get 800 words
  * Optional: --shots <dir> saves a screenshot of every page in both themes.
+ *           --write-budget resets word-budget.json to each page's words plus 15%.
  * Needs a Chromium: CHROME_PATH, or Playwright's (npx playwright install chromium).
  */
 import { createServer } from 'node:http';
-import { readFile, mkdir, readdir, stat } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, readdir, stat } from 'node:fs/promises';
 import { join, extname, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
@@ -52,8 +54,32 @@ async function pagesIn(dir) {
 }
 const pages = (await pagesIn(dist)).sort();
 
-const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
 const problems = [];
+// Word budget (ASDS-100): each page's words, read from the built HTML, stay under its budget in
+// word-budget.json, so the docs don't grow back. Collapsed sections count. New pages get NEW_PAGE_BUDGET.
+// To change a budget on purpose, run verify with --write-budget (current words plus 15%) and commit it.
+const NEW_PAGE_BUDGET = 800;
+const budgetFile = join(here, '..', 'word-budget.json');
+const wordsIn = (html) => {
+  const main = (html.match(/<main[^>]*>([\s\S]*)<\/main>/) || [, ''])[1];
+  const text = main.replace(/<(script|style|svg)[^>]*>[\s\S]*?<\/\1>/g, ' ').replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z#0-9]+;/gi, ' ');
+  return text.split(/\s+/).filter((w) => w && /[\p{L}\p{N}]/u.test(w)).length;
+};
+const wordCounts = Object.fromEntries(await Promise.all(pages.map(async (p) => [p, wordsIn(await readFile(join(dist, p, 'index.html'), 'utf8'))])));
+if (process.argv.includes('--write-budget')) {
+  const budget = Object.fromEntries(Object.entries(wordCounts).map(([p, n]) => [p, Math.ceil((n * 1.15) / 50) * 50]));
+  await writeFile(budgetFile, JSON.stringify(budget, null, 2) + '\n');
+  console.log(`Wrote word-budget.json for ${pages.length} pages.`);
+}
+const budget = JSON.parse(await readFile(budgetFile, 'utf8').catch(() => '{}'));
+for (const [p, n] of Object.entries(wordCounts)) {
+  const cap = budget[p] ?? NEW_PAGE_BUDGET;
+  if (n > cap) problems.push(`${p}: ${n} words, over its budget of ${cap}. Cut it, or raise the budget on purpose (--write-budget).`);
+}
+const totalWords = Object.values(wordCounts).reduce((a, n) => a + n, 0);
+
+const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
 if (shots) await mkdir(shots, { recursive: true });
 
 const open = async (theme, width = 1366) => {
@@ -296,7 +322,7 @@ for (const width of [375, 320]) {
 
 await browser.close();
 server.close();
-console.log(`Checked ${pages.length} pages: axe in light and dark, 375px width, focus management.`);
+console.log(`Checked ${pages.length} pages (${totalWords.toLocaleString('en-US')} words): axe in light and dark, 375px width, focus management, word budget.`);
 for (const p of problems) console.log(`FAIL ${p}`);
 console.log(problems.length ? `${problems.length} problem(s).` : 'PASS: no axe violations, no sideways scroll, focus lands and holds on headings.');
 process.exit(problems.length ? 1 : 0);
