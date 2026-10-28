@@ -1,18 +1,18 @@
 ---
-// Three phones for an iOS component page (ASDS-87): light (interactive), dark and Accessibility 3
-// text. The dark and large-text phones are inert copies so keyboard and screen reader users meet
-// each control once; the figcaption says what they show.
+// Three phones for an iOS component page (ASDS-87): light, dark and Accessibility 3 text. All three
+// are live, so hover, press and focus work in every theme (ASDS-94). Each phone is its own labeled
+// group ("..., iPhone preview, Dark"), so screen reader users know which copy they are in.
 import '../styles/ios.css';
 const { html, id, label, glass = false } = Astro.props;
 // Glass previews swap the large-text phone for Reduce Transparency, the setting that changes glass most.
 const copies = glass ? [
-  { key: 'light', caption: 'Light', theme: 'light', live: true },
-  { key: 'dark', caption: 'Dark', theme: 'dark', live: false },
-  { key: 'rt', caption: 'Reduce Transparency', theme: 'light', rt: true, live: false },
+  { key: 'light', caption: 'Light', theme: 'light' },
+  { key: 'dark', caption: 'Dark', theme: 'dark' },
+  { key: 'rt', caption: 'Reduce Transparency', theme: 'light', rt: true },
 ] : [
-  { key: 'light', caption: 'Light', theme: 'light', ax: false, live: true },
-  { key: 'dark', caption: 'Dark', theme: 'dark', ax: false, live: false },
-  { key: 'ax', caption: 'Accessibility 3 text', theme: 'light', ax: true, live: false },
+  { key: 'light', caption: 'Light', theme: 'light' },
+  { key: 'dark', caption: 'Dark', theme: 'dark' },
+  { key: 'ax', caption: 'Accessibility 3 text', theme: 'light', ax: true },
 ];
 ---
 <div class={`ios-stage${glass ? ' ios-stage--glass' : ''}`}>
@@ -20,10 +20,10 @@ const copies = glass ? [
     <figure>
       <div class="ios-phone">
         <div class="ios-screen" data-theme={c.theme} data-platform="ios" data-ax={c.ax ? '' : undefined} data-glass={glass ? '' : undefined} data-reduce-transparency={c.rt ? '' : undefined}
-             inert={!c.live} role={c.live ? 'group' : undefined} aria-label={c.live ? `${label}, iPhone preview` : undefined}
+             role="group" aria-label={`${label}, iPhone preview, ${c.caption}`}
              set:html={html.replaceAll('__P__', `${id}-${c.key}`)} />
       </div>
-      <figcaption>{c.caption}{c.live ? '' : ', same screen'}</figcaption>
+      <figcaption aria-hidden="true">{c.caption}</figcaption>
     </figure>
   ))}
 </div>
