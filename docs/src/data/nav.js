@@ -4,6 +4,7 @@ export const NAV = [
     title: 'Get started',
     items: [
       ['Overview', '/get-started/'],
+      ['Principles', '/principles/'],
       ['Web', '/get-started/web/'],
       ['iOS and SwiftUI', '/get-started/ios/'],
       ['Figma', '/get-started/figma/'],
