@@ -2,7 +2,9 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
-## Unreleased
+## v1.17.0 (2026-10-28)
+
+The docs restructure: 131 pages down to 60, one page per component with a Web / iOS switch, Principles as its own section, and a word budget so the docs stay lean. The package adds `glass.json`, the Liquid Glass contrast model.
 
 - **Fixes from the AccessSpark crawl (ASDS-103).** A new Privacy page (`/privacy/`) says what runs on the docs: Google Analytics page views, Cloudflare's cookie-free analytics, no advertising, and how to opt out. The footer links to it. Page titles drop "by Inner Spark Media" and fall back to " | Flint" so none passes 65 characters. Preconnect hints for Google Tag Manager and Cloudflare Insights. The preload and "4 stylesheets" hints are left as they are: Astro already bundles the CSS and the fonts are self-hosted.
 - **Humanization pass (ASDS-102).** The copy that isn't technical now reads like a person wrote it. The lines that repeat on every component page are rewritten (the accessibility opener, the contrast note, the token explorer link, the React, CSS, shadcn and comparison notes, and the SwiftUI note). So are the leads for Components, iOS components, Brands, Spacing, Motion and every iOS component, plus a few stiff lines on Color and Usage rules. Facts, numbers and links are unchanged.
