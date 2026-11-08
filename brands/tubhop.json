@@ -1,0 +1,60 @@
+{
+  "$description": "TubHop, the hot tub app (tubhop.app) and its marketing site. Deep End navy, Water teal and Heat orange from the TubHop logo, on a warm Foam page. Open Sans and Flint's spacing, radius and type stay as they are.",
+  "$source": {
+    "from": "tubhop-ios docs/brand/README.md (logo palette), Nov 8 2026.",
+    "kept": "Type, spacing, radius, shadows, feedback colors and charts match Flint.",
+    "swapped": {
+      "Water #14A3B8 (teal.500)": "3.02:1 on white. Logo only. Text and links use teal.900 #09454E (10.64:1); dark mode uses teal.300.",
+      "Heat #FF6B3D (heat.400)": "2.83:1 on white, 2.55:1 on Foam. Logo and decoration only (action.secondary). The light focus ring uses heat.600 #C22E00 (5.14:1 on Foam) so it clears 3:1.",
+      "Muted #4A5F6B (deep.500)": "6.03:1 on Foam, under Flint's 7:1 text bar. Muted text uses deep.600 #2F4A5B.",
+      "Foam #F6F3EC (foam.100)": "Flint's chart amber is 2.87:1 on it, under 3:1. The page uses foam.50 #FBFAF6, a step lighter; foam.100 stays for brand art.",
+      "Dark surfaces": "Deep End #0D2230 is the card surface and deep.950 the page, so Flint's chart blue clears 3:1 on cards.",
+      "Heat button with Deep End label": "5.76:1, under 7:1. The primary button is Deep End navy with a white label instead."
+    },
+    "added": "Dark mode: Deep End surfaces, teal.300 primary with a Deep End label, heat.400 focus ring. Charts keep Flint's palette in both modes so the color-vision check holds."
+  },
+  "color": {
+    "deep": {
+      "50": "#eef3f6", "100": "#cde9ee", "200": "#a9c3cf", "300": "#7f9cab", "400": "#668797", "500": "#4a5f6b",
+      "600": "#2f4a5b", "700": "#1f4456", "800": "#163243", "900": "#0d2230", "950": "#081620"
+    },
+    "teal": {
+      "50": "#edfbfd", "100": "#d6f6fa", "200": "#acedf6", "300": "#75e0f0", "400": "#3ed4ea", "500": "#14a3b8",
+      "600": "#118c9e", "700": "#0f7a8a", "800": "#0c5e6a", "900": "#09454e", "950": "#062d33"
+    },
+    "heat": {
+      "50": "#ffefeb", "100": "#ffdcd1", "200": "#ffb9a3", "300": "#ff8a66", "400": "#ff6b3d", "500": "#f04e17",
+      "600": "#c22e00", "700": "#992400", "800": "#751c00", "900": "#571500", "950": "#380d00"
+    },
+    "foam": { "50": "#fbfaf6", "100": "#f6f3ec", "200": "#ebe6da", "300": "#d9d1bf" }
+  },
+  "semantic": {
+    "light": {
+      "surface": { "page": "{color.foam.50}", "subtle": "{color.foam.200}", "inverse": "{color.deep.900}" },
+      "text": {
+        "heading": "{color.deep.900}", "default": "{color.deep.800}", "muted": "{color.deep.600}",
+        "placeholder": "{color.deep.600}", "link": "{color.teal.900}"
+      },
+      "action": {
+        "primary": "{color.deep.800}", "primaryHover": "{color.deep.900}", "primaryPressed": "{color.deep.950}",
+        "secondary": "{color.heat.400}", "focusRing": "{color.heat.600}"
+      },
+      "border": { "focus": "{color.heat.600}" },
+      "selected": { "surface": "{color.teal.50}", "text": "{color.teal.900}" }
+    },
+    "dark": {
+      "surface": { "page": "{color.deep.950}", "default": "{color.deep.900}", "subtle": "{color.deep.800}", "inverse": "{color.foam.50}", "code": "{color.deep.950}" },
+      "text": {
+        "heading": "{color.foam.50}", "default": "{color.deep.50}", "muted": "{color.deep.100}",
+        "placeholder": "{color.deep.100}", "link": "{color.teal.200}", "inverse": "{color.deep.900}"
+      },
+      "action": {
+        "primary": "{color.teal.300}", "primaryHover": "{color.teal.200}", "primaryPressed": "{color.teal.100}",
+        "onPrimary": "{color.deep.900}", "secondary": "{color.heat.400}", "focusRing": "{color.heat.400}",
+        "disabled": "{color.deep.300}", "disabledBg": "{color.deep.800}"
+      },
+      "border": { "default": "{color.deep.600}", "control": "{color.deep.400}", "controlHover": "{color.deep.200}", "strong": "{color.deep.400}", "focus": "{color.heat.400}", "disabled": "{color.deep.600}" },
+      "selected": { "surface": "{color.deep.800}", "text": "{color.teal.200}" }
+    }
+  }
+}
