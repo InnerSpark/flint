@@ -2,6 +2,10 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## Unreleased
+
+- **New brand: TubHop.** `brands/tubhop.json`, the `FlintTubHop` Swift product and `@innerspark/flint/brands/tubhop`. Deep End navy (`color.deep`), Water teal (`color.teal`), Heat orange (`color.heat`) and a warm Foam page (`color.foam`), from the TubHop logo. Navy primary button with a white label, Heat focus ring (heat.600 in light, heat.400 in dark), teal links. Dark mode on Deep End surfaces with a teal.300 primary. Brand colors under Flint's bars move to the nearest passing step, recorded in the file's `$source` (Water and Heat stay logo-only). Passes the contrast (7:1 text, 3:1 UI) and color-vision checks in light and dark; charts keep Flint's palette.
+
 ## v1.17.0 (2026-10-28)
 
 The docs restructure: 131 pages down to 60, one page per component with a Web / iOS switch, Principles as its own section, and a word budget so the docs stay lean. The package adds `glass.json`, the Liquid Glass contrast model.

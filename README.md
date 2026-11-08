@@ -20,7 +20,7 @@ The build resolves every reference. CSS, JS, MUI, and Swift consumers always get
 
 Two more layers sit on top of `tokens.json` and merge in before references resolve (ASDS-86):
 
-- **Brand:** `brands/<brand>.json` can override any token. Brands: `flint` (the base, empty), `accessspark` (same as Flint today), `innersparkmedia` (orange accent and focus ring, 8px cards, lighter shadows) and `studio` (softer body text). Values came from each live site; anything under Flint's 7:1 text or 3:1 UI bar uses the nearest passing step, and the file's `$source` records the original and why.
+- **Brand:** `brands/<brand>.json` can override any token. Brands: `flint` (the base, empty), `accessspark` (same as Flint today), `innersparkmedia` (orange accent and focus ring, 8px cards, lighter shadows), `studio` (softer body text) and `tubhop` (Deep End navy, Water teal and Heat orange on a warm page, with Deep End dark mode). Values came from each live site; anything under Flint's 7:1 text or 3:1 UI bar uses the nearest passing step, and the file's `$source` records the original and why.
 - **Platform:** `platforms/ios.json` overrides sizes, targets and type for the Swift package: `targetMin` and `control.md` are 44, plus `navTitleLarge`, `navTitle` and `tabLabel` type styles. Platforms can't touch color.
 
 Every brand gets the contrast and color-vision checks in light and dark. A brand path that isn't in `tokens.json`, or a platform that sets a color, fails the build.
@@ -31,6 +31,7 @@ Every brand gets the contrast and color-vision checks in light and dark. A brand
 | accessspark | `@innerspark/flint/brands/accessspark/tokens.css` | `@innerspark/flint/brands/accessspark` | `FlintAccessSpark` |
 | innersparkmedia | `@innerspark/flint/brands/innersparkmedia/tokens.css` | `@innerspark/flint/brands/innersparkmedia` | `FlintInnerSparkMedia` |
 | studio | `@innerspark/flint/brands/studio/tokens.css` | `@innerspark/flint/brands/studio` | `FlintStudio` |
+| tubhop | `@innerspark/flint/brands/tubhop/tokens.css` | `@innerspark/flint/brands/tubhop` | `FlintTubHop` |
 
 Each brand folder also has `tokens.media.css`, `tokens.json` and `shadcn.css`. `components.css` is shared. `@innerspark/flint/brands.css` puts every brand under `[data-brand="<brand>"]` for side-by-side previews, and `tokens.css` has a `[data-platform="ios"]` block for iOS-size previews; apps don't need either. Not per brand yet: the MUI theme (only AccessSpark uses it, and it matches Flint).
 
@@ -142,7 +143,7 @@ For a compact layout, use the object form: `createFlintTheme({ mode: 'light', de
 
 ### Swift / SwiftUI (iOS 16+, macOS 13+)
 
-Add the package in Xcode (File > Add Package Dependencies) with `https://github.com/InnerSpark/flint`, pinned to a version tag. Add one product, the one for your brand (`Flint`, `FlintAccessSpark`, `FlintInnerSparkMedia` or `FlintStudio`); each exposes the same `Flint` API. The Swift output uses the iOS platform values.
+Add the package in Xcode (File > Add Package Dependencies) with `https://github.com/InnerSpark/flint`, pinned to a version tag. Add one product, the one for your brand (`Flint`, `FlintAccessSpark`, `FlintInnerSparkMedia`, `FlintStudio` or `FlintTubHop`); each exposes the same `Flint` API. The Swift output uses the iOS platform values.
 
 ```swift
 import Flint

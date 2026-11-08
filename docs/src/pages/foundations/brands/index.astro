@@ -9,6 +9,7 @@ import flint from '../../../../../brands/flint.json';
 import accessspark from '../../../../../brands/accessspark.json';
 import innersparkmedia from '../../../../../brands/innersparkmedia.json';
 import studio from '../../../../../brands/studio.json';
+import tubhop from '../../../../../brands/tubhop.json';
 import ios from '../../../../../platforms/ios.json';
 import { resolved } from '../../../lib/flint.js';
 
@@ -25,6 +26,7 @@ const brands = [
   { id: 'accessspark', name: 'AccessSpark', where: 'The app and accessspark.io', file: accessspark },
   { id: 'innersparkmedia', name: 'Inner Spark Media', where: 'innersparkmedia.com', file: innersparkmedia },
   { id: 'studio', name: 'Inner Spark Studio', where: 'innerspark.studio', file: studio },
+  { id: 'tubhop', name: 'TubHop', where: 'The TubHop app and tubhop.app', file: tubhop },
 ];
 const swaps = brands.flatMap((b) => Object.entries(b.file.$source?.swapped || {}).map(([from, why]) => ({ brand: b.name, from, why })));
 
@@ -48,7 +50,7 @@ const swiftCode = `// Package.swift: add the product for your brand, only one
 import FlintInnerSparkMedia
 Text("Hello").foregroundStyle(Flint.Colors.textHeading)`;
 ---
-<Docs title="Brands and platforms" crumb="Foundations" lead="Flint runs four brands on two platforms from one set of tokens. A brand can change any token, a platform only changes sizes and type, and every combination has to pass the same contrast checks." toc={toc} wide>
+<Docs title="Brands and platforms" crumb="Foundations" lead="Flint runs five brands on two platforms from one set of tokens. A brand can change any token, a platform only changes sizes and type, and every combination has to pass the same contrast checks." toc={toc} wide>
   <h2 id="layers">How the layers stack</h2>
   <ol class="layer-flow">
     <li><strong>Base</strong><span><code>tokens.json</code>, the Flint brand on the web.</span></li>

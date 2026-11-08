@@ -15,11 +15,13 @@ let package = Package(
     .library(name: "FlintAccessSpark", targets: ["FlintAccessSpark"]),
     .library(name: "FlintInnerSparkMedia", targets: ["FlintInnerSparkMedia"]),
     .library(name: "FlintStudio", targets: ["FlintStudio"]),
+    .library(name: "FlintTubHop", targets: ["FlintTubHop"]),
   ],
   targets: [
     .target(name: "Flint", path: "dist/swift"),
     .target(name: "FlintAccessSpark", path: "dist/swift-brands/accessspark"),
     .target(name: "FlintInnerSparkMedia", path: "dist/swift-brands/innersparkmedia"),
     .target(name: "FlintStudio", path: "dist/swift-brands/studio"),
+    .target(name: "FlintTubHop", path: "dist/swift-brands/tubhop"),
   ]
 )
