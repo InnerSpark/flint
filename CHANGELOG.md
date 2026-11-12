@@ -2,7 +2,9 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
-## Unreleased
+## v1.18.0 (2026-11-12)
+
+Two new brands: TubHop and Squadhop. Additive only, no token changes to existing brands.
 
 - **New brand: Squadhop.** `brands/squadhop.json`, the `FlintSquadhop` Swift product and `@innerspark/flint/brands/squadhop`. Leap Magenta (`color.magenta`) from the Airborne logo and Squadhop Ink (`color.plum`). Magenta.700 `#9E1148` for the primary button, links and focus ring (7.30:1 on gray.100, so secondary and text-button hovers clear 7:1); Ink headings and inverse surface; magenta.50 selected rows. Leap Magenta `#D1185F` (5.24:1) stays logo and decoration only. Dark mode keeps Flint's ink surfaces with a magenta.300 primary, magenta.400 focus ring and magenta.200 links. Passes the contrast (7:1 text, 3:1 UI) and color-vision checks in light and dark; charts keep Flint's palette.
 - **New brand: TubHop.** `brands/tubhop.json`, the `FlintTubHop` Swift product and `@innerspark/flint/brands/tubhop`. Deep End navy (`color.deep`), Water teal (`color.teal`), Heat orange (`color.heat`) and a warm Foam page (`color.foam`), from the TubHop logo. Navy primary button with a white label, Heat focus ring (heat.600 in light, heat.400 in dark), teal links. Dark mode on Deep End surfaces with a teal.300 primary. Brand colors under Flint's bars move to the nearest passing step, recorded in the file's `$source` (Water and Heat stay logo-only). Passes the contrast (7:1 text, 3:1 UI) and color-vision checks in light and dark; charts keep Flint's palette.
