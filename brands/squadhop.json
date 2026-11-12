@@ -1,0 +1,41 @@
+{
+  "$description": "Squadhop, the contacts and email app for class-based studios (squadhop.app, getsquadhop.com). Leap Magenta from the Airborne logo for actions, links and focus, Squadhop Ink for headings. Open Sans and Flint's spacing, radius, type, neutrals and feedback colors stay as they are.",
+  "$source": {
+    "from": "Squadhop logo direction Airborne, chosen 2026-11-12 (Figma: Squadhop: Logo shortlist).",
+    "kept": "Type, spacing, radius, shadows, neutrals, feedback colors and charts match Flint. Dark surfaces stay Flint ink so the chart and feedback checks hold.",
+    "swapped": {
+      "Leap Magenta #D1185F (magenta.500)": "5.24:1 on white, under Flint's 7:1 text bar. Logo, icon and decoration only (action.secondary). Buttons, links and focus use magenta.700 #9E1148 (7.99:1 on white, 7.30:1 on Flint gray.100). The logo board used #A8134C, which drops to 6.70:1 on gray.100.",
+      "Blush #FFE3EC (magenta.100)": "Background tint only. Selected rows use magenta.50 with magenta.800 text.",
+      "Ink #16112E (plum.900)": "18.2:1 on white. Headings and the inverse surface."
+    },
+    "added": "Dark mode: Flint ink surfaces, magenta.300 primary with an ink.900 label, magenta.400 focus ring, magenta.200 links."
+  },
+  "color": {
+    "magenta": {
+      "50": "#fff0f5", "100": "#ffe3ec", "200": "#ffc2d6", "300": "#ff8fb3", "400": "#f2558a", "500": "#d1185f",
+      "600": "#ba1555", "700": "#9e1148", "800": "#850f3c", "900": "#640b2d", "950": "#3f071c"
+    },
+    "plum": { "700": "#2e2650", "800": "#221a3d", "900": "#16112e", "950": "#0c0919" }
+  },
+  "semantic": {
+    "light": {
+      "surface": { "inverse": "{color.plum.900}" },
+      "text": { "heading": "{color.plum.900}", "link": "{color.magenta.700}" },
+      "action": {
+        "primary": "{color.magenta.700}", "primaryHover": "{color.magenta.800}", "primaryPressed": "{color.magenta.900}",
+        "secondary": "{color.magenta.500}", "focusRing": "{color.magenta.700}"
+      },
+      "border": { "focus": "{color.magenta.700}" },
+      "selected": { "surface": "{color.magenta.50}", "text": "{color.magenta.800}" }
+    },
+    "dark": {
+      "text": { "link": "{color.magenta.200}" },
+      "action": {
+        "primary": "{color.magenta.300}", "primaryHover": "{color.magenta.200}", "primaryPressed": "{color.magenta.100}",
+        "secondary": "{color.magenta.400}", "focusRing": "{color.magenta.400}"
+      },
+      "border": { "focus": "{color.magenta.400}" },
+      "selected": { "surface": "{color.magenta.950}", "text": "{color.magenta.100}" }
+    }
+  }
+}

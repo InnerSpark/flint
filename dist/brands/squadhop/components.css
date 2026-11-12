@@ -1,0 +1,388 @@
+/* GENERATED copy of css/components.css. Flint Design System. Edit the source, not this file. */
+/* Flint components (ASDS-58). Plain CSS classes on the component tokens, for any stack: Astro, EJS,
+   React. Load after tokens.css. Source of @innerspark/flint/components.css; the build copies it to
+   dist/ and scripts/check-components.mjs fails on a color literal, an unknown variable, or a px value
+   outside borders and glyph geometry. */
+.flint-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-8);
+  min-height: var(--button-height); padding: 0 var(--space-16);
+  border: 1px solid transparent; border-radius: var(--button-radius);
+  font: 700 var(--font-size-sm) / 1.2 var(--font-sans); cursor: pointer;
+}
+.flint-btn:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-btn--primary { background: var(--button-primary-bg); color: var(--button-primary-fg); }
+.flint-btn--primary:hover { background: var(--button-primary-bg-hover); }
+.flint-btn--primary:active { background: var(--button-primary-bg-pressed); }
+.flint-btn--secondary { background: var(--button-secondary-bg); color: var(--button-secondary-fg); border-color: var(--button-secondary-border); }
+.flint-btn--secondary:hover { background: var(--button-secondary-bg-hover); }
+.flint-btn--danger { background: var(--button-danger-bg); color: var(--button-danger-fg); }
+.flint-btn--danger:hover { background: var(--button-danger-bg-hover); }
+.flint-btn--danger:active { background: var(--button-danger-bg-pressed); }
+/* Secondary and text have no pressed color: no surface darker than their hover keeps the label at 7:1
+   in dark mode, so pressed looks like hover. */
+.flint-btn--text { background: transparent; color: var(--button-text-fg); }
+.flint-btn--text:hover { background: var(--button-text-bg-hover); }
+.flint-btn:disabled { background: var(--button-disabled-bg); color: var(--button-disabled-fg); border-color: transparent; cursor: not-allowed; }
+.flint-btn--secondary:disabled { border-color: var(--button-disabled-border); }
+.flint-btn--text:disabled { background: transparent; }
+/* aria-disabled: looks disabled but stays focusable, so keyboard and screen reader users can reach it
+   and hear why it's off. Prefer it when the reason sits next to the button. Block the click in code. */
+.flint-btn[aria-disabled="true"] { background: var(--button-disabled-bg); color: var(--button-disabled-fg); border-color: transparent; cursor: not-allowed; }
+.flint-btn--secondary[aria-disabled="true"] { border-color: var(--button-disabled-border); }
+.flint-btn--text[aria-disabled="true"] { background: transparent; }
+/* Icon-only: square, the height of the button. Needs an aria-label; the svg is aria-hidden. */
+.flint-btn svg { width: var(--icon-size-md); height: var(--icon-size-md); flex: none; }
+.flint-btn--icon { padding: 0; width: var(--button-height); }
+/* Small: control.sm (32px), still above the 24px target minimum. For dense toolbars and table rows. */
+.flint-btn--sm { min-height: var(--button-height-sm); padding: 0 var(--space-12); }
+.flint-btn--sm.flint-btn--icon { width: var(--button-height-sm); padding: 0; }
+/* Busy: aria-busy="true" plus aria-disabled="true" while the action runs. The label stays (change it to
+   "Saving..." if that helps); the spinner is decorative. Under reduced motion it holds still. */
+.flint-btn[aria-busy="true"] { cursor: progress; }
+.flint-btn[aria-busy="true"]::before {
+  content: ""; width: 1em; height: 1em; flex: none; box-sizing: border-box;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
+  animation: flint-spin calc(var(--duration-slow) * 2.5) linear infinite;
+}
+@media (prefers-reduced-motion: reduce) { .flint-btn[aria-busy="true"]::before { animation: none; } }
+@keyframes flint-spin { to { transform: rotate(1turn); } }
+/* Windows high contrast: disabled reads as disabled, not as a live button. */
+@media (forced-colors: active) {
+  .flint-btn:disabled, .flint-btn[aria-disabled="true"] { color: GrayText; border-color: GrayText; }
+}
+
+/* Link. Underlined always (WCAG 1.4.1): color alone never marks a link. Hover thickens the line.
+   Same color visited or not: these are app links, and a second color would have to clear 7:1 too. */
+.flint-link { color: var(--link-fg); text-decoration: underline; text-decoration-thickness: from-font; text-underline-offset: 0.15em; border-radius: var(--radius-xs); }
+.flint-link:hover { text-decoration-thickness: 0.125em; }
+.flint-link:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+/* Standalone: a link on its own line ("View all trips"). Meets the 24px target. */
+.flint-link--standalone { display: inline-flex; align-items: center; gap: var(--space-4); min-height: var(--target-min); font-weight: 600; }
+/* New tab: a decorative arrow. Say it in text too: <span class="flint-sr-only">(opens in a new tab)</span>. */
+.flint-link[target="_blank"]::after { content: "\2197" / ""; display: inline-block; margin-left: 0.15em; text-decoration: none; }
+
+/* Visually hidden, still read by screen readers. */
+.flint-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+/* Field: the label, helper and error around any control (ASDS-61). The label is always visible and
+   tied to the control with for/id. aria-describedby points at the helper, or at the error when there
+   is one: the error replaces the helper in the markup, so a screen reader never reads both. Required
+   is said in words, never by color or an asterisk alone. */
+.flint-field { display: grid; gap: var(--space-4); }
+.flint-field__label { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--field-label-fg); }
+.flint-field__required { font-weight: var(--font-weight-regular); color: var(--field-helper-fg); }
+.flint-field__helper { font-size: var(--font-size-xs); color: var(--field-helper-fg); }
+.flint-field__error { display: flex; align-items: flex-start; gap: var(--space-4); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--field-error-fg); }
+.flint-field__error svg { width: var(--icon-size-sm); height: var(--icon-size-sm); flex: none; }
+
+/* Select (ASDS-66): a native select, styled to match the input. Native keeps the platform's own list,
+   which already works with keyboards, screen readers and phones. The arrow is drawn with two gradients
+   in select.icon, so it follows light and dark with no image. Forced-colors mode gets the native arrow. */
+.flint-select {
+  appearance: none; box-sizing: border-box; width: 100%; height: var(--select-height); margin: 0;
+  padding: 0 calc(var(--space-12) + 1.5em) 0 var(--space-12);
+  border: 1px solid var(--select-border); border-radius: var(--select-radius);
+  background-color: var(--select-bg); color: var(--select-fg); font: 400 var(--font-size-md) / 1.5 var(--font-sans); cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--select-icon) 50%), linear-gradient(135deg, var(--select-icon) 50%, transparent 50%);
+  background-position: calc(100% - 1.2em) 55%, calc(100% - 0.85em) 55%;
+  background-size: 0.35em 0.35em; background-repeat: no-repeat;
+}
+.flint-select:hover { border-color: var(--select-border-hover); }
+.flint-select:focus-visible { border-color: var(--select-border-focus); outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-select[aria-invalid="true"] { border-color: var(--select-border-error); }
+/* The empty "Choose..." option reads as a placeholder; real options keep the full text color. */
+.flint-select:has(option[value=""]:checked) { color: var(--select-placeholder); }
+.flint-select option { color: var(--select-fg); }
+.flint-select:disabled { background-color: var(--color-action-disabled-bg); color: var(--color-action-disabled); border-color: var(--color-border-disabled); cursor: not-allowed; }
+@media (forced-colors: active) { .flint-select { appearance: auto; background-image: none; } }
+
+/* Badge (ASDS-67): a short, static status label. Not interactive. Intents set the fill and text; the
+   words carry the meaning, so color is never the only cue. */
+.flint-badge {
+  --_bg: var(--badge-neutral-bg); --_fg: var(--badge-neutral-fg);
+  display: inline-flex; align-items: center; gap: var(--space-4); padding: var(--space-2) var(--space-8);
+  border-radius: var(--badge-radius); background: var(--_bg); color: var(--_fg);
+  font: var(--badge-font-weight) var(--badge-font-size) / 1.4 var(--font-sans); white-space: nowrap;
+}
+.flint-badge--success { --_bg: var(--badge-success-bg); --_fg: var(--badge-success-fg); }
+.flint-badge--warning { --_bg: var(--badge-warning-bg); --_fg: var(--badge-warning-fg); }
+.flint-badge--error { --_bg: var(--badge-error-bg); --_fg: var(--badge-error-fg); }
+.flint-badge--info { --_bg: var(--badge-info-bg); --_fg: var(--badge-info-fg); }
+.flint-badge svg { width: var(--icon-size-sm); height: var(--icon-size-sm); flex: none; }
+
+/* Chip (ASDS-67): a label people can act on, usually a filter they can remove. Filled by default;
+   --outlined drops the fill, so its edge (chip.*.border, 3:1 and up) is what makes it visible.
+   The remove button is its own 24px target with its own name ("Remove WCAG 2.2"). */
+.flint-chip {
+  --_bg: var(--chip-neutral-bg); --_fg: var(--chip-neutral-fg); --_edge: var(--chip-neutral-border);
+  display: inline-flex; align-items: center; gap: var(--space-4); min-height: var(--control-sm);
+  padding: 0 var(--space-12); border: 1px solid transparent; border-radius: var(--chip-radius);
+  background: var(--_bg); color: var(--_fg); font: var(--chip-font-weight) var(--font-size-sm) / 1.2 var(--font-sans); white-space: nowrap;
+}
+.flint-chip--success { --_bg: var(--chip-success-bg); --_fg: var(--chip-success-fg); --_edge: var(--chip-success-border); }
+.flint-chip--warning { --_bg: var(--chip-warning-bg); --_fg: var(--chip-warning-fg); --_edge: var(--chip-warning-border); }
+.flint-chip--error { --_bg: var(--chip-error-bg); --_fg: var(--chip-error-fg); --_edge: var(--chip-error-border); }
+.flint-chip--info { --_bg: var(--chip-info-bg); --_fg: var(--chip-info-fg); --_edge: var(--chip-info-border); }
+.flint-chip--outlined { background: transparent; border-color: var(--_edge); }
+.flint-chip:has(.flint-chip__remove) { padding-right: var(--space-4); }
+.flint-chip__remove {
+  display: inline-grid; place-content: center; width: var(--target-min); height: var(--target-min); margin: 0; padding: 0;
+  border: 0; border-radius: var(--radius-pill); background: transparent; color: inherit; cursor: pointer;
+}
+.flint-chip__remove:hover { background: color-mix(in srgb, currentColor 14%, transparent); }
+.flint-chip__remove:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: 0; }
+.flint-chip__remove svg { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+
+/* Alert (ASDS-68): a message about the page or a task. Icon plus words, in one feedback family
+   (surface, border, text) so the parts never mix. Static alerts are plain markup; an alert added
+   after load goes in a live region: role="alert" for errors, role="status" for everything else. */
+.flint-alert {
+  --_surface: var(--color-feedback-info-surface); --_border: var(--color-feedback-info-border); --_text: var(--color-feedback-info-text); --_solid: var(--color-feedback-info-solid);
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-4) var(--space-12); align-items: start;
+  padding: var(--space-16); border: 1px solid var(--_border); border-left: 4px solid var(--_solid); border-radius: var(--radius-md);
+  background: var(--_surface); color: var(--_text); font-size: var(--font-size-sm);
+}
+.flint-alert--success { --_surface: var(--color-feedback-success-surface); --_border: var(--color-feedback-success-border); --_text: var(--color-feedback-success-text); --_solid: var(--color-feedback-success-solid); }
+.flint-alert--warning { --_surface: var(--color-feedback-warning-surface); --_border: var(--color-feedback-warning-border); --_text: var(--color-feedback-warning-text); --_solid: var(--color-feedback-warning-solid); }
+.flint-alert--error { --_surface: var(--color-feedback-error-surface); --_border: var(--color-feedback-error-border); --_text: var(--color-feedback-error-text); --_solid: var(--color-feedback-error-solid); }
+.flint-alert > svg { grid-row: span 2; width: var(--icon-size-md); height: var(--icon-size-md); margin-top: 0.1em; }
+.flint-alert__title { margin: 0; font-weight: var(--font-weight-bold); }
+.flint-alert__body { margin: 0; grid-column: 2; }
+.flint-alert a { color: inherit; }
+
+/* Choice: a checkbox or radio with its label. The label wraps the input, so the whole row is the
+   click target, at least 24px tall. */
+.flint-choice { display: inline-flex; align-items: center; gap: var(--space-8); min-height: var(--target-min); font-size: var(--font-size-sm); color: var(--color-text-default); cursor: pointer; }
+.flint-choice:has(:disabled) { cursor: not-allowed; }
+/* Group: checkboxes or radios that answer one question. The legend asks it; a group error goes in a
+   .flint-field__error inside the fieldset, tied to it with aria-describedby on the fieldset. */
+.flint-fieldset { display: grid; gap: var(--gap-sm); min-width: 0; margin: 0; padding: 0; border: 0; }
+.flint-fieldset__legend { padding: 0; margin-bottom: var(--space-4); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--field-label-fg); }
+
+/* Switch (ASDS-65): an on/off setting that takes effect right away, no submit. A native checkbox with
+   role="switch", so Space toggles it, forms submit it and screen readers say on or off. The thumb
+   moves, so the state never rests on color alone. Wrap it in .flint-choice with a label that names
+   the setting ("Email me weekly"), not the state. */
+.flint-switch {
+  appearance: none; position: relative; flex: none; margin: 0; cursor: pointer;
+  width: var(--space-48); height: var(--target-min); border-radius: var(--radius-pill);
+  background: var(--switch-track);
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+.flint-switch::after {
+  content: ""; position: absolute; top: 50%; left: 4px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--switch-thumb); transform: translateY(-50%);
+  /* The thumb lands with a small overshoot (--ease-emphasis): a small thing arriving. */
+  transition: transform var(--duration-base) var(--ease-emphasis);
+}
+.flint-switch:checked { background: var(--switch-track-checked); }
+.flint-switch:checked::after { background: var(--switch-thumb-checked); transform: translate(24px, -50%); }
+.flint-switch:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-switch:disabled { background: var(--switch-track-disabled); cursor: not-allowed; }
+/* Disabled, on or off: a mid-gray thumb, so its position (the only cue left) still shows. */
+.flint-switch:disabled::after { background: var(--switch-thumb-disabled); }
+@media (prefers-reduced-motion: reduce) { .flint-switch, .flint-switch::after { transition: none; } }
+@media (forced-colors: active) {
+  .flint-switch { border: 1px solid ButtonText; }
+  .flint-switch::after { background: ButtonText; }
+  .flint-switch:checked { background: Highlight; }
+  .flint-switch:checked::after { background: HighlightText; }
+}
+
+.flint-input {
+  box-sizing: border-box; width: 100%; height: var(--input-height); padding: 0 var(--space-12);
+  border: 1px solid var(--input-border); border-radius: var(--input-radius);
+  background: var(--input-bg); color: var(--input-fg); font: 400 var(--font-size-md) / 1.5 var(--font-sans);
+}
+.flint-input::placeholder { color: var(--input-placeholder); opacity: 1; }
+.flint-input:hover { border-color: var(--input-border-hover); }
+.flint-input:focus-visible { border-color: var(--input-border-focus); outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-input[aria-invalid="true"] { border-color: var(--input-border-error); }
+.flint-input:disabled { background: var(--color-action-disabled-bg); color: var(--color-action-disabled); border-color: var(--color-border-disabled); }
+/* Read-only: the value can be read, selected and copied, but not changed. It stays in the tab order
+   and keeps full-contrast text, unlike disabled; the tinted fill says "not editable". */
+.flint-input[readonly] { background: var(--input-bg-read-only); }
+.flint-input[readonly]:hover { border-color: var(--input-border); }
+/* Multi-line: same class on a textarea. Grows by dragging, never sideways. */
+textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); padding-block: var(--space-8); resize: vertical; }
+/* Search: drop the platform's rounded search styling so it matches the other inputs. */
+.flint-input[type="search"] { appearance: none; }
+
+.flint-check {
+  appearance: none; display: inline-grid; place-content: center; margin: 0; cursor: pointer;
+  width: var(--checkbox-size); height: var(--checkbox-size);
+  border: 2px solid var(--checkbox-border); border-radius: var(--checkbox-radius); background: var(--input-bg);
+}
+.flint-check::after { content: ""; width: 12px; height: 6px; border: solid transparent; border-width: 0 0 3px 3px; transform: translateY(-2px) rotate(-45deg); }
+.flint-check:hover { border-color: var(--checkbox-border-hover); }
+.flint-check:checked, .flint-check:indeterminate { background: var(--checkbox-checked-bg); border-color: var(--checkbox-checked-bg); }
+.flint-check:checked::after { border-color: var(--checkbox-checked-fg); }
+/* Indeterminate ("some of these"): set in script with el.indeterminate = true; there is no HTML
+   attribute. A bar instead of a tick, and screen readers announce it as mixed. */
+.flint-check:indeterminate::after { width: 12px; height: 0; border-width: 0 0 3px 0; border-color: var(--checkbox-checked-fg); transform: none; }
+.flint-check[aria-invalid="true"] { border-color: var(--checkbox-border-error); }
+.flint-check:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-check:disabled { border-color: var(--color-border-disabled); background: var(--checkbox-disabled-bg); cursor: not-allowed; }
+.flint-check:disabled:checked::after, .flint-check:disabled:indeterminate::after { border-color: var(--checkbox-disabled); }
+
+/* Radio: same control tokens as the checkbox, but round and never multi-select. The dot is
+   drawn with a box-shadow inset so it scales with the box and needs no extra element. */
+.flint-radio {
+  appearance: none; display: inline-grid; place-content: center; margin: 0; cursor: pointer;
+  width: var(--radio-size); height: var(--radio-size);
+  border: 2px solid var(--radio-border); border-radius: 50%; background: var(--input-bg);
+}
+.flint-radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: transparent; }
+.flint-radio:hover { border-color: var(--radio-border-hover); }
+.flint-radio:checked { background: var(--radio-checked-bg); border-color: var(--radio-checked-bg); }
+.flint-radio:checked::after { background: var(--radio-checked-fg); }
+.flint-radio[aria-invalid="true"] { border-color: var(--radio-border-error); }
+.flint-radio:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-radio:disabled { border-color: var(--radio-disabled); background: var(--radio-disabled-bg); cursor: not-allowed; }
+.flint-radio:disabled:checked::after { background: var(--radio-disabled); }
+
+/* Skip link (ASDS-73): the first thing in <body>. Hidden until focused, then it sits over the top
+   corner. Point it at the main heading (tabindex="-1") and move focus there in script: a bare
+   fragment jump can leave focus on <body>. The transparent border draws its edge in forced colors.
+   :focus-visible sits beside :focus only so the workbench can force the focus row. */
+.flint-skip-link {
+  position: absolute; inset-inline-start: var(--space-16); top: var(--space-8); z-index: var(--z-toast);
+  display: inline-flex; align-items: center; min-height: var(--button-height); padding: 0 var(--space-16);
+  border: 1px solid transparent; border-radius: var(--skip-link-radius);
+  background: var(--skip-link-bg); color: var(--skip-link-fg);
+  font: 700 var(--font-size-sm) / 1.2 var(--font-sans); text-decoration: underline; white-space: nowrap;
+  clip-path: inset(50%);
+}
+.flint-skip-link:focus, .flint-skip-link:focus-visible { clip-path: none; outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+
+/* Icon (ASDS-74): size and color for an svg on its own. Inside a button, badge, chip, alert or field
+   error the component sizes the icon, so leave this class off there. Decorative: aria-hidden="true".
+   Means something on its own: role="img" plus aria-label. Draw with currentColor so forced colors works. */
+.flint-icon { width: var(--icon-md); height: var(--icon-md); flex: none; vertical-align: middle; color: var(--icon-fg); }
+.flint-icon--sm { width: var(--icon-sm); height: var(--icon-sm); }
+.flint-icon--lg { width: var(--icon-lg); height: var(--icon-lg); }
+.flint-icon--muted { color: var(--icon-fg-muted); }
+
+/* Dialog (ASDS-80). Title, body and toast text rules carry two classes so a page's own heading and
+   paragraph margins (a .prose h2, say) can't leak in. Put the class on a native <dialog> and open it with showModal(). The browser traps
+   focus, closes on Esc and puts the rest of the page behind it; behaviors.js returns focus to the
+   button that opened it. Name it with aria-labelledby pointing at the title. Arrives with
+   --ease-entrance, never the overshoot. */
+.flint-dialog {
+  width: min(32rem, calc(100vw - var(--space-32))); max-height: calc(100dvh - var(--space-48));
+  padding: 0; border: 1px solid var(--dialog-border); border-radius: var(--dialog-radius);
+  background: var(--dialog-bg); color: var(--dialog-fg); box-shadow: var(--shadow-dialog);
+  font: 400 var(--font-size-md) / 1.5 var(--font-sans);
+}
+.flint-dialog[open] { display: flex; flex-direction: column; }
+.flint-dialog::backdrop { background: var(--color-overlay-scrim); }
+.flint-dialog__header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-16); padding: var(--space-24) var(--space-24) 0; }
+.flint-dialog .flint-dialog__title { margin: 0; font-size: var(--type-heading-h3-size); font-weight: var(--type-heading-h3-weight); line-height: var(--type-heading-h3-line-height); color: var(--dialog-title-fg); }
+.flint-dialog__header .flint-btn--icon { margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) 0 0; }
+.flint-dialog__body { padding: var(--space-16) var(--space-24); overflow-y: auto; }
+.flint-dialog .flint-dialog__body > * { margin: 0; }
+.flint-dialog .flint-dialog__body > * + * { margin-top: var(--space-12); }
+.flint-dialog__footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-8); padding: 0 var(--space-24) var(--space-24); }
+/* --floating: positioned by a library (Radix, Floating UI) instead of the native <dialog>. Centered
+   over .flint-dialog-overlay, which draws the scrim. @innerspark/flint/react uses these. */
+.flint-dialog--floating { position: fixed; inset: 0; z-index: var(--z-modal); height: fit-content; margin: auto; display: flex; flex-direction: column; }
+.flint-dialog-overlay { position: fixed; inset: 0; z-index: var(--z-overlay); background: var(--color-overlay-scrim); }
+@media (prefers-reduced-motion: no-preference) { .flint-dialog--floating { animation: flint-dialog-in var(--duration-base) var(--ease-entrance); } }
+@media (prefers-reduced-motion: no-preference) { .flint-dialog[open] { animation: flint-dialog-in var(--duration-base) var(--ease-entrance); } }
+@keyframes flint-dialog-in { from { opacity: 0; transform: translateY(var(--space-8)); } }
+
+/* Tabs (ASDS-81): role="tablist" on the list, role="tab" buttons with aria-selected and aria-controls,
+   role="tabpanel" panels. Only the selected tab is in the Tab order; arrow keys move between tabs
+   (behaviors.js). The selected tab shows a bar and a heavier weight, so it never rests on color. */
+.flint-tabs__list { display: flex; gap: var(--space-4); border-bottom: 1px solid var(--tabs-border); overflow-x: auto; }
+.flint-tabs__tab {
+  appearance: none; position: relative; flex: none; min-height: var(--control-md); padding: 0 var(--space-16);
+  border: 0; border-radius: var(--radius-control) var(--radius-control) 0 0; background: none;
+  color: var(--tabs-fg); font: 600 var(--font-size-sm) / 1.2 var(--font-sans); white-space: nowrap; cursor: pointer;
+}
+.flint-tabs__tab:hover { color: var(--tabs-fg-hover); background: var(--tabs-bg-hover); }
+.flint-tabs__tab[aria-selected="true"] { color: var(--tabs-fg-selected); font-weight: 800; box-shadow: inset 0 calc(var(--space-4) * -1) 0 var(--tabs-indicator); }
+/* The ring sits inside the tab, so the list's scroll edge never clips it. */
+.flint-tabs__tab:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: calc(var(--focus-ring-offset) * -1 - var(--focus-ring-width)); }
+.flint-tabs__panel { padding-block: var(--space-16); }
+/* Libraries that keep every panel mounted (so each tab's aria-controls resolves) mark the rest inactive. */
+.flint-tabs__panel[data-state="inactive"] { display: none; }
+.flint-tabs__panel:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); border-radius: var(--radius-xs); }
+@media (forced-colors: active) { .flint-tabs__tab[aria-selected="true"] { box-shadow: none; border-bottom: 4px solid CanvasText; } }
+
+/* Menu (ASDS-82): a menu button. The trigger has aria-haspopup="menu" and aria-expanded; the list is
+   role="menu" with role="menuitem" buttons in role="none" list items. behaviors.js moves focus in on
+   open, handles the arrow keys, and closes on Esc, Tab or a click outside, returning focus. */
+.flint-menu-anchor { position: relative; display: inline-block; }
+.flint-menu {
+  position: absolute; top: calc(100% + var(--space-4)); inset-inline-start: 0; z-index: var(--z-dropdown);
+  min-width: 12rem; margin: 0; padding: var(--space-4); list-style: none;
+  background: var(--menu-bg); color: var(--menu-fg); border: 1px solid var(--menu-border); border-radius: var(--menu-radius); box-shadow: var(--shadow-popover);
+}
+.flint-menu[hidden] { display: none; }
+/* --floating: a positioning library places the menu, so drop the CSS placement. */
+.flint-menu--floating { position: static; }
+.flint-menu > li { margin: 0; }
+.flint-menu__item {
+  display: flex; align-items: center; gap: var(--space-8); width: 100%; min-height: var(--control-md); padding: 0 var(--space-12);
+  border: 0; border-radius: var(--radius-xs); background: none; color: inherit; font: 400 var(--font-size-sm) / 1.2 var(--font-sans); text-align: start; cursor: pointer;
+}
+.flint-menu__item svg { width: var(--icon-size-sm); height: var(--icon-size-sm); flex: none; }
+.flint-menu__item:hover, .flint-menu__item:focus-visible { background: var(--menu-item-bg-hover); }
+.flint-menu__item:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: calc(var(--focus-ring-width) * -1); }
+.flint-menu__item--danger { color: var(--menu-item-fg-danger); }
+.flint-menu__item[aria-disabled="true"] { color: var(--color-action-disabled); cursor: not-allowed; }
+.flint-menu__separator { margin: var(--space-4) 0; border-top: 1px solid var(--menu-border); }
+
+/* Tooltip (ASDS-83): extra text for a control that already has a name. Wrap the control and the
+   tooltip in .flint-tooltip-anchor and point aria-describedby at the tooltip. It shows on hover and
+   keyboard focus, stays while the pointer is over it, and Esc hides it (behaviors.js). Never put the
+   only name of an icon button in a tooltip. */
+.flint-tooltip-anchor { position: relative; display: inline-flex; }
+.flint-tooltip {
+  position: absolute; bottom: calc(100% + var(--space-8)); left: 50%; transform: translateX(-50%); z-index: var(--z-popover);
+  width: max-content; max-width: 16rem; padding: var(--space-4) var(--space-8);
+  border: 1px solid transparent; border-radius: var(--tooltip-radius); background: var(--tooltip-bg); color: var(--tooltip-fg);
+  font: 600 var(--font-size-xs) / 1.4 var(--font-sans); text-align: center;
+  visibility: hidden; opacity: 0;
+}
+/* A bridge over the gap, so moving the pointer from the control onto the tooltip keeps it open. */
+.flint-tooltip::before { content: ""; position: absolute; inset-inline: 0; top: 100%; height: 10px; }
+.flint-tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border: 5px solid transparent; border-top-color: var(--tooltip-bg); }
+.flint-tooltip-anchor:hover .flint-tooltip, .flint-tooltip-anchor:focus-within .flint-tooltip { visibility: visible; opacity: 1; }
+.flint-tooltip-anchor[data-dismissed] .flint-tooltip { visibility: hidden; opacity: 0; }
+/* --floating: a positioning library places it and decides when it shows. */
+.flint-tooltip--floating { position: static; transform: none; visibility: visible; opacity: 1; }
+@media (prefers-reduced-motion: no-preference) { .flint-tooltip { transition: opacity var(--duration-fast) var(--ease-standard), visibility var(--duration-fast); } }
+
+/* Toast (ASDS-84): a short message about something that just happened. Keep one
+   .flint-toast-region (role="status", aria-live="polite") in the page from the start; add toasts to
+   it and screen readers announce them without moving focus. Never auto-dismiss a toast with an action.
+   Arrives with --ease-emphasis: a small thing arriving. */
+.flint-toast-region {
+  position: fixed; inset-block-end: var(--space-16); inset-inline-end: var(--space-16); z-index: var(--z-toast);
+  display: flex; flex-direction: column; gap: var(--space-8); width: min(24rem, calc(100vw - var(--space-32))); pointer-events: none;
+  margin: 0; padding: 0; list-style: none;
+}
+.flint-toast {
+  pointer-events: auto; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; column-gap: var(--space-12);
+  padding: var(--space-12) var(--space-8) var(--space-12) var(--space-16);
+  border: 1px solid transparent; border-radius: var(--toast-radius); background: var(--toast-bg); color: var(--toast-fg);
+  box-shadow: var(--shadow-popover); font: 400 var(--font-size-sm) / 1.4 var(--font-sans);
+}
+.flint-toast > svg { grid-row: span 3; width: var(--icon-size-md); height: var(--icon-size-md); margin-top: var(--space-2); }
+.flint-toast .flint-toast__title { grid-column: 2; margin: 0; padding-top: var(--space-2); font-weight: 700; }
+.flint-toast .flint-toast__body { grid-column: 2; margin: 0; color: var(--toast-fg-muted); }
+.flint-toast__actions { grid-column: 2; display: flex; flex-wrap: wrap; gap: var(--space-12); }
+.flint-toast__action {
+  min-height: var(--target-min); padding: 0; border: 0; background: none; color: var(--toast-fg);
+  font: 700 var(--font-size-sm) / 1.2 var(--font-sans); text-decoration: underline; text-underline-offset: 0.15em; cursor: pointer;
+}
+.flint-toast__close {
+  grid-column: 3; grid-row: 1; display: grid; place-content: center; width: var(--target-min); height: var(--target-min);
+  padding: 0; border: 0; border-radius: var(--radius-xs); background: none; color: var(--toast-fg); cursor: pointer;
+}
+.flint-toast__close svg { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+.flint-toast :focus-visible { outline: var(--focus-ring-width) solid var(--toast-focus-ring); outline-offset: var(--focus-ring-offset); }
+@media (prefers-reduced-motion: no-preference) { .flint-toast { animation: flint-toast-in var(--duration-slow) var(--ease-emphasis); } }
+@keyframes flint-toast-in { from { opacity: 0; transform: translateY(var(--space-16)); } }

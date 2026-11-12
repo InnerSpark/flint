@@ -16,6 +16,7 @@ let package = Package(
     .library(name: "FlintInnerSparkMedia", targets: ["FlintInnerSparkMedia"]),
     .library(name: "FlintStudio", targets: ["FlintStudio"]),
     .library(name: "FlintTubHop", targets: ["FlintTubHop"]),
+    .library(name: "FlintSquadhop", targets: ["FlintSquadhop"]),
   ],
   targets: [
     .target(name: "Flint", path: "dist/swift"),
@@ -23,5 +24,6 @@ let package = Package(
     .target(name: "FlintInnerSparkMedia", path: "dist/swift-brands/innersparkmedia"),
     .target(name: "FlintStudio", path: "dist/swift-brands/studio"),
     .target(name: "FlintTubHop", path: "dist/swift-brands/tubhop"),
+    .target(name: "FlintSquadhop", path: "dist/swift-brands/squadhop"),
   ]
 )

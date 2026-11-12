@@ -10,6 +10,7 @@ import accessspark from '../../../../../brands/accessspark.json';
 import innersparkmedia from '../../../../../brands/innersparkmedia.json';
 import studio from '../../../../../brands/studio.json';
 import tubhop from '../../../../../brands/tubhop.json';
+import squadhop from '../../../../../brands/squadhop.json';
 import ios from '../../../../../platforms/ios.json';
 import { resolved } from '../../../lib/flint.js';
 
@@ -27,6 +28,7 @@ const brands = [
   { id: 'innersparkmedia', name: 'Inner Spark Media', where: 'innersparkmedia.com', file: innersparkmedia },
   { id: 'studio', name: 'Inner Spark Studio', where: 'innerspark.studio', file: studio },
   { id: 'tubhop', name: 'TubHop', where: 'The TubHop app and tubhop.app', file: tubhop },
+  { id: 'squadhop', name: 'Squadhop', where: 'The Squadhop app, squadhop.app and getsquadhop.com', file: squadhop },
 ];
 const swaps = brands.flatMap((b) => Object.entries(b.file.$source?.swapped || {}).map(([from, why]) => ({ brand: b.name, from, why })));
 

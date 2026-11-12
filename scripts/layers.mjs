@@ -18,7 +18,7 @@ import { dirname, join } from 'node:path';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-export const BRANDS = ['flint', 'accessspark', 'innersparkmedia', 'studio', 'tubhop'];
+export const BRANDS = ['flint', 'accessspark', 'innersparkmedia', 'studio', 'tubhop', 'squadhop'];
 export const PLATFORMS = ['web', 'ios'];
 export const DEFAULT_BRAND = 'flint';
 
