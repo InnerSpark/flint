@@ -9,6 +9,7 @@ import brandAccessspark from '../../../../../dist/brands/accessspark/tokens.json
 import brandIsm from '../../../../../dist/brands/innersparkmedia/tokens.json';
 import brandStudio from '../../../../../dist/brands/studio/tokens.json';
 import brandTubhop from '../../../../../dist/brands/tubhop/tokens.json';
+import brandSquadhop from '../../../../../dist/brands/squadhop/tokens.json';
 import Swatch from '../../../components/Swatch.astro';
 import { COMPONENTS } from '../../../data/components.js';
 import { source, resolved, leaves, at, refName, isColor, cssVarForPath, componentVar, camel, kebab, MODES } from '../../../lib/flint.js';
@@ -60,7 +61,7 @@ for (const t of Object.values(T).filter((x) => x.kind === 'primitive')) {
 }
 
 // Per-brand values, kept only where a brand differs from Flint.
-const BRAND_TOKENS = { AccessSpark: brandAccessspark, 'Inner Spark Media': brandIsm, Studio: brandStudio, TubHop: brandTubhop };
+const BRAND_TOKENS = { AccessSpark: brandAccessspark, 'Inner Spark Media': brandIsm, Studio: brandStudio, TubHop: brandTubhop, Squadhop: brandSquadhop };
 const valueIn = (tok, t, mode) => (t.kind === 'component' ? at(tok.component[mode], t.path) : t.kind === 'semantic' ? at(tok.semantic[mode], t.path) : at(tok, t.key.split('.')));
 const brandsFor = (t) => {
   const rows = Object.entries(BRAND_TOKENS).map(([name, tok]) => [name, MODES.map((m) => valueIn(tok, t, m))]);
