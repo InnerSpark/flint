@@ -1478,7 +1478,7 @@
       "label": "warning.text on surface",
       "fg": "feedback.warning.text",
       "bg": "feedback.warning.surface",
-      "ratio": 7.28,
+      "ratio": 12.03,
       "threshold": 7,
       "kind": "text",
       "pass": true
@@ -2408,7 +2408,7 @@
       "label": "chip warning label",
       "fg": "component.chip.warning.fg",
       "bg": "component.chip.warning.bg",
-      "ratio": 7.28,
+      "ratio": 12.03,
       "threshold": 7,
       "kind": "text",
       "pass": true
@@ -2428,7 +2428,7 @@
       "label": "badge warning label",
       "fg": "component.badge.warning.fg",
       "bg": "component.badge.warning.bg",
-      "ratio": 7.28,
+      "ratio": 12.03,
       "threshold": 7,
       "kind": "text",
       "pass": true

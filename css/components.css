@@ -385,3 +385,25 @@ textarea.flint-input { height: auto; min-height: calc(var(--input-height) * 2); 
 .flint-toast :focus-visible { outline: var(--focus-ring-width) solid var(--toast-focus-ring); outline-offset: var(--focus-ring-offset); }
 @media (prefers-reduced-motion: no-preference) { .flint-toast { animation: flint-toast-in var(--duration-slow) var(--ease-emphasis); } }
 @keyframes flint-toast-in { from { opacity: 0; transform: translateY(var(--space-16)); } }
+
+/* Meter (v1.19.0). A level read at a glance: <div class="flint-meter" data-tone="warning"> with a
+   head (label + value in words) and a native <meter> or a role="img" bar. Tone marks a level that
+   needs action; the words always say it too, so meaning never rests on color. */
+.flint-meter { display: grid; gap: var(--space-8); }
+.flint-meter__head { display: flex; justify-content: space-between; gap: var(--space-8); font: var(--type-label-default-weight) var(--type-label-default-size) / var(--type-label-default-line-height) var(--font-sans); color: var(--color-text-default); }
+.flint-meter__value { color: var(--color-text-heading); font-variant-numeric: tabular-nums; }
+.flint-meter[data-tone="warning"] .flint-meter__value { color: var(--color-feedback-warning-text); }
+.flint-meter[data-tone="error"] .flint-meter__value { color: var(--color-feedback-error-text); }
+.flint-meter[data-tone="success"] .flint-meter__value { color: var(--color-feedback-success-text); }
+.flint-meter__track { height: var(--space-8); border-radius: var(--radius-pill); background: var(--color-surface-subtle); overflow: hidden; }
+.flint-meter__fill { height: 100%; border-radius: var(--radius-pill); background: var(--color-action-primary); }
+.flint-meter[data-tone="warning"] .flint-meter__fill { background: var(--color-feedback-warning-solid); }
+.flint-meter[data-tone="error"] .flint-meter__fill { background: var(--color-feedback-error-solid); }
+.flint-meter[data-tone="success"] .flint-meter__fill { background: var(--color-feedback-success-solid); }
+@media (forced-colors: active) { .flint-meter__track { border: 1px solid CanvasText; } .flint-meter__fill { background: Highlight; } }
+
+/* Slider (v1.19.0). A native <input type="range" class="flint-slider">: keyboard, screen readers
+   and touch come free. Pair it with a visible label and an aria-valuetext in words. */
+.flint-slider { width: 100%; min-height: var(--target-min); margin: 0; accent-color: var(--color-action-primary); cursor: pointer; }
+.flint-slider:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.flint-slider:disabled { cursor: not-allowed; accent-color: var(--color-action-disabled); }

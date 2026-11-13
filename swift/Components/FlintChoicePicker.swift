@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// Pick one of a few options. A segmented control normally; a list of rows with a checkmark at
-/// the larger text sizes, where segment labels would truncate.
+/// Pick one of a few options. A segmented control for two to four options; a list of rows with a
+/// checkmark at the larger text sizes, where segment labels would truncate, and always for five or
+/// more. For a long list in a small space, use `FlintChoiceMenu`.
 public struct FlintChoicePicker<Value: Hashable>: View {
   let title: String
   let options: [(value: Value, label: String)]
@@ -20,7 +21,7 @@ public struct FlintChoicePicker<Value: Hashable>: View {
 
   public var body: some View {
     Group {
-      if typeSize >= .xxxLarge {
+      if typeSize >= .xxxLarge || options.count > 4 {
         VStack(spacing: 0) {
           ForEach(Array(options.enumerated()), id: \.offset) { i, option in
             if i > 0 { Divider().overlay(Flint.Colors.borderDefault) }

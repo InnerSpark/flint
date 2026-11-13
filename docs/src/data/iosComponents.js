@@ -229,10 +229,40 @@ FlintToggleRow("Generator", detail: "Auto start", isOn: $autoStart,
     web: 'radio',
     preview: screen({ body: `<fieldset class="ios-seg"><legend>Mode</legend>${['Cool', 'Heat', 'Fan'].map((l, i) => `<label><input type="radio" name="__P__-mode" ${i === 0 ? 'checked' : ''}><span>${l}</span></label>`).join('')}</fieldset><ul class="ios-group ios-choice-rows" aria-label="Mode">${['Cool', 'Heat', 'Fan'].map((l, i) => `<li><button type="button" class="ios-row" aria-pressed="${i === 0}"><span class="ios-row-text">${l}</span>${i === 0 ? `<span class="ios-row-value ios-check">${icon('check')}</span>` : ''}</button></li>`).join('')}</ul>` }),
     when: ['Two to four short options where the choice takes effect at once.'],
-    not: ['Long labels or more than four options. Use a list of rows or a menu.'],
+    not: ['Long labels or more than four options. Five or more always show as rows; for a compact row, use a choice menu.'],
     code: `FlintChoicePicker("Mode", selection: $mode,
                   options: [(.cool, "Cool"), (.heat, "Heat"), (.fan, "Fan")])`,
     a11y: ['At accessibility text sizes it switches to rows, where labels can wrap. The third preview shows it.', 'The selected option is announced as selected in both layouts.'],
+  },
+  meter: {
+    name: 'Meter', swift: 'FlintMeter', lead: 'A level you read at a glance: a label, the value in words, and a bar. A warning or error tone marks a level that needs action.',
+    preview: screen({ body: `<div class="ios-card"><div class="ios-meter" role="img" aria-label="Fresh water, 68 percent"><div class="ios-meter-head"><span>Fresh water</span><b>68%</b></div><div class="ios-meter-track"><div class="ios-meter-fill" style="width:68%"></div></div></div><div class="ios-meter" data-tone="warning" role="img" aria-label="Black tank, 85 percent, dump soon"><div class="ios-meter-head"><span>Black</span><b>85%, dump soon</b></div><div class="ios-meter-track"><div class="ios-meter-fill" style="width:85%"></div></div></div></div>` }),
+    when: ['Levels: tanks, storage, fuel, a battery in a list.', 'A level that can need action. Pick the tone from what the level means, not from how full it is.'],
+    not: ['Progress of a task. Use ProgressView.', 'A value people set. Use a slider or stepper.'],
+    code: `FlintMeter("Black", fraction: 0.85, valueText: "85%, dump soon",
+           spokenValue: "85 percent, dump soon", tone: .warning)`,
+    a11y: ['Read as one element: "Black, 85 percent, dump soon".', 'The words carry the meaning; the warning color only repeats it.', 'The bar height scales with text size.'],
+  },
+  slider: {
+    name: 'Slider', swift: 'FlintSlider', lead: "Drag across a range: a label, the current value, Apple's slider in Flint colors and an optional caption.",
+    preview: screen({ body: `<div class="ios-card"><div class="ios-meter-head"><span>Brightness</span><b>25%</b></div><input type="range" class="ios-slider" min="1" max="100" value="25" aria-label="Brightness" aria-valuetext="25 percent"><p class="ios-muted">100% here is 66% of the strips' full power.</p></div>` }),
+    when: ['Values where the feel matters more than the exact number: brightness, volume, speed.'],
+    not: ['Exact numbers or small ranges. Use a stepper.'],
+    code: `FlintSlider("Brightness", value: $level, in: 0.01...1, step: 0.1,
+            caption: "100% here is 66% of the strips' full power.",
+            display: { "\\(Int($0 * 100))%" }, spoken: { "\\(Int($0 * 100)) percent" },
+            onEditingChanged: { if !$0 { send(level) } })`,
+    a11y: ['One adjustable element: swipe up or down moves by the step and commits at once.', 'The visual value and the spoken value are separate.', 'A disabled slider shows and reads its reason.'],
+  },
+  'choice-menu': {
+    name: 'Choice menu', swift: 'FlintChoiceMenu', lead: 'Pick one of many options from a row that opens the system menu. For five or more options, or long labels.',
+    preview: screen({ body: `<button type="button" class="ios-menu-row" aria-haspopup="menu"><span><span class="ios-h3">Mode</span><span class="ios-muted">Cools to the set temperature.</span></span><span class="ios-menu-value">Cool</span></button>` }),
+    when: ['Five or more options, or labels too long for segments.', 'A setting changed now and then, where showing every option all the time would crowd the screen.'],
+    not: ['Two to four options people switch often. Use a choice picker.'],
+    code: `FlintChoiceMenu("Mode", selection: $mode,
+                options: [(.cool, "Cool"), (.heat, "Heat"), (.auto, "Auto"), (.dry, "Dry"), (.fan, "Fan")],
+                detail: "Cools to the set temperature.")`,
+    a11y: ['Reads "Mode, Cool, button" with the detail as the hint.', 'The menu marks the selected option with a check.', 'A disabled menu shows and reads its reason.'],
   },
   stepper: {
     name: 'Stepper', swift: 'FlintStepper', lead: 'Big minus and plus buttons around a number. VoiceOver treats it as one control you swipe up or down.',
@@ -270,4 +300,4 @@ FlintToggleRow("Generator", detail: "Auto start", isOn: $autoStart,
 // Where an iOS component's docs live: one with a web twin sits on that page behind the Web / iOS switch (ASDS-95).
 export const iosHref = (slug) => (IOS[slug].web ? `/components/${IOS[slug].web}/?platform=ios` : `/components/ios/${slug}/`);
 
-export const IOS_ORDER = ['tab-bar', 'navigation-bar', 'toolbar', 'list', 'sheet', 'glass-button', 'button', 'notice', 'tag', 'card', 'toggle-row', 'choice-picker', 'stepper', 'stat-tile', 'empty-state'];
+export const IOS_ORDER = ['tab-bar', 'navigation-bar', 'toolbar', 'list', 'sheet', 'glass-button', 'button', 'notice', 'tag', 'card', 'toggle-row', 'choice-picker', 'choice-menu', 'stepper', 'slider', 'meter', 'stat-tile', 'empty-state'];
