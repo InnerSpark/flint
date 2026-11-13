@@ -266,6 +266,10 @@
       "900": {
         "$type": "color",
         "$value": "#78350f"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#451a03"
       }
     },
     "red": {
@@ -1501,7 +1505,7 @@
         "warning": {
           "surface": {
             "$type": "color",
-            "$value": "{color.amber.900}"
+            "$value": "{color.amber.950}"
           },
           "border": {
             "$type": "color",

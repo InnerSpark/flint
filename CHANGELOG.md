@@ -2,6 +2,16 @@
 
 Flint tokens follow semver, independent of the consuming apps.
 
+## v1.19.0 (2026-11-13)
+
+Three iOS components and a calmer dark warning, from building Bounder in Flint. Additive; the only token change is the dark warning surface.
+
+- **New: Meter (`FlintMeter`, `.flint-meter`).** A level read at a glance: a label, the value in words and a bar. A tone (normal, success, warning, error) marks a level that needs action, and the words always say it too. VoiceOver reads one element ("Black, 85 percent, dump soon"). In Figma: Meter, Tone x Level in steps of 10.
+- **New: Slider (`FlintSlider`, `.flint-slider`).** Label, value, Apple's slider in Flint colors and an optional caption. One adjustable VoiceOver element that steps by `step` and commits at once; `onEditingChanged` lets an app send once on release. A disabled slider shows and reads its reason. The web class styles a native `<input type="range">`.
+- **New: Choice menu (`FlintChoiceMenu`).** Pick one of many options from a card row that opens the system menu. For five or more options or long labels.
+- **Choice picker: five or more options show as rows.** Segments are for two to four; past that `FlintChoicePicker` uses its rows layout at every text size instead of truncating.
+- **Dark warning surface is calmer.** `feedback.warning.surface` in dark moves from amber.900 to a new amber.950 (`#451a03`). Amber.900 read as a loud orange block next to the other dark feedback surfaces. Warning text (amber.200) is about 13:1 on it.
+
 ## v1.18.0 (2026-11-12)
 
 Two new brands: TubHop and Squadhop. Additive only, no token changes to existing brands.

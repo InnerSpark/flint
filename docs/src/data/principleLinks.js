@@ -41,6 +41,9 @@ const MAP = {
   '/components/ios/glass-button/': ['legible-any-background', 'one-main-action'],
   '/components/ios/card/': ['content-leads'],
   '/components/ios/stepper/': ['keyboard-and-reader', 'accessible-primitives'],
+  '/components/ios/slider/': ['keyboard-and-reader', 'accessible-primitives'],
+  '/components/ios/meter/': ['keyboard-and-reader', 'accessible-primitives'],
+  '/components/ios/choice-menu/': ['keyboard-and-reader', 'accessible-primitives'],
   '/components/ios/stat-tile/': ['content-leads', 'plain-words'],
   '/components/ios/empty-state/': ['plain-words', 'one-main-action'],
 };

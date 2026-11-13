@@ -64,6 +64,7 @@
   --color-amber-700: #b45309;
   --color-amber-800: #92400e;
   --color-amber-900: #78350f;
+  --color-amber-950: #451a03;
   --color-red-50: #fef2f2;
   --color-red-100: #fee2e2;
   --color-red-200: #fecaca;
@@ -337,7 +338,7 @@
   --color-feedback-success-solid: #4ade80;
   --color-feedback-success-text: #bbf7d0;
   --color-feedback-success-on-solid: #0d1117;
-  --color-feedback-warning-surface: #78350f;
+  --color-feedback-warning-surface: #451a03;
   --color-feedback-warning-border: #92400e;
   --color-feedback-warning-solid: #fbbf24;
   --color-feedback-warning-text: #fde68a;

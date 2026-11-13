@@ -216,3 +216,15 @@
 .ios-screen[data-glass] .ios-navbar { inset: 0 0 auto; padding-top: calc(var(--space-32) + var(--space-8)); }
 .ios-screen[data-glass] .ios-scrim { z-index: 4; }
 .ios-screen[data-glass] .ios-sheet { z-index: 5; }
+
+/* Meter, slider and choice menu previews (Bounder gaps, v1.19.0) */
+.ios-meter { display: grid; gap: var(--space-8); }
+.ios-meter-head { display: flex; justify-content: space-between; gap: var(--space-8); font-weight: 600; font-size: calc(var(--type-label-default-size) * var(--dt)); color: var(--color-text-default); }
+.ios-meter-head b { color: var(--color-text-heading); font-variant-numeric: tabular-nums; }
+.ios-meter[data-tone="warning"] .ios-meter-head b { color: var(--color-feedback-warning-text); }
+.ios-meter-track { height: var(--space-8); border-radius: var(--radius-pill); background: var(--color-surface-subtle); overflow: hidden; }
+.ios-meter-fill { height: 100%; border-radius: var(--radius-pill); background: var(--color-action-primary); }
+.ios-meter[data-tone="warning"] .ios-meter-fill { background: var(--color-feedback-warning-solid); }
+.ios-slider { width: 100%; min-height: 44px; accent-color: var(--color-action-primary); }
+.ios-menu-row { display: flex; align-items: center; gap: var(--space-12); width: 100%; min-height: 44px; padding: var(--space-12); border: 1px solid var(--color-border-default); border-radius: var(--radius-card); background: var(--color-surface-default); color: var(--color-text-heading); font: inherit; text-align: start; cursor: pointer; }
+.ios-menu-row .ios-menu-value { margin-inline-start: auto; color: var(--color-action-primary); font-weight: 600; }

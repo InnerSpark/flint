@@ -75,7 +75,8 @@ const tokens = {
       "600": "#d97706",
       "700": "#b45309",
       "800": "#92400e",
-      "900": "#78350f"
+      "900": "#78350f",
+      "950": "#451a03"
     },
     "red": {
       "50": "#fef2f2",
@@ -523,7 +524,7 @@ const tokens = {
           "onSolid": "#0d1117"
         },
         "warning": {
-          "surface": "#78350f",
+          "surface": "#451a03",
           "border": "#92400e",
           "solid": "#fbbf24",
           "text": "#fde68a",
@@ -879,7 +880,7 @@ const tokens = {
           "border": "#4ade80"
         },
         "warning": {
-          "bg": "#78350f",
+          "bg": "#451a03",
           "fg": "#fde68a",
           "border": "#fbbf24"
         },
@@ -907,7 +908,7 @@ const tokens = {
           "fg": "#bbf7d0"
         },
         "warning": {
-          "bg": "#78350f",
+          "bg": "#451a03",
           "fg": "#fde68a"
         },
         "error": {
